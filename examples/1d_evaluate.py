@@ -10,7 +10,6 @@ from src.queries.point import PointQuery
 ratio = 0.2
 b_tree_page_size = 20
 
-
 def load_1D_Data(filename):
     data = pd.read_csv(filename)
     test_data = data.sample(n=int(ratio * len(data)))
