@@ -4,7 +4,8 @@ import pandas as pd
 from tabulate import tabulate
 
 from src.indexing.models.trees.b_tree import BTreeModel
-from src.indexing.models.ml.linear_regression import LRModel
+from src.indexing.models.ml.polynomial_regression import PRModel
+from src.indexing.models.nn.fcn import FCNModel
 from src.queries.point import PointQuery
 
 ratio = 0.2
@@ -19,8 +20,12 @@ def load_1D_Data(filename):
 def evaluate(filename):
     data, test_data = load_1D_Data(filename)
     btm = BTreeModel(b_tree_page_size)
-    lrm = LRModel()
-    models = [btm, lrm]
+    fcn = FCNModel()
+
+    lrm = PRModel(1)
+    prm = PRModel(2)
+    
+    models = [btm, lrm, prm, fcn]
     ptq = PointQuery(models)
     build_times = ptq.build(data, ratio)
     mses, eval_times = ptq.evaluate(test_data)
