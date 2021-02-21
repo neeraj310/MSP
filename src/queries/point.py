@@ -21,6 +21,7 @@ class PointQuery(object):
                 model.name, build_time, mse))
             build_times.append(build_time)
         return build_times
+
     def predict(self, model_idx, key):
         return self.models[model_idx].predict(key)
 

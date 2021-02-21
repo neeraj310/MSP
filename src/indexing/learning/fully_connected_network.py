@@ -13,6 +13,7 @@ class FullyConnectedNetwork():
         self.model = Sequential([])
         self.lr = lr
         self._build()
+        self.model.summary()
 
     def _build(self):
         for idx in range(self.num_fc_layers):

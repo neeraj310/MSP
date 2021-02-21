@@ -1,8 +1,8 @@
 import sys
-
+from typing import List
 import pandas as pd
 from tabulate import tabulate
-
+from src.indexing.models import BaseModel
 from src.indexing.models.trees.b_tree import BTreeModel
 from src.indexing.models.ml.polynomial_regression import PRModel
 from src.indexing.models.nn.fcn import FCNModel
@@ -36,8 +36,27 @@ def evaluate(filename):
         result.append([model.name, build_times[index],
                        eval_times[index], mses[index]])
     print(tabulate(result, header))
+    models_predict(data, models)
 
-
+def models_predict(data, models:List[BaseModel]):
+    x = data.iloc[:, :-1].values
+    x = x.reshape(-1)
+    gt_y = data.iloc[:, 1].values
+    pred_ys = []
+    for model in models:
+        pred_y = []
+        for each in x:
+            pred_y.append(int(model.predict(each)))
+        pred_ys.append(pred_y)
+    results ={}
+    results['x'] = x
+    results['ground_truth'] = gt_y
+    for idx, model in enumerate(models):
+        results[model.name] = pred_ys[idx]
+    df = pd.DataFrame.from_dict(results)
+    df.to_csv('result.csv', index=False)
+    print("Results have been saved to result.csv")
+    
 if __name__ == "__main__":
     filename = sys.argv[1]
     evaluate(filename)
