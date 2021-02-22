@@ -17,8 +17,8 @@ class PointQuery(object):
         x_train, y_train, x_test, y_test = split_train_test(data, test_ratio)
         for model in self.models:
             mse, build_time = model.train(x_train, y_train, x_test, y_test)
-            print("{} model built in {} seconds, mse={}".format(
-                model.name, build_time, mse))
+            print("{} model built in {:.4f} ms, mse={:4f}".format(
+                model.name, build_time*1000, mse))
             build_times.append(build_time)
         return build_times
 
@@ -38,7 +38,7 @@ class PointQuery(object):
             end_time = timer()
             mse = metrics.mean_squared_error(test_data.iloc[:, 1], ys)
             mses.append(mse)
-            print("{} model tested in {} seconds".format(
+            print("{} model tested in {:.4f} seconds".format(
                 model.name, end_time - start_time))
             build_times.append(end_time - start_time)
         return mses, build_times

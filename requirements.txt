@@ -1,1 +1,4 @@
 tinyml
+tabulate
+numpy
+pandas

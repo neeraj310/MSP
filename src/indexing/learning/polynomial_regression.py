@@ -33,4 +33,4 @@ class PolynomialRegression():
         for power in range(self.degree):
             y_pred += self.coeffs[power + 1] * np.power(X, power + 1)
         y_pred + self.coeffs[0]
-        return y_pred
+        return y_pred.astype(int)

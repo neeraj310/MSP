@@ -54,7 +54,7 @@ def models_predict(data, models: List[BaseModel]):
         for each in x:
             pred_y.append(int(model.predict(each)))
         if model.name == 'Fully Connected Neural Network':
-            #print(pred_y)
+            # print(pred_y)
             pass
         pred_ys.append(pred_y)
     results = {}
@@ -65,7 +65,6 @@ def models_predict(data, models: List[BaseModel]):
     df = pd.DataFrame.from_dict(results)
     df.to_csv('result.csv', index=False)
     print("Results have been saved to result.csv")
-
 
 if __name__ == "__main__":
     filename = sys.argv[1]
