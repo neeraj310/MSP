@@ -9,4 +9,4 @@ def split_train_test(data, ratio=0.2):
 
 
 def normalize(x):
-    return (x-np.min(x))/(np.max(x)-np.min(x))
+    return (x - np.min(x)) / (np.max(x) - np.min(x))

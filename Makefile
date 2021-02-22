@@ -1,4 +1,4 @@
 format:
-	autoflake -i **/**/*.py
-	isort **/**/*.py
-	yapf -i **/**/*.py
+	autoflake --recursive .
+	isort .
+	yapf -ir .

@@ -22,15 +22,15 @@ class PolynomialRegression():
         N = len(X)
         matX = [np.ones(N)]
         for power in range(self.degree):
-            matX.append(np.power(X, power+1))
+            matX.append(np.power(X, power + 1))
         matX = np.column_stack(matX)
-        A = np.linalg.inv(matX.T@matX)
-        D = A@matX.T
-        self.coeffs = D@y
-    
+        A = np.linalg.inv(matX.T @ matX)
+        D = A @ matX.T
+        self.coeffs = D @ y
+
     def predict(self, X):
         y_pred = 0
         for power in range(self.degree):
-            y_pred += self.coeffs[power+1] * np.power(X, power+1)
+            y_pred += self.coeffs[power + 1] * np.power(X, power + 1)
         y_pred + self.coeffs[0]
         return y_pred

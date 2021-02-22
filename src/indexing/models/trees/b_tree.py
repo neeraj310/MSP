@@ -1,16 +1,18 @@
-from src.indexing.models import BaseModel
-from src.indexing.models.trees.item import Item
 from timeit import default_timer as timer
+from typing import List, Tuple
+
 import numpy as np
 from sklearn import metrics
 
-from typing import Tuple, List
+from src.indexing.models import BaseModel
+from src.indexing.models.trees.item import Item
+
 
 class BTreeNode():
     def __init__(self, degree) -> None:
         self.degree = degree
-        self.items: List[Item] = [None] * (2*degree-1)
-        self.children: List[BTreeNode] = [None] * (2*degree)
+        self.items: List[Item] = [None] * (2 * degree - 1)
+        self.children: List[BTreeNode] = [None] * (2 * degree)
         self.num_of_keys = 0
         self.is_leaf = True
         self.index = None
@@ -32,7 +34,7 @@ class BTree():
         new_node = BTreeNode(self.degree)
         new_node.index = self.next
         self.nodes[self.next] = new_node
-        self.next = self.next+1
+        self.next = self.next + 1
         return new_node
 
     def get_node_at(self, index) -> BTreeNode:
@@ -62,7 +64,7 @@ class BTree():
             if current.is_leaf:
                 # reached leaf node, stop and break the loop
                 if i > 0:
-                    return False, current.index, current.items[i-1]
+                    return False, current.index, current.items[i - 1]
                 else:
                     return False, current.index, current.items[0]
             else:
@@ -73,11 +75,11 @@ class BTree():
         new_node = self.allocate_node()
         new_node.is_leaf = child.is_leaf
         new_node.num_of_keys = self.degree - 1
-        for j in range(self.degree-1):
+        for j in range(self.degree - 1):
             new_node.items[j] = child.items[j + self.degree]
         if not child.is_leaf:
             for j in range(self.degree):
-                new_node.children[j] = child.children[j+self.degree]
+                new_node.children[j] = child.children[j + self.degree]
 
         child.num_of_keys = self.degree - 1
         j = parent.num_of_keys + 1
@@ -87,9 +89,9 @@ class BTree():
         parent.children[j] = new_node.index
         j = parent.num_of_keys
         while j > index:
-            parent.items[j+1] = parent.items[j]
+            parent.items[j + 1] = parent.items[j]
             j -= 1
-        parent.items[index] = child.items[self.degree-1]
+        parent.items[index] = child.items[self.degree - 1]
         parent.num_of_keys += 1
 
     def insert(self, item: Item):
@@ -121,9 +123,9 @@ class BTree():
             while i >= 0 and item < target_node.items[i]:
                 # rearrange items that are larger than the given item
                 # to make an empty space to locate the new item
-                target_node.items[i+1] = target_node.items[i]
+                target_node.items[i + 1] = target_node.items[i]
                 i -= 1
-            target_node.items[i+1] = item
+            target_node.items[i + 1] = item
             target_node.num_of_keys += 1
         else:
             # if it is not the leaf
@@ -134,12 +136,13 @@ class BTree():
             i += 1
             if self.get_node_at(target_node.children[i]).is_full():
                 # then we need to split into two children
-                self.split_child(target_node, i, self.get_node_at(
-                    target_node.children[i]))
+                self.split_child(target_node, i,
+                                 self.get_node_at(target_node.children[i]))
                 if item > target_node.items[i]:
                     i += 1
-            self.insert_nonfull(self.get_node_at(
-                target_node.children[i]), item)
+            self.insert_nonfull(self.get_node_at(target_node.children[i]),
+                                item)
+
 
 class BTreeModel(BaseModel):
     def __init__(self, page_size=0):
