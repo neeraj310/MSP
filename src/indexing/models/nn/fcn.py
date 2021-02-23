@@ -36,6 +36,16 @@ class FCNModel(BaseModel):
         mse = metrics.mean_squared_error(y_test, y_hat)
         return mse, end_time - start_time
 
+    def fit(self, x_train, y_train):
+        self.max_x = np.max(x_train)
+        self.min_x = np.min(x_train)
+        self.max_y = np.max(y_train)
+        self.min_y = np.min(y_train)
+
+        x_train = normalize(x_train)
+        y_train = normalize(y_train)
+        self.net.fit(x_train, y_train, epochs=10000, batch_size=100)
+
     def predict(self, X):
         X = (X - self.min_x) / (self.max_x - self.min_x)
         X = X.reshape((1))

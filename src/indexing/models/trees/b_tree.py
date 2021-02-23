@@ -167,6 +167,12 @@ class BTreeModel(BaseModel):
         mse = metrics.mean_absolute_error(y_test, pred_y)
         return mse, end_time - start_time
 
+    def fit(self, x_train, y_train):
+        x, y = (list(t) for t in zip(*sorted(zip(x_train, y_train))))
+        data_size = x.shape[0]
+        for i in range(data_size):
+            self.btree.insert(Item(x[i], y[i]))
+
     def __str__(self):
         return self.btree.__str__()
 
