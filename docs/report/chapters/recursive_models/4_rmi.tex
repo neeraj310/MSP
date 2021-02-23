@@ -1,0 +1,13 @@
+\section{Introduction}
+
+%TODO: there should be some graph to demonstrate the last-mile problem.
+
+In our baseline models, it is not very difficult to reduce the mean square error from millions to thousands. However, it is much harder to reduce it from thousands to tens. This is the so called last-mile problem.
+\section{Definitions}
+
+Similar to a tree, we define the following terms in a recursive model:
+
+\begin{enumerate}
+	\item \textbf{Node}. Every node is responsible for making decisions with given input data. In one dimensional case, it can be regarded as a function $f:\mathbb{R}\to\mathbb{R}, x\to y$ where $x$ is the input index and $y$ is the corresponding page block. In principle, each node can be implemented as any machine learning model, from linear regression to neural network, or a traditional tree-based model, such as B-Tree.
+	\item \textbf{Internal Node}. Internal nodes are all nodes except for leaf nodes and the root node. Every internal node receives a certain part of training data from the full dataset, and train a model on it. 
+\end{enumerate}

@@ -1,0 +1,28 @@
+Over the years, indexes have been widely used in databases to improve the speed of data retrieval. In the past decades, the database indexes generally fall into hand-engineered data structures and algorithms, such as B-Tree, KD-Tree, Hash Table, etc. These indexes have played an important role in databases and have been widely used in modern data management systems (DBMS). Despite their success, they do not consider the distribution of the database entries, which might be helpful in designing faster indexes.
+
+For example, if the dataset contains integers from $1$ to $1$ million, the key can be used directly as an offset. With the key used as an offset, the values with the key can be retrieved in $\mathcal{O}(1)$ time complexity. Compared with B-Tree, which always takes $\mathcal{O}(\log n)$ time complexity for the same query. At the same time, by using the key as an offset directly, we do not need any extra overhead regarding memory space, where the B-Tree needs extra $\mathcal{O}(n)$ space complexity to save the tree.
+
+From the above example, we found there are two promising advantages of learned indexes over hand-engineered indexes:
+\begin{enumerate}
+  \item Learned indexes may be faster when performing queries, especially when the number of entries in the database are extremely huge.
+  \item Learned indexes may take less memory space, as we only need to save the model with constant size.
+  \end{enumerate}
+  
+ We will explore and analyse these two advantages qualitatively in the \textit{chapter 5}. 
+
+Nowadays, to leverage these two advantages, researchers proposed learned indexes \cite{kraska2018case}, where machine learning techniques are applied to automatically learn the distribution of the database entries and build the data-driven indexes. This approach has been shown to be powerful and competitive compared with hand-engineered indexes, such as B-Tree.
+
+In this report, we explore the development of database indexes, from hand-engineered indexes to the learned index. After that, we explore the possibilities of using complex convolutional neural networks as database indexes. This report is organised into the following chapters:
+
+\begin{enumerate}
+	\item \textbf{Introduction}. In this chapter, we illustrate the organisation of this report. Besides, we go through the modern computer systems and introduce the general information about database indexes. 
+	\item \textbf{Traditional Indexes used in Database}. In this chapter, we analyse one of the most important traditional index: B-Tree. We go through its motivation, algorithms, advantages and disadvantages. Besides, we explore some other traditional indexes such as B+ Tree briefly.
+	\item \textbf{Baseline Learned Indexes}. In this chapter, we build our first learned index with fully connected neural networks. We demonstrate how it works, explore its properties and analyse its advantages and disadvantages. 
+	\item \textbf{Recursive Model Index}. Proposed by T.Kraska \cite{kraska2018case},  Recursive Model Index (RMI) is one of the most popular model used as learned index. In this chapter, we will explain its mechanism, demonstrate its algorithm and qualitatively analyse its pros and cons. 
+	\item \textbf{2D Learned Index}. Until so far, we only work with $1$-dimensional data. 2-D indexes is also important in many applications. For example, in a location query, where users want to find out all the stores in a certain rectangle, all stores are indexed by 2-D keys, i.e. the coordinates. In this chapter, we will explore how 2-D keys are indexed and arranged using a learned fashion.
+	\item \textbf{Learned Indexes with Convolutional Neural Network}. In this chapter, we discover the possibilities of using convolutional neural network (CNN) as database index. 
+\end{enumerate}
+
+\section{Motivation}
+
+\input{chapters/introduction/motivation}

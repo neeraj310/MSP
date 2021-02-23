@@ -1,0 +1,76 @@
+\documentclass[a4paper,12pt]{scrreprt}
+
+\usepackage{scrhack}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{silence}
+\WarningFilter{scrreprt}{Usage of package `fancyhdr'}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{times}
+\usepackage{listings}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+
+% --------- 
+
+\titlehead{Department of Informatics, University of Zürich}
+\subject{\vspace*{2cm}MSc Thesis}
+\title{Implementing Learned Indexes on 1 and 2 Dimensional Data}
+\author{
+  Neeraj Kumar, Nivedita Nivedita, Xiaozhe Yao\\[-5pt]
+  \scriptsize Matrikelnummer: 19-759-570\\[-5pt]
+  \scriptsize Email: \texttt{xiaozhe.yao@uzh.ch}
+}
+\date{\vspace*{2cm}January 11, 2010}
+\publishers{
+  \small supervised by \\ 
+  Prof.\ Dr.\ Michael H. Böhlen and \\ Mr. Qing\ Chen \\[5cm]
+  \begin{tikzpicture}[overlay]
+    \node at (-3,-3) {\includegraphics[height=1.5cm]{IFIlogo}};
+    \node at (7,-3) {\includegraphics[height=1.5cm]{dbtgBW}};
+  \end{tikzpicture}
+}
+
+% --------- 
+
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+
+% --------- 
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+	
+\end{abstract}
+
+\chapter*{Abstract}
+
+\chapter{Introduction}
+
+\input{chapters/introduction/1_introduction}
+
+\chapter{Traditional Indexes used in Database}
+
+\input{chapters/traditional_indexes/2_traditional_indexes}
+
+\chapter{Baseline Learned Indexes}
+
+\input{chapters/baseline_learned_indexes/3_baseline}
+
+\chapter{Recursive Model Index (RMI)}
+
+\input{chapters/recursive_models/4_rmi}
+
+
+\bibliographystyle{alpha}
+\bibliography{refs}
+
+\end{document}

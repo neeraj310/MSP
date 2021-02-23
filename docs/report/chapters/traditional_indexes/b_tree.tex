@@ -1,0 +1,82 @@
+B-Tree and its variants have been widely used as indexes in
+databases. For example, the PostgreSQL uses B-Tree as its index. B-Trees
+can be considered as a natural generalisation of binary search tree. In
+binary search tree, there is only one key and two children possible in
+it's internal node. However, an internal node of B-Tree can contain
+several keys and children. The keys in a node serve as dividing points
+and separate the range of keys. With this structure, we make an
+multi-way decision based on comparisons with the keys stored at the node
+\(x\). The image below illustrates a simple B-Tree.
+
+In this section, we will introduce the construction and query processes
+of B-Trees and then analyse their properties.
+
+\subsection{Motivation}
+
+In computers, the memories are organised in an hierarchical way. For example, a classical computer system consists three layers of memory: the CPU cache, main memory and the hard disk. In such a system, the CPU cache is the fastest but the most expensive while and hard disk is the cheapest but also the slowest. When querying for an item, the CPU will first try to fetch it from the CPU cache. If not there the CPU will then try to fetch it from the main memory, and then the hard disk.
+
+%TODO: Some statements are needed to show the data is stored in blocks in the memory.
+
+At the same time, the traditional hard disk drive (HDD) is made by a moving mechanical parts.
+
+%TODO: Illustrate the mechanical structure.
+
+%TODO: I don't think we need this part anymore? Removing the motivation might be helpful...
+
+In summary, there are two properties in classical computer systems that we need to take into account:
+
+\begin{enumerate}
+	\item The memory is not flat, meaning that memory references are not equally expensive. 
+	\item 
+\end{enumerate}
+
+\subsection{Definition and Terms}
+
+Before we formally define B-Trees, we assume the following terms:
+
+\begin{itemize}
+\item
+  \textbf{Keys}: The key in database is a special attribute that could
+  identify a row in the database. In our work, each key corresponds to a
+  \textbf{value} and forms a key-value pair.
+\item
+  \textbf{Internal Node}: An internal node is any node of the tree that
+  has child nodes.
+\item
+  \textbf{Leaf Node}: A leaf node is any node that does not have child
+  nodes.
+\end{itemize}
+
+Each node in a B-Tree has the following attributes:
+
+\begin{itemize}
+\item
+  \(x.n\) is the number of keys currently stored in the node \(x\).
+\item
+  Inside each node, the keys are sorted in nondecreasing order, so that
+  we have \(x.keys_1\leq x.keys_2\leq\cdots\leq x.keys_{x.n}\).
+\item
+  \(x.leaf\), a Boolean value determines if current node is a leaf node.
+\end{itemize}
+
+With these properties, A B-Tree \(T\) whose root is \(T.root\) have the
+following properties:
+
+\begin{itemize}
+\item
+  Each internal node \(x\) contains \(x.n+1\) children. We assume the
+  children are \(x.c_1,\cdots,x.c_{x.n+1}\).
+\item
+  The nodes in the tree have lower and upper bounds on the number of
+  keys that can contain. These bounds can be expressed in terms of a
+  fixed integer \(t\)
+\end{itemize}
+
+\subsection{Insertion of B-Tree}
+
+When inserting keys into a binary search tree, we search for the leaf
+position at which to insert the new key. However, with B-Tree, we cannot
+simply find the position, create a new node and insert the value because
+the tree will be imbalanced again. Hence, in this section we illustrate
+an operation that splits a full node around its median key
+
