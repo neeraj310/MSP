@@ -169,7 +169,7 @@ class BTreeModel(BaseModel):
 
     def fit(self, x_train, y_train):
         x, y = (list(t) for t in zip(*sorted(zip(x_train, y_train))))
-        data_size = x.shape[0]
+        data_size = len(x)
         for i in range(data_size):
             self.btree.insert(Item(x[i], y[i]))
 

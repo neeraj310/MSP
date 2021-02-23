@@ -7,6 +7,7 @@ from tabulate import tabulate
 from src.indexing.models import BaseModel
 from src.indexing.models.ml.polynomial_regression import PRModel
 from src.indexing.models.nn.fcn import FCNModel
+from src.indexing.models.rmi.staged import StagedModel
 from src.indexing.models.trees.b_tree import BTreeModel
 from src.queries.point import PointQuery
 
@@ -27,8 +28,8 @@ def evaluate(filename):
 
     lrm = PRModel(1)
     prm = PRModel(2)
-
-    models = [btm, lrm, prm, fcn]
+    sgm = StagedModel(['fcn', 'lr', 'lr'], [1, 2, 4])
+    models = [sgm, btm, fcn, lrm, prm]
     ptq = PointQuery(models)
     build_times = ptq.build(data, ratio)
     mses, eval_times = ptq.evaluate(test_data)
@@ -65,6 +66,7 @@ def models_predict(data, models: List[BaseModel]):
     df = pd.DataFrame.from_dict(results)
     df.to_csv('result.csv', index=False)
     print("Results have been saved to result.csv")
+
 
 if __name__ == "__main__":
     filename = sys.argv[1]

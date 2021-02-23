@@ -9,6 +9,7 @@ from tinyml.optims import SGDOptimizer
 # set this to 1 will print training loss in every epoch.
 tinyml.utilities.logger.VERBOSE = 0
 
+
 class FullyConnectedNetwork():
     def __init__(self, num_neurons, activations, lr=0.01) -> None:
         self.num_fc_layers = len(num_neurons) - 1
@@ -33,7 +34,10 @@ class FullyConnectedNetwork():
 
     def fit(self, X, y, epochs=200, batch_size=100) -> None:
         self.learner = Learner(self.model, mse_loss, SGDOptimizer(lr=self.lr))
-        self.model, _ = self.learner.fit(X, y, epochs=epochs, batch_size=batch_size)
+        self.model, _ = self.learner.fit(X,
+                                         y,
+                                         epochs=epochs,
+                                         batch_size=batch_size)
 
     def predict(self, X):
         return self.model.predict(X)

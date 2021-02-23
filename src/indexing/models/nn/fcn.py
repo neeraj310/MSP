@@ -12,9 +12,7 @@ from src.indexing.utilities.dataloaders import normalize
 class FCNModel(BaseModel):
     def __init__(self) -> None:
         super().__init__('Fully Connected Neural Network')
-        self.net = FullyConnectedNetwork([1, 8, 1],
-                                         ['relu', 'relu'],
-                                         lr=0.001)
+        self.net = FullyConnectedNetwork([1, 8, 1], ['relu', 'relu'], lr=0.001)
 
     def train(self, x_train, y_train, x_test, y_test):
 
@@ -25,8 +23,8 @@ class FCNModel(BaseModel):
 
         x_train = normalize(x_train)
         y_train = normalize(y_train)
-        x_test = (x_test - self.min_x)/(self.max_x - self.min_x)
-        y_test = (y_test - self.min_y)/(self.max_y - self.min_y)
+        x_test = (x_test - self.min_x) / (self.max_x - self.min_x)
+        y_test = (y_test - self.min_y) / (self.max_y - self.min_y)
 
         start_time = timer()
         self.net.fit(x_train, y_train, epochs=10000, batch_size=100)

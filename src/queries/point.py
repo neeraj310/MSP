@@ -18,7 +18,7 @@ class PointQuery(object):
         for model in self.models:
             mse, build_time = model.train(x_train, y_train, x_test, y_test)
             print("{} model built in {:.4f} ms, mse={:4f}".format(
-                model.name, build_time*1000, mse))
+                model.name, build_time * 1000, mse))
             build_times.append(build_time)
         return build_times
 
