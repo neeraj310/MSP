@@ -67,7 +67,8 @@ class StagedModel(BaseModel):
                 next_xs = [[] for i in range(self.num_of_models[stage + 1])]
                 next_ys = [[] for i in range(self.num_of_models[stage + 1])]
                 for index, key in enumerate(x_train):
-                    output = model.predict(key)
+                    model_id = self.get_staged_output(key, stage)
+                    output = self.models[stage][model_id].predict(key)
                     selected_model_id = int(
                         output * self.num_of_models[stage + 1] / self.max_pos)
                     # in case, selected_model_id is not in range
@@ -122,3 +123,15 @@ class StagedModel(BaseModel):
                 # the output from the model is the predicted position directly
                 final_output = self.models[stage][next_model_id].predict(key)
         return int(final_output)
+
+    def get_staged_output(self, key, stage):
+        if stage >= self.num_of_stages:
+            raise ValueError("Stage cannot surpass the total number of stages")
+        next_model_id = 0
+        for stage in range(stage):
+            output = self.models[stage][next_model_id].predict(key)
+            next_model_id = int(output * self.num_of_models[stage + 1] /
+                            self.max_pos)
+            next_model_id = self.acceptable_next_model(
+                next_model_id, stage)
+        return next_model_id

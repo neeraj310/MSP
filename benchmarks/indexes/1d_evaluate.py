@@ -1,5 +1,5 @@
 # Copyright (c) 2021 Xiaozhe Yao et al.
-# 
+#
 # This software is released under the MIT License.
 # https://opensource.org/licenses/MIT
 
@@ -33,8 +33,8 @@ def evaluate(filename):
 
     lrm = PRModel(1)
     prm = PRModel(2)
-    sgm = StagedModel(['fcn', 'lr', 'lr'], [1, 2, 4])
-    models = [sgm, btm, fcn, lrm, prm]
+    sgm = StagedModel(['lr', 'lr', 'lr'], [1, 2, 200])
+    models = [btm, lrm, prm, sgm]
     ptq = PointQuery(models)
     build_times = ptq.build(data, ratio)
     mses, eval_times = ptq.evaluate(test_data)
@@ -59,17 +59,14 @@ def models_predict(data, models: List[BaseModel]):
         pred_y = []
         for each in x:
             pred_y.append(int(model.predict(each)))
-        if model.name == 'Fully Connected Neural Network':
-            # print(pred_y)
-            pass
         pred_ys.append(pred_y)
     results = {}
     results['x'] = x
     results['ground_truth'] = gt_y
     for idx, model in enumerate(models):
         results[model.name] = pred_ys[idx]
-    df = pd.DataFrame.from_dict(results)
-    df.to_csv('result.csv', index=False)
+    # df = pd.DataFrame.from_dict(results)
+    # df.to_csv('result.csv', index=False)
     print("Results have been saved to result.csv")
 
 
