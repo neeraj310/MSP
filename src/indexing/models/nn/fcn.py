@@ -42,7 +42,7 @@ class FCNModel(BaseModel):
 
         x_train = normalize(x_train)
         y_train = normalize(y_train)
-        self.net.fit(x_train, y_train, epochs=10000, batch_size=100)
+        self.net.fit(x_train, y_train, epochs=500, batch_size=100)
 
     def predict(self, X):
         X = (X - self.min_x) / (self.max_x - self.min_x)

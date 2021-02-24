@@ -33,7 +33,7 @@ def evaluate(filename):
 
     lrm = PRModel(1)
     prm = PRModel(2)
-    sgm = StagedModel(['lr', 'lr', 'lr'], [1, 2, 200])
+    sgm = StagedModel(['lr', 'lr', 'lr'], [1, 2, 8])
     models = [btm, lrm, prm, sgm]
     ptq = PointQuery(models)
     build_times = ptq.build(data, ratio)
@@ -65,8 +65,8 @@ def models_predict(data, models: List[BaseModel]):
     results['ground_truth'] = gt_y
     for idx, model in enumerate(models):
         results[model.name] = pred_ys[idx]
-    # df = pd.DataFrame.from_dict(results)
-    # df.to_csv('result.csv', index=False)
+    df = pd.DataFrame.from_dict(results)
+    df.to_csv('result.csv', index=False)
     print("Results have been saved to result.csv")
 
 
