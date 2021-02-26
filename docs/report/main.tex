@@ -1,5 +1,15 @@
 \documentclass[a4paper,12pt]{scrreprt}
 
+\usepackage{scrlayer}
+\DeclareNewLayer[
+    foreground,
+    contents={%
+      \parbox[b][\layerheight][c]{\layerwidth}
+        {\centering (This page intentionally left blank)}%
+    }
+  ]{blankpage.fg}
+\DeclarePageStyleByLayers{blank}{blankpage.fg}
+
 \usepackage{scrhack}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -12,14 +22,17 @@
 \usepackage{amssymb}
 \usepackage{amsfonts}
 \usepackage{amsmath}
-
-% --------- 
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[noend]{algpseudocode}
+\usepackage[ruled, vlined]{algorithm2e}
 
 \titlehead{Department of Informatics, University of Zürich}
 \subject{\vspace*{2cm}MSc Thesis}
 \title{Implementing Learned Indexes on 1 and 2 Dimensional Data}
 \author{
   Neeraj Kumar, Nivedita Nivedita, Xiaozhe Yao\\[-5pt]
+  %TODO: Add your matri.no and email here
   \scriptsize Matrikelnummer: 19-759-570\\[-5pt]
   \scriptsize Email: \texttt{xiaozhe.yao@uzh.ch}
 }
@@ -32,26 +45,24 @@
     \node at (7,-3) {\includegraphics[height=1.5cm]{dbtgBW}};
   \end{tikzpicture}
 }
-
-% --------- 
-
+ 
 \newtheorem{definition}{Definition}
 \newtheorem{example}{Example}
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
 
-
-% --------- 
-
 \begin{document}
 
+\begingroup
+\let\newpage\relax%
 \maketitle
+\newpage\null\thispagestyle{blank}\newpage
+\setcounter{page}{0}
+\endgroup
 
 \begin{abstract}
-	
+\input{chapters/introduction/abstract}
 \end{abstract}
-
-\chapter*{Abstract}
 
 \chapter{Introduction}
 
@@ -68,6 +79,10 @@
 \chapter{Recursive Model Index (RMI)}
 
 \input{chapters/recursive_models/4_rmi}
+
+\chapter{Learned Index Structure for Spatial Data (LISA)}
+
+\input{chapters/Lisa/5_lisa}
 
 
 \bibliographystyle{alpha}

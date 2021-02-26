@@ -33,7 +33,7 @@ def evaluate(filename):
 
     lrm = PRModel(1)
     prm = PRModel(2)
-    sgm = StagedModel(['lr', 'lr', 'lr'], [1, 2, 8])
+    sgm = StagedModel(['lr', 'b-tree', 'lr'], [1, 2, 8])
     models = [btm, lrm, prm, sgm]
     ptq = PointQuery(models)
     build_times = ptq.build(data, ratio)
