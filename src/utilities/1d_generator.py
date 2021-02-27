@@ -25,6 +25,7 @@ def get_data(distribution, size):
     else:
         data = np.random.normal(size, size * FACTOR, size)
     data.sort()
+    data = data + abs(np.min(data))
     return data
 
 
