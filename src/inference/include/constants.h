@@ -1,1 +1,0 @@
-#define FATAL_FAILURE 500
