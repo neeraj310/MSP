@@ -26,6 +26,7 @@ class PointQuery(object):
         return self.models[model_idx].predict(key)
 
     def evaluate(self, test_data):
+        #print('/n in function PointQuery.evaluate')
         data_size = test_data.shape[0]
         build_times = []
         mses = []
@@ -33,10 +34,11 @@ class PointQuery(object):
             ys = []
             start_time = timer()
             for i in range(data_size):
-                y = self.predict(idx, test_data.iloc[i, 0])
+                y = self.predict(idx, test_data.iloc[i, :-1])
                 ys.append(y)
             end_time = timer()
-            mse = metrics.mean_squared_error(test_data.iloc[:, 1], ys)
+          
+            mse = metrics.mean_squared_error(test_data.iloc[:,-1:], ys)
             mses.append(mse)
             print("{} model tested in {:.4f} seconds".format(
                 model.name, end_time - start_time))
