@@ -3,7 +3,7 @@ import os
 import random
 import sys
 import numpy as np
-from src.utilities.generator import get_data
+from generator import get_data
 DATA_SIZE = 10000
 BLOCK_SIZE = 10
 
