@@ -1,34 +1,8 @@
-\section{Baseline Models}
-
-Our baseline model is a two layer fully connected neural network. Before
-constructing the neural network, we will try to theoretically analyze
-the requirements in such a neural network serving as database index.
-
-
-\subsection{Neural Network Settings}
-
-The input (key) to our neural network is a scalar, and the expected
-output of the neural network is the position of the given input. We
-assume the following parameters in the neural network:
+\subsubsection{Activation Functions}
 
 \begin{itemize}
 \item
-  The weight in the \(i\)th layer \(w^{(i)}\).
-\item
-  The bias in the \(i\)th layer \(b^{(i)}\).
-\item
-  The activation function after the \(i\)th layer \(z^{(i)}\).
-\end{itemize}
-
-For example the output of the first layer will be
-\(z^{(1)}(w^{(1)}x+b^{(1)})\).
-
-
-\subsection{Activation Functions}
-
-\begin{itemize}
-\item
-  If we use identity activation function, i.e.~\(z^{(i)}(x)=x\), then no
+  If we use identity activation function, i.e.$z^{(i)}(x)=x$, then no
   matter how many layers are there, the fully connected neural network
   falls back to a linear regression.
 
@@ -57,4 +31,4 @@ For example the output of the first layer will be
   correct.
 \end{itemize}
 
-\subsection{Monotonicity}
+\subsubsection{Monotonicity}

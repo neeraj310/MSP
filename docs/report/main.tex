@@ -1,5 +1,4 @@
 \documentclass[a4paper,12pt]{scrreprt}
-
 \usepackage{scrlayer}
 \DeclareNewLayer[
     foreground,
@@ -26,9 +25,12 @@
 \usepackage[utf8]{inputenc}
 \usepackage[noend]{algpseudocode}
 \usepackage[ruled, vlined]{algorithm2e}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage[labelfont=bf,format=plain,justification=raggedright,singlelinecheck=false]{caption}
 
-\titlehead{Department of Informatics, University of Zürich}
-\subject{\vspace*{2cm}MSc Thesis}
+\titlehead{Institut für Informatik, Universität Zürich}
+\subject{\vspace*{2cm}MSc Project Report}
 \title{Implementing Learned Indexes on 1 and 2 Dimensional Data}
 \author{
   Neeraj Kumar, Nivedita Nivedita, Xiaozhe Yao\\[-5pt]
@@ -50,7 +52,7 @@
 \newtheorem{example}{Example}
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
-
+\newcommand{\comment}[1]{}
 \begin{document}
 
 \begingroup
@@ -64,26 +66,39 @@
 \input{chapters/introduction/abstract}
 \end{abstract}
 
+\tableofcontents
+
 \chapter{Introduction}
 
-\input{chapters/introduction/1_introduction}
+\input{chapters/introduction/introduction}
 
-\chapter{Traditional Indexes used in Database}
+\chapter{Implementation}
 
-\input{chapters/traditional_indexes/2_traditional_indexes}
+\section{One Dimensional Data}
 
-\chapter{Baseline Learned Indexes}
+\subsection{B-Tree}
 
-\input{chapters/baseline_learned_indexes/3_baseline}
+\input{chapters/implementations/one-dim/b-tree}
 
-\chapter{Recursive Model Index (RMI)}
+\subsection{Baseline Learned Index}
 
-\input{chapters/recursive_models/4_rmi}
+\input{chapters/implementations/one-dim/baseline}
 
-\chapter{Learned Index Structure for Spatial Data (LISA)}
+\subsection{Recursive Model Index}
 
-\input{chapters/Lisa/5_lisa}
+\input{chapters/implementations/one-dim/rmi}
 
+\section{Two Dimensional Data}
+
+\subsection{LISA: Learned Index for Spatial Data}
+
+\input{chapters/implementations/two-dim/lisa}
+
+\chapter{Evaluation}
+
+\chapter{Insights and Findings}
+
+\chapter{Conclusion}
 
 \bibliographystyle{alpha}
 \bibliography{refs}

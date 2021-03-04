@@ -1,12 +1,10 @@
-\section{Introduction}
-
 %TODO: there should be some graph to demonstrate the last-mile problem.
 
 In our baseline models, it is not very difficult to reduce the mean square error from millions to thousands. However, it is much harder to reduce it from thousands to tens. This is the so called last-mile problem.
 
 In order to solve this problem, recursive model index was proposed \cite{kraska2018case}. The idea is to split the whole set of data into smaller pieces and assign each piece an index model.
 
-\section{Definitions}
+\subsubsection{Definitions}
 
 
 Similar to a tree, we define the following terms in a recursive model:
@@ -23,17 +21,16 @@ In the following sections, we will use the notations defined below:
 	%TODO: modify algorithms accordingly
 \end{enumerate}
 
-\section{Training}
+\subsubsection{Training}
 
 In order to construct a recursive model, we need to have several parameters listed below:
 \begin{enumerate}
 	\item The training dataset, notated as $(X, Y)$ with entries notated as $(x,y)$.
 	\item The number of stages, notated as $N_S$. It is an integer variable.
 	\item The number of models at each stage, notated as $N_M$. It is a list of integer variable. $N_M^{(i+1)}$ represents the number of models in the $i$th stage.
-	\item 
 \end{enumerate}
 
-The training process of recursive model is a up-bottom process. There will be only one root model that receives the whole training data. After the root model is trained, we iterate over all the training data and predict the page by the root model. After the iteration, we get a new set of pairs $(X, Y_0)$. Then we map $\forall y_0\in Y_0$ into the selected model id in next stage by $\texttt{next}=y_0 * N_M^{(i+1)}/\texttt{max(Y)}$.
+The training process of recursive model is an up-bottom process. There will be only one root model that receives the whole training data. After the root model is trained, we iterate over all the training data and predict the page by the root model. After the iteration, we get a new set of pairs $(X, Y_0)$. Then we map $\forall y_0\in Y_0$ into the selected model id in next stage by $\texttt{next}=y_0 * N_M^{(i+1)}/\texttt{max(Y)}$.
 
 \begin{algorithm}[H]
     \SetAlgoLined
@@ -58,7 +55,7 @@ The training process of recursive model is a up-bottom process. There will be on
      \caption{Training of Recursive Model Index}
 \end{algorithm}
 
-\section{Prediction}
+\subsubsection{Prediction}
 
 \begin{algorithm}[H]
     \SetAlgoLined

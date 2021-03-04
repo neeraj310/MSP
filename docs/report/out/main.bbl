@@ -1,0 +1,10 @@
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{KBC{\etalchar{+}}18}
+
+\bibitem[KBC{\etalchar{+}}18]{kraska2018case}
+Tim Kraska, Alex Beutel, Ed~H Chi, Jeffrey Dean, and Neoklis Polyzotis.
+\newblock The case for learned index structures.
+\newblock In {\em Proceedings of the 2018 International Conference on
+  Management of Data}, pages 489--504, 2018.
+
+\end{thebibliography}

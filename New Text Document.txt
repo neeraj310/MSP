@@ -1,1 +1,0 @@
-set PYTHONPATH=C:\Users\neera\Documents\Python_Scripts\Master_Project\Uzh_Git_26_Feb_2021\learn-index-master-project

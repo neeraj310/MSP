@@ -15,13 +15,16 @@ Nowadays, to leverage these two advantages, researchers proposed learned indexes
 In this report, we explore the development of database indexes, from hand-engineered indexes to the learned index. After that, we explore the possibilities of using complex convolutional neural networks as database indexes. This report is organised into the following chapters:
 
 \begin{enumerate}
-	\item \textbf{Introduction}. In this chapter, we illustrate the organisation of this report. Besides, we go through the modern computer systems and introduce the general information about database indexes. 
-	\item \textbf{Traditional Indexes used in Database}. In this chapter, we analyse one of the most important traditional index: B-Tree. We go through its motivation, algorithms, advantages and disadvantages. Besides, we explore some other traditional indexes such as B+ Tree briefly.
-	\item \textbf{Baseline Learned Indexes}. In this chapter, we build our first learned index with fully connected neural networks. We demonstrate how it works, explore its properties and analyse its advantages and disadvantages. 
-	\item \textbf{Recursive Model Index}. Proposed by T.Kraska \cite{kraska2018case},  Recursive Model Index (RMI) is one of the most popular model used as learned index. In this chapter, we will explain its mechanism, demonstrate its algorithm and qualitatively analyse its pros and cons. 
-	\item \textbf{2D Learned Index}. Until so far, we only work with $1$-dimensional data. 2-D indexes is also important in many applications. For example, in a location query, where users want to find out all the stores in a certain rectangle, all stores are indexed by 2-D keys, i.e. the coordinates. In this chapter, we will explore how 2-D keys are indexed and arranged using a learned fashion.
-	\item \textbf{Learned Indexes with Convolutional Neural Network}. In this chapter, we discover the possibilities of using convolutional neural network (CNN) as database index. 
+	\item \textbf{Introduction}. In this chapter, we illustrate the organisation of this report. Besides, we go through the modern computer systems and introduce the general information about database indexes.
+	\item \textbf{Implementation}. In this chapter, we thoroughly describe the implementation of one and two dimensional indexes, including B-Tree, baseline learned index, recursive model, KD-Tree and LISA.
+	\item \textbf{Evaluation}. In this chapter, we perform evaluation among the indexes we implemented with different evaluation dataset. 
+	\item \textbf{Insights and Findings}. We demonstrate our findings during the implementation in this chapter. Besides, we also discuss the advantages and disadvantages of different indexes.
+	\item \textbf{Conclusions}. 
 \end{enumerate}
+
+\section{Notations}
+
+\input{chapters/introduction/notations}
 
 \section{Terminologies}
 
