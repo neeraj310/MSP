@@ -2,7 +2,24 @@
 #
 # This software is released under the MIT License.
 # https://opensource.org/licenses/MIT
-
+'''
+// In the end, every function needs to have a strucutr like this. 
+def _switch_to_np_array(input_):
+        r"""
+        Check the input, if it's not a Numpy array transform it to one.
+        Parameters
+        ----------
+        input_ : array_like
+            The object that requires a check.
+        Returns
+        -------
+        input_ : ndarray
+            The input data that's been transformed when required.
+        """
+        if isinstance(input_, np.ndarray) is False:
+            input_ = np.array(input_)
+        return input_
+'''
 import sys
 from typing import List
 
