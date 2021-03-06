@@ -78,32 +78,6 @@ class LisaBaseModel():
         # If we reach here, then the element was not present
         #print('\n returning page %d' %(-1))
         return -1
-    
-    def key_binary_search(self,x,page_lower):
-        low = page_lower
-        high = page_lower+self.keysPerPage-1
-        mid = 0
-        #print('searching for %d' %(x))
-        while low <= high:
-        
-            mid = (high + low) // 2
-            #print('mid is %d' %(mid))
-            # If x is greater, ignore left half
-            if self.train_array[mid][3] < x:
-                low = mid + 1
-                
-                # If x is smaller, ignore right half
-            elif self.train_array[mid][3] > x:
-                high = mid - 1
- 
-            # means x is present at mid
-            else:
-                #print('\n returning index %d' %(mid))
-                return mid
-    
-        # If we reach here, then the element was not present
-        #print('\n returning page %d' %(-1))
-        return -1
  
         
         
@@ -111,38 +85,36 @@ class LisaBaseModel():
         #print(query_point)
         #start_time = timer()
         mapped_val = query_point[0]+query_point[1]
+        '''
+        found = False
+        for i in range(self.pageCount):
+            if ((mapped_val >= self.denseArray[i][0]) and (mapped_val <= self.denseArray[i][1])):
+                found = True
+                break
+        
+        if (found == False):
+            print('\n\n\nPoint Not Found_1\n\n')
+            return 0
+
+        else:
+        '''
         i = self.search_page_index(mapped_val)
         if (i == -1):
-            print('\n\n\nPoint Not Found:search page return -1, for query point %d %d \n\n' %(query_point[0],query_point[1]))
-            return i
+            print('\n\n\nPoint Not Found_1\n\n')
+            return 0
 
         else:
             #print('Point found in page %d'%(i))
             page_lower = i*self.keysPerPage
-            key_index = self.key_binary_search(mapped_val,page_lower)
-            if (key_index != -1):
-                if ((query_point[0] == self.train_array[key_index][0]) and (query_point[1] == self.train_array[key_index][1])):
-                    return(self.train_array[key_index][2])
-                else:
-                    i = 0
-                    while(mapped_val == self.train_array[key_index-i][3]):
-                        if ((query_point[0] == self.train_array[key_index-i][0]) and (query_point[1] == self.train_array[key_index-i][1])):
-                            return(self.train_array[key_index-i][2])
-                        else:
-                            i = i+1
-                    i = 0
-                    while(mapped_val == self.train_array[key_index+i][3]):
-                        if ((query_point[0] == self.train_array[key_index+i][0]) and (query_point[1] == self.train_array[key_index+i][1])):
-                            return(self.train_array[key_index+i][2])
-                        else:
-                            i = i+1
-                print('\n\n\nPoint Not Found_2\n\n')
-                return -1
-            else:
-                print('\n\n\nPoint Not Found_3\n\n')
-                return -1
-                
+            for j in range(page_lower,page_lower+self.keysPerPage):
+                if ((query_point[0] == self.train_array[j][0]) and (query_point[1] == self.train_array[j][1])):
+                    #print( 'value found in location %d '%(in_data_arr[j][2]))
+                    #print('Time taken %f'%(timer()-start_time))
+                    return self.train_array[j][2]
+            print('\n\n\nPoint Not Found_2\n\n')
             
+            return 0
+        
     
     def range_query(self):
         '''
@@ -201,7 +173,6 @@ else:
         test_data_size = x_test.shape[0]
         pred_y = []
         #for i in range(20):
-        print('\n In Lisabaseline.build evaluation %d data points' %(test_data_size))
         for i in range(test_data_size):
             pred_y.append(self.predict(x_test[i]))
         

@@ -1,0 +1,44 @@
+/n build time 1.598277
+LisaBaseLine model built in 1598.2775 ms, mse=0.000000
+/n in function PointQuery.evaluate data size = 10
+LisaBaseLine model tested in 11.8108 seconds
+/n in function PointQuery.evaluate data size = 110
+LisaBaseLine model tested in 182.8667 seconds
+/n in function PointQuery.evaluate data size = 210
+LisaBaseLine model tested in 318.1675 seconds
+/n in function PointQuery.evaluate data size = 310
+LisaBaseLine model tested in 420.0867 seconds
+/n in function PointQuery.evaluate data size = 410
+LisaBaseLine model tested in 756.9242 seconds
+/n in function PointQuery.evaluate data size = 510
+LisaBaseLine model tested in 1137.7791 seconds
+/n in function PointQuery.evaluate data size = 610
+LisaBaseLine model tested in 985.7698 seconds
+/n in function PointQuery.evaluate data size = 710
+
+
+
+
+
+/n build time 1.598277
+LisaBaseLine model built in 1598.2775 ms, mse=0.000000
+/n in function PointQuery.evaluate data size = 10
+LisaBaseLine model tested in 11.8108 seconds
+/n in function PointQuery.evaluate data size = 110
+LisaBaseLine model tested in 182.8667 seconds
+/n in function PointQuery.evaluate data size = 210
+LisaBaseLine model tested in 318.1675 seconds
+/n in function PointQuery.evaluate data size = 310
+LisaBaseLine model tested in 420.0867 seconds
+/n in function PointQuery.evaluate data size = 410
+LisaBaseLine model tested in 756.9242 seconds
+/n in function PointQuery.evaluate data size = 510
+LisaBaseLine model tested in 1137.7791 seconds
+/n in function PointQuery.evaluate data size = 610
+LisaBaseLine model tested in 985.7698 seconds
+/n in function PointQuery.evaluate data size = 710
+LisaBaseLine model tested in 1061.1880 seconds
+/n in function PointQuery.evaluate data size = 810
+LisaBaseLine model tested in 1169.5826 seconds
+/n in function PointQuery.evaluate data size = 910
+Traceback (most recent call last):

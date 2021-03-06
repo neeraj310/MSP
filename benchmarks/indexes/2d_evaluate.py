@@ -20,20 +20,20 @@ from src.queries.point import PointQuery
 from sklearn import metrics
 import numpy as np
 
-ratio = 0.01
-b_tree_page_size = 20
+ratio = 0.2
+
 
 
 def load_2D_Data(filename):
     data = pd.read_csv(filename)
-    data = data[0:100]
+    #data = data[0:100]
     test_data = data.sample(n=int(ratio * len(data)))
     return data, test_data
 
 
 def evaluate(filename):
     data, test_data = load_2D_Data(filename)
-    lisaBm = LisaBaseModel(10)
+    lisaBm = LisaBaseModel(100)
     
     '''
     btm = BTreeModel(b_tree_page_size)
@@ -46,21 +46,25 @@ def evaluate(filename):
     '''
     models = [lisaBm]
     ptq = PointQuery(models)
-    build_times = ptq.build(data, ratio)
+    build_times = ptq.build(data, 0.00002)
     
-
- 
-    mses, eval_times = ptq.evaluate(test_data)
+    i = 10
     result = []
     header = [
-        "Name", "Build Time (s)", "Evaluation Time (s)",
-        "Evaluation Error (MSE)"
-    ]
-    for index, model in enumerate(models):
-        result.append(
-            [model.name, build_times[index], eval_times[index], mses[index]])
+        "Name", "Test Data Size","Build Time (s)", "Evaluation Time (s)",
+        "Average Evaluation Time (s)","Evaluation Error (MSE)"
+        ]
+    while (i <= 1000000):
+        mses, eval_times = ptq.evaluate(test_data.iloc[:i, :])
+        
+        for index, model in enumerate(models):
+            result.append(
+                [model.name, i, build_times[index], eval_times[index], 
+                eval_times[index]/i, mses[index]])
+        print(len(result))    
+        i = i*10
     print(tabulate(result, header))
-    models_predict(data, models)
+    #models_predict(data, models)
     
 
 def models_predict(data, models: List[BaseModel]):

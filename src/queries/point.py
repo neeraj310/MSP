@@ -26,8 +26,9 @@ class PointQuery(object):
         return self.models[model_idx].predict(key)
 
     def evaluate(self, test_data):
-        #print('/n in function PointQuery.evaluate')
+        print('/n in function PointQuery.evaluate data size = %d' %(test_data.shape[0])) 
         data_size = test_data.shape[0]
+        
         build_times = []
         mses = []
         for idx, model in enumerate(self.models):
