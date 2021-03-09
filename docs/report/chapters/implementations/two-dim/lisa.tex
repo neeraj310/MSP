@@ -17,8 +17,8 @@ The joint CDF satisfies the following properties:
 \end{itemize}
 
 \textcolor{blue} {Need to find a solid argument to explain why learning multi dimensional CDFs will result in  searching local regions qualified on one dimension. }
-LISA solves this problem by partitioning search space into a series of grid cells based on the data distribution and building a partially monotonic function according to the borders of cells to map the data from $\mathbb{R}^d$ into $\mathbb{R}$.
 
+LISA solves this problem by partitioning search space into a series of grid cells based on the data distribution and building a partially monotonic function according to the borders of cells to map the data from $\mathbb{R}^d$ into $\mathbb{R}$.
 
 \subsubsection{Baseline Method}  
 
@@ -38,7 +38,12 @@ This section presents the definition
 	\item \textbf{Cell}. A grid cell is a rectangle whose lower and upper corners are points $(l_{0},l_{1}) and  (u_{0},u_{1})$, i.e.,  cell = $(l_{0},u_{0}) \times [l_{1},u_{1})$
 	
 	\item \textbf{Mapping Function}. A mapping function M is a partially monotonic function on the domain $\mathbb{R}^{2}$ to the non-negative range,i.e $M:[0,X_{0}]\times[0,X_{1}]\to [0,+\infty)$ such that $M(x_{0},x_{1}) \leq M(y_{0},y_{1})$ when $x_{0} \leq y_{0}$ and $x_{1} \leq y_{1} $
+	\item \textbf{Shard}.shard S is the preimage of an
+interval $[a, b) \subseteq [0, +1)$ under the mapping function M,  i.e., $S = M^{-1}([a.b))$.
     
+	\item \textbf{Local Model}. local model $L_{i}$ is a model
+that processes operations within a shard $S_i$ . It keeps dynamic
+structures such as the addresses of pages contained by $S_{i}$ .
 \end{enumerate}
 % $f:\mathbb{R}\to\mathbb{R}, x\to y$ where $x$ is the input index and $y$ is the corresponding page block
 
@@ -52,14 +57,13 @@ In order to construct the baseline model, we need to have several parameters lis
 \end{enumerate}
 
 During training, sort all keys according to their mapped values, divide the keys into equal sized cells(pages), and store the mapped values of first and last key for each page into an array. For prediction, find the page corresponding to mapped value of query point, and scan this page sequentially. 
-%The training algorithm is shown in f. There will be only one root model that receives the whole training data. After the root model is trained, we iterate over all the training data and predict the page by the root model. After the iteration, we get a new set of pairs $(X, Y_0)$. Then we map $\forall y_0\in Y_0$ into the selected model id in next stage by $\texttt{next}=y_0 * N_M^{(i+1)}/\texttt{max(Y)}$.
 
 \begin{algorithm}[H]
     \SetAlgoLined
     \SetKwInOut{Input}{input}
-    %\Input{\texttt{num\_of\_stages; num\_of\_models; types\_of\_models; x; y}}
-     \Input{\texttt{num\_of\_cells;x;y}}
-      \texttt{trainset=[$(x,y);x \in \mathbb{R}^{2};y \in \mathbb{R}$]} \\
+    \SetKwInOut{Output}{Output}
+    \Input{num\_of\_cells; trainset=[$(x,y);x \in \mathbb{R}^{2};y \in \mathbb{R}$]}
+    \Output{M:Mapped Function}
      \For{$i\gets0$ \KwTo $len(x)$}{
             	\texttt{x[i].mapped\_value = x[i][0]+x[i][1]} \\
             
@@ -67,7 +71,7 @@ During training, sort all keys according to their mapped values, divide the keys
      \texttt{Sort x based on x.mapped\_value}\\
      \texttt{Divide x into equal size pages according to num\_of\_cells}\\
      \texttt{Store mapped value of first and last key for each page }\\
-      \For{$i\gets0$ \KwTo num\_of\_cells} %\Comment{Store mapped value of first and last key for each page}
+      \For{$i\gets0$ \KwTo num\_of\_cells}
      {
          \texttt{denseArray[i].lower = first key in page i  } \\
 		 \texttt{denseArray[i].upper = last key in page i  }
@@ -82,11 +86,11 @@ During training, sort all keys according to their mapped values, divide the keys
 \begin{algorithm}[H]
     \SetAlgoLined
     \SetKwInOut{Input}{input}
-    \Input{\texttt{x\_test: Key Value to be searched }}
+    \Input{\texttt{x\_test}: Key; \texttt{d:}the denseArray}
     \texttt{x\_test.mapped\_value = x\_test[0]+x\_test[1] } \\
     \For{$i\gets0$ \KwTo $len(denseArray)$}
     {
-        \uIf{$((x\_test.mapped\_value \geq denseArray[i].lower) \& (x\_test.mapped\_value \leq denseArray[i].upper))$} 
+        \If{$\mathcal{M}(x\_test) \in [d[i].lower,d[i].upper]$} 
         {
 		    \texttt{Key is in Page i } \\
 		    \texttt{break }
@@ -98,8 +102,8 @@ During training, sort all keys according to their mapped values, divide the keys
 \end{algorithm}
 
 \subsubsection{Limitation}
+
 Prediction cost in baseline method consists of following two parts.
-%search cost for the page which contains the key, and once the page is found, scan cost of all the keys in the page to match the query point. If page size is small, first cost will be high as keys will be divided into larger number of pages. On the other hand, if page size is large, number of pages will be smaller, number of keys per page will be higher, resulting in higher cost of sequential scan with in the page.
 
 \begin{enumerate}
 	\item Search cost for the page which contains the key. If page size is small, this cost will be high as keys will be divided into larger number of pages
@@ -115,6 +119,7 @@ Consider the example in figure \ref{fig:BaseLine_Method_Limitation}. Dataset is 
 \end{figure*}
 
 \subsubsection{Lisa Overview}
+
 Given a spatial dataset, we generate the mapping function
 M, the shard prediction function SP and a series of local
 models. Based on them, we build our index structure, LISA, to
@@ -127,24 +132,16 @@ process range query,KNN query and data updates. LISA consists of four parts: the
     \label{fig:Lisa_Framework}
 \end{figure*}
 
-This section presents the additional definition for Lisa model.  
-
+As seen in the overview of LISA, there are four stages in building the LISA. 
 \begin{enumerate}
-	\item \textbf{Shard}.shard S is the preimage of an
-interval $[a, b) \subseteq [0, +1)$ under the mapping function M,  i.e., $S = M^{-1}([a.b))$.
-    
-	\item \textbf{Local Model}. local model $L_{i}$ is a model
-that processes operations within a shard Si . It keeps dynamic
-structures such as the addresses of pages contained by $S_{i}$ .
-\textcolor{blue} {Will add further details as we start working on corresponding modules.}	
+	\item Grid cell partition.
+	\item Mapping spatial coordinates into scalars, i.e. $\mathbb{R}^d\to\mathbb{R}$.
+	\item Build shard prediction function $\mathcal{SP}$.
+	\item Build local models.
 \end{enumerate}
 
-
-\subsubsection{Lisa Design}
 \textbf{Grid Cells Generation} 
-First task in Lisa implementation is to partition the 2 dimensional key space into a series of grid cells based on the data distribution
-along a sequence of axes and numbering the cells also along
-these axes. The principal idea behind this partition strategy is to divide the key space into cell boundaries and apply a mapping function to create monotonically increasing mapping values at the cell boundaries, i.e. mapped value of all keys in cell i will be less than mapped values of keys in cell j, if i <j. Consider the example shown in the figure \ref{fig:Cell_Parttion} total number of keys are 18, and we decided to partition the key space into 9 cells, resulting in 2 keys per cell. To partition the key space, we first sort the keys values according to $1^{st}$  dimension, divide the keys into 3 cells each containing 6 keys. Then for each cell, we sort the keys again according to $2^{nd}$  dimension, and divide the keys in each cell into 3 new cells. 
+First task in Lisa implementation is to partition the 2 dimensional key space into a series of grid cells based on the data distribution along a sequence of axes and numbering the cells also along these axes. The principal idea behind this partition strategy is to divide the key space into cell boundaries and apply a mapping function to create monotonically increasing mapping values at the cell boundaries, i.e. mapped value of all keys in cell i will be less than mapped values of keys in cell j, if i <j. Consider the example shown in the figure \ref{fig:Cell_Parttion} total number of keys are 18, and we decided to partition the key space into 9 cells, resulting in 2 keys per cell. To partition the key space, we first sort the keys values according to $1^{st}$  dimension, divide the keys into 3 cells each containing 6 keys. Then for each cell, we sort the keys again according to $2^{nd}$  dimension, and divide the keys in each cell into 3 new cells. 
 
 
 \begin{figure*}[t]
@@ -158,7 +155,6 @@ these axes. The principal idea behind this partition strategy is to divide the k
 \begin{algorithm}[H]
     \SetAlgoLined
     \SetKwInOut{Input}{input}
-    %\Input{\texttt{num\_of\_stages; num\_of\_models; types\_of\_models; x; y}}
      \Input{\texttt{num\_of\_cells;x; y}}
      \texttt{trainset=[$(x,y);x \in \mathbb{R}^{2};y \in \mathbb{R}$]} \\
      \texttt{$keysPerPage =  len(x) / num\_of\_cells $}\\
@@ -166,27 +162,115 @@ these axes. The principal idea behind this partition strategy is to divide the k
      \texttt{In first for loop, divide the keys into equal size subsets based on first dimension }\\
      \For{$i\gets0$ \KwTo $\sqrt(num\_of\_cells)$}  
      {
-        \texttt{Store the 1st dimensional coordinates of first and last key for each cell.Each such cell will contain $keysPerPage*sqrt(num\_of\_cells)$ keys } \\
-        %\texttt{$cellMatrix[i].lower\_x0 = 1st dimensional coordinates$ of first key in the cell  } \\
-		%\texttt{$cellMatrix[i].upper\_x0 = 1st dimensional coordinates$ of last key in the cell  }
-		
+        \texttt{Store the 1st dimensional coordinates of first and last key for each cell. Each such cell will contain $keysPerPage*sqrt(num\_of\_cells)$ keys } \\
      }
-     %\texttt{After first for loop, each cell in sqrt(num\_of\_cells) will contain $keysPerPage*sqrt(num\_of\_cells)$ keys }\\
      
      \texttt{Sort keys in each cell based on 2nd dimension,x[:][1] }\\
      
-      \For{$i\gets0$ \KwTo $\sqrt(num\_of\_cells)$} %\Comment{Store mapped value of first and last key for each page}
+      \For{$i\gets0$ \KwTo $\sqrt{num\_of\_cells}$}
       {
          \For{$j\gets0$ \KwTo $\sqrt(num\_of\_cells)$}
          {
             \texttt{Store the 2nd dimensional coordinates of first and last key for each cell.} \\
-            %\texttt{$cellMatrix[i].lower_x0 = 2nd dimensional coordinates$ of first key in the cell  } \\
-	    	%\texttt{$cellMatrix[i].upper_x0 =  2nd dimensional Coordinates$ of last key in the cell}
 		 }
       }
      \caption{Grid Cell Generation Algorithm for Lisa Method}
      \label{Training_Lisa_Baseline}
 \end{algorithm}
+
+\subsubsection{Mapping Function}
+
+\subsubsection{Shard Prediction Function}
+
+After the mapping function, we get a dense array of mapped values. Then we partition them evenly into $U$ parts and let $\boldsymbol{M}_p=[m_1,\cdots, m_U]$. We train linear regression functions $\mathcal{F}_i$ on each interval and suppose $V+1$ is the number of mapped values that each $\mathcal{F}_i$ needs to process and $\Psi$ is the average number of keys falling in a shard. With these definitions, we know that each $\mathcal{F}_i$ generates $D=\ceil{\frac{V+1}{\Psi}}$ shards.
+
+For example, assume we have a dense array of mapped values as $[1,1.2,2.2,3,3.4,4]$, and we want to partition it into 2 parts, then we have $\boldsymbol{M}_p=[3]$ and $V+1=3$. In this case we will train $2$ linear regression functions. Suppose that the average number of keys in a shard is $\Psi=2$, then each $\mathcal{F}_i$ generates $D=\ceil{\frac{V+1}{\Psi}}=\ceil{\frac{3}{2}}=2$ shards.
+
+Then with a given $x$, the predicted shard is given by $\mathcal{SP}(x)=\mathcal{F}_i(x)+i\times D$, where $i=\text{binary-search}(\boldsymbol{M}_p,x)$. More specifically, we first determine $i$ by using binary search. The result tells which interval this $x$ should belong to. Then we find the corresponding linear regression function $\mathcal{F}_i$ and calculate $\mathcal{F}_i(x)$, which is the predicted shard.
+
+In the above example, given a key $x=2.2$, we first perform binary search in $\boldsymbol{M}_p$ and we found $i=1$. Then we find the first linear regression function $\mathcal{F}_1$ and calculate $\mathcal{F}_1(x)$. Since each linear regression function will yield $D=\ceil{\frac{V+1}{\Psi}}=2$ shards, the shards that the first linear regression function generates will be from $0$ to $1$ and the shards that the second linear regression function generates will be from $2$ to $3$. Hence, the predicted shard id is given by 
+$$
+\mathcal{SP}(x)=\mathcal{F}_i(x)+i\times D
+$$
+
+Then the problem left is to train the linear regression functions $\mathcal{F}_i$. Let $\boldsymbol{x}=(x_0,\cdots,x_v)$ be the keys' mapped value that fall in $[m_{i-1}, m_i)$. Suppose that $\boldsymbol{x}$ is sorted, i.e. $x_i\leq x_j, \forall 0\leq i<j\leq v$. Let $\boldsymbol{y}=(0,\cdots, V)$. Then we build a piecewise linear regression function $f_i$ with inputs $\boldsymbol{x}$ and ground truth $\boldsymbol{y}$. For a given point with mapped value $m\in[m_{i-1}, m_i)$, its shard id is given by $\ceil{\frac{f_i(m)}{\Psi}}+i\times D$, i.e. $\mathcal{F}_i(x)=\frac{f_i(m)}{\Psi}$.
+
+In our previous example, in the interval $[0,3)$, we have $\boldsymbol{x}=(1,1.2,2.2)$ and $\boldsymbol{y}=(0,1,2)$. Then for a point with the mapped value $m=1.2$, the expected output will be $f_i(m)=1$ and the shard id is given by $\ceil{\frac{1}{2}}+0\times 2=1$. Hence, the point with mapped value $m=1.2$ will be allocated to the first shard. Then the problem is to train a continuous piecewise linear regression function in each interval. We constrain the piecewise linear regression function to be continuous so that it is guaranteed be monotonic.
+
+Formally, a piecewise linear function can be described as 
+
+\begin{equation}
+\label{piecewise_linear_function}
+	f(x)= \begin{cases} 
+      b_0+\alpha_0(x-\beta_0) & \beta_0\leq x < \beta_1 \\
+      b_1+\alpha_1(x-\beta_1) &  \beta_1\leq x < \beta_2 \\
+      \vdots \\
+      b_\sigma+\alpha_\sigma(x-\beta_\sigma) &  \beta_\sigma\leq x \\
+   \end{cases}
+\end{equation}
+
+In order to make this piecewise linear function continuous, the slopes and intercepts of each linear region depend on previous values. Formally, let $\bar{a}=b_0$, then Eq. (\ref{piecewise_linear_function}) reduces to
+
+\begin{equation}
+	\label{continuous_piecewise_linear_function}
+	f(x)= \begin{cases} 
+      \bar{\alpha}+\alpha_0(x-\beta_0) & \beta_0\leq x < \beta_1 \\
+      \bar{\alpha}+\alpha_0(x-\beta_0) + \alpha_1(x-\beta_1) &  \beta_1\leq x < \beta_2 \\
+      \cdots \\
+      \bar{\alpha}+\alpha_0(x-\beta_0) + \alpha_1(x-\beta_1)+\cdots+\alpha_\sigma(x-\beta_\sigma) &  \beta_\sigma\leq x \\
+   \end{cases}
+\end{equation}
+
+
+Then to make Eq. (\ref{continuous_piecewise_linear_function}) monotonically increasing, we only need to ensure that $$\sum_{i=0}^\eta \alpha_i\geq 0, \forall 0\leq \eta\leq \sigma$$
+
+Let $\boldsymbol{\alpha}=(\bar{\alpha},\alpha_0,\cdots,\alpha_\sigma)$, the square loss function $L(\boldsymbol{\alpha},\boldsymbol{\beta})=\sum_{i=1}^{V}(f(x_i)-y_i)^2$. We then optimise $\boldsymbol{\alpha}$ and $\boldsymbol{\beta}$ iteratively.
+
+Assume that $\boldsymbol{\beta}=\hat{\boldsymbol{\beta}}=(\hat{\beta_0},\hat{\beta_1},\cdots,\hat{\beta_\sigma})$ is fixed, then $\boldsymbol{\alpha}$ can be regarded as the least square solution of the linear equation $\boldsymbol{A\alpha}=\boldsymbol{y}$, where
+
+$$
+A=\left[\begin{array}{ccccc}
+1 & x_{0}-\hat{\beta}_{0} & \left(x_{0}-\hat{\beta}_{1}\right) 1_{x_{0} \geq \hat{\beta}_{1}} & \ldots & \left(x_{0}-\hat{\beta}_{\sigma}\right) 1_{x_{0} \geq \hat{\beta}_{\sigma}} \\
+1 & x_{1}-\hat{\beta}_{0} & \left(x_{1}-\hat{\beta}_{1}\right) 1_{x_{1} \geq \hat{\beta}_{1}} & \ldots & \left(x_{1}-\hat{\beta}_{\sigma}\right) 1_{x_{1}} \geq \hat{\beta}_{\sigma} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+1 & x_{N}-\hat{\beta}_{0} & \left(x_{V}-\hat{\beta}_{1}\right) 1_{x_{V} \geq \hat{\beta}_{2}} & \cdots & \left(x_{V}-\hat{\beta}_{\sigma}\right) 1_{x_{V} \geq \hat{\beta}_{\sigma}}
+\end{array}\right]$$
+
+Let $\boldsymbol{r}=\boldsymbol{A\alpha-y}$, then we have
+\begin{equation}
+ \begin{split}
+	L(\boldsymbol{\alpha},\boldsymbol{\beta}) 
+	 =(\boldsymbol{y-A\alpha})^T(\boldsymbol{y-A\alpha}) 
+	&=\boldsymbol{y}^T\boldsymbol{y}-\boldsymbol{\alpha}{^T}\boldsymbol{A}^T\boldsymbol{y}-\boldsymbol{y}^T\boldsymbol{A\alpha}+\boldsymbol{\alpha}^T\boldsymbol{A}^T\boldsymbol{A\alpha} \\
+	& = \boldsymbol{y}^T\boldsymbol{y}-2\boldsymbol{\alpha}^T\boldsymbol{A}^T\boldsymbol{y}+\boldsymbol{\alpha}^T\boldsymbol{A}^T\boldsymbol{A}\boldsymbol{\alpha}
+\end{split}
+\end{equation}
+
+and if we let
+
+\begin{equation}
+	\begin{split}
+		\frac{\partial L(\boldsymbol{\alpha}, \boldsymbol{\beta})}{\boldsymbol{\alpha}}=2\boldsymbol{A}^T\boldsymbol{A}\boldsymbol{\beta}-2\boldsymbol{A^T}\boldsymbol{y}=0 \\ \implies 
+		\boldsymbol{\alpha}=(\boldsymbol{A}^T\boldsymbol{A})^{-1}\boldsymbol{A}\boldsymbol{y}
+	\end{split}
+\end{equation}
+
+
+we get the $\boldsymbol{\alpha}$ with the given fixed $\boldsymbol{\beta}$. Clearly, different $\boldsymbol{\beta}$ give rise to different optimal parameters. Let $\boldsymbol{\alpha^\star}(\boldsymbol{\beta})$ be the optimal $\boldsymbol{\alpha}$ for a particular $\boldsymbol{\beta}$, then we want to find $\boldsymbol{beta}$ such that
+
+
+\begin{equation}
+	L()
+\end{equation}
+
+
+
+
+
+
+
+
+
 
 
 
