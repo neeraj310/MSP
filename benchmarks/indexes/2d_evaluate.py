@@ -26,13 +26,15 @@ from typing import List
 import pandas as pd
 from tabulate import tabulate
 
-from src.indexing.models import BaseModel
-from src.indexing.models.ml.polynomial_regression import PRModel
-from src.indexing.models.nn.fcn import FCNModel
-from src.indexing.models.rmi.staged import StagedModel
-from src.indexing.models.trees.b_tree import BTreeModel
-from src.indexing.models.lisa.basemodel import LisaBaseModel
-from src.queries.point import PointQuery
+sys.path.append('src')
+from indexing.models import BaseModel
+from indexing.models.ml.polynomial_regression import PRModel
+from indexing.models.nn.fcn import FCNModel
+from indexing.models.rmi.staged import StagedModel
+from indexing.models.trees.b_tree import BTreeModel
+from indexing.models.lisa.basemodel import LisaBaseModel
+from indexing.models.trees.KD_tree import KDTreeModel
+from queries.point import PointQuery
 
 from sklearn import metrics
 import numpy as np
@@ -51,6 +53,7 @@ def load_2D_Data(filename):
 def evaluate(filename):
     data, test_data = load_2D_Data(filename)
     lisaBm = LisaBaseModel(100)
+    kdtree=KDTreeModel()
     
     '''
     btm = BTreeModel(b_tree_page_size)
@@ -61,9 +64,11 @@ def evaluate(filename):
     sgm = StagedModel(['lr', 'b-tree', 'lr'], [1, 2, 8])
     models = [btm, lrm, prm, sgm]
     '''
-    models = [lisaBm]
+    models = [lisaBm,kdtree]
     ptq = PointQuery(models)
     build_times = ptq.build(data, 0.00002)
+
+    # Kdtree Model
     
     i = 10
     result = []
@@ -71,7 +76,7 @@ def evaluate(filename):
         "Name", "Test Data Size","Build Time (s)", "Evaluation Time (s)",
         "Average Evaluation Time (s)","Evaluation Error (MSE)"
         ]
-    while (i <= 1000000):
+    while (i <= 100000):
         mses, eval_times = ptq.evaluate(test_data.iloc[:i, :])
         
         for index, model in enumerate(models):
@@ -82,6 +87,8 @@ def evaluate(filename):
         i = i*10
     print(tabulate(result, header))
     #models_predict(data, models)
+
+    
     
 
 def models_predict(data, models: List[BaseModel]):
@@ -109,5 +116,7 @@ def models_predict(data, models: List[BaseModel]):
 
 
 if __name__ == "__main__":
-    filename = sys.argv[1]
+    # filename = sys.argv[1]
+    filename = 'data/2d_lognormal_lognormal_1000000.csv'
+
     evaluate(filename)
