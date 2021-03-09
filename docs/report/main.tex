@@ -24,10 +24,14 @@
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[noend]{algpseudocode}
-\usepackage[ruled, vlined]{algorithm2e}
+\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
 \usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage[labelfont=bf,format=plain,justification=raggedright,singlelinecheck=false]{caption}
+\usepackage{mathtools}
+%\usepackage[ruled, vlined, linesnumbered, algo2e]{algorithm2e}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 
 \titlehead{Institut für Informatik, Universität Zürich}
 \subject{\vspace*{2cm}MSc Project Report}
@@ -66,7 +70,8 @@
 \input{chapters/introduction/abstract}
 \end{abstract}
 
-\tableofcontents
+\setcounter{tocdepth}{2}
+\tableofcontents 
 
 \chapter{Introduction}
 
@@ -89,6 +94,10 @@
 \input{chapters/implementations/one-dim/rmi}
 
 \section{Two Dimensional Data}
+
+\subsection{KD-Tree}
+
+\input{chapters/implementations/two-dim/kd-tree}
 
 \subsection{LISA: Learned Index for Spatial Data}
 

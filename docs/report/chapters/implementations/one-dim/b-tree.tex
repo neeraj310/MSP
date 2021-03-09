@@ -53,7 +53,7 @@ Each node in a B-Tree has the following attributes:
 \item
   $x.n$ is the number of keys currently stored in the node $x$.
 \item
-  Inside each node, the keys are sorted in nondecreasing order, so that
+  Inside each node, the keys are sorted in non decreasing order, so that
   we have $x.keys_1\leq x.keys_2\leq\cdots\leq x.keys_{x.n}$.
 \item
   $x.leaf$, a Boolean value determines if current node is a leaf node.
@@ -80,3 +80,42 @@ simply find the position, create a new node and insert the value because
 the tree will be imbalanced again. Hence, in this section we illustrate
 an operation that splits a full node around its median key
 
+\begin{algorithm}[H]
+    \SetAlgoLined
+    \SetKwInOut{Input}{Input}
+     \Input{\texttt{$m$:order\_of\_tree ,$(k,v)$:(key, value), $N$:Node;}}
+    \SetKwInOut{Output}{Output}
+     \Output{\texttt{Btree is constructed}}
+     \eIf{$N$ is not yet full}  
+     {
+        \texttt{insert $(k,v)$ into $N$}
+     }
+     {
+        \texttt{create new Node N'}
+     }
+    \eIf{$N$ is is a leaf}
+    {
+    
+        \texttt{Temp:=$N$+$(k,v)$, $k’$:=$ceil(m/2-1)$} \\k' is the median index of Temp
+        \texttt{move entries greater than median to k}
+        
+    }
+    {
+        \texttt{Temp:=N+(k,p), k’:=ceil(m/2-1)}
+     
+    }
+    
+    
+     
+     \texttt{Sort keys in each cell based on 2nd dimension,x[:][1] }\\
+     
+      \For{$i\gets0$ \KwTo $\sqrt(num\_of\_cells)$} %\Comment{Store mapped value of first and last key for each page}
+      {
+         \For{$j\gets0$ \KwTo $\sqrt(num\_of\_cells)$}
+         {
+            \texttt{Store the 2nd dimensional coordinates of first and last key for each cell.} \\
+		 }
+      }
+     \caption{Grid Cell Generation Algorithm for Lisa Method}
+     \label{Training_Lisa_Baseline}
+\end{algorithm}
