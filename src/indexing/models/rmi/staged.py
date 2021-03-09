@@ -7,14 +7,15 @@ This file describes how staged model, i.e. recursive model works.
 
 from timeit import default_timer as timer
 from typing import List
-
+import sys
 import numpy as np
 from sklearn import metrics
 
-from src.indexing.models import BaseModel
-from src.indexing.models.ml.polynomial_regression import PolynomialRegression
-from src.indexing.models.nn.fcn import FCNModel
-from src.indexing.models.trees.b_tree import BTreeModel
+sys.path.append('src')
+from indexing.models import BaseModel
+from indexing.models.ml.polynomial_regression import PolynomialRegression
+from indexing.models.nn.fcn import FCNModel
+from indexing.models.trees.b_tree import BTreeModel
 
 PAGE_SIZE = 10
 

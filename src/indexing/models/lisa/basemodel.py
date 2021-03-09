@@ -4,14 +4,15 @@ Created on Fri Feb 26 14:36:30 2021
 
 @author: neera
 """
-
+import sys
 from timeit import default_timer as timer
 from typing import List, Tuple
 import numpy as np
 from sklearn import metrics
 import pandas as pd
 
-from src.indexing.models import BaseModel
+sys.path.append('src')
+from indexing.models import BaseModel
 
 import matplotlib.pyplot as plt
 

@@ -1,9 +1,10 @@
 from timeit import default_timer as timer
-
+import sys
 from sklearn import metrics
 
-from src.indexing.learning.polynomial_regression import PolynomialRegression
-from src.indexing.models import BaseModel
+sys.path.append('src')
+from indexing.learning.polynomial_regression import PolynomialRegression
+from indexing.models import BaseModel
 
 
 class PRModel(BaseModel):
