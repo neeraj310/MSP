@@ -1,5 +1,3 @@
-
-
 class BaseModel(object):
     def __init__(self, name) -> None:
         super().__init__()

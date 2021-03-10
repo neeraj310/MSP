@@ -5,9 +5,8 @@ import sys
 import numpy as np
 from sklearn import metrics
 
-sys.path.append('src')
-from indexing.models import BaseModel
-from indexing.models.trees.item import Item
+from src.indexing.models import BaseModel
+from src.indexing.models.trees.item import Item
 
 
 class BTreeNode():

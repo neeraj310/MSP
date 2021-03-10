@@ -3,11 +3,10 @@ import sys
 import numpy as np
 from sklearn import metrics
 
-sys.path.append('src')
-from indexing.learning.fully_connected_network import FullyConnectedNetwork
+from src.indexing.learning.fully_connected_network import FullyConnectedNetwork
 # from indexing.learning.pt_fcn import FullyConnectedNetwork
-from indexing.models import BaseModel
-from indexing.utilities.dataloaders import normalize
+from src.indexing.models import BaseModel
+from src.indexing.utilities.dataloaders import normalize
 
 
 class FCNModel(BaseModel):
