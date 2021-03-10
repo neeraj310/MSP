@@ -229,14 +229,16 @@ Let $\boldsymbol{\alpha}=(\bar{\alpha},\alpha_0,\cdots,\alpha_\sigma)$, the squa
 Assume that $\boldsymbol{\beta}=\hat{\boldsymbol{\beta}}=(\hat{\beta_0},\hat{\beta_1},\cdots,\hat{\beta_\sigma})$ is fixed, then $\boldsymbol{\alpha}$ can be regarded as the least square solution of the linear equation $\boldsymbol{A\alpha}=\boldsymbol{y}$, where
 
 $$
-A=\left[\begin{array}{ccccc}
+\boldsymbol{A}=\left[\begin{array}{ccccc}
 1 & x_{0}-\hat{\beta}_{0} & \left(x_{0}-\hat{\beta}_{1}\right) 1_{x_{0} \geq \hat{\beta}_{1}} & \ldots & \left(x_{0}-\hat{\beta}_{\sigma}\right) 1_{x_{0} \geq \hat{\beta}_{\sigma}} \\
 1 & x_{1}-\hat{\beta}_{0} & \left(x_{1}-\hat{\beta}_{1}\right) 1_{x_{1} \geq \hat{\beta}_{1}} & \ldots & \left(x_{1}-\hat{\beta}_{\sigma}\right) 1_{x_{1}} \geq \hat{\beta}_{\sigma} \\
 \vdots & \vdots & \vdots & \ddots & \vdots \\
 1 & x_{N}-\hat{\beta}_{0} & \left(x_{V}-\hat{\beta}_{1}\right) 1_{x_{V} \geq \hat{\beta}_{2}} & \cdots & \left(x_{V}-\hat{\beta}_{\sigma}\right) 1_{x_{V} \geq \hat{\beta}_{\sigma}}
 \end{array}\right]$$
 
-Let $\boldsymbol{r}=\boldsymbol{A\alpha-y}$, then we have
+where $1_{x_{0} \geq \hat{\beta}_{1}}$ equals to $1$ if ${x_{0} \geq \hat{\beta}_{1}}$, otherwise it equals to $0$.
+
+We have
 \begin{equation}
  \begin{split}
 	L(\boldsymbol{\alpha},\boldsymbol{\beta}) 
@@ -249,19 +251,75 @@ Let $\boldsymbol{r}=\boldsymbol{A\alpha-y}$, then we have
 and if we let
 
 \begin{equation}
+\label{alpha_form}
 	\begin{split}
-		\frac{\partial L(\boldsymbol{\alpha}, \boldsymbol{\beta})}{\boldsymbol{\alpha}}=2\boldsymbol{A}^T\boldsymbol{A}\boldsymbol{\beta}-2\boldsymbol{A^T}\boldsymbol{y}=0 \\ \implies 
+		\frac{\partial L(\boldsymbol{\alpha}, \boldsymbol{\beta})}{\boldsymbol{\alpha}}=2\boldsymbol{A}^T\boldsymbol{A}\boldsymbol{\alpha}-2\boldsymbol{A^T}\boldsymbol{y}=0 \\ \implies 
 		\boldsymbol{\alpha}=(\boldsymbol{A}^T\boldsymbol{A})^{-1}\boldsymbol{A}\boldsymbol{y}
 	\end{split}
 \end{equation}
 
 
-we get the $\boldsymbol{\alpha}$ with the given fixed $\boldsymbol{\beta}$. Clearly, different $\boldsymbol{\beta}$ give rise to different optimal parameters. Let $\boldsymbol{\alpha^\star}(\boldsymbol{\beta})$ be the optimal $\boldsymbol{\alpha}$ for a particular $\boldsymbol{\beta}$, then we want to find $\boldsymbol{beta}$ such that
+we get the $\boldsymbol{\alpha}$ with the given fixed $\boldsymbol{\beta}$. Clearly, different $\boldsymbol{\beta}$ give rise to different optimal parameters. Let $\boldsymbol{\alpha^\star}(\boldsymbol{\beta})$ be the optimal $\boldsymbol{\alpha}$ for a particular $\boldsymbol{\beta}$, then we want to find $\boldsymbol{\beta}$ such that
 
 
 \begin{equation}
-	L()
+	L(\boldsymbol{\alpha^\star}(\boldsymbol{\beta^\star)}, \boldsymbol{\beta^\star})=\text{min}\{L(\boldsymbol{\alpha^\star}(\boldsymbol{\beta)}, \boldsymbol{\beta}) | \boldsymbol{\beta\in\mathbb{R}^{\sigma+1}}\}
 \end{equation}
+
+For $\boldsymbol{\beta}$, we define $\boldsymbol{r}=\boldsymbol{A\alpha-y}$ and 
+
+$$
+\boldsymbol{K}=\text{diag}(\bar{\alpha},\alpha_0, \cdots, \alpha_\sigma), \boldsymbol{G}=\begin{bmatrix}
+ -1 & -1 & \cdots & -1 \\
+  p_0^{(0)} & p_0^{(1)} & \cdots & p_0^{(V)} \\
+  p_1^{(0)} & p_1^{(1)} & \cdots & p_1^{(V)} \\
+  \vdots & \vdots & \ddots & \vdots \\
+  p_\sigma^{(0)} & p_\sigma^{(1)}& \cdots & p_\sigma^{(V)} \\
+\end{bmatrix}
+$$
+
+where $p_i^{(l)}=-1_{x_l\geq \beta_i}$. Then
+
+$$
+\boldsymbol{KG}=\begin{bmatrix}
+ -\bar{\alpha} & 0 & \cdots & 0 \\
+ 0 & \alpha_0p_0^{(1)} & \cdots  & 0 \\
+ \vdots & \vdots & \ddots & \vdots \\
+ 0 & 0 & \cdots & \alpha_\sigma p_\sigma^{(V)}
+\end{bmatrix}
+$$
+
+then we have 
+
+\begin{equation}
+	g=\frac{\partial L(\boldsymbol{\alpha},\boldsymbol{\beta})}{\partial \boldsymbol{\beta}}=2\boldsymbol{KGr},
+	Y=\frac{\partial g}{\partial \boldsymbol{\beta}}=2\boldsymbol{KGG}^T \boldsymbol{K}^T
+\end{equation}
+\textcolor{red}{Show how these are calculated}
+
+As $g=\nabla_{\boldsymbol{\beta}} L$, $-g$ specifies the steepest descent direction of $\boldsymbol{\beta}$ for $L$. However, the convergence rate of $-g$ is low as it does not consider the second order derivative of $L$. Hence, we perform the update along the direction of $s=-\boldsymbol{Y}^{-1}g$.
+
+\textcolor{red}{Show that Y is positive definite and explain why it matters}  
+%TODO: Show that Y is positive definite and explain why it matters
+
+In the beginning, we set $\beta^{(0)}=x_0$ and $\beta_i^{(0)}=x_{\floor{i\times \frac{V}{\Psi}}}, \forall i\in[1,\sigma]$. Then we can obtain $\boldsymbol{\alpha}$ by solving Eq. (\ref{alpha_form}). Then at each step, we perform a grid search to find the step $lr^{(k)}$ such that the loss $L$ is minimal. Then at the next iteration, we increase $k$ by one and set 
+
+$$
+\boldsymbol{\beta}^{(k+1)}=\boldsymbol{\beta}^{(k)} + lr^{(k)}s^{(k)}
+$$
+
+The iteration continues until $L$ converges, i.e. the $|L^{(k)}-L^{(k-1)}|<\delta$ where $\delta$ is a pre-set hyperparameter.
+
+
+
+
+
+
+
+
+
+
+
 
 
 
