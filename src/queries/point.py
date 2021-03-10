@@ -1,10 +1,12 @@
+import sys
 from timeit import default_timer as timer
 from typing import List
 
 from sklearn import metrics
 
-from src.indexing.models import BaseModel
-from src.indexing.utilities.dataloaders import split_train_test
+sys.path.append('src')
+from indexing.models import BaseModel
+from indexing.utilities.dataloaders import split_train_test
 
 
 class PointQuery(object):

@@ -1,11 +1,13 @@
 from timeit import default_timer as timer
 from typing import List, Tuple
+import sys
 
 import numpy as np
 from sklearn import metrics
 
-from src.indexing.models import BaseModel
-from src.indexing.models.trees.item import Item
+sys.path.append('src')
+from indexing.models import BaseModel
+from indexing.models.trees.item import Item
 
 
 class BTreeNode():

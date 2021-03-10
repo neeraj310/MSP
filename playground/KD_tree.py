@@ -1,5 +1,8 @@
 import random, cProfile,csv,sys
 import numpy as np
+from sklearn.neighbors import KDTree
+import time
+import pickle
 
 # Makes the KD-Tree for fast lookup
 def make_kd_tree(points, dim, i=0):
@@ -78,8 +81,8 @@ def get_knn_naive(points, point, k, dist_func, return_distances=True):
 
 dim = 2
 
-def rand_point(dim):
-    return [random.uniform(-1, 1) for d in range(dim)]
+# def rand_point(dim):
+#     return [random.uniform(-1, 1) for d in range(dim)]
 
 def dist_sq(a, b, dim):
     return sum((a[i] - b[i]) ** 2 for i in range(dim))
@@ -87,13 +90,21 @@ def dist_sq(a, b, dim):
 def dist_sq_dim(a, b):
     return dist_sq(a, b, dim)
 
+def sklearn_kdtree(points, dim):
+    points = np.array(points)
+    tree = KDTree(points, leaf_size=2)
+    s = pickle.dumps(tree)                     
+    tree_copy = pickle.loads(s) 
+    dist, ind = tree.query(test, k=3)
+    return dist**2
+
 
 """
 Below is all the testing code
 """
 if __name__ == "__main__":
     filename=sys.argv[1]
-    # filename= "data/2d_exponential_exponential_1000000.csv"clear
+    # filename= "data/2d_exponential_exponential_1000000.csv"
     points=[]
     with open(filename,'r') as csvfile:
         points_reader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -102,17 +113,21 @@ if __name__ == "__main__":
             points.append(list(np.float_(point[:2])))
     
     points=points
-    # points =points
     test = [[3,1]]
     result = []
     dim=2
 
     kd_tree = make_kd_tree(points, dim)
     # result.append(tuple(get_knn(kd_tree, [0] * dim, 2, dim, dist_sq_dim)))
+    t_start = time.time()
     for t in test:
         result.append(tuple(get_knn(kd_tree, t, 2, dim, dist_sq_dim)))
+    t_end = time.time()
 
-    print(result)
+    dis_grnd_truth = sklearn_kdtree(points, dim)
+    print(result, "result")
+    # print(t_end-t_start, "Time taken")
+    print(dis_grnd_truth, "dis_grnd_truth")
 
 
 # def bench1():
