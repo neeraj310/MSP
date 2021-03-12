@@ -46,12 +46,22 @@ class LisaBaseModel():
     def init_dense_array(self):
         
         self.nuofKeys = self.train_array.shape[0]
-        self.keysPerPage =  self.nuofKeys // self.pageCount
         self.denseArray = np.zeros((self.pageCount, 3))
-        for i in range(self.pageCount):   
+        self.keysPerPage =  self.nuofKeys // self.pageCount
+        if (self.nuofKeys > self.keysPerPage * self.pageCount ):
+           self.keysPerPage  = self.keysPerPage +1
+        
+        for i in range(self.pageCount-1):   
             self.denseArray[i][0] = self.train_array[i*self.keysPerPage,3]
             self.denseArray[i][1] = self.train_array[((i+1)*self.keysPerPage)-1,3]
             self.denseArray[i][2] = i
+
+        # Last page may not be full
+        i = self.pageCount-1
+        #Store mapped value boundries
+        self.denseArray[i][0] = self.train_array[i*self.keysPerPage,3]
+        self.denseArray[i][1] = self.train_array[self.nuofKeys-1,3]
+        self.denseArray[i][2] = i
             
     def search_page_index(self, x):
         low = 0
@@ -81,7 +91,12 @@ class LisaBaseModel():
     
     def key_binary_search(self,x,page_lower):
         low = page_lower
-        high = page_lower+self.keysPerPage-1
+        # Last page may contain less nu of keys than self.keysPerPage
+        if (page_lower == (self.keysPerPage * (self.pageCount - 1))):
+            # Last page 
+            high = self.nuofKeys-1
+        else:   
+            high = page_lower+self.keysPerPage-1
         mid = 0
         #print('searching for %d' %(x))
         while low <= high:
@@ -105,15 +120,41 @@ class LisaBaseModel():
         #print('\n returning page %d' %(-1))
         return -1
  
-        
-        
-    def predict(self, query_point):     
+     def predict(self, query_point):     
         #print(query_point)
         #start_time = timer()
         mapped_val = query_point[0]+query_point[1]
         i = self.search_page_index(mapped_val)
         if (i == -1):
-            print('\n\n\nPoint Not Found:search page return -1, for query point %d %d \n\n' %(query_point[0],query_point[1]))
+            print('\n\n\n Page not found query point = %d %d, mapped value = %d' %(query_point[0], query_point[1], mapped_val))
+            return -1
+
+        else:
+            page_lower = i*self.keysPerPage
+             # Last page may contain less nu of keys than self.keysPerPage
+            if (page_lower == (self.keysPerPage * (self.pageCount - 1))):
+                # Last page 
+                high = self.nuofKeys
+            else:   
+                high = page_lower+self.keysPerPage
+            
+            for j in range(page_lower,high):
+                if ((query_point[0] == self.train_array[j][0]) and (query_point[1] == self.train_array[j][1])):
+                    #print( 'value found in location %d '%(in_data_arr[j][2]))
+                    #print('Time taken %f'%(timer()-start_time))
+                    pred = self.train_array[j][2]
+                    return self.train_array[j][2]
+            
+            print('\n\n\n Point not found query point = %d %d, mapped value = %d' %(query_point[0], query_point[1], mapped_val))
+            return -1       
+        
+    def predict_opt(self, query_point):     
+        #print(query_point)
+        #start_time = timer()
+        mapped_val = query_point[0]+query_point[1]
+        i = self.search_page_index(mapped_val)
+        if (i == -1):
+            print('\n\n\nPage Not Found:search page return -1, for query point %d %d \n\n' %(query_point[0],query_point[1]))
             return i
 
         else:
@@ -136,10 +177,10 @@ class LisaBaseModel():
                             return(self.train_array[key_index+i][2])
                         else:
                             i = i+1
-                print('\n\n\nPoint Not Found_2\n\n')
+                print('\n\n\n Point not found query point = %d %d, mapped value = %d' %(query_point[0], query_point[1], mapped_val))
                 return -1
             else:
-                print('\n\n\nPoint Not Found_3\n\n')
+                print('\n\n\n Point not found query point = %d %d, mapped value = %d' %(query_point[0], query_point[1], mapped_val))
                 return -1
                 
             
