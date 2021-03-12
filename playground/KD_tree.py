@@ -2,7 +2,9 @@ import random, cProfile,csv,sys
 import numpy as np
 from sklearn.neighbors import KDTree
 import time
+from timeit import default_timer as timer
 import pickle
+from sklearn.metrics import mean_squared_error
 
 # Makes the KD-Tree for fast lookup
 def make_kd_tree(points, dim, i=0):
@@ -91,11 +93,15 @@ def dist_sq_dim(a, b):
     return dist_sq(a, b, dim)
 
 def sklearn_kdtree(points, dim):
+    dist=0.0
     points = np.array(points)
-    tree = KDTree(points, leaf_size=2)
-    s = pickle.dumps(tree)                     
-    tree_copy = pickle.loads(s) 
-    dist, ind = tree.query(test, k=3)
+    t_start1 = time.time() 
+    tree = KDTree(points)
+    t_end1 = time.time()
+    print(t_end1- t_start1, 'kd_tree sklearn')
+    # s = pickle.dumps(tree)                     
+    # tree_copy = pickle.loads(s)    
+    # dist, ind = tree.query(test, k=1)
     return dist**2
 
 
@@ -103,8 +109,8 @@ def sklearn_kdtree(points, dim):
 Below is all the testing code
 """
 if __name__ == "__main__":
-    filename=sys.argv[1]
-    # filename= "data/2d_exponential_exponential_1000000.csv"
+    # filename=sys.argv[1]
+    filename= "data/2d_lognormal_lognormal_1000000.csv"
     points=[]
     with open(filename,'r') as csvfile:
         points_reader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -117,17 +123,32 @@ if __name__ == "__main__":
     result = []
     dim=2
 
-    kd_tree = make_kd_tree(points, dim)
-    # result.append(tuple(get_knn(kd_tree, [0] * dim, 2, dim, dist_sq_dim)))
     t_start = time.time()
-    for t in test:
-        result.append(tuple(get_knn(kd_tree, t, 2, dim, dist_sq_dim)))
+    start_time = timer()
+    kd_tree = make_kd_tree(points, dim)
+    end_time = timer()
     t_end = time.time()
-
+    print(t_end- t_start, 'kd_tree')
+    print(end_time- start_time, 'kd_tree time')
+    # result.append(tuple(get_knn(kd_tree, [0] * dim, 2, dim, dist_sq_dim)))
+   
+    for t in test:
+        result.append(tuple(get_knn(kd_tree, t, 5, dim, dist_sq_dim)))
+    
     dis_grnd_truth = sklearn_kdtree(points, dim)
+    
     print(result, "result")
+    list_result = []
+    print(len(result))
+    for i in range(len(result[0])):
+        list_result.append(result[0][i][0])
+
+    print(list_result, 'list_result')
     # print(t_end-t_start, "Time taken")
-    print(dis_grnd_truth, "dis_grnd_truth")
+    print(dis_grnd_truth[0], "dis_grnd_truth")
+    mse_error = mean_squared_error(dis_grnd_truth[0], list_result, squared=False)
+    print(mse_error, 'mse_error')
+
 
 
 # def bench1():

@@ -34,6 +34,7 @@ from indexing.models.rmi.staged import StagedModel
 from indexing.models.trees.b_tree import BTreeModel
 from indexing.models.lisa.basemodel import LisaBaseModel
 from indexing.models.trees.KD_tree import KDTreeModel
+from indexing.models.trees.scipykdtree import ScipyKDTreeModel
 from queries.point import PointQuery
 
 from sklearn import metrics
@@ -54,6 +55,7 @@ def evaluate(filename):
     data, test_data = load_2D_Data(filename)
     lisaBm = LisaBaseModel(100)
     kdtree=KDTreeModel()
+    scipykdtree=ScipyKDTreeModel(leafsize=10)
     
     '''
     btm = BTreeModel(b_tree_page_size)
@@ -64,9 +66,11 @@ def evaluate(filename):
     sgm = StagedModel(['lr', 'b-tree', 'lr'], [1, 2, 8])
     models = [btm, lrm, prm, sgm]
     '''
-    models = [lisaBm,kdtree]
+    models = [lisaBm,kdtree,scipykdtree]
     ptq = PointQuery(models)
     build_times = ptq.build(data, 0.00002)
+
+    # print("Build time",build_times)
 
     # Kdtree Model
     
@@ -74,9 +78,8 @@ def evaluate(filename):
     result = []
     header = [
         "Name", "Test Data Size","Build Time (s)", "Evaluation Time (s)",
-        "Average Evaluation Time (s)","Evaluation Error (MSE)"
-        ]
-    while (i <= 100000):
+        "Average Evaluation Time (s)","Evaluation Error (MSE)"]
+    while (i <= 1000000):
         mses, eval_times = ptq.evaluate(test_data.iloc[:i, :])
         
         for index, model in enumerate(models):
@@ -86,7 +89,7 @@ def evaluate(filename):
         print(len(result))    
         i = i*10
     print(tabulate(result, header))
-    #models_predict(data, models)
+    # models_predict(data, models)
 
     
     
