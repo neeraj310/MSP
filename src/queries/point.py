@@ -43,8 +43,8 @@ class PointQuery(object):
           
             mse = metrics.mean_squared_error(test_data.iloc[:,-1:], ys)
             mses.append(mse)
-            print("{} model tested in {:.4f} seconds".format(
-                model.name, end_time - start_time))
+            print("{} model tested in {:.4f} seconds with mse {}".format(
+                model.name, end_time - start_time, mse))
             build_times.append(end_time - start_time)
         return mses, build_times
 
