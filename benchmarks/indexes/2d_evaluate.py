@@ -47,6 +47,9 @@ ratio = 0.2
 def load_2D_Data(filename):
     data = pd.read_csv(filename)
     #data = data[0:100]
+    # Remove duplicates
+    col_names = list(data.columns)[:-1]
+    data.drop_duplicates(subset=col_names, ignore_index= True, inplace = True)
     test_data = data.sample(n=int(ratio * len(data)))
     return data, test_data
 
