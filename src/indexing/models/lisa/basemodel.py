@@ -51,6 +51,9 @@ class LisaBaseModel():
         if (self.nuofKeys > self.keysPerPage * self.pageCount ):
            self.keysPerPage  = self.keysPerPage +1
         
+        if(((self.keysPerPage * self.pageCount) - self.nuofKeys) >= self.keysPerPage ):
+            print('\n Invalid configuration, Nu of keys per page needs to be greater than page count')
+            
         for i in range(self.pageCount-1):   
             self.denseArray[i][0] = self.train_array[i*self.keysPerPage,3]
             self.denseArray[i][1] = self.train_array[((i+1)*self.keysPerPage)-1,3]
