@@ -120,7 +120,7 @@ class LisaBaseModel():
         #print('\n returning page %d' %(-1))
         return -1
  
-     def predict(self, query_point):     
+    def predict(self, query_point):     
         #print(query_point)
         #start_time = timer()
         mapped_val = query_point[0]+query_point[1]
