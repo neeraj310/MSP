@@ -7,4 +7,5 @@ class RangeQuery(Query):
     def predict(self, upper_right, lower_left):
         pass
 
-    def evaluate(self)
+    def evaluate(self):
+        pass

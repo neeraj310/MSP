@@ -2,3 +2,4 @@ tinyml
 tabulate
 numpy
 pandas
+pwlf
