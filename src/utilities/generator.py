@@ -3,6 +3,7 @@ import random
 
 FACTOR = 10
 
+
 def get_data(distribution, size):
     data = []
     if distribution == "UNIFORM":

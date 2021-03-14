@@ -8,6 +8,7 @@ DATA_SIZE = 10000
 BLOCK_SIZE = 10
 FACTOR = 10
 
+
 def generate_1d_data(distribution, data_size=DATA_SIZE):
     data = get_data(distribution, data_size)
     multiplicant = 1

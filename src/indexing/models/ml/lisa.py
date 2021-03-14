@@ -3,14 +3,18 @@ import pandas as pd
 import numpy as np
 CELL_SIZE = 10
 
+
 def grid_cell(data):
     pass
+
 
 def mapping():
     pass
 
+
 def predict_shard():
     pass
+
 
 def evaluate(filename):
     data = pd.read_csv(filename)
@@ -20,6 +24,6 @@ def evaluate(filename):
     keys_per_cell = num_of_keys // (CELL_SIZE * CELL_SIZE)
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     filename = sys.argv[1]
     evaluate(filename)

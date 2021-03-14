@@ -26,8 +26,7 @@ class StagedModel(BaseModel):
         self.num_of_models = num_models
         if not len(self.num_of_models) == self.num_of_stages:
             raise ValueError(
-                "len(num_models) is expected to be equal to len(model_types)"
-            )
+                "len(num_models) is expected to be equal to len(model_types)")
         self.models: List = []
         self.model_types = model_types
 
@@ -87,10 +86,8 @@ class StagedModel(BaseModel):
                     else:
                         # there is no x and y allocated
                         # by default, give it all the training data
-                        print("[WARN] The model {}/{} is not given any data".format(
-                            stage+1,
-                            next_model_id
-                        ))
+                        print("[WARN] The model {}/{} is not given any data".
+                              format(stage + 1, next_model_id))
                         train_datas[stage + 1].append((x_train, y_train))
         end_time = timer()
 
@@ -115,7 +112,7 @@ class StagedModel(BaseModel):
             if not stage == self.num_of_stages - 1:
                 output = self.models[stage][next_model_id].predict(key)
                 next_model_id = int(output * self.num_of_models[stage + 1] /
-                                self.max_pos)
+                                    self.max_pos)
                 next_model_id = self.acceptable_next_model(
                     next_model_id, stage)
             else:
@@ -131,7 +128,6 @@ class StagedModel(BaseModel):
         for stage in range(stage):
             output = self.models[stage][next_model_id].predict(key)
             next_model_id = int(output * self.num_of_models[stage + 1] /
-                            self.max_pos)
-            next_model_id = self.acceptable_next_model(
-                next_model_id, stage)
+                                self.max_pos)
+            next_model_id = self.acceptable_next_model(next_model_id, stage)
         return next_model_id

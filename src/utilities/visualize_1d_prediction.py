@@ -7,8 +7,6 @@ from bokeh.models.tools import HoverTool
 from bokeh.plotting import figure
 import pandas as pd
 
-
-
 def visualize(filename):
     df = pd.read_csv(filename)
     ds = ColumnDataSource(df)
@@ -16,7 +14,8 @@ def visualize(filename):
     # p.add_tools(HoverTool(tooltips=[("x")]))
 
     line_renderer = p.line('x', 'ground_truth', source=ds)
-    handler = CustomJS(args=dict(line_renderer=line_renderer), code="""
+    handler = CustomJS(args=dict(line_renderer=line_renderer),
+                       code="""
         line_renderer.glyph.y = {field: cb_obj.value};
     """)
 
@@ -25,6 +24,7 @@ def visualize(filename):
 
     show(column(select, p))
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     filename = sys.argv[1]
     visualize(filename)

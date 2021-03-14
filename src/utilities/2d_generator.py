@@ -1,11 +1,11 @@
 import csv
 import os
-import random
 import sys
-import numpy as np
-from generator import get_data
+
+from src.utilities.generator import get_data
 DATA_SIZE = 10000
 BLOCK_SIZE = 10
+
 
 def generate_2d_data(distribution_x, distribution_y, data_size):
     X = get_data(distribution_x, data_size)
@@ -26,15 +26,15 @@ def generate_2d_data(distribution_x, distribution_y, data_size):
     )
     with open(data_path, "w+") as csv_file:
         csv_writer = csv.writer(csv_file)
-        csv_writer.writerow(["x","y","value"])
+        csv_writer.writerow(["x", "y", "value"])
         for index, number in enumerate(X):
             csv_writer.writerow([
                 int(number * x_multiplicant),
-                int(Y[index] * y_multiplicant),
-                index // BLOCK_SIZE
+                int(Y[index] * y_multiplicant), index // BLOCK_SIZE
             ])
-    
-if __name__=="__main__":
+
+
+if __name__ == "__main__":
     x_distribution = sys.argv[1]
     y_distribution = sys.argv[2]
     data_size = int(sys.argv[3])
