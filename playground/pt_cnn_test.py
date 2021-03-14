@@ -3,10 +3,10 @@
 # This software is released under the MIT License.
 # https://opensource.org/licenses/MIT
 
+import tinyml
 import torch
 import torch.nn
 import torch.nn.functional as F
-import tinyml
 from tinyml.layers import Conv2D
 
 
@@ -17,4 +17,4 @@ def pt_conv(x, w):
 
 
 def tinyml_conv(x, w):
-    layer = Conv2D()
+    Conv2D()

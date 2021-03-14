@@ -3,28 +3,24 @@
 
 # In[1]:
 
-import csv
 import os
-import random
-import sys
 
-import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import pwlf
 from scipy import linalg
+
 DATA_SIZE = 10000
 BLOCK_SIZE = 10
 FACTOR = 10
 
 # In[2]:
 
-from scipy.optimize import nnls
-from scipy.optimize import lsq_linear
+import pwlf
+from scipy.optimize import lsq_linear, nnls
 
 # In[41]:
-
-import pwlf
 
 # In[3]:
 
@@ -365,7 +361,7 @@ def predict(x, alpha=None, breaks=None):
         breaks_order = np.argsort(breaks)
         fit_breaks = breaks[breaks_order]
         n_parameters = len(fit_breaks)
-        n_segments = n_parameters - 1
+        n_parameters - 1
 
     x = convert_to_np_array(x)
 
@@ -427,7 +423,6 @@ def calc_gradient(x, alpha, fit_breaks, r_error, n_segments):
     except np.linalg.LinAlgError:
         print('Y_inverse not avaliable')
         s = 0
-    pass
 
     return s
 

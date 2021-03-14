@@ -7,7 +7,7 @@ This file describes how staged model, i.e. recursive model works.
 
 from timeit import default_timer as timer
 from typing import List
-import sys
+
 import numpy as np
 from sklearn import metrics
 

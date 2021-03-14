@@ -4,16 +4,14 @@ Created on Fri Feb 26 14:36:30 2021
 
 @author: neera
 """
-import sys
 from timeit import default_timer as timer
-from typing import List, Tuple
-import numpy as np
-from sklearn import metrics
-import pandas as pd
-
-from src.indexing.models import BaseModel
 
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from sklearn import metrics
+
+from src.indexing.models import BaseModel
 
 
 class LisaBaseModel():
@@ -153,7 +151,7 @@ class LisaBaseModel():
                         and (query_point[1] == self.train_array[j][1])):
                     #print( 'value found in location %d '%(in_data_arr[j][2]))
                     #print('Time taken %f'%(timer()-start_time))
-                    pred = self.train_array[j][2]
+                    self.train_array[j][2]
                     return self.train_array[j][2]
 
             print(

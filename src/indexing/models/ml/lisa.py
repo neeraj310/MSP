@@ -1,6 +1,8 @@
 import sys
-import pandas as pd
+
 import numpy as np
+import pandas as pd
+
 CELL_SIZE = 10
 
 
@@ -18,10 +20,10 @@ def predict_shard():
 
 def evaluate(filename):
     data = pd.read_csv(filename)
-    x_range = np.max(data.x)
-    y_range = np.max(data.y)
+    np.max(data.x)
+    np.max(data.y)
     num_of_keys = len(data)
-    keys_per_cell = num_of_keys // (CELL_SIZE * CELL_SIZE)
+    num_of_keys // (CELL_SIZE * CELL_SIZE)
 
 
 if __name__ == "__main__":

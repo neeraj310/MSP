@@ -1,5 +1,5 @@
 from timeit import default_timer as timer
-import sys
+
 from sklearn import metrics
 
 from src.indexing.learning.polynomial_regression import PolynomialRegression

@@ -3,6 +3,7 @@ import os
 import sys
 
 from src.utilities.generator import get_data
+
 DATA_SIZE = 10000
 BLOCK_SIZE = 10
 

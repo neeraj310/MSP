@@ -1,10 +1,10 @@
-import random, cProfile, csv, sys
-import numpy as np
-from sklearn.neighbors import KDTree
+import csv
 import time
 from timeit import default_timer as timer
-import pickle
+
+import numpy as np
 from sklearn.metrics import mean_squared_error
+from sklearn.neighbors import KDTree
 
 
 # Makes the KD-Tree for fast lookup
@@ -122,7 +122,7 @@ def sklearn_kdtree(points, dim):
     dist = 0.0
     points = np.array(points)
     t_start1 = time.time()
-    tree = KDTree(points)
+    KDTree(points)
     t_end1 = time.time()
     print(t_end1 - t_start1, 'kd_tree sklearn')
     # s = pickle.dumps(tree)

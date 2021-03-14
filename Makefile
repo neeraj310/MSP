@@ -1,4 +1,4 @@
 format:
-	autoflake --recursive .
+	autoflake --in-place --remove-unused-variables --recursive .
 	isort .
 	yapf -ir .

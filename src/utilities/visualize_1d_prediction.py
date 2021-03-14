@@ -1,11 +1,12 @@
 import sys
+
+import pandas as pd
 from bokeh.io import show
 from bokeh.layouts import column
-from bokeh.models import ColumnDataSource, CustomJS
-from bokeh.models import Select
+from bokeh.models import ColumnDataSource, CustomJS, Select
 from bokeh.models.tools import HoverTool
 from bokeh.plotting import figure
-import pandas as pd
+
 
 def visualize(filename):
     df = pd.read_csv(filename)

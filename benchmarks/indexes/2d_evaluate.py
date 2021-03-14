@@ -27,18 +27,18 @@ import pandas as pd
 from tabulate import tabulate
 
 sys.path.append('src')
+import numpy as np
+from sklearn import metrics
+
 from indexing.models import BaseModel
+from indexing.models.lisa.basemodel import LisaBaseModel
 from indexing.models.ml.polynomial_regression import PRModel
 from indexing.models.nn.fcn import FCNModel
 from indexing.models.rmi.staged import StagedModel
 from indexing.models.trees.b_tree import BTreeModel
-from indexing.models.lisa.basemodel import LisaBaseModel
 from indexing.models.trees.KD_tree import KDTreeModel
 from indexing.models.trees.scipykdtree import ScipyKDTreeModel
 from queries.point import PointQuery
-
-from sklearn import metrics
-import numpy as np
 
 ratio = 0.2
 

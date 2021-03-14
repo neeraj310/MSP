@@ -6,7 +6,8 @@ def split_train_test(data, ratio=0.2):
     x_train, y_train = data.iloc[:, :-1].values, data.iloc[:, -1:].values
     x_test, y_test = test_data.iloc[:, :-1].values, test_data.iloc[:,
                                                                    -1:].values
-    return x_train, y_train, x_test, y_test
+    x_index = np.linspace(0, len(x_train) - 1, 1)
+    return x_train, y_train, x_test, y_test, x_index
 
 
 def normalize(x):

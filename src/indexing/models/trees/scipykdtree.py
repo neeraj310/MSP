@@ -1,8 +1,9 @@
-import numpy as np
-import random, cProfile, csv, sys
-from sklearn import metrics
+import csv
 from timeit import default_timer as timer
+
+import numpy as np
 from scipy.spatial import KDTree as ScipyKDTree
+from sklearn import metrics
 
 
 class ScipyKDTreeModel():

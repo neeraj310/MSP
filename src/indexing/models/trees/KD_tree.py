@@ -1,10 +1,12 @@
-import random, cProfile, csv, sys
+import csv
+import heapq
+import pickle
+import random
+from timeit import default_timer as timer
+
 import numpy as np
 from sklearn import metrics
 from sklearn.neighbors import KDTree
-from timeit import default_timer as timer
-import pickle
-import heapq
 
 
 class KDTreeModel():
@@ -144,7 +146,7 @@ def sklearn_kdtree(points, dim):
     points = np.array(points)
     tree = KDTree(points, leaf_size=2)
     s = pickle.dumps(tree)
-    tree_copy = pickle.loads(s)
+    pickle.loads(s)
     dist, _ = tree.query(test, k=3)
     return dist**2
 

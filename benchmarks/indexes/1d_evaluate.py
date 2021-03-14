@@ -31,7 +31,7 @@ def load_1D_Data(filename):
 def evaluate(filename):
     data, test_data = load_1D_Data(filename)
     btm = BTreeModel(b_tree_page_size)
-    fcn = FCNModel()
+    FCNModel()
     print('\n in evaluate')
     lrm = PRModel(1)
     prm = PRModel(2)
