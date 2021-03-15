@@ -31,11 +31,10 @@ class PointQuery(Query):
                 y = self.predict(idx, test_data.iloc[i, :-1])
                 y = int(y // model.page_size)
                 ys.append(y)
-            print(max(ys))
             end_time = timer()
             mse = metrics.mean_squared_error(test_data.iloc[:, -1:], ys)
             mses.append(mse)
-            print("{} model tested in {:.4f} seconds with mse {}".format(
+            print("{} model tested in {:.4f} seconds with mse {:.4f}".format(
                 model.name, end_time - start_time, mse))
             build_times.append(end_time - start_time)
         return mses, build_times

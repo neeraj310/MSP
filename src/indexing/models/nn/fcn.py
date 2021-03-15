@@ -46,7 +46,8 @@ class FCNModel(BaseModel):
 
     def predict(self, X):
         X = (X - self.min_x) / (self.max_x - self.min_x)
+        X=np.array(X)
         X = X.reshape((1))
         portion = self.net.predict(X)
         position = int(portion * (self.max_y - self.min_y)) + self.min_y
-        return position // self.page_size
+        return position

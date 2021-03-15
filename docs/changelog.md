@@ -1,5 +1,13 @@
 # Change Log
 
+## 14 Mar, Minor Revision
+
+Changed the logic of b-tree.
+
+## Feb 27, Added Feature
+
+* Added 2-dimensional data generator.
+
 ## Feb 20, Major Revision
 
 * Update all models and remove dependencies for PyTorch. Now PyTorch is only used for testing and comparing purposes. Files started with ```pt_``` requires PyTorch.
