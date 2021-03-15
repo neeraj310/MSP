@@ -13,9 +13,8 @@ from src.queries import Query
 
 
 class PointQuery(Query):
-    def __init__(self, models: List[BaseModel], page_size: int) -> None:
+    def __init__(self, models: List[BaseModel]) -> None:
         super().__init__(models)
-        self.page_size = page_size
 
     def predict(self, model_idx: int, key: int):
         return self.models[model_idx].predict(key)
@@ -30,7 +29,9 @@ class PointQuery(Query):
             start_time = timer()
             for i in range(data_size):
                 y = self.predict(idx, test_data.iloc[i, :-1])
+                y = int(y // model.page_size)
                 ys.append(y)
+            print(max(ys))
             end_time = timer()
             mse = metrics.mean_squared_error(test_data.iloc[:, -1:], ys)
             mses.append(mse)

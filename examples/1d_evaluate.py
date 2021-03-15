@@ -2,6 +2,7 @@ import sys
 from typing import List
 
 import pandas as pd
+import numpy as np
 from tabulate import tabulate
 
 from src.indexing.models import BaseModel
@@ -12,24 +13,24 @@ from src.indexing.models.trees.b_tree import BTreeModel
 from src.queries.point import PointQuery
 
 ratio = 0.2
-b_tree_page_size = 20
-
+b_tree_degree = 20
 
 def load_1D_Data(filename):
     data = pd.read_csv(filename)
     test_data = data.sample(n=int(ratio * len(data)))
-    return data, test_data
+    page_size = len(data) // np.max(data.iloc[:, 1])
+    return data, test_data, page_size
 
 
 def evaluate(filename):
-    data, test_data = load_1D_Data(filename)
-    btm = BTreeModel(b_tree_page_size)
-    fcn = FCNModel()
+    data, test_data, page_size = load_1D_Data(filename)
+    btm = BTreeModel(page_size, b_tree_degree)
+    fcn = FCNModel(page_size)
 
-    lrm = PRModel(1)
-    prm = PRModel(2)
-    sgm = StagedModel(['fcn', 'lr', 'lr'], [1, 2, 4])
-    models = [sgm, btm, fcn, lrm, prm]
+    lrm = PRModel(1, page_size)
+    prm = PRModel(2, page_size)
+    # sgm = StagedModel(['fcn', 'lr', 'lr'], [1, 2, 4], page_size)
+    models = [btm, fcn, lrm, prm]
     ptq = PointQuery(models)
     build_times = ptq.build(data, ratio)
     mses, eval_times = ptq.evaluate(test_data)

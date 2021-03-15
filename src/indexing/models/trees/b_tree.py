@@ -1,3 +1,8 @@
+# Copyright (c) 2021 Xiaozhe Yao et al.
+# 
+# This software is released under the MIT License.
+# https://opensource.org/licenses/MIT
+
 from timeit import default_timer as timer
 from typing import List, Tuple
 
@@ -43,7 +48,8 @@ class BTree():
     def search(self, key) -> Tuple[bool, int, Item]:
         '''
         Search tries to find the key in the current node, 
-        Args:
+        Parameters
+        -----------
             key: [any] the requested key value
         Returns:
             has_found: [boolean] if the key is found in this node
@@ -145,16 +151,13 @@ class BTree():
 
 
 class BTreeModel(BaseModel):
-    def __init__(self, page_size=0):
-        super(BaseModel, self).__init__()
-        self.btree = BTree(page_size)
-        self.name = 'B-Tree'
+    def __init__(self, page_size, degree=0):
+        super().__init__("B-Tree d={}".format(degree), page_size)
+        self.btree = BTree(degree)
 
     def train(self, x_train, y_train, x_test, y_test):
-        x = np.concatenate((x_train, x_test)).reshape(-1)
-        y = np.concatenate((y_train, y_test))
-        self.total_data_size = x.shape[0]
-        x, y = (list(t) for t in zip(*sorted(zip(x, y))))
+        self.total_data_size = x_train.shape[0]
+        x, y = (list(t) for t in zip(*sorted(zip(x_train, y_train))))
         start_time = timer()
         for i in range(self.total_data_size):
             self.btree.insert(Item(x[i], y[i]))
@@ -162,22 +165,21 @@ class BTreeModel(BaseModel):
         test_data_size = x_test.shape[0]
         pred_y = []
         for i in range(test_data_size):
-            pred_y.append(self.btree.search(x_test[i])[2].value)
+            pred_y.append(self.btree.search(x_test[i])[2].value // self.page_size)
         pred_y = np.array(pred_y)
         mse = metrics.mean_absolute_error(y_test, pred_y)
         return mse, end_time - start_time
 
     def fit(self, x_train, y_train):
-        x, y = (list(t) for t in zip(*sorted(zip(x_train, y_train))))
-        data_size = len(x)
+        data_size = len(x_train)
         for i in range(data_size):
-            self.btree.insert(Item(x[i], y[i]))
+            self.btree.insert(Item(x_train[i], y_train[i]))
 
     def __str__(self):
         return self.btree.__str__()
 
     def predict(self, x):
-        has_found, position, item = self.btree.search(x)
+        has_found, position, item = self.btree.search(int(x))
         if not has_found:
             return item.value
         return item.value

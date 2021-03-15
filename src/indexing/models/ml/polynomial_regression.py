@@ -7,8 +7,8 @@ from src.indexing.models import BaseModel
 
 
 class PRModel(BaseModel):
-    def __init__(self, degree) -> None:
-        super().__init__("Polynomial Regression with degree {}".format(degree))
+    def __init__(self, degree, page_size) -> None:
+        super().__init__("Polynomial Regression with degree {}".format(degree), page_size)
         self.model = PolynomialRegression(degree)
 
     def train(self, x_train, y_train, x_test, y_test):

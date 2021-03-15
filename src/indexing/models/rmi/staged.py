@@ -2,7 +2,7 @@
 This file describes how staged model, i.e. recursive model works.
 
 @author: Xiaozhe Yao
-@updated: 22. Feb. 2021.
+@updated: 14. Mar. 2021.
 '''
 
 from timeit import default_timer as timer
@@ -16,12 +16,9 @@ from src.indexing.models.ml.polynomial_regression import PolynomialRegression
 from src.indexing.models.nn.fcn import FCNModel
 from src.indexing.models.trees.b_tree import BTreeModel
 
-PAGE_SIZE = 10
-
-
 class StagedModel(BaseModel):
-    def __init__(self, model_types, num_models) -> None:
-        super().__init__("Staged Model")
+    def __init__(self, model_types, num_models, page_size) -> None:
+        super().__init__("Staged Model", page_size)
         self.num_of_stages = len(model_types)
         self.num_of_models = num_models
         if not len(self.num_of_models) == self.num_of_stages:
@@ -38,9 +35,9 @@ class StagedModel(BaseModel):
         elif model_type == 'quadratic':
             model = PolynomialRegression(2)
         elif model_type == 'b-tree':
-            model = BTreeModel(page_size=PAGE_SIZE)
+            model = BTreeModel(page_size=self.page_size, degree=10)
         elif model_type == 'fcn':
-            model = FCNModel()
+            model = FCNModel(self.page_size)
         else:
             raise ValueError("Unsupported Model Type")
         model.fit(x_train, y_train)
