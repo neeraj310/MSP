@@ -2,4 +2,4 @@
 
 ## Change Log
 
-Please see [Changelog](./docs/changelog.md)
+Please see [Changelog](./changelog.md)
