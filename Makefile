@@ -5,3 +5,5 @@ format:
 
 docs:
 	pdoc --html --output-dir docs src/indexing
+	mv docs/indexing/* docs/
+	rm -rf docs/indexing
