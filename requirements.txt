@@ -7,3 +7,4 @@ pdoc3
 torch
 torchvision
 scikit-learn
+matplotlib
