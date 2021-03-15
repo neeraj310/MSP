@@ -5,14 +5,10 @@ Created on Fri Feb 26 14:36:30 2021
 @author: neera
 """
 from timeit import default_timer as timer
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from sklearn import metrics
-
-from src.indexing.models import BaseModel
-
 
 class LisaBaseModel():
     def __init__(self, degree) -> None:
@@ -21,7 +17,7 @@ class LisaBaseModel():
         self.nuofKeys = 0
         self.keysPerPage = 0
         self.train_array = 0
-        self.name = 'LisaBaseLine'
+        self.name = 'Lisa Baseline'
         #print('In LisaBase Model pageCount = %d' %( self.pageCount ))
 
     '''

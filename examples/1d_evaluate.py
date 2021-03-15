@@ -11,7 +11,7 @@ from src.indexing.models.nn.fcn import FCNModel
 from src.indexing.models.rmi.staged import StagedModel
 from src.indexing.models.trees.b_tree import BTreeModel
 from src.queries.point import PointQuery
-
+from src.indexing.utilities.metrics import get_memory_size
 ratio = 0.2
 b_tree_degree = 20
 
@@ -37,11 +37,11 @@ def evaluate(filename):
     result = []
     header = [
         "Name", "Build Time (s)", "Evaluation Time (s)",
-        "Evaluation Error (MSE)"
+        "Evaluation Error (MSE)", "Memory Size (KB)"
     ]
     for index, model in enumerate(models):
         result.append(
-            [model.name, build_times[index], eval_times[index], mses[index]])
+            [model.name, build_times[index], eval_times[index], mses[index], get_memory_size(model)])
     print(tabulate(result, header))
     models_predict(data, models)
 
