@@ -1,5 +1,5 @@
 class BaseModel(object):
-    def __init__(self, name, page_size=0) -> None:
+    def __init__(self, name, page_size=1) -> None:
         super().__init__()
         self.name = name
         self.page_size = page_size
