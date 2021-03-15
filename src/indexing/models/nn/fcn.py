@@ -12,7 +12,8 @@ from src.indexing.utilities.dataloaders import normalize
 class FCNModel(BaseModel):
     def __init__(self, page_size) -> None:
         super().__init__('Fully Connected Neural Network', page_size)
-        self.net = FullyConnectedNetwork([1, 8, 1], ['relu', 'relu'], lr=0.001)
+        self.net = FullyConnectedNetwork(
+            [1, 8, 8, 1], ['relu', 'relu', 'relu'], lr=0.01)
 
     def train(self, x_train, y_train, x_test, y_test):
 
@@ -27,7 +28,7 @@ class FCNModel(BaseModel):
         y_test = (y_test - self.min_y) / (self.max_y - self.min_y)
 
         start_time = timer()
-        self.net.fit(x_train, y_train, epochs=100, batch_size=100)
+        self.net.fit(x_train, y_train, epochs=10000, batch_size=100)
         end_time = timer()
 
         y_hat = self.net.predict(x_test)
@@ -35,6 +36,9 @@ class FCNModel(BaseModel):
         return mse, end_time - start_time
 
     def fit(self, x_train, y_train):
+        r'''
+        fit
+        '''
         self.max_x = np.max(x_train)
         self.min_x = np.min(x_train)
         self.max_y = np.max(y_train)
@@ -46,7 +50,7 @@ class FCNModel(BaseModel):
 
     def predict(self, X):
         X = (X - self.min_x) / (self.max_x - self.min_x)
-        X=np.array(X)
+        X = np.array(X)
         X = X.reshape((1))
         portion = self.net.predict(X)
         position = int(portion * (self.max_y - self.min_y)) + self.min_y

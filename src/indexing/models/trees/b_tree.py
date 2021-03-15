@@ -152,7 +152,7 @@ class BTree():
 
 class BTreeModel(BaseModel):
     def __init__(self, page_size, degree=0):
-        super().__init__("B-Tree d={}".format(degree), page_size)
+        super().__init__("B-Tree (d={})".format(degree), page_size)
         self.btree = BTree(degree)
 
     def train(self, x_train, y_train, x_test, y_test):
