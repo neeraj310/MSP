@@ -3,4 +3,4 @@ tabulate
 numpy
 pandas
 pwlf
-pdoc
+pdoc3
