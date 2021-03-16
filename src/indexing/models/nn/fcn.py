@@ -1,7 +1,7 @@
 from timeit import default_timer as timer
 
 import numpy as np
-from sklearn import metrics
+import src.indexing.utilities.metrics as metrics
 
 from src.indexing.learning.fully_connected_network import FullyConnectedNetwork
 # from indexing.learning.pt_fcn import FullyConnectedNetwork
@@ -13,7 +13,7 @@ class FCNModel(BaseModel):
     def __init__(self, page_size) -> None:
         super().__init__('Fully Connected Neural Network', page_size)
         self.net = FullyConnectedNetwork(
-            [1, 8, 8, 1], ['relu', 'relu', 'relu'], lr=0.01)
+            [1, 32, 1], ['relu', 'relu'], lr=0.01)
 
     def train(self, x_train, y_train, x_test, y_test):
 
@@ -28,7 +28,7 @@ class FCNModel(BaseModel):
         y_test = (y_test - self.min_y) / (self.max_y - self.min_y)
 
         start_time = timer()
-        self.net.fit(x_train, y_train, epochs=10000, batch_size=100)
+        self.net.fit(x_train, y_train, epochs=100, batch_size=100)
         end_time = timer()
 
         y_hat = self.net.predict(x_test)

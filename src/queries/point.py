@@ -5,9 +5,9 @@
 
 from timeit import default_timer as timer
 from typing import List
+import numpy as np
 
-from sklearn import metrics
-
+import src.indexing.utilities.metrics as metrics
 from src.indexing.models import BaseModel
 from src.queries import Query
 
@@ -32,7 +32,9 @@ class PointQuery(Query):
                 y = int(y // model.page_size)
                 ys.append(y)
             end_time = timer()
-            mse = metrics.mean_squared_error(test_data.iloc[:, -1:], ys)
+            yhat = np.array(ys).reshape(-1,1)
+            ytrue = np.array(test_data.iloc[:, -1:])
+            mse = metrics.mean_squared_error(yhat, ytrue)
             mses.append(mse)
             print("{} model tested in {:.4f} seconds with mse {:.4f}".format(
                 model.name, end_time - start_time, mse))

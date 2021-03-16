@@ -5,7 +5,7 @@ import random
 from timeit import default_timer as timer
 
 import numpy as np
-from sklearn import metrics
+import src.indexing.utilities.metrics as metrics
 from sklearn.neighbors import KDTree
 
 

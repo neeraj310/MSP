@@ -9,8 +9,8 @@ from timeit import default_timer as timer
 from typing import List
 
 import numpy as np
-from sklearn import metrics
 
+import src.indexing.utilities.metrics as metrics
 from src.indexing.models import BaseModel
 from src.indexing.models.ml.polynomial_regression import PolynomialRegression
 from src.indexing.models.nn.fcn import FCNModel

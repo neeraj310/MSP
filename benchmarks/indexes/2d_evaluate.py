@@ -28,7 +28,7 @@ from tabulate import tabulate
 
 sys.path.append('src')
 import numpy as np
-from sklearn import metrics
+import src.indexing.utilities.metrics as metrics
 
 from indexing.models import BaseModel
 from indexing.models.lisa.basemodel import LisaBaseModel

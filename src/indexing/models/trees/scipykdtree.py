@@ -3,7 +3,7 @@ from timeit import default_timer as timer
 
 import numpy as np
 from scipy.spatial import KDTree as ScipyKDTree
-from sklearn import metrics
+import src.indexing.utilities.metrics as metrics
 
 
 class ScipyKDTreeModel():

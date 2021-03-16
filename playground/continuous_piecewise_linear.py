@@ -3,7 +3,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pwlf
-from sklearn.metrics import mean_squared_error
+from src.indexing.utilities.metrics import mean_squared_error
 
 
 def solve_least_sqaure(A, y):

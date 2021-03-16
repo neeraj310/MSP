@@ -3,7 +3,7 @@ import time
 from timeit import default_timer as timer
 
 import numpy as np
-from sklearn.metrics import mean_squared_error
+from src.indexing.utilities.metrics import mean_squared_error
 from sklearn.neighbors import KDTree
 
 

@@ -7,7 +7,7 @@ from timeit import default_timer as timer
 from typing import List, Tuple
 
 import numpy as np
-from sklearn import metrics
+import src.indexing.utilities.metrics as metrics
 
 from src.indexing.models import BaseModel
 from src.indexing.models.trees.item import Item
@@ -167,7 +167,7 @@ class BTreeModel(BaseModel):
         for i in range(test_data_size):
             pred_y.append(self.btree.search(x_test[i])[2].value // self.page_size)
         pred_y = np.array(pred_y)
-        mse = metrics.mean_absolute_error(y_test, pred_y)
+        mse = metrics.mean_squared_error(y_test, pred_y)
         return mse, end_time - start_time
 
     def fit(self, x_train, y_train):

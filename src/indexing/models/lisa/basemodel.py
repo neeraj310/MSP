@@ -8,7 +8,7 @@ from timeit import default_timer as timer
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from sklearn import metrics
+import src.indexing.utilities.metrics as metrics
 
 class LisaBaseModel():
     def __init__(self, degree) -> None:

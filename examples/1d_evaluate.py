@@ -12,6 +12,7 @@ from src.indexing.models.rmi.staged import StagedModel
 from src.indexing.models.trees.b_tree import BTreeModel
 from src.queries.point import PointQuery
 from src.indexing.utilities.metrics import get_memory_size
+
 ratio = 0.2
 b_tree_degree = 20
 
@@ -29,8 +30,8 @@ def evaluate(filename):
 
     lrm = PRModel(1, page_size)
     prm = PRModel(2, page_size)
-    # sgm = StagedModel(['fcn', 'lr', 'lr'], [1, 2, 4], page_size)
-    models = [btm, fcn, lrm, prm]
+    sgm = StagedModel(['fcn', 'lr', 'lr'], [1, 2, 4], page_size)
+    models = [sgm, btm, fcn, lrm, prm]
     ptq = PointQuery(models)
     build_times = ptq.build(data, ratio)
     mses, eval_times = ptq.evaluate(test_data)
