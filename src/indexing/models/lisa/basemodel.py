@@ -5,10 +5,13 @@ Created on Fri Feb 26 14:36:30 2021
 @author: neera
 """
 from timeit import default_timer as timer
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+
 import src.indexing.utilities.metrics as metrics
+
 
 class LisaBaseModel():
     def __init__(self, degree) -> None:

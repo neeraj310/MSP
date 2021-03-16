@@ -5,8 +5,9 @@ import random
 from timeit import default_timer as timer
 
 import numpy as np
-import src.indexing.utilities.metrics as metrics
 from sklearn.neighbors import KDTree
+
+import src.indexing.utilities.metrics as metrics
 
 
 class KDTreeModel():

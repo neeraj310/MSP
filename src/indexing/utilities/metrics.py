@@ -5,11 +5,13 @@
 import numpy as np
 from pympler import asizeof
 
+
 def mean_squared_error(yhat, y):
     return (np.square(yhat - y)).mean()
+
 
 def get_memory_size(obj):
     '''
     return the memory size in kilo bytes
     '''
-    return asizeof.asizeof(obj)/1024
+    return asizeof.asizeof(obj) / 1024

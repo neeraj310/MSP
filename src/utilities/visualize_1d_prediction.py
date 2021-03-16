@@ -11,8 +11,7 @@ from bokeh.plotting import figure
 def visualize(filename):
     df = pd.read_csv(filename)
     ds = ColumnDataSource(df)
-    p = figure(toolbar_location="above", x_axis_type="linear")
-    # p.add_tools(HoverTool(tooltips=[("x")]))
+    p = figure(title="title",toolbar_location="above", x_axis_type="linear")
 
     line_renderer = p.line('x', 'ground_truth', source=ds)
     handler = CustomJS(args=dict(line_renderer=line_renderer),
@@ -22,7 +21,7 @@ def visualize(filename):
 
     select = Select(title="Model Type:", options=list(df.columns))
     select.js_on_change('value', handler)
-
+    select.js_link('value', p.title, 'text')
     show(column(select, p))
 
 

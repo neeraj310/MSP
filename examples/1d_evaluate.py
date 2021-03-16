@@ -1,8 +1,8 @@
 import sys
 from typing import List
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 from tabulate import tabulate
 
 from src.indexing.models import BaseModel
@@ -10,11 +10,12 @@ from src.indexing.models.ml.polynomial_regression import PRModel
 from src.indexing.models.nn.fcn import FCNModel
 from src.indexing.models.rmi.staged import StagedModel
 from src.indexing.models.trees.b_tree import BTreeModel
-from src.queries.point import PointQuery
 from src.indexing.utilities.metrics import get_memory_size
+from src.queries.point import PointQuery
 
 ratio = 0.2
 b_tree_degree = 20
+
 
 def load_1D_Data(filename):
     data = pd.read_csv(filename)
@@ -26,11 +27,11 @@ def load_1D_Data(filename):
 def evaluate(filename):
     data, test_data, page_size = load_1D_Data(filename)
     btm = BTreeModel(page_size, b_tree_degree)
-    fcn = FCNModel(page_size)
+    fcn = FCNModel(page_size=page_size)
 
     lrm = PRModel(1, page_size)
     prm = PRModel(2, page_size)
-    sgm = StagedModel(['fcn', 'lr', 'lr'], [1, 2, 4], page_size)
+    sgm = StagedModel(['fcn', 'fcn', 'lr'], [1, 20, 100000], page_size)
     models = [sgm, btm, fcn, lrm, prm]
     ptq = PointQuery(models)
     build_times = ptq.build(data, ratio)
@@ -41,8 +42,10 @@ def evaluate(filename):
         "Evaluation Error (MSE)", "Memory Size (KB)"
     ]
     for index, model in enumerate(models):
-        result.append(
-            [model.name, build_times[index], eval_times[index], mses[index], get_memory_size(model)])
+        result.append([
+            model.name, build_times[index], eval_times[index], mses[index],
+            get_memory_size(model)
+        ])
     print(tabulate(result, header))
     models_predict(data, models)
 
@@ -55,7 +58,7 @@ def models_predict(data, models: List[BaseModel]):
     for model in models:
         pred_y = []
         for each in x:
-            pred_y.append(int(model.predict(each)))
+            pred_y.append(int(model.predict(each) // model.page_size))
         if model.name == 'Fully Connected Neural Network':
             # print(pred_y)
             pass
@@ -66,7 +69,7 @@ def models_predict(data, models: List[BaseModel]):
     for idx, model in enumerate(models):
         results[model.name] = pred_ys[idx]
     df = pd.DataFrame.from_dict(results)
-    df.to_csv('result.csv', index=False)
+    df.to_csv('result_100k.csv', index=False)
     print("Results have been saved to result.csv")
 
 

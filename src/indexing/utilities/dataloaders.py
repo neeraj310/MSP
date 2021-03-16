@@ -7,9 +7,9 @@ def split_train_test(data, ratio=0.2):
     x_test, y_test = test_data.iloc[:, :-1].values, test_data.iloc[:,
                                                                    -1:].values
     x_index = np.linspace(0, len(x_train) - 1, len(x_train))
-    x_index = x_index.reshape(-1,1)
+    x_index = x_index.reshape(-1, 1)
     return x_train, y_train, x_test, y_test, x_index
 
 
 def normalize(x):
-    return (x - np.min(x)) / (np.max(x) - np.min(x))
+    return (x - np.min(x)) / (np.max(x) - np.min(x) + 1)

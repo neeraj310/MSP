@@ -5,6 +5,7 @@
 
 from timeit import default_timer as timer
 from typing import List
+
 import numpy as np
 
 import src.indexing.utilities.metrics as metrics
@@ -32,7 +33,7 @@ class PointQuery(Query):
                 y = int(y // model.page_size)
                 ys.append(y)
             end_time = timer()
-            yhat = np.array(ys).reshape(-1,1)
+            yhat = np.array(ys).reshape(-1, 1)
             ytrue = np.array(test_data.iloc[:, -1:])
             mse = metrics.mean_squared_error(yhat, ytrue)
             mses.append(mse)

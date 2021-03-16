@@ -3,8 +3,9 @@ import time
 from timeit import default_timer as timer
 
 import numpy as np
-from src.indexing.utilities.metrics import mean_squared_error
 from sklearn.neighbors import KDTree
+
+from src.indexing.utilities.metrics import mean_squared_error
 
 
 # Makes the KD-Tree for fast lookup

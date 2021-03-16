@@ -24,7 +24,7 @@ class PolynomialRegression():
         for power in range(self.degree):
             matX.append(np.power(X, power + 1))
         matX = np.column_stack(matX)
-        A = np.linalg.inv(matX.T @ matX)
+        A = np.linalg.pinv(matX.T @ matX)
         D = A @ matX.T
         self.coeffs = D @ y
 

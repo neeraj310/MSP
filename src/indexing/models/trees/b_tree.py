@@ -1,5 +1,5 @@
 # Copyright (c) 2021 Xiaozhe Yao et al.
-# 
+#
 # This software is released under the MIT License.
 # https://opensource.org/licenses/MIT
 
@@ -7,8 +7,8 @@ from timeit import default_timer as timer
 from typing import List, Tuple
 
 import numpy as np
-import src.indexing.utilities.metrics as metrics
 
+import src.indexing.utilities.metrics as metrics
 from src.indexing.models import BaseModel
 from src.indexing.models.trees.item import Item
 
@@ -165,7 +165,8 @@ class BTreeModel(BaseModel):
         test_data_size = x_test.shape[0]
         pred_y = []
         for i in range(test_data_size):
-            pred_y.append(self.btree.search(x_test[i])[2].value // self.page_size)
+            pred_y.append(
+                self.btree.search(x_test[i])[2].value // self.page_size)
         pred_y = np.array(pred_y)
         mse = metrics.mean_squared_error(y_test, pred_y)
         return mse, end_time - start_time

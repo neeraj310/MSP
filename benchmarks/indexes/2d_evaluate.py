@@ -28,8 +28,8 @@ from tabulate import tabulate
 
 sys.path.append('src')
 import numpy as np
-import src.indexing.utilities.metrics as metrics
 
+import src.indexing.utilities.metrics as metrics
 from indexing.models import BaseModel
 from indexing.models.lisa.basemodel import LisaBaseModel
 from indexing.models.ml.polynomial_regression import PRModel

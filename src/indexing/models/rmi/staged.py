@@ -16,6 +16,7 @@ from src.indexing.models.ml.polynomial_regression import PolynomialRegression
 from src.indexing.models.nn.fcn import FCNModel
 from src.indexing.models.trees.b_tree import BTreeModel
 
+
 class StagedModel(BaseModel):
     def __init__(self, model_types, num_models, page_size) -> None:
         super().__init__("Staged Model", page_size)
@@ -37,7 +38,11 @@ class StagedModel(BaseModel):
         elif model_type == 'b-tree':
             model = BTreeModel(page_size=self.page_size, degree=10)
         elif model_type == 'fcn':
-            model = FCNModel(self.page_size)
+            model = FCNModel(layers=[1, 4, 4, 1],
+                             activations=['relu', 'relu', 'relu'],
+                             epochs=2000,
+                             page_size=self.page_size,
+                             lr=0.001)
         else:
             raise ValueError("Unsupported Model Type")
         model.fit(x_train, y_train)
@@ -52,9 +57,12 @@ class StagedModel(BaseModel):
         for stage in range(self.num_of_stages):
             self.models.append([])
             for model_id in range(self.num_of_models[stage]):
-                model = self._build_single_model(self.model_types[stage],
-                                                 train_datas[stage][model_id])
-                self.models[stage].append(model)
+                if train_datas[stage][model_id][0] is not None:
+                    model = self._build_single_model(
+                        self.model_types[stage], train_datas[stage][model_id])
+                    self.models[stage].append(model)
+                else:
+                    self.models[stage].append(None)
             if not stage == self.num_of_stages - 1:
                 # if it is not the last stage
                 # prepare dataset for the next stage
@@ -67,25 +75,26 @@ class StagedModel(BaseModel):
                     output = self.models[stage][model_id].predict(key)
                     selected_model_id = int(
                         output * self.num_of_models[stage + 1] / self.max_pos)
-                    # in case, selected_model_id is not in range
+                    # in case selected_model_id is not in range
                     selected_model_id = self.acceptable_next_model(
                         selected_model_id, stage)
+                    # print('selected model id: {}'.format(selected_model_id))
                     next_xs[selected_model_id].append(key)
                     next_ys[selected_model_id].append(y_train[index])
 
                 # prepare data accordingly
                 for next_model_id in range(self.num_of_models[stage + 1]):
                     train_datas.append([])
-                    if not len(next_xs[next_model_id]) == 0:
+                    if len(next_xs[next_model_id]) != 0:
                         dataset = (next_xs[next_model_id],
                                    next_ys[next_model_id])
                         train_datas[stage + 1].append(dataset)
                     else:
                         # there is no x and y allocated
                         # by default, give it all the training data
-                        print("[WARN] The model {}/{} is not given any data".
-                              format(stage + 1, next_model_id))
-                        train_datas[stage + 1].append((x_train, y_train))
+                        # print("[WARN] The model {}-{} is not given any data".
+                        #       format(stage + 1, next_model_id))
+                        train_datas[stage + 1].append((None, None))
         end_time = timer()
 
         y_pred = []
