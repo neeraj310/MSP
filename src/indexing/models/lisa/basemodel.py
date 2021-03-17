@@ -51,9 +51,8 @@ class LisaBaseModel():
 
         if (((self.keysPerPage * self.pageCount) - self.nuofKeys) >=
                 self.keysPerPage):
-            print(
-                '\n Invalid configuration, Nu of keys per page needs to be greater than page count'
-            )
+            print('Invalid configuration, Nu of keys per page needs to be greater than page count')
+            return -1
 
         for i in range(self.pageCount - 1):
             self.denseArray[i][0] = self.train_array[i * self.keysPerPage, 3]
@@ -67,6 +66,7 @@ class LisaBaseModel():
         self.denseArray[i][0] = self.train_array[i * self.keysPerPage, 3]
         self.denseArray[i][1] = self.train_array[self.nuofKeys - 1, 3]
         self.denseArray[i][2] = i
+        return 0
 
     def search_page_index(self, x):
         low = 0
@@ -255,7 +255,8 @@ else:
         #self.plot_function(in_data_arr)
 
         #Init dense array with sorted mapped values(Store first and last key per page)
-        self.init_dense_array()
+        if (self.init_dense_array() == -1):
+            return -1, timer() - start_time
         #print(self.denseArray)
         end_time = timer()
         print('/n build time %f' % (end_time - start_time))
