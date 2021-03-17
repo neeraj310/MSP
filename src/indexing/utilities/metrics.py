@@ -7,7 +7,7 @@ from pympler import asizeof
 
 
 def mean_squared_error(yhat, y):
-    return (np.square(yhat - y)).mean()
+    return (np.square(yhat.reshape(-1) - y.reshape(-1))).mean()
 
 
 def get_memory_size(obj):
