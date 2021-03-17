@@ -32,10 +32,8 @@ import numpy as np
 import src.indexing.utilities.metrics as metrics
 from indexing.models import BaseModel
 from indexing.models.lisa.basemodel import LisaBaseModel
-from indexing.models.ml.polynomial_regression import PRModel
-from indexing.models.nn.fcn import FCNModel
-from indexing.models.rmi.staged import StagedModel
-from indexing.models.trees.b_tree import BTreeModel
+from indexing.models.lisa.lisa import LisaModel
+
 from indexing.models.trees.KD_tree import KDTreeModel
 from indexing.models.trees.scipykdtree import ScipyKDTreeModel
 from queries.point import PointQuery
@@ -58,16 +56,9 @@ def evaluate(filename):
     lisaBm = LisaBaseModel(100)
     kdtree = KDTreeModel()
     scipykdtree = ScipyKDTreeModel(leafsize=10)
-    '''
-    btm = BTreeModel(b_tree_page_size)
-    fcn = FCNModel()
+    lisa = LisaModel(cellSize=10, nuOfShards=5)
 
-    lrm = PRModel(1)
-    prm = PRModel(2)
-    sgm = StagedModel(['lr', 'b-tree', 'lr'], [1, 2, 8])
-    models = [btm, lrm, prm, sgm]
-    '''
-    models = [lisaBm, kdtree, scipykdtree]
+    models = [lisaBm, kdtree, scipykdtree,lisa]
     ptq = PointQuery(models)
     build_times = ptq.build(data, 0.00002)
 
