@@ -11,58 +11,72 @@ For example, if the keys are uniformly distributed from $0$ to $1000$, i.e. the 
 In this example, we see that the distribution of $X$ is essential and our goal of learned index in one-dimensional data is to learn such distribution. To do so, we apply two different techniques as the baseline, the polynomial regression and fully connected neural network.
 
 To train such a learned index, we first manually generate the $X$ with respect to a certain distribution. We then save the generated $X$ into a dense array with the length $N$. Then we use the proportional index, i.e. the index of each $x$ divided by $N$ as the expected output $y$.
-
-\subsubsection{Polynomial Regression}
- 
-The polynomial regression model with degree $m$ can be formalised as 
-
-$$ \hat{y_i}= \beta_0+\beta_1x_i+\beta_2x_i^2+\cdots+\beta_mx_i^m$$ and it can be expressed in a matrix form as below
-
-$$
-\begin{bmatrix}
-y_1 \\ y_2\\ \vdots \\ y_n 
-\end{bmatrix}=\begin{bmatrix}
-1 & x_1 & x_1^2 &\cdots & x_1^m \\ 
-1 & x_2 & x_2^2 &\cdots & x_2^m \\ 
-\vdots \\ 
-1 & x_n & x_n^2 &\cdots & x_n^m \\ 
-\end{bmatrix}\begin{bmatrix}
-\beta_0 \\ \beta_1 \\ \vdots \\ \beta_m 
-\end{bmatrix}
-$$ which can be written as $Y=\boldsymbol{X}\boldsymbol{\beta}$. 
- 
- Our goal is to find $\beta$ such that the sum of squared error, i.e. $\text{S}(\boldsymbol{\beta})=\sum_{i=1}^n(\hat{y}-y)^2$ is minimal. This optimisation problem can be resolved by ordinary least square estimation as shown below.
- 
- First we have the error as
- 
- \begin{equation}
- \begin{split}
- \text{S}(\boldsymbol{\beta})=||\boldsymbol{y}-\boldsymbol{X} \boldsymbol{\beta}||& =(\boldsymbol{y}-\boldsymbol{X}\boldsymbol{\beta})^T(\boldsymbol{y}-\boldsymbol{X}\boldsymbol{\beta})\\
- 	& =\boldsymbol{y}^T\boldsymbol{y}-\boldsymbol{\beta}^T\boldsymbol{X}^T\boldsymbol{y}-\boldsymbol{y}^T\boldsymbol{X}\boldsymbol{\beta}+\boldsymbol{\beta}^T\boldsymbol{X}^T\boldsymbol{X}\boldsymbol{\beta}
-\end{split}
- \end{equation}
- 
- Here we know that $(\boldsymbol{\beta}^T\boldsymbol{X}^T\boldsymbol{y})^T=\boldsymbol{y}^T\boldsymbol{X}\boldsymbol{\beta}$ is a $1\times 1$ matrix, i.e. a scalar. Hence it is equal to its own transpose. As a result we could simplify the error as
- 
- \begin{equation}
- 	\begin{split}
- 		\text{S}(\boldsymbol{\beta})=\boldsymbol{y}^T\boldsymbol{y}-2\boldsymbol{\beta}^T\boldsymbol{X}^T\boldsymbol{y}+\boldsymbol{\beta}^T\boldsymbol{X}^T\boldsymbol{X}\boldsymbol{\beta}
- 	\end{split}
- \end{equation}
- 
- In order to find the minimum of $S(\boldsymbol{\beta})$, we differentiate it with respect to $\boldsymbol{\beta}$ as 
- 
- \begin{equation}
- 	\nabla_{\boldsymbol{\beta}}S=-2\boldsymbol{X}^T\boldsymbol{y}+2(\boldsymbol{X}^T\boldsymbol{X})\boldsymbol{\beta}
- \end{equation}
- 
- By let it to be zero, we end up with 
- 
- \begin{equation}
- \begin{split}
- 	 &	-\boldsymbol{X}^T\boldsymbol{y}+(\boldsymbol{X}^T\boldsymbol{X})\boldsymbol{\beta}=0 \\
- 	& \implies \boldsymbol{\beta}= (\boldsymbol{X}^T\boldsymbol{X})^{-1}\boldsymbol{X}^T\boldsymbol{y}
- \end{split}
- \end{equation}
  
 \subsubsection{Fully Connected Neural Network}
+
+After generating the training dataset $X$ and its corresponding $Y$, we build a fully connected neural network as the baseline learned index. The architecture of the fully connected neural network is illustrated in Figure \ref{fig:baseline_fcn}.
+
+\tikzset{%
+  every neuron/.style={
+    circle,
+    draw,
+    minimum size=1cm
+  },
+  neuron missing/.style={
+    draw=none, 
+    scale=4,
+    text height=0.333cm,
+    execute at begin node=\color{black}$\vdots$
+  },
+}
+\begin{figure}
+\center
+\begin{tikzpicture}[x=1.5cm, y=1.5cm, >=stealth]
+\foreach \m/\l [count=\y] in {1}
+  \node [every neuron/.try, neuron \m/.try] (input-\m) at (0,2.5-\y*2.75) {};
+
+\foreach \m [count=\y] in {1,missing,2}
+  \node [every neuron/.try, neuron \m/.try ] (first-\m) at (2,2-\y*1.25) {};
+
+\foreach \m [count=\y] in {1,missing,2}
+  \node [every neuron/.try, neuron \m/.try ] (second-\m) at (4,2-\y*1.25) {};
+
+\foreach \m [count=\y] in {1}
+  \node [every neuron/.try, neuron \m/.try ] (output-\m) at (6,1.5-\y*2) {};
+
+
+\foreach \l [count=\i] in {1}
+  \draw [<-] (input-\i) -- ++(-1,0)
+    node [above, midway] {$I_{\l}$};
+
+\foreach \l [count=\i] in {1,32}
+  \node [above] at (first-\i.north) {$F_{\l}$};
+
+\foreach \l [count=\i] in {1,32}
+   \node [above] at (second-\i.north) {$S_{\l}$};
+
+\foreach \l [count=\i] in {1}
+   \node [above] at (output-\i.north) {$O$};
+
+\foreach \i in {1}
+  \foreach \j in {1,...,2}
+    \draw [->] (input-\i) -- (first-\j);
+
+\foreach \i in {1,...,2}
+  \foreach \j in {1,...,2}
+    \draw [->] (first-\i) -- (second-\j);
+
+\foreach \i in {1,...,2}
+  \foreach \j in {1}
+    \draw [->] (second-\i) -- (output-\j);
+
+\foreach \l [count=\x from 0] in {Input, First, Second, Ouput}
+  \node [align=center, above] at (\x*2,2) {\l \\ layer};
+
+\end{tikzpicture}
+\caption{The architecture of the fully connected neural network used as baseline learned index. In this neural network, we use only 2 fully connected layers and each layer is equipped with 32 neurons. The input of this neural network is only one neuron such that it represents the given query key. The output of this neural network is limited to 1 neuron such that it represents the predicted proportional position of the key value pair.}
+\label{fig:baseline_fcn}
+\end{figure}
+
+We apply Rectified Linear Unit (ReLU) activation function at the end of $F_i$ and $S_i$. Formally, assume the output of $F_i$ is $a$, then we define the output of $F_i$ as $y=max\{a, 0\}$. Then we train this fully connected neural network with standard stochastic gradient descent (SGD), and we set the learning rate to be $lr=0.001$. 
+

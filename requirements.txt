@@ -1,10 +1,13 @@
 tinyml
-tabulate
 numpy
 pandas
-pwlf
-pdoc3
-torch
-torchvision
 matplotlib
 pympler
+# the following are for comparing only
+scikit-learn
+torch
+torchvision
+pwlf
+# documentation
+pdoc3
+pwlf
