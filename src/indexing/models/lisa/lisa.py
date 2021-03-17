@@ -53,6 +53,11 @@ class LisaModel():
 
         self.keysPerShard = self.numOfKeysPerInterval//self.nuOfShards
         self.nuOfKeysToSearchinAdjacentShard = self.keysPerShard //6
+        if(self.nuOfKeysToSearchinAdjacentShard < 5):
+            self.nuOfKeysToSearchinAdjacentShard= 5
+        if (self.nuOfKeysToSearchinAdjacentShard >self.keysPerShard ):
+            print('Invalid Configuration')
+            return -1
         self.shardMatrix = np.zeros((self.nuOfIntervals, 5))
         print('nuOfIntervals =%d, numOfKeysPerInterval = %d nuOfShards = %d keysperShard = %d NuofKeys = %d keysInLastInterval = %d'
                       %(self.nuOfIntervals, self.numOfKeysPerInterval,self.nuOfShards,self.keysPerShard, self.nuOfKeys, self.keysInLastInterval) )
@@ -108,7 +113,7 @@ class LisaModel():
             self.cellMatrix[i][8] =  np.abs((self.cellMatrix[i][3] - self.cellMatrix[i][1])* \
                                            (self.cellMatrix[i][2] - self.cellMatrix[i][0]))
       
-        return
+        return 0
     
     def compute_mapping_value(self):
         j = 0
@@ -696,7 +701,9 @@ class LisaModel():
                                       np.zeros((x_train.shape[0], 1),
                                                dtype=x_train.dtype)))
         self.train_array = self.train_array.astype('float64')
-        self.generate_grid_cells()
+        if (self.generate_grid_cells() == -1):
+            print('Invalid Configuration')
+            return -1, timer() - start_time
         self.compute_mapping_value()
         self.createShards()
         end_time = timer()
@@ -711,6 +718,7 @@ class LisaModel():
         for i in range(test_data_size):
             y_hat = self.predict(x_test[i])
             if(y_hat != y_test[i]):
+                print(' pred = %d, gt = %d' %(y_hat, y_test[i] ))
                 error_count = error_count+1
             pred_y.append(y_hat)
 
