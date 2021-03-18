@@ -51,7 +51,9 @@ class LisaBaseModel():
 
         if (((self.keysPerPage * self.pageCount) - self.nuofKeys) >=
                 self.keysPerPage):
-            print('Invalid configuration, Nu of keys per page needs to be greater than page count')
+            print(
+                'Invalid configuration, Nu of keys per page needs to be greater than page count'
+            )
             return -1
 
         for i in range(self.pageCount - 1):

@@ -11,7 +11,7 @@ from bokeh.plotting import figure
 def visualize(filename):
     df = pd.read_csv(filename)
     ds = ColumnDataSource(df)
-    p = figure(title="title",toolbar_location="above", x_axis_type="linear")
+    p = figure(title="title", toolbar_location="above", x_axis_type="linear")
 
     line_renderer = p.line('x', 'ground_truth', source=ds)
     handler = CustomJS(args=dict(line_renderer=line_renderer),

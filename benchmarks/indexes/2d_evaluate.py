@@ -33,7 +33,6 @@ import src.indexing.utilities.metrics as metrics
 from indexing.models import BaseModel
 from indexing.models.lisa.basemodel import LisaBaseModel
 from indexing.models.lisa.lisa import LisaModel
-
 from indexing.models.trees.KD_tree import KDTreeModel
 from indexing.models.trees.scipykdtree import ScipyKDTreeModel
 from queries.point import PointQuery
@@ -58,7 +57,7 @@ def evaluate(filename):
     scipykdtree = ScipyKDTreeModel(leafsize=10)
     lisa = LisaModel(cellSize=10, nuOfShards=5)
 
-    models = [lisaBm, kdtree, scipykdtree,lisa]
+    models = [lisaBm, kdtree, scipykdtree, lisa]
     ptq = PointQuery(models)
     build_times = ptq.build(data, 0.00002)
 

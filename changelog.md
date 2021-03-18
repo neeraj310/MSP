@@ -1,5 +1,9 @@
 # Change Log
 
+## 18 Mar, Added Feature
+
+* Added a class for learning continuous piecewise linear function.
+
 ## 14 Mar, Minor Revision
 
 Changed the logic of b-tree.
