@@ -651,6 +651,12 @@ class LisaModel():
         #print('\n returning page %d' %(-1))
         return -1
 
+    def sequentially_scan_mapped_interval(self, x):
+        for i in range(self.nuOfIntervals):
+            if (x <= self.mappedIntervalMatrix[i][4]):
+                return i
+        return -1 
+
     def search_shard_matrix(self, x, intervalId):
         shardOffset = intervalId * self.nuOfShards
         for i in range(self.nuOfShards):
@@ -712,7 +718,7 @@ class LisaModel():
         cell_id = self.searchCellGrid(query)
         if (cell_id == -1):
             print('Query point %d %d not found' % (query[0], query[1]))
-            return
+            return -1
         else:
             keyArea = np.abs((query[1] - self.cellMatrix[cell_id][1]) *
                              (query[0] - self.cellMatrix[cell_id][0]))
@@ -721,12 +727,16 @@ class LisaModel():
                 (keyArea / self.cellMatrix[cell_id][8]) * self.keysPerCell)
             #print('Query point %d %d found with mapped_value=%f ' %(query[0],query[1],mapped_value))
             intervalId = self.search_mapped_interval(mapped_value)
-            if (intervalId == -1):
-                print('Query point %d %d mapping value not found' %
-                      (query[0], query[1]))
-                return
+             if(intervalId == -1):
+                #print('Query point %d %d mapping value %f not found in bst search' %(query[0],query[1], mapped_value))
+                intervalId = self.sequentially_scan_mapped_interval(mapped_value)
+                if(intervalId != -1):
+                    #print('Query point %d %d mapping value %f found in interval id %d in sequential scan' %(query[0],query[1], mapped_value, intervalId))
+                else:
+                    print('Query point %d %d mapping value %f not found in sequential search' %(query[0],query[1], mapped_value))
+                    return -1
             #else:
-            #print('Query point %d %d found with mapped_value=%f and mapped interval = %d' %(query[0],query[1],mapped_value, i))
+            #print('Query point %d %d found with mapped_value=%f and mapped interval = %d' %(query[0],query[1],mapped_value, i))    
 
             v_pred = self.predictShardId(
                 mapped_value, self.alphas_list[intervalId],
