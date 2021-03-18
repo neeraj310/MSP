@@ -616,9 +616,11 @@ class LisaModel():
         for i in range(self.cellSize):
             for j in range(self.cellSize):
                 if(query[0] >= self.cellMatrix[i+j*self.cellSize][0] and query[0] <= self.cellMatrix[i+j*self.cellSize][2]) and \
-                    (query[1] >= self.cellMatrix[i+j*self.cellSize][1] and query[0] <= self.cellMatrix[i+j*self.cellSize][3]):
+                    (query[1] >= self.cellMatrix[i+j*self.cellSize][1] and query[1] <= self.cellMatrix[i+j*self.cellSize][3]):
                     found = True
                     cellIdx = i + j * self.cellSize
+
+
                     break
             if (found == True):
                 break
