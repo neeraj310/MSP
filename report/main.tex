@@ -8,7 +8,6 @@
     }
   ]{blankpage.fg}
 \DeclarePageStyleByLayers{blank}{blankpage.fg}
-
 \usepackage{scrhack}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -27,8 +26,18 @@
 \usepackage[ruled,vlined,linesnumbered]{algorithm2e}
 \usepackage{tabularx}
 \usepackage{booktabs}
+\usepackage[tikz]{mdframed}
 \usepackage[labelfont=bf,format=plain,justification=raggedright,singlelinecheck=false]{caption}
 \usepackage{mathtools}
+\newenvironment{mscexample}
+    {\begin{center}
+    \begin{mdframed}[backgroundcolor=lightgray]}
+{\end{mdframed}
+    \end{center}
+   }
+
+ 
+ 
 %\usepackage[ruled, vlined, linesnumbered, algo2e]{algorithm2e}
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}

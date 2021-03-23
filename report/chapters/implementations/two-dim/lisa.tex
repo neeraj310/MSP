@@ -3,8 +3,14 @@ and geo-targeted advertising. Motivated by the performance benefits of learned i
 for one-dimensional data, this section explores the application of learned index for spatial data. The main motivation is to use machine learning models through several steps and generate a learned index for spatial data to reduce the storage consumption and IO cost compared to existing indexes such as R-Tree.
 
 \subsubsection{Motivation}
-In the last section, we described a recursive model index (RMI) that consists of a
-number of machine learning models staged into a hierarchy to enable synthesis of specialised index structures, termed learned indexes. Provided with a search key x, RMI predicts the position of x's data with some error bound, by learning the cumulative distribution function (CDF) over the key search space. However, the idea of RMI is not applicable in the context of spatial data as spatial data invalidates the assumption required by RMI that the data is sorted by key and that any imprecision can be easily corrected by a localised search. Although it is possible to learn multi-dimensional CDFs, such CDFs will result in searching local regions qualified on one dimension but not all dimensions.
+In the last section, we described a recursive model index (RMI) that consists of a number of machine learning models staged into a hierarchy to enable synthesis of specialised index structures, termed learned indexes. Provided with a search key x, RMI predicts the position of x's data with some error bound, by learning the cumulative distribution function (CDF) over the key search space. However, as shown in figure \ref{fig:Key_Distribution}, the idea of RMI is not applicable in the context of spatial data as spatial data invalidates the assumption required by RMI that the data is sorted by key and that any imprecision can be easily corrected by a localised search. Although it is possible to learn multi-dimensional CDFs, such CDFs will result in searching local regions qualified on one dimension but not all dimensions.
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=0.8\textwidth]{graphs/Key_Distribution_1.png}
+    \caption{Key Distribution in 2 dimensional case}
+    \label{fig:Key_Distribution}
+\end{figure*}
 
 For example, consider the joint cumulative function of two random variables X and Y defined as $F_{XY}(x, y)=P(X\leq x, Y\leq y)$.
 
@@ -20,12 +26,10 @@ The joint CDF satisfies the following properties:
 
 LISA solves this problem by partitioning search space into a series of grid cells based on the data distribution and building a partially monotonic function according to the borders of cells to map the data from $\mathbb{R}^d$ into $\mathbb{R}$.
 
-\subsubsection{Baseline Method}  
+\subsection{Baseline Method}  
 
-We can extend the learned index method for range queries on spatial data by using a mapping function. This baseline method works as follows. We first sort all keys according to their mapped values and divide the mapped values into equal number of cells. If a point
-(x,y)’s mapped value is larger than those of the keys stored
-in the first i cells, i.e. $M(x,y) > \sup \bigcup\limits_{j=0}^{i-1} M(C_{j})$, we store (x,y) in cell i. Subsequently, for a query rectangle
-qr = $[l_{0},u_{0}) \times [l_{1},u_{1})$, we only need to predict $i_{1}$ and $i_{2}$, the indices of $(l_{0}, l_{1})$ and $(u_{0},u_{1})$, respectively, scan the keys in $i_{2}$ - $i_{1}$ + 1 cells, and those keys that fall in the query rectangle qr . 
+We can extend the learned index method for range queries on spatial data by using a mapping function. This baseline method works as follows.We first sort all keys according to their mapped values and divide the mapped values into equal number of cells. If a point (x,y)’s mapped value is larger than those of the keys stored in the first i cells, i.e. $M(x,y) > \sup \bigcup\limits_{j=0}^{i-1} M(C_{j})$, we store (x,y) in cell i. Subsequently, for a query rectangle
+qr = $[l_{0},u_{0}) \times [l_{1},u_{1})$, we only need to predict $i_{1}$ and $i_{2}$, the indices of $(l_{0}, l_{1})$ and $(u_{0},u_{1})$, respectively, scan the keys in $i_{2}$ - $i_{1}$ + 1 cells, and those keys that fall in the query rectangle qr. As shown in figure \ref{fig:BaseLine_Method_Limitation}, key space is divided into 3 cells using the mapping function $M((x,y))= x+y$. The query rectangle consisting of only 1 key, falls inside the second part. During prediction, we need to find out the cells to which our query rectangle belongs ($2^{nd}$ cell in our example). Once the cell is computed, we need to compare the query point key value, against all the keys in the cell until a match is found.This results in 8 irrelevant points accessed for the range query that only contains one relevant key.
 
 \subsubsection{Definitions}
 
@@ -38,12 +42,14 @@ This section presents the definition
 	\item \textbf{Cell}. A grid cell is a rectangle whose lower and upper corners are points $(l_{0},l_{1}) and  (u_{0},u_{1})$, i.e.,  cell = $(l_{0},u_{0}) \times [l_{1},u_{1})$
 	
 	\item \textbf{Mapping Function}. A mapping function M is a partially monotonic function on the domain $\mathbb{R}^{2}$ to the non-negative range,i.e $M:[0,X_{0}]\times[0,X_{1}]\to [0,+\infty)$ such that $M(x_{0},x_{1}) \leq M(y_{0},y_{1})$ when $x_{0} \leq y_{0}$ and $x_{1} \leq y_{1} $
-	\item \textbf{Shard}.shard S is the preimage of an
-interval $[a, b) \subseteq [0, +1)$ under the mapping function M,  i.e., $S = M^{-1}([a.b))$.
+	
+	%\item \textbf{Shard}.shard S is the preimage of an
+%interval $[a, b) \subseteq [0, +1)$ under the mapping function M,  i.e., $S = M^{-1}([a.b))$.
     
-	\item \textbf{Local Model}. local model $L_{i}$ is a model
-that processes operations within a shard $S_i$ . It keeps dynamic
-structures such as the addresses of pages contained by $S_{i}$ .
+%	\item \textbf{Local Model}. local model $L_{i}$ is a model
+%that processes operations within a shard $S_i$ . It keeps dynamic
+%structures such as the addresses of pages contained by $S_{i}$ .
+
 \end{enumerate}
 % $f:\mathbb{R}\to\mathbb{R}, x\to y$ where $x$ is the input index and $y$ is the corresponding page block
 
@@ -53,10 +59,10 @@ structures such as the addresses of pages contained by $S_{i}$ .
 In order to construct the baseline model, we need to have several parameters listed below:
 \begin{enumerate}
 	\item The training dataset, notated as $(X, Y)$ with entries notated as $(x,y)$. $X$ represents the two dimensional key values, and $Y$ represents the corresponding data item value. 
-	\item This number represents the number of cells(pages) into which the key space mapped values will be divided. It is an integer variable. Pages or cells will be used interchangeably in the next section to represents the subset of keys in a particular cell. 
+	\item This number represents the number of cells into which the key space mapped values will be divided. It is an integer variable. Number of keys in a cell can be thought of as the page size.  
 \end{enumerate}
 
-During training, sort all keys according to their mapped values, divide the keys into equal sized cells(pages), and store the mapped values of first and last key for each page into an array. For prediction, find the page corresponding to mapped value of query point, and scan this page sequentially. 
+During training, sort all keys according to their mapped values, divide the keys into equal sized cells(pages), and store the mapped values of first and last key for each cell into an array. For prediction, find the cell corresponding to mapped value of query point using binary search, scan this cell sequentially and compare the values of keys in the cell against the query point, until a match is found. 
 
 \begin{algorithm}[H]
     \SetAlgoLined
@@ -106,19 +112,22 @@ During training, sort all keys according to their mapped values, divide the keys
 Prediction cost in baseline method consists of following two parts.
 
 \begin{enumerate}
-	\item Search cost for the page which contains the key. If page size is small, this cost will be high as keys will be divided into larger number of pages
-	\item Scan cost of all the keys in a particular page to match the query point. If page size is large, number of pages will be smaller, number of keys per page will be higher, resulting in higher cost of sequential scan with in the page. 
+	\item Search cost for the cell which contains the key. This cost will be equal to $log_{2}N_{1}$, where $N_{1}$ is the number of cells into which mapped values are divided.
+	
+	\item Cost associated with sequentially comparing the query point key value against keys inside the cell found in previous search. On average this cost will be equal to $N_{2}\div2$, where $N_{2}$ is the number of keys in a cell.   
+	
+If cell size is large, number of cells will be smaller, number of keys per cell will be higher, resulting in higher cost of sequential scan with in the cell. 
 \end{enumerate}
-Consider the example in figure \ref{fig:BaseLine_Method_Limitation}. Dataset is divided into 3 sections based on the mapped values. Any point or range query in the second triangle(page) will result into a sequential scan through all 14 keys in the triangle.   
+Consider the example in figure \ref{fig:BaseLine_Method_Limitation}. Dataset is divided into 3 sections based on the mapped values. Any point or range query in the second triangle(page) will result into a sequential scan through all 9 keys in the cells.   
 
 \begin{figure*}[t]
     \centering
-    \includegraphics[width=0.9\textwidth]{graphs/Lisa_Baseline_Model_Limitation.png}
+    \includegraphics[width=1\textwidth]{graphs/Lisa_Baseline_Model_Limitation.png}
     \caption{Baseline Method Limitation }
     \label{fig:BaseLine_Method_Limitation}
 \end{figure*}
 
-\subsubsection{Lisa Overview}
+\subsection{Lisa Overview}
 
 Given a spatial dataset, we generate the mapping function
 M, the shard prediction function SP and a series of local
@@ -140,16 +149,40 @@ As seen in the overview of LISA, there are four stages in building the LISA.
 	\item Build local models.
 \end{enumerate}
 
-\textbf{Grid Cells Generation} 
-First task in Lisa implementation is to partition the 2 dimensional key space into a series of grid cells based on the data distribution along a sequence of axes and numbering the cells also along these axes. The principal idea behind this partition strategy is to divide the key space into cell boundaries and apply a mapping function to create monotonically increasing mapping values at the cell boundaries, i.e. mapped value of all keys in cell i will be less than mapped values of keys in cell j, if i <j. Consider the example shown in the figure \ref{fig:Cell_Parttion} total number of keys are 18, and we decided to partition the key space into 9 cells, resulting in 2 keys per cell. To partition the key space, we first sort the keys values according to $1^{st}$  dimension, divide the keys into 3 cells each containing 6 keys. Then for each cell, we sort the keys again according to $2^{nd}$  dimension, and divide the keys in each cell into 3 new cells. 
+\subsubsection{Definitions}
 
+This section presents the additional definition specific to Lisa implementation.
+\begin{enumerate}
+\setcounter{enumi}{3}
+	\item \textbf{Shard}.shard S is the preimage of an
+interval $[a, b) \subseteq [0, +1)$ under the mapping function M,  i.e., $S = M^{-1}([a.b))$. \\
+Given an initial data set, we divide the key space into cell grids based on the data distribution, map keys values to a monotonically increasing one dimensional space using mapping function, followed by learning a monotonic shard prediction function. One dimensional mapped value space is divided into equal intervals, and shard Prediction function is learned for each interval, to partition the keys belonging to a particular interval,into different shards.As keys are sorted by mapped values before partitioning them into equal sized intervals, and all shards exhibit a total order with respect to their corresponding intervals in the mapped range(Shard Prediction function for each interval is monotonically increasing), following relationship holds \\
+$ inf (M(S_{i}))  > sup (M(S_{j}))$ when i > j 
+
+    
+\item \textbf{Local Model}. local model $L_{i}$ is a model
+that processes operations within a shard $S_i$ . It keeps dynamic
+structures such as the addresses of pages contained by $S_{i}$ .
+\end{enumerate}
+
+\subsection{Design and Implementation Details}
+\subsubsection{Grid Cells Generation} 
+First task in Lisa implementation is to partition the $2$ dimensional key space into a series of grid cells based on the data distribution along a sequence of axes and numbering the cells also along these axes. The principal idea behind this partition strategy is to divide the key space into cell boundaries and apply a mapping function to create monotonically increasing mapping values at the cell boundaries. 
+
+    $ M(x_{i} \in V) <  M(x_{j} \in V)$ when i < j, where $x_{i} \in C_{i}$ and $x_{j} \in C_{j}$ 
+    
+i.e. mapped value of a key in cell i will always be less than mapped values of a key in cell j, if i <j.
+Consider the example shown in the figure \ref{fig:Cell_Parttion}: 27 keys are partitioned into 9 cell,resulting in 3 keys per cell. To partition the key space, we first sort the keys values according to $1^{st}$  dimension and divide the keys into 3 vertical columns each containing 9 keys. Then for each vertical column of 9 keys, we sort the keys again according to $2^{nd}$  dimension, and divide the keys in each column into 3 new cells.Numbers of cells into which the keys space is divided,is a hyper-parameter and learned empirically using grid search.
+
+We need to sort the key space along the sequence of axis before we partition the keys value along that axis to make sure that cells don't contain overlapping keys. \\
 
 \begin{figure*}[t]
     \centering
-    \includegraphics[width=0.8\textwidth]{graphs/Cell_partition.png}
+    \includegraphics[width=1\textwidth]{graphs/Grid_Cell_Generation_Strategy_2.png}
     \caption{Cell Partition Strategy }
     \label{fig:Cell_Parttion}
 \end{figure*}
+
 
 
 \begin{algorithm}[H]
@@ -179,6 +212,31 @@ First task in Lisa implementation is to partition the 2 dimensional key space in
 \end{algorithm}
 
 \subsubsection{Mapping Function}
+A mapping function M is a partially monotonic function on the domain $\mathbb{R}^{2}$ to the non-negative range,i.e $M:[0,X_{0}]\times[0,X_{1}]\to [0,+\infty)$ such that \\
+    $ M(x_{i} \in V) <  M(x_{j} \in V)$ when i < j, where $x_{i} \in C_{i}$ and $x_{j} \in C_{j}$.
+    
+i.e. mapped value of a key in cell i will always be less than mapped values of a key in cell j, if i <j. 
+Suppose $x = (x_{0}, x_{1})$ and $x \in C_{i} = [\theta^{(0)}_{i_0},\theta^{(0)}_{i_0+1}) \times [\theta^{(1)}_{i_1},\theta^{(1)}_{i_1+1}) $ then 
+$M(x) = i+ \frac {\mu(H_{i})}{\mu(C_{i})} $, where $H_{i} = [\theta^{(0)}_{i_0},x_{0}) \times [\theta^{(1)}_{i_1},x_{1}) $ and $\mu$ is the Lebesgue measure on $\mathbb{R}^2$
+
+As shown in figure \ref{fig:Lebesgue_Measure}, $\frac {\mu(H_{i})}{\mu(C_{i})}$ represents the fraction of area covered by the key$(x_{0}, x_{1})$ to the total area of the cell. Since we are adding i to this fraction, mapped value of a key in cell i will always be less than mapped values of a key in cell j, if i<j. After calculating the mapping function for data set, we sort the keys in each cell according to mapped value. This results in whole key space, sorted according to the mapped value. Figure \ref{fig:Mapped_Cdf} shows the mapping of 2 dimensional key space to one dimensional cdf.
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=0.6\textwidth]{graphs/Lebesgue_Measure.png}
+    \caption{Lebesgue Measure Representation for 2 dimensional data }
+    \label{fig:Lebesgue_Measure}
+\end{figure*}
+
+
+
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{graphs/Mapped_Cdf.png}
+    \caption{Mapping 2 dimensional key Values to one dimensional cdf }
+    \label{fig:Mapped_Cdf}
+\end{figure*}
 
 \subsubsection{Shard Prediction Function}
 

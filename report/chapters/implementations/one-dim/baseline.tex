@@ -6,7 +6,13 @@ If we know the CDF of $X$ as $F(X\leq x)$ and the total number of entries $N$, t
 
 $$y=\floor{\frac{p}{S}}=\floor{\frac{F(x)*N}{S}}$$  
 
+\begin{mscexample}
+
 For example, if the keys are uniformly distributed from $0$ to $1000$, i.e. the CDF of $X$ is defined as $F(X\leq x)=\frac{x}{1000}$ and we set $S=10, N=1001$. Then for any key $x$, we immediately know it will be allocated into $y=\floor{\frac{1000}{10}*\frac{x}{1000}}=\floor{\frac{x}{10}}$. Assume that we have a key $698$, then we can calculate $y=\floor{\frac{698}{10}}=69$. By doing so, the page index is calculated in constant time and space.
+
+\end{mscexample}
+
+
 
 In this example, we see that the distribution of $X$ is essential and our goal of learned index in one-dimensional data is to learn such distribution. To do so, we apply two different techniques as the baseline, the polynomial regression and fully connected neural network.
 
@@ -79,4 +85,6 @@ After generating the training dataset $X$ and its corresponding $Y$, we build a 
 \end{figure}
 
 We apply Rectified Linear Unit (ReLU) activation function at the end of $F_i$ and $S_i$. Formally, assume the output of $F_i$ is $a$, then we define the output of $F_i$ as $y=max\{a, 0\}$. Then we train this fully connected neural network with standard stochastic gradient descent (SGD), and we set the learning rate to be $lr=0.001$. 
+
+Formally, we can induce the output of this fully connected neural network as following:
 
