@@ -2,7 +2,22 @@
 
 In our baseline models, it is not very difficult to reduce the mean square error from millions to thousands. However, it is much harder to reduce it from thousands to tens. This is the so called last-mile problem.
 
-In order to solve this problem, recursive model index was proposed \cite{kraska2018case}. The idea is to split the whole set of data into smaller pieces and assign each piece an index model.
+In order to solve this problem, recursive model index was proposed \cite{kraska2018case}. The idea is to split the whole set of data into smaller pieces and assign each piece an index model. By doing so, each model is only responsible for a small range of keys. Ideally, in each smaller range, the keys are distributed in a way that is easier to be learned by our index models, such as polynomial model, fully connected model or even traditional B-Tree model.
+
+As shown in Fig. \ref{rmi_structure}. A recursive model can be regarded as a tree structure, which contains a root model that receives the full dataset for training. Then the root model will split the dataset into several parts. Each sub-model will then receive one part of the full dataset. Then we train the sub-models one by one with the partial training dataset. 
+
+\begin{mscexample}
+	For example, in the Fig. \ref{rmi_structure}, the full dataset will be split into three parts and each sub-model receives one part. To train this recursive model, we first train the root model with the whole dataset. Then the root model will split the dataset into 3 parts according to the predicted value of each data point in the dataset. Then each sub-model will receive one part and we train the sub-model accordingly.
+\end{mscexample}
+
+\begin{figure*}[h]
+\centering
+\includegraphics[scale=0.4]{graphs/rmi_demo}
+\caption{An example recursive model index with one root model and three leaf model.}
+\label{rmi_structure}
+\end{figure*}
+
+
 
 \subsubsection{Definitions}
 
@@ -19,6 +34,7 @@ In the following sections, we will use the notations defined below:
 	%TODO: more notations
 	%TODO: modify algorithms accordingly
 \end{enumerate}
+
 
 \subsubsection{Training}
 
