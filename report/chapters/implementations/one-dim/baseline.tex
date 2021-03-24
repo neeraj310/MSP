@@ -76,7 +76,7 @@ After generating the training dataset $X$ and its corresponding $Y$, we build a 
   \node [align=center, above] at (\x*2,2) {\l \\ layer};
 
 \end{tikzpicture}
-\caption{The architecture of the fully connected neural network used as baseline learned index. In this neural network, we use only 2 fully connected layers and each layer is equipped with 32 neurons. The input of this neural network is only one neuron such that it represents the given query key. The output of this neural network is limited to 1 neuron such that it represents the predicted proportional position of the key value pair.}
+\caption{The architecture of the fully connected neural network used as baseline learned index. In this neural network, we use only 2 fully connected layers. The input of this neural network is only one neuron such that it represents the given query key. The output of this neural network is limited to 1 neuron such that it represents the predicted proportional position of the key-value pair.}
 \label{fig:baseline_fcn}
 \end{figure}
 
@@ -109,7 +109,7 @@ In the above fully connected neural network, there are 6 parameters to optimise:
 		\item Then we pass the $\nabla_3$ to previous layer, and calculate the partial derivatives as $\frac{\partial \ell}{\partial\boldsymbol{w_2}}=\boldsymbol{z_2}^T\nabla_3$, $\frac{\partial \ell}{\partial\boldsymbol{b_2}}=\nabla_3$ and $\nabla_2=\frac{\partial \ell}{\partial\boldsymbol{z_1}}=\nabla_3\boldsymbol{w_2}^T$. Then we update $\boldsymbol{w_2}$ and $\boldsymbol{b_2}$.
 		\item After that, we pass the $\nabla_2$ to the first layer, and calculate the partial derivatives as $\frac{\partial \ell}{\partial\boldsymbol{w_1}}=x^T\nabla_2$, $\frac{\partial \ell}{\partial\boldsymbol{b_1}}=\nabla_2$. Then we update $\boldsymbol{w_1}$ and $\boldsymbol{b_1}$.
 	\end{enumerate}
-	\item \textbf{Loop between 2 and 3}. We perform the forward pass and the backward for several times, until the loss is acceptable or a maximum number of loops reached.
+	\item \textbf{Loop between 2 and 3}. We perform the forward pass and the backward several times until the loss is acceptable or a maximum number of loops reached.
 \end{enumerate}
 
 We will discuss more findings and insights about the baseline model in the \textit{Chapter 4}.

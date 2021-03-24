@@ -7,3 +7,4 @@
 .env
 *.txt
 docs/
+report/out
