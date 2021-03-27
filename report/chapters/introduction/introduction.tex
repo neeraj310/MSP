@@ -1,18 +1,16 @@
-Over the years, indexes have been widely used in databases to improve the speed of data retrieval. In the past decades, the database indexes generally fall into hand-engineered data structures and algorithms, such as B-Tree, KD-Tree, Hash Table, etc. These indexes have played an important role in databases and have been widely used in modern data management systems (DBMS). Despite their success, they do not consider the distribution of the database entries, which might be helpful in designing faster indexes.
+Over the years, indexes have been widely used in databases to improve the speed of data retrieval. In the past decades, the database indexes generally fall into the hand-engineered data structures, such as B-Tree, KD-Tree, etc. These indexes have played important roles in databases and have been widely used in modern data management systems (DBMS) such as PostgreSQL. Despite their huge success, one shortcoming of these hand-engineered data structure is that they do not consider the distribution of the database entries, which might be helpful in designing faster indexes.
 
-For example, if the dataset contains integers from $1$ to $1$ million, the key can be used directly as an offset. With the key used as an offset, the values with the key can be retrieved in $\mathcal{O}(1)$ time complexity. Compared with B-Tree, which always takes $\mathcal{O}(\log n)$ time complexity for the same query. At the same time, by using the key as an offset directly, we do not need any extra overhead regarding memory space, where the B-Tree needs extra $\mathcal{O}(n)$ space complexity to save the tree.
+\begin{mscexample}
+	For example, if the dataset contains integers from $1$ to $1$ million, then the keys can be used directly as offsets. With the keys used as offsets, the value with a given key can be retrieved in $\mathcal{O}(1)$ time complexity while B-Tree requires $\mathcal{O}(\log n)$ time complexity for the same query. From the perspective of space complexity, we do not need any extra overhead by using the key as an offset directly, while the B-Tree needs extra $\mathcal{O}(n)$ space complexity to save the tree.
+\end{mscexample}
 
-From the above example, we found there are two promising advantages of learned indexes over hand-engineered indexes:
+From the above example, we found that there are two promising advantages of leveraging the distribution of the data:
 \begin{enumerate}
-  \item Learned indexes may be faster when performing queries, especially when the number of entries in the database are extremely huge.
-  \item Learned indexes may take less memory space, as we only need to save the model with constant size.
+  \item It may be faster when performing queries, especially when the number of entries in the database are extremely huge.
+  \item It may take less memory space, as we only need to save the model with constant size.
   \end{enumerate}
-  
- We will explore and analyse these two advantages qualitatively in the \textit{chapter 5}. 
 
-Nowadays, to leverage these two advantages, researchers proposed learned indexes \cite{kraska2018case}, where machine learning techniques are applied to automatically learn the distribution of the database entries and build the data-driven indexes. This approach has been shown to be powerful and competitive compared with hand-engineered indexes, such as B-Tree.
-
-In this report, we explore the development of database indexes, from hand-engineered indexes to the learned index. After that, we explore the possibilities of using complex convolutional neural networks as database indexes. This report is organised into the following chapters:
+Nowadays, to learn the distribution and apply it to database indexes, researchers proposed learned indexes \cite{kraska2018case}, where machine learning techniques are applied to automatically learn the distribution of the database entries and build the data-driven indexes. In this report, we explore the development of database indexes, from hand-engineered indexes to the learned index. After that, we explore the possibilities of using complex convolutional neural networks as database indexes. This report is organised into the following chapters:
 
 \begin{enumerate}
 	\item \textbf{Introduction}. In this chapter, we illustrate the organisation of this report. Besides, we go through the modern computer systems and introduce the general information about database indexes.

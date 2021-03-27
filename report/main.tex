@@ -27,6 +27,7 @@
 \usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage[tikz]{mdframed}
+\usepackage[toc,page]{appendix}
 \usepackage[labelfont=bf,format=plain,justification=raggedright,singlelinecheck=false]{caption}
 \usepackage{mathtools}
 \newenvironment{mscexample}
@@ -118,6 +119,8 @@
 
 \section{General Discussions}
 
+\input{chapters/insights/overview}
+
 \section{One Dimensional Learned Index}
 
 \subsection{Baseline Learned Index}
@@ -126,7 +129,17 @@
 
 \section{Two Dimensional Learned Index}
 
+\input{chapters/insights/lisa}
+
+\chapter{Convolution and CNN for Learned Indexes}
+
+\input{chapters/convolution/overview}
+
 \chapter{Conclusion}
+
+\section*{Acknowledgement}
+
+\input{chapters/introduction/ack}
 
 \bibliographystyle{alpha}
 \bibliography{refs}

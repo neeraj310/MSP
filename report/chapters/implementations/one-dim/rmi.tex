@@ -87,3 +87,73 @@ The training process of recursive model is an up-bottom process. There will be o
      }
      \caption{Training of Recursive Model Index}
 \end{algorithm}
+
+\subsubsection{Polynomial Internal Models}
+
+In the recursive model index, we use internal models to learn the CDF of a part of the full training data. In order to learn the CDF, we need to know or assume the distribution of a specific part of the data. In this report, we support the following distributions.
+
+\begin{table}[h]
+  \begin{tabularx}{\textwidth}{@{}XX@{}}
+  \toprule
+    Linear Regression & $wx+b$ \\
+    Quadratic Regression & $ax^2+bx+c$ \\
+    B-Tree & N/A \\
+    Fully Connected Neural Network & N/A \\
+  \bottomrule
+  \end{tabularx}
+  \end{table}
+
+Here we describe how we fit a polynomial model.
+
+The polynomial regression model with degree $m$ can be formalised as 
+
+$$ \hat{y_i}= \beta_0+\beta_1x_i+\beta_2x_i^2+\cdots+\beta_mx_i^m$$ and it can be expressed in a matrix form as below
+
+$$
+\begin{bmatrix}
+y_1 \\ y_2\\ \vdots \\ y_n 
+\end{bmatrix}=\begin{bmatrix}
+1 & x_1 & x_1^2 &\cdots & x_1^m \\ 
+1 & x_2 & x_2^2 &\cdots & x_2^m \\ 
+\vdots \\ 
+1 & x_n & x_n^2 &\cdots & x_n^m \\ 
+\end{bmatrix}\begin{bmatrix}
+\beta_0 \\ \beta_1 \\ \vdots \\ \beta_m 
+\end{bmatrix}
+$$ which can be written as $Y=\boldsymbol{X}\boldsymbol{\beta}$. 
+ 
+ Our goal is to find $\beta$ such that the sum of squared error, i.e. $\text{S}(\boldsymbol{\beta})=\sum_{i=1}^n(\hat{y}-y)^2$ is minimal. This optimisation problem can be resolved by ordinary least square estimation as shown below.
+ 
+ First we have the error as
+ 
+ \begin{equation}
+ \begin{split}
+ \text{S}(\boldsymbol{\beta})=||\boldsymbol{y}-\boldsymbol{X} \boldsymbol{\beta}||& =(\boldsymbol{y}-\boldsymbol{X}\boldsymbol{\beta})^T(\boldsymbol{y}-\boldsymbol{X}\boldsymbol{\beta})\\
+ 	& =\boldsymbol{y}^T\boldsymbol{y}-\boldsymbol{\beta}^T\boldsymbol{X}^T\boldsymbol{y}-\boldsymbol{y}^T\boldsymbol{X}\boldsymbol{\beta}+\boldsymbol{\beta}^T\boldsymbol{X}^T\boldsymbol{X}\boldsymbol{\beta}
+\end{split}
+ \end{equation}
+ 
+ Here we know that $(\boldsymbol{\beta}^T\boldsymbol{X}^T\boldsymbol{y})^T=\boldsymbol{y}^T\boldsymbol{X}\boldsymbol{\beta}$ is a $1\times 1$ matrix, i.e. a scalar. Hence it is equal to its own transpose. As a result we could simplify the error as
+ 
+ \begin{equation}
+ 	\begin{split}
+ 		\text{S}(\boldsymbol{\beta})=\boldsymbol{y}^T\boldsymbol{y}-2\boldsymbol{\beta}^T\boldsymbol{X}^T\boldsymbol{y}+\boldsymbol{\beta}^T\boldsymbol{X}^T\boldsymbol{X}\boldsymbol{\beta}
+ 	\end{split}
+ \end{equation}
+ 
+ In order to find the minimum of $S(\boldsymbol{\beta})$, we differentiate it with respect to $\boldsymbol{\beta}$ as 
+ 
+ \begin{equation}
+ 	\nabla_{\boldsymbol{\beta}}S=-2\boldsymbol{X}^T\boldsymbol{y}+2(\boldsymbol{X}^T\boldsymbol{X})\boldsymbol{\beta}
+ \end{equation}
+ 
+ By let it to be zero, we end up with 
+ 
+ \begin{equation}
+ \begin{split}
+ 	 &	-\boldsymbol{X}^T\boldsymbol{y}+(\boldsymbol{X}^T\boldsymbol{X})\boldsymbol{\beta}=0 \\
+ 	& \implies \boldsymbol{\beta}= (\boldsymbol{X}^T\boldsymbol{X})^{-1}\boldsymbol{X}^T\boldsymbol{y}
+ \end{split}
+ \end{equation}
+
+  

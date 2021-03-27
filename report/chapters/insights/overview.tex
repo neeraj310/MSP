@@ -1,0 +1,11 @@
+\subsubsection{Limitations}
+
+Though the learned index model, especially the recursive model has a potential to greatly reduce the memory usage and cost less time in making the query. It is still limited in several perspective.
+
+\begin{itemize}
+    \item \textbf{Read-only database}. Current recursive model index assumes that the data is a static, read-only array. Only when this assumption is hold, we can regard the database index as the CDF. However, in reality, we usually need to insert and delete the data in the array and violates this assumption.
+\end{itemize}
+
+\subsubsection{Requirements}
+
+For a learned index.
