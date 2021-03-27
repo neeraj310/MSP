@@ -3,7 +3,7 @@
 # This software is released under the MIT License.
 # https://opensource.org/licenses/MIT
 
-for i in {1..3}
+for i in {1..5}
 do
     # first generate the data
     python3 src/utilities/1d_generator.py uniform 10000
