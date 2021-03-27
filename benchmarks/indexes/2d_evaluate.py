@@ -26,16 +26,16 @@ from typing import List
 import pandas as pd
 from tabulate import tabulate
 
-sys.path.append('src')
+sys.path.append('')
 import numpy as np
 
 import src.indexing.utilities.metrics as metrics
-from indexing.models import BaseModel
-from indexing.models.lisa.basemodel import LisaBaseModel
-from indexing.models.lisa.lisa import LisaModel
-from indexing.models.trees.KD_tree import KDTreeModel
-from indexing.models.trees.scipykdtree import ScipyKDTreeModel
-from queries.point import PointQuery
+from src.indexing.models import BaseModel
+from src.indexing.models.lisa.basemodel import LisaBaseModel
+from src.indexing.models.lisa.lisa import LisaModel
+from src.indexing.models.trees.KD_tree import KDTreeModel
+from src.indexing.models.trees.scipykdtree import ScipyKDTreeModel
+from src.queries.point import PointQuery
 
 ratio = 0.2
 

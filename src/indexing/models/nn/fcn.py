@@ -1,7 +1,7 @@
 from timeit import default_timer as timer
-
+import sys
 import numpy as np
-
+sys.path.append('')
 import src.indexing.utilities.metrics as metrics
 from src.indexing.learning.fully_connected_network import FullyConnectedNetwork
 # from src.indexing.learning.pt_fcn import FullyConnectedNetwork
