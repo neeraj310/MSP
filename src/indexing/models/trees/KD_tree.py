@@ -3,11 +3,13 @@ import heapq
 import pickle
 import random
 from timeit import default_timer as timer
+import sys
 
 import numpy as np
 from sklearn.neighbors import KDTree
 
-import src.indexing.utilities.metrics as metrics
+sys.path.append('')
+from src.indexing.utilities.metrics import mean_squared_error
 
 
 class KDTreeModel():
@@ -15,6 +17,7 @@ class KDTreeModel():
         super(KDTreeModel, self).__init__()
         self.name = 'KD-Tree'
         self.kdtree = None
+        self.page_size = 10
 
     def train(self, x_train, y_train, x_test, y_test, dim=2):
 
@@ -30,14 +33,37 @@ class KDTreeModel():
             y_predict_test.append(nearest[1][-1])
 
         y_predict_test = np.array(y_predict_test)
-        mse = metrics.mean_absolute_error(y_test, y_predict_test)
+        mse = mean_squared_error(y_test, y_predict_test)
 
         return mse, build_time
+    
+    def range_points(self,area,kd_node='init',i=0,out=None):
+
+        if out==None:
+            out = []
+
+        if kd_node=='init':
+            kd_node = self.kdtree
+
+        if kd_node is not None:
+            xmin,ymin,xmax,ymax=area
+
+            # acceptance of point within range
+            if kd_node[2][0]>=xmin and kd_node[2][0]<=xmax and kd_node[2][1]>=ymin and kd_node[2][1]<=ymax:
+                out.append(kd_node[2])
+
+            #for traversing left
+            if (kd_node[2][i]>= xmin and i==0) or (kd_node[2][i]>= ymin and i==1):
+                self.range_points(area,kd_node[0],(i+1)%2,out)
+
+            #for traversing left
+            if (kd_node[2][i]>= xmin and i==0) or (kd_node[2][i]>= ymin and i==1):
+                self.range_points(area,kd_node[1],(i+1)%2,out)
+        
+        return out
 
     def predict(self, key):
-
         nearest = self.get_nearest(key, dim=2)
-
         return nearest[1][-1]
 
     def build_kd_tree(self, points, dim=2):
@@ -66,9 +92,7 @@ class KDTreeModel():
         if kd_node is not None:
             dx = kd_node[2][i] - point[i]
             i = (i + 1) % dim  # i is to alternate bw x and y
-            for j, c in (
-                (0, dx >= 0), (1, dx < 0)
-            ):  # j is for left and right addition  and c is to check where to add
+            for j, c in ((0, dx >= 0), (1, dx < 0)):  # j is for left and right addition  and c is to check where to add
                 if c and kd_node[j] is None:
                     kd_node[j] = [None, None, point]
                 elif c:

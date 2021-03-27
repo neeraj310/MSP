@@ -9,7 +9,8 @@ from timeit import default_timer as timer
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-
+import sys
+sys.path.append('')
 import src.indexing.utilities.metrics as metrics
 
 

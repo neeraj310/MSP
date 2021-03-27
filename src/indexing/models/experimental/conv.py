@@ -2,7 +2,8 @@
 #
 # This software is released under the MIT License.
 # https://opensource.org/licenses/MIT
-
+import sys
+sys.path.append('')
 from src.indexing.learning.piecewise import PiecewiseRegression
 from src.indexing.models import BaseModel
 

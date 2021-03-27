@@ -7,9 +7,9 @@ This file describes how staged model, i.e. recursive model works.
 
 from timeit import default_timer as timer
 from typing import List
-
+import sys
 import numpy as np
-
+sys.path.append('')
 import src.indexing.utilities.metrics as metrics
 from src.indexing.models import BaseModel
 from src.indexing.models.ml.polynomial_regression import PolynomialRegression

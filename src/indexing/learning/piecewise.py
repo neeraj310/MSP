@@ -6,7 +6,8 @@
 import numpy as np
 from matplotlib.pyplot import xlabel
 from numpy.core.fromnumeric import mean
-
+import sys
+sys.path.append('')
 from src.indexing.utilities.metrics import mean_squared_error
 
 

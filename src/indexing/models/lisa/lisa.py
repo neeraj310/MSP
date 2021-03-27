@@ -727,10 +727,11 @@ class LisaModel():
                 (keyArea / self.cellMatrix[cell_id][8]) * self.keysPerCell)
             #print('Query point %d %d found with mapped_value=%f ' %(query[0],query[1],mapped_value))
             intervalId = self.search_mapped_interval(mapped_value)
-             if(intervalId == -1):
+            if(intervalId == -1):
                 #print('Query point %d %d mapping value %f not found in bst search' %(query[0],query[1], mapped_value))
                 intervalId = self.sequentially_scan_mapped_interval(mapped_value)
                 if(intervalId != -1):
+                    pass
                     #print('Query point %d %d mapping value %f found in interval id %d in sequential scan' %(query[0],query[1], mapped_value, intervalId))
                 else:
                     print('Query point %d %d mapping value %f not found in sequential search' %(query[0],query[1], mapped_value))

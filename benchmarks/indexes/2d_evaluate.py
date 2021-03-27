@@ -22,20 +22,22 @@ def _switch_to_np_array(input_):
 '''
 import sys
 from typing import List
+from random import randrange
 
 import pandas as pd
 from tabulate import tabulate
 
-sys.path.append('src')
+sys.path.append('')
 import numpy as np
 
 import src.indexing.utilities.metrics as metrics
-from indexing.models import BaseModel
-from indexing.models.lisa.basemodel import LisaBaseModel
-from indexing.models.lisa.lisa import LisaModel
-from indexing.models.trees.KD_tree import KDTreeModel
-from indexing.models.trees.scipykdtree import ScipyKDTreeModel
-from queries.point import PointQuery
+from src.indexing.models import BaseModel
+from src.indexing.models.lisa.basemodel import LisaBaseModel
+from src.indexing.models.lisa.lisa import LisaModel
+from src.indexing.models.trees.KD_tree import KDTreeModel
+from src.indexing.models.trees.scipykdtree import ScipyKDTreeModel
+from src.queries.point import PointQuery
+from src.queries.range import RangeQuery
 
 ratio = 0.2
 
@@ -50,7 +52,7 @@ def load_2D_Data(filename):
     return data, test_data
 
 
-def evaluate(filename):
+def evaluate_point(filename):
     data, test_data = load_2D_Data(filename)
     lisaBm = LisaBaseModel(100)
     kdtree = KDTreeModel()
@@ -63,8 +65,6 @@ def evaluate(filename):
 
     # print("Build time",build_times)
 
-    # Kdtree Model
-
     i = 10
     result = []
     header = [
@@ -72,7 +72,7 @@ def evaluate(filename):
         "Average Evaluation Time (s)", "Evaluation Error (MSE)"
     ]
     while (i <= 1000000):
-        mses, eval_times = ptq.evaluate(test_data.iloc[:i, :])
+        mses, eval_times = ptq.evaluate_point(test_data.iloc[:i, :])
 
         for index, model in enumerate(models):
             result.append([
@@ -82,10 +82,35 @@ def evaluate(filename):
         print(len(result))
         i = i * 10
     print(tabulate(result, header))
-    # models_predict(data, models)
 
+def evaluate_range(filename):
+    data, test_data = load_2D_Data(filename)
+    kdtree = KDTreeModel()
 
-def models_predict(data, models: List[BaseModel]):
+    # models = [lisaBm, kdtree, scipykdtree, lisa]
+    models = [kdtree]       #add trees here
+    rq = RangeQuery(models)
+    build_times = rq.build(data, 0.00002)
+
+    lower_left = []
+    upper_right = []
+    for i in range(2):
+        lower_left.append(randrange(100,200))
+        upper_right.append(randrange(200,300))
+
+    
+    # Area = (x_min,y_min,x_max,y_max)
+    area=(lower_left[0],lower_left[1],upper_right[0],upper_right[1])
+    
+    range_points=rq.range_query(area)
+
+    print(range_points)
+
+    return range_points
+
+   
+
+def models_predict_point(data, models: List[BaseModel]):
     data = data.to_numpy()
     x = data[:, :-1]
     gt_y = data[:, -1:].reshape(-1)
@@ -113,6 +138,7 @@ def models_predict(data, models: List[BaseModel]):
 
 if __name__ == "__main__":
     # filename = sys.argv[1]
-    filename = 'data/2d_lognormal_lognormal_1000000.csv'
+    filename = 'data/2d_lognormal_lognormal_10000.csv'
 
-    evaluate(filename)
+    # evaluate(filename)
+    evaluate_range(filename)

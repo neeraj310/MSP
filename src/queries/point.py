@@ -5,9 +5,10 @@
 
 from timeit import default_timer as timer
 from typing import List
+import sys
 
 import numpy as np
-
+sys.path.append('')
 import src.indexing.utilities.metrics as metrics
 from src.indexing.models import BaseModel
 from src.queries import Query
