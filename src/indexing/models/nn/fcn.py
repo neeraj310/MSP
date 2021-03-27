@@ -13,9 +13,9 @@ class FCNModel(BaseModel):
     def __init__(self,
                  layers=[1, 32, 1],
                  activations=['relu', 'relu'],
-                 epochs=10000,
+                 epochs=1000,
                  page_size=32,
-                 lr=0.001) -> None:
+                 lr=0.01) -> None:
         super().__init__('Fully Connected Neural Network', page_size)
         self.net = FullyConnectedNetwork(layers, activations, lr=lr)
         self.has_normalized = False
@@ -43,7 +43,7 @@ class FCNModel(BaseModel):
         x_train, y_train, x_test, y_test = self._normalize(
             x_train, y_train, x_test, y_test)
         start_time = timer()
-        self.net.fit(x_train, y_train, epochs=self.epochs, batch_size=100)
+        self.net.fit(x_train, y_train, epochs=self.epochs, batch_size=10)
         end_time = timer()
 
         y_hat = self.net.predict(x_test)
@@ -63,6 +63,7 @@ class FCNModel(BaseModel):
         X = np.array(X)
         X = X.reshape((1))
         portion = self.net.predict(X)[0]
+        # print(portion)
         if (portion == np.nan):
             print("portion {}, max y {}, min y {}".format(
                 portion, self.max_y, self.min_y))

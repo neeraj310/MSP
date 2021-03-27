@@ -40,4 +40,4 @@ class FullyConnectedNetwork():
                                          batch_size=batch_size)
 
     def predict(self, X):
-        return self.model.predict(X)
+        return self.learner.predict(X)

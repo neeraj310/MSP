@@ -12,10 +12,11 @@ from src.indexing.models.rmi.staged import StagedModel
 from src.indexing.models.trees.b_tree import BTreeModel
 from src.indexing.utilities.metrics import get_memory_size
 from src.queries.point import PointQuery
+import uuid
 
 ratio = 0.2
 b_tree_degree = 20
-
+experiment_id = uuid.uuid4().__str__()[0:8]
 
 def load_1D_Data(filename):
     data = pd.read_csv(filename)
@@ -27,12 +28,12 @@ def load_1D_Data(filename):
 def evaluate(filename):
     data, test_data, page_size = load_1D_Data(filename)
     btm = BTreeModel(page_size, b_tree_degree)
-    fcn = FCNModel(page_size=page_size)
+    fcnm = FCNModel(page_size=page_size, layers=[1,8,8,1], activations=['relu','relu', 'relu'])
 
     lrm = PRModel(1, page_size)
     prm = PRModel(2, page_size)
-    # sgm = StagedModel(['fcn', 'fcn', 'lr'], [1, 20, 10000], page_size)
-    models = [btm]
+    sgm = StagedModel(['fcn', 'fcn', 'lr'], [1, 20, 10000], page_size)
+    models = [fcnm]
     ptq = PointQuery(models)
     build_times = ptq.build(data, ratio)
     mses, eval_times = ptq.evaluate(test_data)
@@ -46,6 +47,7 @@ def evaluate(filename):
             model.name, build_times[index], eval_times[index], mses[index],
             get_memory_size(model)
         ])
+    print("Experiment ID: {}".format(experiment_id))
     print(tabulate(result, header))
     models_predict(data, models)
 
@@ -69,8 +71,8 @@ def models_predict(data, models: List[BaseModel]):
     for idx, model in enumerate(models):
         results[model.name] = pred_ys[idx]
     df = pd.DataFrame.from_dict(results)
-    df.to_csv('result_100k.csv', index=False)
-    print("Results have been saved to result.csv")
+    df.to_csv('result_10k_{}.csv'.format(experiment_id), index=False)
+    print("Results of experiment {} have been saved to result.csv".format(experiment_id))
 
 
 if __name__ == "__main__":
