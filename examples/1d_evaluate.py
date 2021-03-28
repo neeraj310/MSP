@@ -32,8 +32,9 @@ def evaluate(filename):
 
     lrm = PRModel(1, page_size)
     prm = PRModel(2, page_size)
-    sgm = StagedModel(['fcn', 'fcn', 'lr'], [1, 20, 10000], page_size)
-    models = [fcnm, lrm, prm, sgm, btm]
+    sgm1 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 200, 10000], page_size)
+    sgm2 = StagedModel(['lr', 'lr', 'lr'], [1, 200, 10000], page_size)
+    models = [sgm1, sgm2]
     ptq = PointQuery(models)
     build_times = ptq.build(data, ratio)
     mses, eval_times = ptq.evaluate(test_data)

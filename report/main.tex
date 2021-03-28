@@ -28,6 +28,15 @@
 \usepackage{booktabs}
 \usepackage[tikz]{mdframed}
 \usepackage[toc,page]{appendix}
+\usepackage{color}   %May be necessary if you want to color links
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
 \usepackage[labelfont=bf,format=plain,justification=raggedright,singlelinecheck=false]{caption}
 \usepackage{mathtools}
 \newenvironment{mscexample}
@@ -114,6 +123,16 @@
 \input{chapters/implementations/two-dim/lisa}
 
 \chapter{Evaluation}
+
+\input{chapters/evaluation/overview}
+
+\section{One Dimensional Data and Indexes}
+
+\input{chapters/evaluation/one-dim}
+
+\section{Two Dimensional Data and Indexes}
+
+\input{chapters/evaluation/two-dim}
 
 \chapter{Insights and Findings}
 
