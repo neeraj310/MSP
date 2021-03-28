@@ -7,6 +7,10 @@ from pympler import asizeof
 
 
 def mean_squared_error(yhat, y):
+    if not isinstance(yhat, np.ndarray):
+        yhat = np.array(yhat)
+    if not isinstance(y, np.ndarray):
+        y = np.array(y)
     return (np.square(yhat.reshape(-1) - y.reshape(-1))).mean()
 
 
