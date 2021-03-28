@@ -4,6 +4,6 @@ format:
 	yapf -ir .
 
 docs:
-	pdoc --html --output-dir docs src/indexing
+	python3 -m pdoc --html --output-dir docs src/indexing
 	mv docs/indexing/* docs/
 	rm -rf docs/indexing

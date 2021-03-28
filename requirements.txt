@@ -3,6 +3,7 @@ numpy
 pandas
 matplotlib
 pympler
+tabulate
 # the following are for comparing only
 scikit-learn
 torch
