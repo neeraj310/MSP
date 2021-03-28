@@ -30,7 +30,7 @@ class FullyConnectedNetwork():
             if self.activations[idx] == 'relu':
                 self.model.add(ReLu('relu_{}'.format(idx)))
         self.model.build_params()
-        self.model.summary()
+        # self.model.summary()
 
     def fit(self, X, y, epochs=200, batch_size=100) -> None:
         self.learner = Learner(self.model, mse_loss, SGDOptimizer(lr=self.lr))

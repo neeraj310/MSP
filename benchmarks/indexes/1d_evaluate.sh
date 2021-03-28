@@ -21,7 +21,6 @@ do
     python3 src/utilities/1d_generator.py uniform 100000
     python3 src/utilities/1d_generator.py normal 100000
     python3 src/utilities/1d_generator.py lognormal 100000
-
     python3 examples/1d_evaluate.py data/1d_uniform_100000.csv > uniform_100k_$i.log
     python3 examples/1d_evaluate.py data/1d_normal_100000.csv > normal_100k_$i.log
     python3 examples/1d_evaluate.py data/1d_lognormal_100000.csv > lognormal_100k_$i.log
