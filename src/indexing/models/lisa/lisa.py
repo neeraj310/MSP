@@ -8,11 +8,11 @@ import sys
 from timeit import default_timer as timer
 from typing import List, Tuple
 import numpy as np
-from sklearn import metrics
 import pandas as pd
 from scipy import linalg
 
 from src.indexing.models import BaseModel
+import src.indexing.utilities.metrics as metrics
 
 import matplotlib.pyplot as plt
 
@@ -702,7 +702,80 @@ class LisaModel():
                   print('query point %d %d not found with mapped value %f predicted shard id %d gt shardId %d' 
                         %(query[0], query[1], mapped_value,predShardId, gtShardId ))    
             return y_pred    
+    
+     def range_query(self,query_l, query_u):
+        lowerBound = False
+        cell_list = []
+        for i in range(self.cellSize):
+            for j in range(self.cellSize):
+                idx = j*self.cellSize+i
+                if(query_l[0] >= self.cellMatrix[idx][0] and query_l[0] <= self.cellMatrix[idx][2]) and \
+                     (query_l[1] >= self.cellMatrix[idx][1] and query_l[1] <= self.cellMatrix[idx][3]):
+                    cell_list.append(idx)
+                    lowerBound = True
+                    break
+            if(lowerBound == True):
+                break
+                
+        if(lowerBound == False):
+            print('Query Rectangle Outside the range')
+        else:
+            print('lowerbound is a equal to %d'%(idx))
+            x_offset = idx% self.cellSize
+            print(x_offset)
+            print(' i = %d j = %d' %(i, j))
+            j = j+1
+            if(j == self.cellSize):
+                j = 0
+                i = i+1
+            idx = j*self.cellSize+i
+            while(i < self.cellSize):
+                if ((idx%self.cellSize) < x_offset):
+                    j = j+1
+                    if(j == self.cellSize):
+                        j = 0
+                        i = i+1
+                    idx = j*self.cellSize+i
+                    continue
+                print(idx)
+                if(query_u[0] >= self.cellMatrix[idx][0] and query_u[1] >= self.cellMatrix[idx][1]):
+                #or (query_u[1] <= lisa.cellMatrix[i][3] and query_u[0] >= lisa.cellMatrix[i][0]):
+                    cell_list.append(idx)
+                j = j+1   
+                if(j == self.cellSize):
+                    j = 0
+                    i = i+1
+                idx = j*self.cellSize+i
+        print(cell_list)
 
+        return cell_list
+    
+    def getKeysInRangeQuery(self, cellList, query_l, query_u):
+        keyList = []
+        for i in cellList:
+            nuOfKeys = self.keysPerCell
+            startOffset = int(self.cellMatrix[i][6]*(self.keysPerCell))
+            print(startOffset)
+            if i == ((self.cellSize*self.cellSize)-1):
+                nuOfKeys = nuOfKeys + self.additionalKeysInLastCell 
+                print(nuOfKeys)
+            for j in range(startOffset, startOffset+nuOfKeys):
+                 if(self.train_array[j, 0] >= query_l[0] and self.train_array[j, 0] <= query_u[0] )and \
+                         (self.train_array[j, 1] >= query_l[1] and self.train_array[j, 1] <= query_u[1] ):
+                        keyList.append(self.train_array[j, 0:3])
+     
+        return np.array(keyList)
+    
+    def predict_range(self, query_l, query_u):
+        cellList =self.range_query(query_l, query_u)    
+        if(len(cellList) == 0):
+            print('range query is empty')
+            return -1
+        else:
+            neighboursKeySet = self.getKeysInRangeQuery(cellList, query_l, query_u)
+            #print(neighboursKeySet)
+            return np.sort(neighboursKeySet[:, -1])
+            
     def train(self, x_train, y_train, x_test, y_test):
 
         print(x_train.shape)
