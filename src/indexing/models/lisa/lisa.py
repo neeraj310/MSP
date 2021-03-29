@@ -37,6 +37,7 @@ class LisaModel():
         self.shardPredictionErrorCount = 0
         
         self.name = 'Lisa'
+        self.initDelta = 3
         print('In Lisa Model')
     
     def generate_grid_cells(self):
@@ -702,8 +703,43 @@ class LisaModel():
                   print('query point %d %d not found with mapped value %f predicted shard id %d gt shardId %d' 
                         %(query[0], query[1], mapped_value,predShardId, gtShardId ))    
             return y_pred    
+    '''
+    def range_query(self,query_l, query_u):
+        lowerBound = False
+        cell_list = []
+        for i in range(self.cellSize):
+            for j in range(self.cellSize):
+                idx = j*self.cellSize+i
+                if(query_l[0] >= self.cellMatrix[idx][0] and query_l[0] <= self.cellMatrix[idx][2]) and \
+                     (query_l[1] >= self.cellMatrix[idx][1] and query_l[1] <= self.cellMatrix[idx][3]):
+                    cell_list.append(idx)
+                    lowerBound = True
+                    break
+            if(lowerBound == True):
+                break
+                
+        if(lowerBound == False):
+            print('Query Rectangle Outside the range')
+        else:
+            print('lowerbound is a equal to %d'%(idx))
+            x_offset = idx%self.cellSize
+            #print(x_offset)
+            idx = idx+1
+            while(idx < self.cellSize*self.cellSize):
+                if ((idx%self.cellSize) < x_offset):
+                    idx = idx+1
+                    continue
+                print(idx)  
+                if(query_u[0] >= self.cellMatrix[idx][0] and query_u[1] >= self.cellMatrix[idx][1]):
+                      cell_list.append(idx)
+               
+                idx= idx+1       
+        print(cell_list)
+
+        return cell_list
+    '''
     
-     def range_query(self,query_l, query_u):
+    def range_query(self,query_l, query_u):
         lowerBound = False
         cell_list = []
         for i in range(self.cellSize):
@@ -766,7 +802,45 @@ class LisaModel():
      
         return np.array(keyList)
     
-    def predict_range(self, query_l, query_u):
+    def distance(self, left, right):
+        """ Returns the square of the distance between left and right. """
+        return np.sqrt(((left[0] - right[0]) ** 2) + ((left[1] - right[1]) ** 2))
+        
+    def findKthNeighbour (self, queryPoint, k):
+        for scale in range (1,5):
+            delta = self.initDelta**scale
+            print('delta = %d'%(delta))
+            query_l = (queryPoint[0]-delta, queryPoint[1]-delta)
+            query_h = (queryPoint[0]+delta, queryPoint[1]+delta)
+            if (query_l < (self.train_array[0,0], self.train_array[0,1])):
+                query_l = (self.train_array[0,0], self.train_array[0,1])
+                print('query_l changed to %d %d ' %(query_l[0], query_l[1]))
+            if (query_h  > (self.train_array[-1,0], self.train_array[-1,1])):
+                query_h = (self.train_array[-1,0], self.train_array[-1,1])
+                print('query_h changed to %d %d ' %(query_h[0], query_h[1]))
+                
+            cellList =self.range_query(query_l,query_h)
+            if(len(cellList) == 0):
+                print('range query is empty')
+                return None
+            neighboursKeySet = self.getKeysInRangeQuery(cellList,query_l,query_h )
+            #print(neighboursKeySet)
+            if (len(neighboursKeySet) < k):
+                print('No of keys found = %d' %(len(neighboursKeySet) ))
+                continue   
+            #neighboursKeySet = np.array(neighboursKeySet[:, 0:2])
+            neighboursKeySet = np.hstack((neighboursKeySet, np.zeros((neighboursKeySet.shape[0], 1),dtype=neighboursKeySet.dtype)))
+            idx = np.where((neighboursKeySet[:, 0] == queryPoint[0] ) & (neighboursKeySet[:, 1] == queryPoint[1]))
+            print('idx is %d' %(idx))
+            #neighboursKeySet[:, 3] = self.distance(queryPoint,(neighboursKeySet[:, 0], neighboursKeySet[:,1]))
+            neighboursKeySet[:, 3] = np.sqrt(((neighboursKeySet[:, 2]- neighboursKeySet[idx, 2]) ** 2))
+                                             
+            neighboursKeySet = neighboursKeySet[neighboursKeySet[:,3].argsort()]
+           
+            return neighboursKeySet[0:k, 2]
+        return (None, None)
+    
+    def predict_range_query(self, query_l, query_u):
         cellList =self.range_query(query_l, query_u)    
         if(len(cellList) == 0):
             print('range query is empty')
@@ -775,14 +849,24 @@ class LisaModel():
             neighboursKeySet = self.getKeysInRangeQuery(cellList, query_l, query_u)
             #print(neighboursKeySet)
             return np.sort(neighboursKeySet[:, -1])
+        
+    def predict_knn_query(self, query, k):
+          y_pred = self.findKthNeighbour(query, k)
+          print(y_pred)
+          return np.sort(y_pred)
+          
+        
             
+            
+
+    
     def train(self, x_train, y_train, x_test, y_test):
 
         print(x_train.shape)
         print(x_test.shape)
         print(y_train.shape)
         print(y_test.shape)
-        #print(y_train[0:100])
+        print(y_train[0:100])
         
         np.set_printoptions(threshold=100000)
         start_time = timer()
@@ -806,6 +890,7 @@ class LisaModel():
               (test_data_size))
         error_count = 0
         for i in range(test_data_size):
+            print('Quering for %d %d ' %(x_test[i,0], x_test[i,1]))
             y_hat = self.predict(x_test[i])
             if(y_hat != y_test[i]):
                 print(' pred = %d, gt = %d' %(y_hat, y_test[i] ))
@@ -813,8 +898,10 @@ class LisaModel():
             pred_y.append(y_hat)
 
         pred_y = np.array(pred_y)
-        mse = metrics.mean_absolute_error(y_test, pred_y)
+        #mse = metrics.mean_absolute_error(y_test, pred_y)
+        mse = metrics.mean_squared_error(y_test, pred_y)
         print('CorrectShardCount = %d error count is %d, test size is %d ratio is %f' %(self.CorrectShardCount,error_count,test_data_size, error_count/test_data_size ))
+        print(self.cellMatrix)
         return mse, end_time - start_time
      
         
