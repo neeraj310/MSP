@@ -17,9 +17,9 @@ class Query(object):
 
     def build(self, data, test_ratio, use_index=True):
         if use_index:
-            self.build_with_index(data, test_ratio)
+            return self.build_with_index(data, test_ratio)
         else:
-            self.build_with_y(data, test_ratio)
+            return self.build_with_y(data, test_ratio)
 
     def build_with_index(self, data, test_ratio):
         build_times = []

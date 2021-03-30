@@ -16,7 +16,7 @@ def get_data(distribution, size):
     elif distribution == "EXPONENTIAL":
         data = np.random.exponential(150, size)
     elif distribution == "LOGNORMAL":
-        data = np.random.lognormal(3, 2, size)
+        data = np.random.lognormal(0, 2, size)
     else:
         data = np.random.normal(size, size * FACTOR, size)
     data.sort()

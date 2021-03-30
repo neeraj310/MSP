@@ -28,13 +28,12 @@ def load_1D_Data(filename):
 def evaluate(filename):
     data, test_data, page_size = load_1D_Data(filename)
     btm = BTreeModel(page_size, b_tree_degree)
-    fcnm = FCNModel(page_size=page_size, layers=[1,8,8,1], activations=['relu','relu', 'relu'])
+    fcnm = FCNModel(page_size=page_size, layers=[1,32,32,1], activations=['relu','relu', 'relu'])
 
     lrm = PRModel(1, page_size)
     prm = PRModel(2, page_size)
-    sgm1 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 200, 10000], page_size)
-    sgm2 = StagedModel(['lr', 'lr', 'lr'], [1, 200, 10000], page_size)
-    models = [sgm1, sgm2]
+    sgm1 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 400, 10000], page_size)
+    models = [sgm1, btm, fcnm]
     ptq = PointQuery(models)
     build_times = ptq.build(data, ratio)
     mses, eval_times = ptq.evaluate(test_data)
