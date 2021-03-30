@@ -39,7 +39,7 @@ from src.indexing.models.trees.scipykdtree import ScipyKDTreeModel
 from src.queries.point import PointQuery
 from src.queries.range import RangeQuery
 
-ratio = 0.2
+ratio = 0.5
 
 
 def load_2D_Data(filename):
@@ -48,30 +48,35 @@ def load_2D_Data(filename):
     # Remove duplicates
     col_names = list(data.columns)[:-1]
     data.drop_duplicates(subset=col_names, ignore_index=True, inplace=True)
-    test_data = data.sample(n=int(ratio * len(data)))
+    data = data[0:10000]
+    test_data = data #data.sample(n=int(ratio * len(data)))
     return data, test_data
 
 
-def evaluate_point(filename):
+def create_models(filename):
     data, test_data = load_2D_Data(filename)
     lisaBm = LisaBaseModel(100)
     kdtree = KDTreeModel()
     scipykdtree = ScipyKDTreeModel(leafsize=10)
-    lisa = LisaModel(cellSize=10, nuOfShards=5)
+    lisa = LisaModel(cellSize=4, nuOfShards=5)
 
-    models = [lisaBm, kdtree, scipykdtree, lisa]
+    #models = [lisaBm, kdtree, scipykdtree, lisa]
+    models = [lisa,scipykdtree]
+    #models = [scipykdtree]
     ptq = PointQuery(models)
-    build_times = ptq.build(data, 0.00002)
-
+    build_times = ptq.build(data, 0.002)
+    return(models, ptq,test_data, build_times)
     # print("Build time",build_times)
 
+def point_query_eval(models, ptq, test_data,build_times):
     i = 10
     result = []
     header = [
         "Name", "Test Data Size", "Build Time (s)", "Evaluation Time (s)",
         "Average Evaluation Time (s)", "Evaluation Error (MSE)"
     ]
-    while (i <= 1000000):
+    while (i <= 10000):
+        #Sample a point
         mses, eval_times = ptq.evaluate_point(test_data.iloc[:i, :])
 
         for index, model in enumerate(models):
@@ -83,12 +88,83 @@ def evaluate_point(filename):
         i = i * 10
     print(tabulate(result, header))
 
+def range_query_eval(models, ptq, test_data,build_times):
+    i = 100
+    result = []
+    header = [
+        "Name", "Query Size", "Build Time (s)", "Evaluation Time (s)",
+        "Average Evaluation Time (s)", "Evaluation Error (MSE)"
+    ]
+    print(test_data.size)
+    print(test_data.shape)
+    idx = np.random.randint(test_data.shape[0]-1001)
+    while (i <= 4000):
+        print(idx)
+        query_l = test_data.iloc[idx, 0:2]
+        if (idx+i) > test_data.shape[0] :
+            break
+        
+        query_h = test_data.iloc[idx+i, 0:2]
+        print('idx = %d i = %d ' %(idx, idx+i) )
+        print('query_l = %d %d' %(query_l[0],query_l[1]))
+        print('query_h = %d %d' %(query_h[0],query_h[1]))
+        test_range_query = test_data.iloc[idx:idx+i, :]
+        mses, eval_times = ptq.evaluate_range_query(test_range_query)
+        for index, model in enumerate(models):
+            result.append([
+                model.name, i, build_times[index], eval_times[index],
+                eval_times[index] / i, mses[index]
+            ])
+            
+        print(len(result))
+       
+        i = i +100
+    print(tabulate(result, header))
+    
+def knn_query_eval(models, ptq, test_data,build_times):
+    i = 3
+    result = []
+    header = [
+        "Name", "K Value", "Build Time (s)", "Evaluation Time (s)",
+        "Average Evaluation Time (s)", "Evaluation Error (MSE)"
+    ]
+    print(test_data.size)
+    print(test_data.shape)
+    idx = np.random.randint(test_data.shape[0]-1001)
+    while (i <= 20):
+        print(idx)
+        query = test_data.iloc[idx, 0:2]
+        if (idx+i) > test_data.shape[0] :
+            break
+        
+       
+        print('idx = %d i = %d ' %(idx, idx+i) )
+        print('query_l = %d %d' %(query[0],query[1]))
+           
+        y_gt = ptq.evaluate_scipy_kdtree_knn_query(query, k = i)
+        mses, eval_times = ptq.evaluate_knn_query(query, y_gt, k = i)
+       
+        
+        for index, model in enumerate(models):
+            if (model.name == 'Scipy KD-Tree') or (model.name == 'Lisa Baseline') :
+                continue
+            result.append([
+                model.name, i, build_times[index], eval_times[index],
+                eval_times[index] / i, mses[index]
+            ])
+            
+        print(len(result))
+    
+        i = i +1
+    print(tabulate(result, header))
+'''
 def evaluate_range(filename):
     data, test_data = load_2D_Data(filename)
     kdtree = KDTreeModel()
+    lisa = LisaModel(cellSize=10, nuOfShards=5)
 
     # models = [lisaBm, kdtree, scipykdtree, lisa]
-    models = [kdtree]       #add trees here
+    models = [lisa, kdtree]       #add trees here
     rq = RangeQuery(models)
     build_times = rq.build(data, 0.00002)
 
@@ -107,7 +183,7 @@ def evaluate_range(filename):
     print(range_points)
 
     return range_points
-
+'''
    
 
 def models_predict_point(data, models: List[BaseModel]):
@@ -138,7 +214,10 @@ def models_predict_point(data, models: List[BaseModel]):
 
 if __name__ == "__main__":
     # filename = sys.argv[1]
-    filename = 'data/2d_lognormal_lognormal_10000.csv'
+    filename = 'data/2d_lognormal_lognormal_1000000.csv'
 
     # evaluate(filename)
-    evaluate_range(filename)
+    (models, ptq, test_data,build_times) = create_models(filename)
+    #range_query_eval(models, ptq, test_data,build_times)
+    knn_query_eval(models, ptq, test_data,build_times)
+    
