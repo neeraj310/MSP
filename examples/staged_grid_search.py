@@ -32,13 +32,17 @@ def evaluate(filename):
 
     lrm = PRModel(1, page_size)
     prm = PRModel(2, page_size)
-    sgm1 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 400, 2000], page_size)
-    #sgm2 = StagedModel(['lr', 'lr', 'lr'], [1, 200, 10000], page_size)
-    #sgm3 = StagedModel(['lr', 'fcn', 'fcn'], [1, 200, 10000], page_size)
-    #sgm4 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 100, 10000], page_size)
-    #sgm5 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 300, 10000], page_size)
-    #sgm6 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 200, 15000], page_size)
-    models = [sgm1]
+    sgm1 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 200, 2000], page_size)
+    sgm2 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 200, 4000], page_size)
+    sgm3 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 200, 6000], page_size)
+    sgm4 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 400, 2000], page_size)
+    sgm5 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 400, 4000], page_size)
+    sgm6 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 400, 6000], page_size)
+    sgm7 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 600, 2000], page_size)
+    sgm8 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 600, 4000], page_size)
+    sgm9 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 600, 6000], page_size)
+    
+    models = [sgm1, sgm2, sgm3, sgm4, sgm5, sgm6, sgm7, sgm8, sgm9]
     ptq = PointQuery(models)
     build_times = ptq.build(data, ratio)
     mses, eval_times = ptq.evaluate(test_data)

@@ -5,16 +5,16 @@ This file describes how staged model, i.e. recursive model works.
 @updated: 14. Mar. 2021.
 '''
 
+from src.indexing.models.trees.b_tree import BTreeModel
+from src.indexing.models.nn.fcn import FCNModel
+from src.indexing.models.ml.polynomial_regression import PolynomialRegression
+from src.indexing.models import BaseModel
+import src.indexing.utilities.metrics as metrics
 from timeit import default_timer as timer
 from typing import List
 import sys
 import numpy as np
 sys.path.append('')
-import src.indexing.utilities.metrics as metrics
-from src.indexing.models import BaseModel
-from src.indexing.models.ml.polynomial_regression import PolynomialRegression
-from src.indexing.models.nn.fcn import FCNModel
-from src.indexing.models.trees.b_tree import BTreeModel
 
 
 class StagedModel(BaseModel):
@@ -55,6 +55,7 @@ class StagedModel(BaseModel):
         train_datas = [[train_data]]
         start_time = timer()
         for stage in range(self.num_of_stages):
+            number_unused_model = 0
             self.models.append([])
             for model_id in range(self.num_of_models[stage]):
                 if train_datas[stage][model_id][0] is not None:
@@ -92,9 +93,13 @@ class StagedModel(BaseModel):
                     else:
                         # there is no x and y allocated
                         # by default, give it all the training data
+                        number_unused_model = number_unused_model+1
+
                         # print("[WARN] The model {}-{} is not given any data".
                         #       format(stage + 1, next_model_id))
                         train_datas[stage + 1].append((None, None))
+                print("unused model at stage {}: {}".format(
+                    stage+1, number_unused_model))
         end_time = timer()
 
         y_pred = []

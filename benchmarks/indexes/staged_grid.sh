@@ -7,5 +7,5 @@ evaluate() {
 }
 for i in {1..3}; 
 do 
-    evaluate "$i"
+    evaluate "$i" &
 done
