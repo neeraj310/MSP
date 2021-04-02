@@ -64,7 +64,7 @@ def create_models(filename):
     models = [lisa,scipykdtree]
     #models = [scipykdtree]
     ptq = PointQuery(models)
-    build_times = ptq.build(data, 0.002)
+    build_times = ptq.build(data, 0.002,use_index = False)
     return(models, ptq,test_data, build_times)
     # print("Build time",build_times)
 
