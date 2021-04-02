@@ -30,7 +30,7 @@ class ScipyKDTreeModel():
         for key in x_test:
             pred = self.predict(key)
             y_predict_test.append(pred)
-        mse = metrics.mean_absolute_error(y_test, y_predict_test)
+        mse = metrics.mean_squared_error(y_test, y_predict_test)
 
         return mse, build_time
 
