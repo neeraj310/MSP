@@ -272,5 +272,5 @@ else:
             pred_y.append(self.predict(x_test[i]))
 
         pred_y = np.array(pred_y)
-        mse = metrics.mean_absolute_error(y_test, pred_y)
+        mse = metrics.mean_squared_error(y_test, pred_y)
         return mse, end_time - start_time
