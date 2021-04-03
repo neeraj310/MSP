@@ -121,7 +121,7 @@ For prediction, we find the cell corresponding to mapped value of the query poin
 
 %TODO: motivation 
 
-Given a spatial dataset, we generate the mapping function $M$, the shard prediction function $\mathcal{SP}$. Based on them, we build our index structure, LISA, to process range query and $K$NN query. LISA consists of four parts: the representation of grid cells, the mapping function M, the shard prediction function $\mathcal{SP}$, and the local models for all shards. As illustrated in the Fig \ref{fig:Lisa_Framework}. the procedure of building LISA is composed of four parts.
+Given a spatial dataset, we generate the mapping function $\mathcal{M}$, the shard prediction function $\mathcal{SP}$. Based on them, we build our index structure, LISA, to process range query and $K$NN query. LISA consists of four parts: the representation of grid cells, the mapping function $\mathcal{M}$, the shard prediction function $\mathcal{SP}$, and the local models for all shards. As illustrated in the Fig \ref{fig:Lisa_Framework}. the procedure of building LISA is composed of four parts.
 
 \begin{figure*}[t]
     \centering
@@ -210,7 +210,7 @@ We need to sort the key space along the sequence of axis before we partition the
 \end{algorithm}
 
 \subsubsection{Mapping Function}
-A mapping function M is a function on the domain $\mathbb{R}^{2}$ to the non-negative range, i.e $M:[0,X_{0}]\times[0,X_{1}]\to [0,+\infty)$ such that
+A mapping function $\mathcal{M}$ is a function on the domain $\mathbb{R}^{2}$ to the non-negative range, i.e $M:[0,X_{0}]\times[0,X_{1}]\to [0,+\infty)$ such that
     $ M(x_{i} \in V) <  M(x_{j} \in V)$ if $i<j$, where $x_{i} \in C_{i}$ and $x_{j} \in C_{j}$. That means the mapped value of a key in cell $i$ will always be less than mapped values of a key in cell $j$, if $i <j$. 
     
 Suppose $x = (x_{0}, x_{1})$ and $x \in C_{i} = [\theta^{(0)}_{i_0},\theta^{(0)}_{i_0+1}) \times [\theta^{(1)}_{i_1},\theta^{(1)}_{i_1+1}) $ then we define 
@@ -360,9 +360,16 @@ then we have
 \end{equation}
 \textcolor{red}{Show how these are calculated}
 
-As $g=\nabla_{\boldsymbol{\beta}} L$, $-g$ specifies the steepest descent direction of $\boldsymbol{\beta}$ for $L$. However, the convergence rate of $-g$ is low as it does not consider the second order derivative of $L$. Hence, we perform the update along the direction of $s=-\boldsymbol{Y}^{-1}g$.
+As $g=\nabla_{\boldsymbol{\beta}} L$, $-g$ specifies the steepest descent direction of $\boldsymbol{\beta}$ for $L$. However, the convergence rate of $-g$ is low as it does not consider the second order derivative of $L$. Hence, we use Newton's method to perform the update along the direction of second derivative, $s=-\boldsymbol{Y}^{-1}g$. Newton's method assumes that the loss L is twice differentiable and uses the approximation with Hessian
+The geometric interpretation of Newton's method is that at each iteration, it amounts to the fitting of a paraboloid to the surface of $L(\boldsymbol{\alpha},\boldsymbol{\beta})$  at the trial value $\beta_{k}$, having the same slopes and curvature as the surface at that point, and then proceeding to the maximum or minimum of that paraboloid. 
+Hessian matrix, Y in our case is positive semidefinite and hence can be inverted. 
+\begin{equation}
+	Y=\frac{\partial g}{\partial \boldsymbol{\beta}}=2\boldsymbol{KGG}^T \boldsymbol{K}^T= 2 \boldsymbol{(KG)} (\boldsymbol{G}^T \boldsymbol{K}^T)=2 (\boldsymbol{G}^T \boldsymbol{K}^T)^T (\boldsymbol{G}^T \boldsymbol{K}^T)
+\end{equation}
 
-\textcolor{red}{Show that Y is positive definite and explain why it matters}  
+\textcolor{red}{Show how these are calculated}
+
+\textcolor{red}{How to show that Y is positive definite and not just positive semidefnite.}  
 %TODO: Show that Y is positive definite and explain why it matters
 
 In the beginning, we set $\beta^{(0)}=x_0$ and $\beta_i^{(0)}=x_{\floor{i\times \frac{V}{\Psi}}}, \forall i\in[1,\sigma]$. Then we can obtain $\boldsymbol{\alpha}$ by solving Eq. (\ref{alpha_form}). Then at each step, we perform a grid search to find the step $lr^{(k)}$ such that the loss $L$ is minimal. Then at the next iteration, we increase $k$ by one and set 
@@ -371,9 +378,63 @@ $$
 \boldsymbol{\beta}^{(k+1)}=\boldsymbol{\beta}^{(k)} + lr^{(k)}s^{(k)}
 $$
 
-The iteration continues until $L$ converges, i.e. the $|L^{(k)}-L^{(k-1)}|<\delta$ where $\delta$ is a pre-set hyperparameter.
+%The iteration continues until $L$ converges, i.e. the $|L^{(k)}-L^{(k-1)}|<\delta$ where $\delta$ is a pre-set hyperparameter.
 
+As described in Algorithm \ref{Shard_Training_Lisa}, we perform  following operations during shard training, :
 
+\begin{enumerate}
+	\item Divide the sorted mapped values into equal sized U intervals.
+	\item Suppose V +1 is the number of mapped values in each interval and $\psi$ is the estimated average number of keys falling in a shard.
+	\item For each interval, we want to build a monotonic regression
+    model $ \mathcal {F}_{i}$ whose domain is $[m_{i-1},m_{i}]$ 
+ 
+ 	\item Each $\mathcal{F}_{i}$ generates D = $\ceil{\frac{V+1}{\Psi}}$ number of shards 
+    
+    \item $x =[x_0,\cdots, x_V] $ specifies the keys' mapped values in interval i, $[m_{i-1},m_{i}]$ 
+    
+    \item Given V +1 sorted mapped values $x =[x_0,\cdots, x_V]$ and their indices $y =[0,\cdots, V]$, each $\mathcal{F}_{i}$ is built and trained with the procedure mentioned in the algorithm \ref{Shard_Training_Lisa}.
+    
+
+\end{enumerate}
+
+\begin{algorithm}[H]
+    \SetAlgoLined
+    \SetKwInOut{Input}{input}
+    \Input{\texttt{$M_{p}$}, $\Psi$, U}
+    \texttt{Partition $M_{p}$ into equal length U intervals $\boldsymbol{M}_p=[m_1,\cdots, m_U]$ }
+    \For{$i\gets0$ \KwTo $U$}
+    {   
+        \texttt{$x =[x_0,\cdots, x_V] $ be the keys' mapped values
+        in interval i} \\
+        \texttt{$y =[0,\cdots, V]$ } \\
+        \texttt{Initialize $\beta^{(0)}$ as $\beta^{(0)}=x_0$ and $\beta_i^{(0)}=x_{\floor{i\times \frac{V}{\Psi}}}, \forall i\in[1,\sigma]$} \\
+        \While{\texttt{k} \textless \texttt{1000}} 
+        {
+            \texttt{Initialize $A^{(k)}$ according to \eqref{continuous_piecewise_linear_function}} \\
+            \texttt{$\alpha^{(k)}= ((A^{(k)})^T A^{(k)})^{-1}(A^{(k)})^Ty$} \\
+            
+            \texttt{Calculate $g^{(k)}, Y^{(k)}$ } \\
+            \texttt{$s^{k} = -(Y^{(k)})^{-1} g^{(k)}, $ } \\
+            
+            \texttt{Find update step $lr^{(k)}$ such that    L$(\alpha^\star(\beta^{k}+ lr^{(k)}s^{k}), \beta^{k}+ lr^{(k)}s^{k}) =\text{min}\{L(\alpha^\star(\beta^{k}+ lr^{(k)}s^{k}), \beta^{k}+ lr^{(k)}s^{k})\} $} \\
+            
+            \texttt{$\beta^{k+1} = \beta^{k}+ lr^{(k)}s^{k}$ } \\
+           
+           
+        }
+    }
+    
+    \caption{Shard Training Algorithm}
+    \label{Shard_Training_Lisa}
+\end{algorithm}
+
+\subsubsection{Range Query}
+To search a range query, qr = $[l_{0},u_{0})\times[l_{1},u_{1})$, we first get the cells that overlap with qr and decompose qr
+into the union of smaller query rectangles each of which
+intersects one and only one cell. Suppose qr =
+–Q0
+j=0 qr 0j
+with qr 0j = [l 0j0 ,u0j0) ⇥ · · · ⇥ [l 0jd−1 ,u0jd−1) ✓ Cij .
 
 
 

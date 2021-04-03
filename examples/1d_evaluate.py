@@ -12,6 +12,7 @@ from src.indexing.models.rmi.staged import StagedModel
 from src.indexing.models.trees.b_tree import BTreeModel
 from src.indexing.utilities.metrics import get_memory_size
 from src.queries.point import PointQuery
+from src.indexing.utilities.results import write_results
 import uuid
 
 ratio = 0.2
@@ -32,8 +33,8 @@ def evaluate(filename):
 
     lrm = PRModel(1, page_size)
     prm = PRModel(2, page_size)
-    sgm1 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 400, 10000], page_size)
-    models = [sgm1, btm, fcnm]
+    sgm1 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 200, 4000], page_size)
+    models = [sgm1, btm, fcnm, lrm, prm]
     ptq = PointQuery(models)
     build_times = ptq.build(data, ratio)
     mses, eval_times = ptq.evaluate(test_data)
@@ -47,6 +48,7 @@ def evaluate(filename):
             model.name, build_times[index], eval_times[index], mses[index],
             get_memory_size(model)
         ])
+    write_results(experiment_id, result)
     print("Experiment ID: {}".format(experiment_id))
     print(tabulate(result, header))
     models_predict(data, models)

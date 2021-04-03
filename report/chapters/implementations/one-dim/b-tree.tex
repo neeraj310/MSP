@@ -20,8 +20,7 @@ In computers, the memories are organised in an hierarchical way. For example, a 
 At the same time, the traditional hard disk drive (HDD) is made by a moving mechanical structure.
 
 %TODO: Illustrate the mechanical structure.
-
-%TODO: I don't think we need this part anymore? Removing the motivation might be helpful...
+% Should we be writing this since we are using in-memory ?
 
 In summary, there are two properties in classical computer systems that we need to take into account:
 
@@ -31,15 +30,23 @@ In summary, there are two properties in classical computer systems that we need 
 \end{enumerate}
 
 \subsubsection{Definition and Terms}
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=0.6\textwidth]{graphs/B-Tree_definitions.png}
+    \caption{B-Tree}
+    \label{fig:B-Tree}
+\end{figure}
 
 Before we formally define B-Trees, we assume the following terms:
 
 \begin{itemize}
 \item
-  \textbf{Keys}: The key in a database is a special attribute that could identify a row in the database. In our work, each key corresponds to a
+  \textbf{Keys}: The key in a database is a special attribute that could identify a row in the database. In our work, each key corresponds to a 1-dimensional
   \textbf{value} and forms a key-value pair.
 \item
-  \textbf{Internal Node}: An internal node is any node of the tree that has child nodes.
+  \textbf{Order}: The Order of a B-Tree is the maximum number of children that a node can have. Number of keys in a node is always one less than the order of the tree at the maximum.
+\item
+  \textbf{Internal Node}: An internal node is any node of the tree that has child nodes and is not a root node.
 \item
   \textbf{Leaf Node}: A leaf node is any node that does not have child nodes.
 \end{itemize}
@@ -82,37 +89,77 @@ an operation that splits a full node around its median key
     \SetKwInOut{Input}{Input}
      \Input{\texttt{$m$:order\_of\_tree ,$(k,v)$:(key, value), $N$:Node;}}
     \SetKwInOut{Output}{Output}
-     \Output{\texttt{Btree is constructed}}
-     \eIf{$N$ is not yet full}  
+     \Output{\texttt{B-Tree}}
+     \eIf{$N$ is a leaf and not yet full}  
      {
         \texttt{insert $(k,v)$ into $N$}
      }
      {
-        \texttt{create new Node N'}
+        \texttt{create new Node N'}\\
+        \texttt{Find the median of the node}\\
+        \texttt{Add the value at the median location to the new node N'}\\
      }
-    \eIf{$N$ is is a leaf}
+    \If{$N$ is root with no children and not full}
     {
     
-        \texttt{Temp:=$N$+$(k,v)$, $k’$:=$ceil(m/2-1)$} \\k' is the median index of Temp
-        \texttt{move entries greater than median to k}
+        \texttt{insert $(k,v)$ into $N$}
         
     }
-    {
-        \texttt{Temp:=N+(k,p), k’:=ceil(m/2-1)}
-     
-    }
-    
-    
-     
-     \texttt{Sort keys in each cell based on 2nd dimension,x[:][1] }\\
-     
-      \For{$i\gets0$ \KwTo $\sqrt(num\_of\_cells)$} %\Comment{Store mapped value of first and last key for each page}
-      {
-         \For{$j\gets0$ \KwTo $\sqrt(num\_of\_cells)$}
-         {
-            \texttt{Store the 2nd dimensional coordinates of first and last key for each cell.} \\
-		 }
-      }
-     \caption{Grid Cell Generation Algorithm for Lisa Method}
-     \label{Training_Lisa_Baseline}
+     \caption{Algorithm for B-Tree insertion}
+     \label{B-Tree Insertion}
 \end{algorithm}
+
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=0.6\textwidth]{graphs/B-Tree_example01.png}
+    \caption{B-Tree key insertion}
+    \label{fig:B-Tree key insertion1}
+\end{figure}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=0.3\textwidth]{graphs/B-Tree_example02.png}
+    \caption{B-Tree key insertion}
+    \label{fig:B-Tree key insertion2}
+\end{figure}
+
+\subsubsection{Insertion in a B-Tree}
+
+There are two conditions in insertion:
+\begin{itemize}
+\item
+\textbf{When the node is empty or not created at all}:
+In the algorithm, initially when the first key is inserted and there is no root to the tree it will check the condition if there are any nodes and if not create a new one. It will insert the new key in the node and keeps inserting the new keys until it is one less than the order of the B-Tree being created. 
+\item
+\textbf{When the node is full}:
+As soon as the maximum number of allowed children has reached for the root node a new empty node is created. Suppose we have inserted [1,11,21] to a node of a B-Tree with degree 4. Now if we want to insert a new value 31 into the tree, since it has reached the maximum number of children it will find the median of the existing node [1,11,21] which is 11 and increase the level of the B-tree to 2 and make [1] and [21] child nodes of [11]. So now if a new value is to be inserted it can be inserted. Splitting of the node happens each time it reaches it's maximum allowed keys. Now 31 will be compared with 11 and since 31 > 11 it will be inserted in the right child and it will have an updated value of [21,31]. More keys can then be inserted until it reaches it's maximum and splits again. Once the node is split it's parent is also updated to the median value i.e., [11] in this case for nodes [1] and [21,31,41] as can be seen in \ref{fig:B-Tree key insertion2}.
+\end{itemize}
+
+\subsubsection{Search in a B-Tree}
+
+\begin{algorithm}[H]
+    \SetAlgoLined
+    \SetKwInOut{Input}{Input}
+     \Input{\texttt{k ; key, root ; Root of the B-Tree}}
+    \SetKwInOut{Output}{Output}
+     \Output{\texttt{Value associated with key}}
+     \For{$i\gets0$ \KwTo $len(Root Node)$}{
+         \If{keys in root greater than k}
+         {
+            \texttt{SEARCH\_CHILD(key)} //Search linearly the child associated with the key location one before\\
+            \eIf{Child is a leaf}
+            {
+                \texttt{Linearly search until the key is reached}
+            }
+            {
+                \texttt{SEARCH\_CHILD(key)}
+            }
+            
+         }
+    }
+     \caption{Algorithm for B-Tree Search}
+     \label{B-Tree Search}
+\end{algorithm}
+
+Search in a B-Tree is basically the comparison of the value of the key that needs to be searched with the keys in the node. It first linearly checks the value in the root key and looks for a key value which is greater than the searched key. As soon as it finds a key greater than the searched key it will search in the child of the key before it. For example if we were to search of key [41] in the example of the B-Tree used above, we would first check the value [11] and since it smaller than [31] and there are no keys greater than this in the root node it will search in the right child of the root node. It will then linearly search the node and locate it's associated value and return it. 

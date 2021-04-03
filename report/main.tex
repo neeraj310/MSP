@@ -9,17 +9,21 @@
   ]{blankpage.fg}
 \DeclarePageStyleByLayers{blank}{blankpage.fg}
 \usepackage{scrhack}
+\usepackage{lscape}
 \usepackage[utf8]{inputenc}
+\usepackage[table,xcdraw]{xcolor}
 \usepackage[T1]{fontenc}
 \usepackage{silence}
 \WarningFilter{scrreprt}{Usage of package `fancyhdr'}
 \usepackage{graphicx}
 \usepackage{tikz}
+\usepackage{pgfplots}
 \usepackage{times}
 \usepackage{listings}
 \usepackage{amssymb}
 \usepackage{amsfonts}
 \usepackage{amsmath}
+\usepackage{multirow}
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[noend]{algpseudocode}
@@ -46,6 +50,7 @@
     \end{center}
    }
 
+%\algdef{SE}[DOWHILE]{Do}{doWhile}{\algorithmicdo}[1]{\algorithmicwhile\ #1}%
  
  
 %\usepackage[ruled, vlined, linesnumbered, algo2e]{algorithm2e}
@@ -159,6 +164,12 @@
 \section*{Acknowledgement}
 
 \input{chapters/introduction/ack}
+
+\begin{appendices}
+\chapter{Appendix}
+\end{appendices}
+
+\input{chapters/appendix/experiments}
 
 \bibliographystyle{alpha}
 \bibliography{refs}

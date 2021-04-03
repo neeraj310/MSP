@@ -1,6 +1,6 @@
 import sys
 from typing import List
-
+import csv
 import numpy as np
 import pandas as pd
 from tabulate import tabulate
@@ -11,6 +11,7 @@ from src.indexing.models.nn.fcn import FCNModel
 from src.indexing.models.rmi.staged import StagedModel
 from src.indexing.models.trees.b_tree import BTreeModel
 from src.indexing.utilities.metrics import get_memory_size
+from src.indexing.utilities.results import write_results
 from src.queries.point import PointQuery
 import uuid
 
@@ -32,17 +33,14 @@ def evaluate(filename):
 
     lrm = PRModel(1, page_size)
     prm = PRModel(2, page_size)
-    sgm1 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 200, 2000], page_size)
-    sgm2 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 200, 4000], page_size)
-    sgm3 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 200, 6000], page_size)
-    sgm4 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 400, 2000], page_size)
-    sgm5 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 400, 4000], page_size)
-    sgm6 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 400, 6000], page_size)
-    sgm7 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 600, 2000], page_size)
-    sgm8 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 600, 4000], page_size)
-    sgm9 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 600, 6000], page_size)
-    
-    models = [sgm1, sgm2, sgm3, sgm4, sgm5, sgm6, sgm7, sgm8, sgm9]
+    sgm1 = StagedModel(['lr', 'lr', 'fcn'], [1, 200, 4000], page_size)
+    sgm2 = StagedModel(['lr', 'fcn', 'fcn'], [1, 200, 4000], page_size)
+    sgm3 = StagedModel(['fcn', 'fcn', 'lr'], [1, 200, 4000], page_size)
+    sgm4 = StagedModel(['fcn', 'lr', 'lr'], [1, 200, 4000], page_size)
+    sgm5 = StagedModel(['lr', 'fcn', 'lr'], [1, 200, 4000], page_size)
+    sgm6 = StagedModel(['fcn', 'lr', 'fcn'], [1, 200, 4000], page_size)
+    models = [sgm1, sgm2, sgm3, sgm4, sgm5, sgm6]
+    # models = [sgm1]
     ptq = PointQuery(models)
     build_times = ptq.build(data, ratio)
     mses, eval_times = ptq.evaluate(test_data)
@@ -51,11 +49,13 @@ def evaluate(filename):
         "Name", "Build Time (s)", "Evaluation Time (s)",
         "Evaluation Error (MSE)", "Memory Size (KB)"
     ]
+    
     for index, model in enumerate(models):
         result.append([
             model.name, build_times[index], eval_times[index], mses[index],
             get_memory_size(model)
         ])
+    write_results(experiment_id, result)
     print("Experiment ID: {}".format(experiment_id))
     print(tabulate(result, header))
     models_predict(data, models)
