@@ -16,24 +16,42 @@ import src.indexing.utilities.metrics as metrics
 
 class LisaBaseModel():
     def __init__(self, degree) -> None:
+        # PageCount : Number of pages into which keyspace is divided
         self.pageCount = degree
+        # denseArray = Array to store Page Addresses
         self.denseArray = np.zeros((degree, 3))
+        # nuofKeys = Total Nu of Keys in Database
         self.nuofKeys = 0
+        # keysPerPage = Nu of keys per page. 
         self.keysPerPage = 0
+        # Data Structure to hold keys-value pairs
         self.train_array = 0
         self.name = 'Lisa Baseline'
-        #print('In LisaBase Model pageCount = %d' %( self.pageCount ))
-
+        #Book Keeping code
+        self.page_size=1
+        
     '''
-        Calculate mapping function value for all elements in the array
-        We are using mapping function as key.x1+key.x2
-    '''
+        Apply mapping function(key.x1+key.x2) to keys database.
+        Parameters
+        ----------
+        self.train_array:
+             Data structure containing key-value pairs .
+         
+        Returns
+        -------
+        self.train_array:
+             Update the data structure with mapped value for each key 
+    '''  
 
     def mapping_function(self):
         for i in range(0, self.train_array.shape[0]):
             self.train_array[
                 i, 3] = self.train_array[i][0] + self.train_array[i][1]
 
+    '''
+        Plot mapped values against position indexes.
+       
+    '''  
     def plot_function(self):
         plt.figure(figsize=(20, 1000))
         plt.plot(self.train_array[:, 3], self.train_array[:, 2])
@@ -41,12 +59,20 @@ class LisaBaseModel():
         plt.ylabel('Position Index')
         plt.show()
         return
+    
+    '''
+        Initialize model parameters based on size of training data
+        
+    '''  
 
     def init_dense_array(self):
 
+        # nuofKeys will be equal to nu of data points in the training database.
         self.nuofKeys = self.train_array.shape[0]
         self.denseArray = np.zeros((self.pageCount, 3))
+        # Divide the keys space into equal length intervals. 
         self.keysPerPage = self.nuofKeys // self.pageCount
+        # Last page may have less number of keys than keysPerPage
         if (self.nuofKeys > self.keysPerPage * self.pageCount):
             self.keysPerPage = self.keysPerPage + 1
 
@@ -56,7 +82,8 @@ class LisaBaseModel():
                 'Invalid configuration, Nu of keys per page needs to be greater than page count'
             )
             return -1
-
+        # Store mapped value of first and last key of each page in denseArray
+        # These values will be used to decide the page for query point during query search
         for i in range(self.pageCount - 1):
             self.denseArray[i][0] = self.train_array[i * self.keysPerPage, 3]
             self.denseArray[i][1] = self.train_array[(
@@ -70,6 +97,21 @@ class LisaBaseModel():
         self.denseArray[i][1] = self.train_array[self.nuofKeys - 1, 3]
         self.denseArray[i][2] = i
         return 0
+    
+    '''
+       Perform binary search based on query point mapped value to find the page address
+       containign the key
+       Parameters
+        ----------
+        x : Integer 
+            Mapped value of the query point
+                
+        Returns
+        -------
+        mid: Integer
+           Returns the page address or -1
+        
+    '''  
 
     def search_page_index(self, x):
         low = 0
@@ -97,6 +139,20 @@ class LisaBaseModel():
         #print('\n returning page %d' %(-1))
         return -1
 
+    '''
+       Perform binary search for the query point in a page based on mapped value
+       Parameters
+        ----------
+        x : Integer 
+            Mapped value of the query point
+        page_lower : Interger
+            Offset of the page containg the mapped key        
+        Returns
+        -------
+        mid: Integer
+           Returns the index which matches the query point mapped value or -1 
+        
+    '''  
     def key_binary_search(self, x, page_lower):
         low = page_lower
         # Last page may contain less nu of keys than self.keysPerPage
@@ -127,6 +183,20 @@ class LisaBaseModel():
         # If we reach here, then the element was not present
         #print('\n returning page %d' %(-1))
         return -1
+    
+    '''
+       Predict the position of query point in the database
+       Parameters
+        ----------
+        Query_point: Tuple 
+            2 dimensional key value
+       
+        Returns
+        -------
+        self.train_array[j][2]: Integer
+           Returns the value at the query point
+        
+    '''  
 
     def predict(self, query_point):
         #print(query_point)
@@ -160,10 +230,24 @@ class LisaBaseModel():
                 '\n\n\n Point not found query point = %d %d, mapped value = %d'
                 % (query_point[0], query_point[1], mapped_val))
             return -1
+    
+    '''
+       Predict the position of query point based on mapped value instead of 
+       sequential search. 
+       Parameters
+        ----------
+        Query_point: Tuple 
+            2 dimensional key value
+       
+        Returns
+        -------
+        self.train_array[j][2]: Integer
+           Returns the value at the query point
+        
+    '''  
 
     def predict_opt(self, query_point):
-        #print(query_point)
-        #start_time = timer()
+        
         mapped_val = query_point[0] + query_point[1]
         i = self.search_page_index(mapped_val)
         if (i == -1):
@@ -173,15 +257,21 @@ class LisaBaseModel():
             return i
 
         else:
-            #print('Point found in page %d'%(i))
+           
             page_lower = i * self.keysPerPage
+            # Find key index based on mapped value
             key_index = self.key_binary_search(mapped_val, page_lower)
             if (key_index != -1):
+                # Multiple keys can have the same mapped value. 
+                
                 if ((query_point[0] == self.train_array[key_index][0]) and
                     (query_point[1] == self.train_array[key_index][1])):
+                    # Return value if index key value matches with query point
                     return (self.train_array[key_index][2])
                 else:
                     i = 0
+                    # Search in the neighbourhood of index returned by key_binary_search
+                    # as multiple keys can have the same mapped value 
                     while (mapped_val == self.train_array[key_index - i][3]):
                         if ((query_point[0]
                              == self.train_array[key_index - i][0])
@@ -208,42 +298,32 @@ class LisaBaseModel():
                     '\n\n\n Point not found query point = %d %d, mapped value = %d'
                     % (query_point[0], query_point[1], mapped_val))
                 return -1
-
-    def range_query(self):
-        '''
-        i1 =0
-i2 = 0
-query_l = (50255,50255)
-query_u = (2146566186, 2146566186)
-qmap_l = query_l[0]+query_l[1]
-qmap_u = query_u[0]+query_u[1]
-print('qmap_l = %d qmap_u = %d'%(qmap_l, qmap_u))
-for i in range(PageCount):
-     if ((qmap_l >= denseArray[i][0]) and (qmap_l <= denseArray[i][1])):
-            i1 = i
-            lowerBound = True
-            break
-if(lowerBound == False):
-    print('Query Rectangle Outside the range')
-else:
-    print('lowerbound is equal to %d'%(i))
-    i = i+1
-    while(i < PageCount):
-        if ((qmap_u < denseArray[i][0])):
-            print(denseArray[i][0])
-            break
-        i= i+1
-    i2 = i-1
-   
-        '''
-
+    
+     
+    '''
+       Train the lisa Baselinemodel: Training consists of:
+            a) Applying mapping function to keys values taking into account '
+               cell boundaries
+            b)Divining mapped values into equal length intervals. 
+    
+       Parameters
+        ----------
+        Train and test point np arrays
+       
+        Returns
+        -------
+        mse: Float
+           Mean square error for eval points
+           time : Time taken to build the lisaBaseline model. 
+        
+    '''  
     def train(self, x_train, y_train, x_test, y_test):
 
         print(x_train.shape)
         print(x_test.shape)
         print(y_train.shape)
         print(y_test.shape)
-        #print(y_train)
+   
 
         np.set_printoptions(threshold=1000)
         start_time = timer()
@@ -251,6 +331,7 @@ else:
                                       np.zeros((x_train.shape[0], 1),
                                                dtype=x_train.dtype)))
         self.train_array = self.train_array.astype('float64')
+        # Apply mapping function to 2 dimenional key values
         self.mapping_function()
 
         # Sort the input data array with mapped values
@@ -260,7 +341,7 @@ else:
         #Init dense array with sorted mapped values(Store first and last key per page)
         if (self.init_dense_array() == -1):
             return -1, timer() - start_time
-        #print(self.denseArray)
+      
         end_time = timer()
         print('/n build time %f' % (end_time - start_time))
         test_data_size = x_test.shape[0]
