@@ -98,10 +98,10 @@ class KDTreeModel():
                 elif c:
                     self.add_point(point, dim, kd_node[j], i)
 
-    def get_k_nearest(self,
+    def predict_knn_query(self,
                       point,
                       k,
-                      dim,
+                      dim=2,
                       kd_node='init',
                       return_distances=True,
                       i=0,
@@ -125,7 +125,7 @@ class KDTreeModel():
             for b in [dx < 0] + [dx >= 0] * (
                     dx * dx < -heap[0][0]
             ):  # dx*dx is r' and decide whether to check other branch or not.
-                self.get_k_nearest(point, k, dim, kd_node[b], return_distances,
+                self.predict_knn_query(point, k, dim, kd_node[b], return_distances,
                                    i, heap)
         if is_root:
             neighbors = sorted((-h[0], h[1]) for h in heap)

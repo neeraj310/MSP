@@ -52,7 +52,7 @@ class PointQuery(Query):
         return mses, build_times
 
     def evaluate_range_query(self, test_range_query):
-        data_size = test_range_query.shape[0]
+        data_size = np.array(test_range_query.shape[0])
         print("[Point Query] Evaluating {} datapoints".format(data_size))
         build_times = []
         mses = []
@@ -60,7 +60,7 @@ class PointQuery(Query):
             if (model.name == 'Lisa Baseline'):
                 continue
             start_time = timer()
-            y_pred = self.predict_range_query(idx, test_range_query.iloc[0, :-1],test_range_query.iloc[-1, :-1])
+            y_pred = np.array(self.predict_range_query(idx, test_range_query.iloc[0, :-1],test_range_query.iloc[-1, :-1]))
             end_time = timer()
             if (y_pred.shape[0] != data_size):
                 print( 'Nu of predicted entries in range query %d versus expected entries %d',y_pred.shape[0], data_size)
@@ -106,10 +106,10 @@ class PointQuery(Query):
         build_times = []
         mses = []
         for idx, model in enumerate(self.models):
-            if (model.name == 'Scipy KD-Tree') or (model.name == 'Lisa Baseline'):
-                continue
+            # if (model.name == 'Scipy KD-Tree') or (model.name == 'Lisa Baseline'):
+            #     continue
             start_time = timer()
-            y_pred = self.predict_knn_query(idx, query,k)
+            y_pred = np.array(self.predict_knn_query(idx, query,k))
             end_time = timer()
             if (y_pred.shape[0] != ytrue.shape[0]):
                 print( 'Nu of predicted entries in range query %d versus expected entries %d',y_pred.shape[0], ytrue.shape[0])
