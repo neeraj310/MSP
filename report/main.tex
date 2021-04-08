@@ -34,6 +34,12 @@
 \usepackage[toc,page]{appendix}
 \usepackage{color}   %May be necessary if you want to color links
 \usepackage{hyperref}
+\usepackage{pgfplots}
+\usepackage[labelfont=bf,format=plain,justification=raggedright,singlelinecheck=false]{caption}
+\usepackage{mathtools}
+
+\usetikzlibrary{matrix}
+\usepgfplotslibrary{groupplots}
 \hypersetup{
     colorlinks,
     citecolor=black,
@@ -41,14 +47,16 @@
     linkcolor=black,
     urlcolor=black
 }
-\usepackage[labelfont=bf,format=plain,justification=raggedright,singlelinecheck=false]{caption}
-\usepackage{mathtools}
-\newenvironment{mscexample}
-    {\begin{center}
-    \begin{mdframed}[backgroundcolor=lightgray]}
-{\end{mdframed}
-    \end{center}
-   }
+\newcounter{example}
+\newenvironment{mscexample}[1][]
+	{\refstepcounter{example}\par\medskip
+		\begin{mdframed}[backgroundcolor=lightgray]
+		\noindent \textbf{Example~\theexample. #1} \rmfamily
+		}{
+		\end{mdframed}
+	}
+
+{\medskip}
 
 %\algdef{SE}[DOWHILE]{Do}{doWhile}{\algorithmicdo}[1]{\algorithmicwhile\ #1}%
  

@@ -14,139 +14,155 @@ For one dimensional case, we manually generate two columns of the data:
 	\item Then we assign the keys into different pages according to a preset parameter $N_{page}$ for page size. Specifically, the first $N_{page}$ keys will be assigned into the first page, the second $N_{page}$ keys will be assigned into the second page and so on so forth. After the assignments, we set the second column $Y$ to be the page index of the corresponding $x$.
 \end{itemize}
 
-\textbf{Small Lognormal Distributed Data} We first generate $10,000$ data points where $X$ is from a lognormal distribution $\text{Lognormal}(0, 4)$. 
+%%TODO: change this to a graph with multiple distributions
 
-\begin{table}
-	\centering
-	\begin{tabular}{||c | c | c | c | c | c||}
-		\hline
-		Name& root model & 2nd model & No. of 2nd models & 3rd model & No. of 3rd models \\ [0.5ex] 
-		\hline
-		\hline
-		Setting 1  & FCN& FCN& 200 & FCN& 2000\\
-		\hline
-		Setting 2  & FCN& FCN& 200 & FCN& 4000\\
-		\hline
-		Setting 3  & FCN& FCN& 200 & FCN& 6000\\
-		\hline
-		Setting 4  & FCN& FCN& 400 & FCN& 2000\\ 
-		\hline
-		Setting 5  & FCN& FCN& 400 & FCN& 4000\\
-		\hline
-		Setting 6  & FCN& FCN& 400 & FCN& 6000\\
-		\hline 
-		Setting 7  & FCN& FCN& 600 & FCN& 2000\\
-		\hline 
-		Setting 8  & FCN& FCN& 600 & FCN& 4000\\
-		\hline 
-		Setting 9  & FCN& FCN& 600 & FCN& 6000\\
-		\hline
-		Setting 10 & LR & LR& 200 & LR& 2000\\
-		\hline
-		Setting 11 & LR & LR& 200 & LR& 4000\\
-		\hline
-		Setting 12 & LR & LR& 200 & LR& 6000\\
-		\hline
-		Setting 13 & LR & LR& 400 & LR& 2000\\ 
-		\hline
-		Setting 14 & LR & LR& 400 & LR& 4000\\ 
-		\hline
-		Setting 15 & LR & LR& 600 & LR& 2000\\ 
-		\hline
-		Setting 16 & LR & LR& 600 & LR& 4000\\ 
-		\hline
-		Setting 17 & LR & LR& 600 & LR& 6000\\ 
-		\hline
-		Setting 18 & LR & LR& 400 & LR& 6000\\ 
-		\hline
-		Setting 19 & LR & FCN& 200 & FCN& 4000\\
-		\hline
-		Setting 20 & FCN& FCN& 200 & LR& 4000\\
-		\hline 
-		Setting 21 & FCN& LR& 200 & LR& 4000\\
-		\hline 
-		Setting 22 & LR & FCN& 200 & LR& 4000\\
-		\hline 
-		Setting 23 & FCN& LR& 200 & LR& 4000\\
-		\hline
-		Setting 24 & FCN& LR& 200 & LR& 4000\\
-		\hline
-		\hline
-	\end{tabular}
-	\label{small_lognormal_settings}
-	\caption{Structures of recursive models for small lognormal data}
-\end{table}
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=0.6\textwidth]{graphs/evaluation/lognormal_distribution_x_y.pdf}
+    \caption{The x-y graph where x is randomly sampled from a lognormal distribution}
+    \label{fig:lognormal_x_y}
+\end{figure}
 
-\begin{center}
-	\begin{tikzpicture}
-		\begin{axis}[title  = Mean Square Error of Different Recursive Models,
-				xbar,
-				y axis line style = { opacity = 0 },
-				axis x line= none,
-				ytick             = data,
-				tickwidth = 0pt,
-				enlarge y limits  = 0.01,
-				enlarge x limits  = 0.05,
-				bar width=2.5mm,
-				height=20cm,
-				width=10cm,
-				symbolic y coords = {Setting 24, Setting 23, Setting 22, Setting 21, Setting 20, Setting 19, Setting 18, Setting 17, Setting 16, Setting 15, Setting 14, Setting 13, Setting 12, Setting 11, Setting 10, Setting 9, Setting 8, Setting 7, Setting 6, Setting 5, Setting 4, Setting 3, Setting 2, Setting 1},
-				nodes near coords,
-			]
-			\addplot coordinates { 
-			    (653.8536667,Setting 1)
-				(1.134166667,Setting 2)
-				(196.9116667,Setting 3)
-				(113246.196,Setting 4) 
-				(113652.3212,Setting 5)
-				(51.00183333,Setting 6)
-				(113246.2647,Setting 7)
-				(18.99766667,Setting 8)
-				(142041.6877,Setting 9)
-				(8246.633985,Setting 10) 
-				(7326.238372,Setting 11)
-				(6276.09111,Setting 12)
-				(120427.9247,Setting 13)
-				(6783.428749,Setting 14)
-				(5998.720313,Setting 15) 
-				(121932.5051,Setting  16)
-				(8434.091306,Setting 17)
-				(35342.6365,Setting 18)
-				(14478.05283,Setting 19)
-				(13656.1507,Setting 20) 
-				(12191.8397,Setting 21)
-				(13403.64758,Setting 22)
-				(12567.93278,Setting 23)
-				(11572.93555,Setting 24)};
-			\addplot coordinates {
-				(653.8536667,Setting 1)
-				(1.134166667,Setting 2)
-				(196.9116667,Setting 3)
-				(113246.196,Setting 4) 
-				(113652.3212,Setting 5)
-				(51.00183333,Setting 6)
-				(113246.2647,Setting 7)
-				(18.99766667,Setting 8)
-				(142041.6877,Setting 9)
-				(8246.633985,Setting 10) 
-				(7326.238372,Setting 11)
-				(6276.09111,Setting 12)
-				(120427.9247,Setting 13)
-				(6783.428749,Setting 14)
-				(5998.720313,Setting 15) 
-				(121932.5051,Setting  16)
-				(8434.091306,Setting 17)
-				(35342.6365,Setting 18)
-				(14478.05283,Setting 19)
-				(13656.1507,Setting 20) 
-				(12191.8397,Setting 21)
-				(13403.64758,Setting 22)
-				(12567.93278,Setting 23)
-				(11572.93555,Setting 24)};
-			\legend{MSE, Memory Usage (KB)}
-		\end{axis}
-	\end{tikzpicture}
-\end{center}
+\textbf{Small Lognormal Distributed Data} We first generate $10,000$ data points where $X$ is from a lognormal distribution $\text{Lognormal}(0, 4)$. In the Fig \ref{fig:lognormal_x_y}, we illustrate the $x-y$ relations where $X$ is randomly sampled from a lognormal distribution.
+
+
+
+We use three groups to find the best recursive model for lognormal data.
+\begin{itemize}
+	\item All models are fully connected neural networks. The number of second-level models are $200, 400,$ and $600$ respectively. The number of third-level models are $2000, 4000$ and $6000$ for each number of second-level models.
+	\item All models are linear regression models. The number of second-level models are $200, 400,$ and $600$ respectively. The number of third-level models are $2000, 4000$ and $6000$ for each number of second-level models.
+	\item Models are combinations of fully connected neural networks and linear regression models. The numbers of second-level and third-level models are determined by the best settings in previous two group.
+\end{itemize}
+
+\begin{tikzpicture}[font=\small]
+	\pgfplotsset{%
+		width=0.55\textwidth,
+		height=0.60\textwidth,
+		minor grid style = {dotted},
+	}
+	\tikzstyle{every node}=[font=\footnotesize]
+	\begin{groupplot}[group style={
+                  group name=firstplot,
+                  group size= 2 by 2}]
+    
+    \nextgroupplot[title=Group 1 (Fully Connected Network),
+			xbar,
+			y axis line style = { opacity = 0 },
+			axis x line= none,
+			ytick             = data,
+			tickwidth = 0pt,
+			enlarge y limits  = 0.1,
+			enlarge x limits  = 0.5,
+			symbolic y coords = {600+6000, 600+4000, 600+2000, 400+6000, 400+4000, 400+2000, 200+6000, 200+4000, 200+2000},
+			nodes near coords]
+    \addplot coordinates { 
+		    (653.8536667,200+2000)
+			(1.134166667,200+4000)
+			(196.9116667,200+6000)
+			(113246.196,400+2000) 
+			(113652.3212,400+4000)
+			(51.00183333,400+6000)
+			(113246.2647,600+2000)
+			(18.99766667,600+4000)
+			(142041.6877,600+6000)};
+	\label{plots:mse}
+	
+    \addplot coordinates { 
+		    (7487.059896,200+2000)
+			(24440.75523,200+4000)
+			(13034.22656,200+6000)
+			(9208.992183,400+2000)
+			(12695.55731,400+4000)
+			(15434.78905,400+6000)
+			(9745.335942,600+2000)
+			(20434.90626,600+4000)
+			(8118.023442,600+6000)};
+	\label{plots:memory}
+	
+    \nextgroupplot[title=Group 2 (Linear Regression),
+			xbar,
+			y axis line style = { opacity = 0 },
+			axis x line= none,
+			ytick=\empty,
+			tickwidth = 0pt,
+			enlarge y limits  = 0.1,
+			enlarge x limits  = 0.5,
+			symbolic y coords = {600+6000, 600+4000, 600+2000, 400+6000, 400+4000, 400+2000, 200+6000, 200+4000, 200+2000},
+			nodes near coords]
+     \addplot coordinates { 
+		    (8246.633985,200+2000)
+			(7326.238372,200+4000)
+			(6276.09111,200+6000)
+			(120427.9247,400+2000)
+			(6783.428749,400+4000)
+			(5998.720313,400+6000)
+			(121932.5051,600+2000)
+			(8434.091306,600+4000)
+			(35342.6365,600+6000)};
+     \addplot coordinates { 
+		    (4348.463542,200+2000)
+			(18769.81252,200+4000)
+			(13297.72135,200+6000)
+			(5143.059892,400+2000)
+			(12864.80731,400+4000)
+			(8041.416654,400+6000)
+			(4986.927088,600+2000)
+			(13843.60678,600+4000)
+			(8366.570317,600+6000)};
+	\coordinate (top) at (rel axis cs:0,1);
+	
+    \nextgroupplot[title=Group 3 (Hybrid),
+			xbar,
+			y axis line style = { opacity = 0 },
+			axis x line= none,
+			ytick             = data,
+			tickwidth = 0pt,
+			enlarge y limits  = 0.1,
+			enlarge x limits  = 0.5,
+			symbolic y coords = {FCN/LR/FCN, LR/FCN/LR, FCN/LR/LR, FCN/FCN/LR, LR/FCN/FCN, LR/LR/FCN},
+			nodes near coords]
+    \addplot coordinates { 
+		    (14478.05283,LR/LR/FCN)
+			(13656.1507,LR/FCN/FCN)
+			(12191.8397,FCN/FCN/LR)
+			(13403.64758,FCN/LR/LR) 
+			(12567.93278,LR/FCN/LR)
+			(11572.93555,FCN/LR/FCN)};
+    \addplot coordinates { 
+		    (220.4973958,LR/LR/FCN)
+			(9318.697933,LR/FCN/FCN)
+			(602.2005208,FCN/FCN/LR)
+			(5229.914058,FCN/LR/LR) 
+			(6588.58335,LR/FCN/LR)
+			(8292.059883,FCN/LR/FCN)};
+	\coordinate (bot) at (rel axis cs:1,0);
+	
+    \end{groupplot}
+
+	\path (top|-current bounding box.south)--
+	  coordinate(legendpos)
+	  (bot|-current bounding box.east);
+	\matrix[
+		matrix of nodes,
+		anchor=south,
+		draw,
+		inner sep=0.2em,
+		draw
+		]at([xshift=20ex]legendpos)
+		{
+		\ref{plots:mse}& Mean Square Error \\
+		\ref{plots:memory}& Memory Usage (KB)\\
+	};
+\end{tikzpicture}
+
+From the experiment results, we found that the second setting in group 1 (1 FCN model as root, 200 FCN models as second level models and 4000 FCN models as third level models) is the best regarding the mean square error. We also have the following findings in this searching process.
+
+\begin{itemize}
+	\item Generally, the average error in group $1$, where all models are fully connected neural networks is less than the error in group $2$. Fully connected neural networks have a potential to be more accurate, i.e. it could achieve a small error if we tuned the models parameters properly.
+	\item Tuning a model is tedious and can be costly. There are lots of hyper-parameters to choose from, such as the number of models in each level, types of models in each level, number of levels, and the internal hyper-parameters in each model. Using grid search, as we did in this experiment can be costly and time-consuming.
+\end{itemize}
+
+
 
 \textbf{Various Distributions and Sizes} After the search process for a recursive model, we then conduct experiments on several different distributions and sizes datasets. During this process, we use the following settings:
 

@@ -345,7 +345,7 @@ where $p_i^{(l)}=-1_{x_l\geq \beta_i}$. Then
 
 $$
 \boldsymbol{KG}=\begin{bmatrix}
- -\bar{\alpha} & 0 & \cdots & 0 \\
+ -\bar{\alpha} & -\bar{\alpha} & \cdots & -\bar{\alpha} \\
  0 & \alpha_0p_0^{(1)} & \cdots  & 0 \\
  \vdots & \vdots & \ddots & \vdots \\
  0 & 0 & \cdots & \alpha_\sigma p_\sigma^{(V)}
@@ -364,12 +364,14 @@ As $g=\nabla_{\boldsymbol{\beta}} L$, $-g$ specifies the steepest descent direct
 The geometric interpretation of Newton's method is that at each iteration, it amounts to the fitting of a paraboloid to the surface of $L(\boldsymbol{\alpha},\boldsymbol{\beta})$  at the trial value $\beta_{k}$, having the same slopes and curvature as the surface at that point, and then proceeding to the maximum or minimum of that paraboloid. 
 Hessian matrix, Y in our case is positive semidefinite and hence can be inverted. 
 \begin{equation}
-	Y=\frac{\partial g}{\partial \boldsymbol{\beta}}=2\boldsymbol{KGG}^T \boldsymbol{K}^T= 2 \boldsymbol{(KG)} (\boldsymbol{G}^T \boldsymbol{K}^T)=2 (\boldsymbol{G}^T \boldsymbol{K}^T)^T (\boldsymbol{G}^T \boldsymbol{K}^T)
+	Y=\frac{\partial g}{\partial \boldsymbol{\beta}}=2\boldsymbol{KGG}^T \boldsymbol{K}^T= 2 \boldsymbol{(KG)} (\boldsymbol{G}^T \boldsymbol{K}^T)=2 (\boldsymbol{G}^T \boldsymbol{K}^T)^T (\boldsymbol{G}^T \boldsymbol{K}^T)= 2\boldsymbol{({M}^TM)}
 \end{equation}
 
 \textcolor{red}{Show how these are calculated}
+Y is a full rank matrix as columns of Y are linearly independent (all keys are independent of each other). To prove that Y is positive definite, we need to show that ${x}^TYx > 0,  \forall x \neq 0$. \\ 
+${x}^TYx = {x}^T{M}^TMx = {(Mx)}^T(Mx) = \| Mx\|_{2}^{2} \geq 0,\forall x \neq 0 $
 
-\textcolor{red}{How to show that Y is positive definite and not just positive semidefnite.}  
+%\textcolor{red}{How to show that Y is positive definite and not just positive semidefnite.}  
 %TODO: Show that Y is positive definite and explain why it matters
 
 In the beginning, we set $\beta^{(0)}=x_0$ and $\beta_i^{(0)}=x_{\floor{i\times \frac{V}{\Psi}}}, \forall i\in[1,\sigma]$. Then we can obtain $\boldsymbol{\alpha}$ by solving Eq. (\ref{alpha_form}). Then at each step, we perform a grid search to find the step $lr^{(k)}$ such that the loss $L$ is minimal. Then at the next iteration, we increase $k$ by one and set 
@@ -421,6 +423,7 @@ As described in Algorithm \ref{Shard_Training_Lisa}, we perform  following opera
             \texttt{$\beta^{k+1} = \beta^{k}+ lr^{(k)}s^{k}$ } \\
            
            
+           
         }
     }
     
@@ -428,29 +431,40 @@ As described in Algorithm \ref{Shard_Training_Lisa}, we perform  following opera
     \label{Shard_Training_Lisa}
 \end{algorithm}
 
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{graphs/range_query_lisa.png}
+    \caption{Range Query Search in Lisa\\
+    1)Find the cells that overlap with query rectangle qr.\\
+    2)Decompose qr into the unions of smaller query rectangles, each of which intersect one only one cell \\
+    3)Find shards corresponding to lower and upper coordinates for each query rectangle, and perform a sequential search. }
+    \label{fig:Range_Query_Lisa}
+\end{figure*}
+\subsubsection{Local Models for Shards}
+Local models are not relevant to our implementation as all the data is contained in the memory.  
+
 \subsubsection{Range Query}
-To search a range query, qr = $[l_{0},u_{0})\times[l_{1},u_{1})$, we first get the cells that overlap with qr and decompose qr
+To search a range query represented by query rectangle qr = $[l_{0},u_{0})\times[l_{1},u_{1})$, we first get the cells that overlap with qr and decompose qr
 into the union of smaller query rectangles each of which
-intersects one and only one cell. Suppose qr =
-–Q0
-j=0 qr 0j
-with qr 0j = [l 0j0 ,u0j0) ⇥ · · · ⇥ [l 0jd−1 ,u0jd−1) ✓ Cij .
+intersects one and only one cell, as shown in the Fig. \ref{fig:Range_Query_Lisa}. Suppose qr = $\bigcup\limits_{j=0}^{Q^{'}}qr_{j}^{'}$ with $qr_{j}^{'}$=$[l_{j_0}^{'},u_{j_0}^{'})\times[l_{j_1}^{'},u_{j_1}^{'}) \subseteq C_{i}$, $qr_{j}^{'}$ represents $j^{th}$ subset of range query rectangle spanning cell $C_{i}$. This is followed by calculation of mapped values of 
+$qr_{j}$'s vertices. We use $m_{l}^{(0)}, m_{u}^{(0)},\cdots,m_{l}^{(Q)}, m_{u}^{(Q)}$ to denote $\mathcal{M}((l_{0_0},l_{0_1} )), \mathcal{M}((u_{0_0},u_{0_1} )), \cdots, \mathcal{M}((l_{Q_0},l_{Q_1} )), \mathcal{M}((u_{Q_0},u_{Q_1} ))$ respectively. After creating corresponding shard values,  $\mathcal{SP}(m_{l}^{0}), \mathcal{SP}(m_{u}^{0}), \cdot, \mathcal{SP}(m_{l}^{Q}), \mathcal{SP}(m_{u}^{Q})$, it is easy to select the keys that overlap with qr using sequential scan.
 
 
 
+\subsubsection{KNN Query}
+We do not know the analytical representation of shards, as we use machine learning model $ \mathcal{SP}$ to generate shards. Thus,it is difficult to apply traditional KNN query pruning strategies applicable for KD-Trees, to LISA model. 
 
+Consider a query point $q_{knn}=x=(x_{0},x_{1})$, let $x^{'} \in V$ be the Kth nearest key to x in database at a distance value $\delta = \| x^{'}-x\|_{2} $. Lets define $ \mathcal{Q}(x,\delta) \triangleq [x_{0}-\delta, x_{0}+\delta) \times[x_{1}-\delta, x_{1}+\delta)$ and $\mathcal{B}(x, \delta)  \triangleq \{p \in V \mid \| x-p\|_{2} \leq \delta \} $.We can create a query rectangle $qr =  \mathcal{Q}(x, \delta + \epsilon)$ where $\epsilon \rightarrow 0$. As shown in Fig. \ref{fig:KNN_Query_Lisa}, K nearest keys to x are all in $\mathcal{B}(x, \delta)$ and thus in qr. KNN query can be solved using the range query if we can estimate an appropriate distance bound $\delta$ for every query point.
 
-
-
-
-
-
-
-
-
-
-
-
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=0.7\textwidth]{graphs/KNN_Query_Lisa.png}
+    \caption{KNN Query Implementation in Lisa(K=3)\\
+    1)$q_{knn}$ represents the query point, $ \mathcal{Q}(x,\delta) \triangleq [x_{0}-\delta, x_{0}+\delta) \times[x_{1}-\delta, x_{1}+\delta)$, represents query rectangle and $ \mathcal{B}(x, \delta)$ represents the key space at distance $\delta$ containing K nearest keys.\\
+    2)KNN query can be solved by range query if we can estimate an appropriate distance bound $\delta$ for every query point\\
+    }
+    \label{fig:KNN_Query_Lisa}
+\end{figure*}
 
 
 
