@@ -17,7 +17,7 @@ class KDTreeModel():
         super(KDTreeModel, self).__init__()
         self.name = 'KD-Tree'
         self.kdtree = None
-        self.page_size = 10
+        self.page_size = 1
 
     def train(self, x_train, y_train, x_test, y_test, dim=2):
 
@@ -37,7 +37,13 @@ class KDTreeModel():
 
         return mse, build_time
     
-    def range_points(self,area,kd_node='init',i=0,out=None):
+    def predict_range_query(self,query_l, query_u,kd_node='init',i=0,out=None):
+        xmin = query_l[0]
+        xmax = query_u[0]
+        ymin = query_l[1]
+        ymax = query_u[1]
+        self.query_l = query_l
+        self.query_u = query_u
 
         if out==None:
             out = []
@@ -46,19 +52,19 @@ class KDTreeModel():
             kd_node = self.kdtree
 
         if kd_node is not None:
-            xmin,ymin,xmax,ymax=area
-
+            # xmin,ymin,xmax,ymax=area
+            area = xmin,ymin,xmax,ymax
             # acceptance of point within range
             if kd_node[2][0]>=xmin and kd_node[2][0]<=xmax and kd_node[2][1]>=ymin and kd_node[2][1]<=ymax:
-                out.append(kd_node[2])
+                out.append(kd_node[2][2])
 
             #for traversing left
             if (kd_node[2][i]>= xmin and i==0) or (kd_node[2][i]>= ymin and i==1):
-                self.range_points(area,kd_node[0],(i+1)%2,out)
+                self.predict_range_query(self.query_l, self.query_u,kd_node[0],(i+1)%2,out)
 
             #for traversing right
             if (kd_node[2][i]<= xmax and i==0) or (kd_node[2][i]<= ymax and i==1):
-                self.range_points(area,kd_node[1],(i+1)%2,out)
+                self.predict_range_query(self.query_l, self.query_u,kd_node[1],(i+1)%2,out)
         
         return out
 
@@ -98,7 +104,8 @@ class KDTreeModel():
                 elif c:
                     self.add_point(point, dim, kd_node[j], i)
 
-    def predict_knn_query(self,
+
+    def predict_knn_query_find(self,
                       point,
                       k,
                       dim=2,
@@ -125,11 +132,27 @@ class KDTreeModel():
             for b in [dx < 0] + [dx >= 0] * (
                     dx * dx < -heap[0][0]
             ):  # dx*dx is r' and decide whether to check other branch or not.
-                self.predict_knn_query(point, k, dim, kd_node[b], return_distances,
+                self.predict_knn_query_find(point, k, dim, kd_node[b], return_distances,
                                    i, heap)
         if is_root:
             neighbors = sorted((-h[0], h[1]) for h in heap)
             return neighbors if return_distances else [n[1] for n in neighbors]
+
+    def predict_knn_query(self,
+                      point,
+                      k,
+                      dim=2,
+                      kd_node='init',
+                      return_distances=True,
+                      i=0,
+                      heap=None):
+
+        y_pred = self.predict_knn_query_find(point,k,dim,kd_node,return_distances,i,heap)
+        y_pred = np.array(y_pred)
+        yhat=np.vstack(y_pred[:,1])[:,2]
+        return yhat
+                      
+
 
     def get_nearest(self,
                     point,
@@ -165,15 +188,18 @@ class KDTreeModel():
     def dist_sq_dim(self, a, b, dim):
         return self.dist_sq(a, b, dim)
 
+    def get_storage(self):
 
-#Below is the code to test the ground truth using sklearn KDtree
-def sklearn_kdtree(points, dim):
-    points = np.array(points)
-    tree = KDTree(points, leaf_size=2)
-    s = pickle.dumps(tree)
-    pickle.loads(s)
-    dist, _ = tree.query(test, k=3)
-    return dist**2
+        return self.kdtree
+
+# #Below is the code to test the ground truth using sklearn KDtree
+# def sklearn_kdtree(points, dim):
+#     points = np.array(points)
+#     tree = KDTree(points, leaf_size=2)
+#     s = pickle.dumps(tree)
+#     pickle.loads(s)
+#     dist, _ = tree.query(test, k=3)
+#     return dist**2
 
 
 # def sanity_check():

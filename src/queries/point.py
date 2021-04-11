@@ -22,8 +22,12 @@ class PointQuery(Query):
         return self.models[model_idx].predict(key)
     
     def predict_range_query(self, model_idx: int, query_l, query_u):
+
         print('Get keys in range (%d, %d), (%d, %d)' %(query_l[0], query_l[1], query_u[0], query_u[1] ))
         return self.models[model_idx].predict_range_query(query_l, query_u)
+
+    def get_storage(self, model_idx: int):
+        return self.models[model_idx].get_storage()
     
     def predict_knn_query(self, model_idx: int, query,k):
        
@@ -34,6 +38,7 @@ class PointQuery(Query):
         print("[Point Query] Evaluating {} datapoints".format(data_size))
         build_times = []
         mses = []
+        storage=[]
         for idx, model in enumerate(self.models):
             ys = []
             start_time = timer()
@@ -45,31 +50,37 @@ class PointQuery(Query):
             yhat = np.array(ys).reshape(-1, 1)
             ytrue = np.array(test_data.iloc[:, -1:])
             mse = metrics.mean_squared_error(yhat, ytrue)
+            obj = self.get_storage(idx)
+            storage.append(metrics.get_memory_size(obj))
             mses.append(mse)
             print("{} model tested in {:.4f} seconds with mse {:.4f}".format(
                 model.name, end_time - start_time, mse))
             build_times.append(end_time - start_time)
-        return mses, build_times
+        return mses, build_times, storage
 
     def evaluate_range_query(self, test_range_query):
         data_size = np.array(test_range_query.shape[0])
         print("[Point Query] Evaluating {} datapoints".format(data_size))
         build_times = []
         mses = []
+        storage=[]
         for idx, model in enumerate(self.models):
-            if (model.name == 'Lisa Baseline'):
+            if (model.name == 'Lisa Baseline'  or model.name == 'Scipy KD-Tree'):
                 continue
             start_time = timer()
             y_pred = np.array(self.predict_range_query(idx, test_range_query.iloc[0, :-1],test_range_query.iloc[-1, :-1]))
             end_time = timer()
+            obj = self.get_storage(idx)
+            storage.append(metrics.get_memory_size(obj))
             if (y_pred.shape[0] != data_size):
                 print( 'Nu of predicted entries in range query %d versus expected entries %d',y_pred.shape[0], data_size)
                 mse = -1
                 exit(0)
             else:
-                yhat = np.array(y_pred).reshape(-1, 1)
+                # yhat = np.array(y_pred).reshape(-1, 1)
                 ytrue =np.array(test_range_query.iloc[:, -1:])
-                mse = metrics.mean_squared_error(yhat, ytrue)
+                mse = metrics.mean_squared_error(np.sort(y_pred), np.sort(ytrue))
+
                 '''
                 if(mse != 0):
                     print(yhat)
@@ -85,7 +96,7 @@ class PointQuery(Query):
                     model.name, end_time - start_time, mse))
             build_times.append(end_time - start_time)
             
-        return mses, build_times
+        return mses, build_times, storage
     
     def evaluate_scipy_kdtree_knn_query(self, query, k):
         
@@ -105,18 +116,23 @@ class PointQuery(Query):
         print("[Point Query %d %d]  Evaluating %d neighbours" %(query[0], query[1], k))
         build_times = []
         mses = []
+        storage=[]
         for idx, model in enumerate(self.models):
             # if (model.name == 'Scipy KD-Tree') or (model.name == 'Lisa Baseline'):
             #     continue
             start_time = timer()
-            y_pred = np.array(self.predict_knn_query(idx, query,k))
+            y_pred = np.array(self.predict_knn_query(idx, query, k))
             end_time = timer()
-            if (y_pred.shape[0] != ytrue.shape[0]):
-                print( 'Nu of predicted entries in range query %d versus expected entries %d',y_pred.shape[0], ytrue.shape[0])
+            ytrue=np.squeeze(ytrue)
+            obj = self.get_storage(idx)
+            storage.append(metrics.get_memory_size(obj))
+            if (y_pred.shape[0] != np.squeeze(ytrue).shape[0]):
+                print(f'Num of predicted entries in knn query {np.squeeze(y_pred).shape[0]} versus expected {ytrue.shape[0]} entries')
                 mse = -1
                 exit(0)
             else:
                 yhat = np.array(y_pred).reshape(-1, 1)
+                # yhat=np.vstack(y_pred[:,1])[:,2]
                 mse = metrics.mean_squared_error(yhat, ytrue)
                 
                 if(mse != 0):
@@ -133,7 +149,7 @@ class PointQuery(Query):
                     model.name, end_time - start_time, mse))
             build_times.append(end_time - start_time)
             
-        return mses, build_times
+        return mses, build_times, storage
        
             
       

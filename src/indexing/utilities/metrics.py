@@ -14,13 +14,13 @@ def mean_squared_error(yhat, y):
     # return (np.square(yhat.reshape(-1) - y.reshape(-1))).mean()
     yhat_squeezed = np.squeeze(yhat)
     yhat_list = []
-    if yhat_squeezed.shape[0] != y.shape[0]:
+    if yhat.shape[0] != np.squeeze(y).shape[0]:
 
         for i in range(1,yhat_squeezed.shape[0],2):
             yhat_list.append(yhat_squeezed[i][2])
-        result = np.square(np.array(yhat_list) - y).mean()
+        result = np.square(np.array(yhat_list) - np.squeeze(y)).mean()
     else:
-        result = np.square(yhat_squeezed - y).mean()
+        result = np.square(yhat_squeezed - np.squeeze(y)).mean()
 
     return result
 
