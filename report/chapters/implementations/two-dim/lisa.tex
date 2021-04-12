@@ -156,7 +156,7 @@ structures such as the addresses of pages contained by $S_{i}$ .
 \end{enumerate}
 
 \subsection{Design and Implementation Details}
-\subsubsection{Grid Cells Generation} 
+\subsubsection{Grid Cells Generation}
 The first task in Lisa implementation is to partition the $2$ dimensional key space into a series of grid cells based on the data distribution along a sequence of axes. Then we number the cells along these axes as well. The principal idea behind this partition strategy is to divide the key space into cell boundaries and apply a mapping function to create monotonically increasing mapping values at the cell boundaries. 
 
 %TODO: change the principal idea behind.
@@ -180,8 +180,6 @@ We need to sort the key space along the sequence of axis before we partition the
     2) : Sort each vertical column keys on y dimension and divide into 3 horizontal columns each containing 3 keys}
     \label{fig:Cell_Parttion}
 \end{figure*}
-
-
 
 \begin{algorithm}[H]
     \SetAlgoLined
@@ -241,7 +239,9 @@ As shown in figure \ref{fig:Lebesgue_Measure}, in $2$-dimensional case, $\frac {
 After the mapping function, we get a dense array of mapped values. Then we partition them evenly into $U$ parts and let $\boldsymbol{M}_p=[m_1,\cdots, m_U]$. We train linear regression functions $\mathcal{F}_i$ on each interval and suppose $V+1$ is the number of mapped values that each $\mathcal{F}_i$ needs to process and $\Psi$ is the average number of keys falling in a shard. With these definitions, we know that each $\mathcal{F}_i$ generates $D=\ceil{\frac{V+1}{\Psi}}$ shards.
 
 \begin{mscexample}
-	For example, assume we have a dense array of mapped values as $[1,1.2,2.2,3,3.4,4]$, and we want to partition it into 2 parts, then we have $\boldsymbol{M}_p=[3]$ and $V+1=3$. In this case we will train $2$ linear regression functions. Suppose that the average number of keys in a shard is $\Psi=2$, then each $\mathcal{F}_i$ generates $D=\ceil{\frac{V+1}{\Psi}}=\ceil{\frac{3}{2}}=2$ shards.
+	For example, assume we have a dense array of mapped values as $$[1,1.2,2.2,3,3.4,4]$$ 
+	
+	We want to partition it into 2 parts, so we have $\boldsymbol{M}_p=[3]$ and $V+1=3$. In this case we will train $2$ linear regression functions. Suppose that the average number of keys in a shard is $\Psi=2$, then each $\mathcal{F}_i$ generates $D=\ceil{\frac{V+1}{\Psi}}=\ceil{\frac{3}{2}}=2$ shards.
 \end{mscexample}
 
 
@@ -421,9 +421,6 @@ As described in Algorithm \ref{Shard_Training_Lisa}, we perform  following opera
             \texttt{Find update step $lr^{(k)}$ such that    L$(\alpha^\star(\beta^{k}+ lr^{(k)}s^{k}), \beta^{k}+ lr^{(k)}s^{k}) =\text{min}\{L(\alpha^\star(\beta^{k}+ lr^{(k)}s^{k}), \beta^{k}+ lr^{(k)}s^{k})\} $} \\
             
             \texttt{$\beta^{k+1} = \beta^{k}+ lr^{(k)}s^{k}$ } \\
-           
-           
-           
         }
     }
     
@@ -431,25 +428,8 @@ As described in Algorithm \ref{Shard_Training_Lisa}, we perform  following opera
     \label{Shard_Training_Lisa}
 \end{algorithm}
 
-\begin{figure*}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{graphs/range_query_lisa.png}
-    \caption{Range Query Search in Lisa\\
-    1)Find the cells that overlap with query rectangle qr.\\
-    2)Decompose qr into the unions of smaller query rectangles, each of which intersect one only one cell \\
-    3)Find shards corresponding to lower and upper coordinates for each query rectangle, and perform a sequential search. }
-    \label{fig:Range_Query_Lisa}
-\end{figure*}
 \subsubsection{Local Models for Shards}
 Local models are not relevant to our implementation as all the data is contained in the memory.  
-
-\subsubsection{Range Query}
-To search a range query represented by query rectangle qr = $[l_{0},u_{0})\times[l_{1},u_{1})$, we first get the cells that overlap with qr and decompose qr
-into the union of smaller query rectangles each of which
-intersects one and only one cell, as shown in the Fig. \ref{fig:Range_Query_Lisa}. Suppose qr = $\bigcup\limits_{j=0}^{Q^{'}}qr_{j}^{'}$ with $qr_{j}^{'}$=$[l_{j_0}^{'},u_{j_0}^{'})\times[l_{j_1}^{'},u_{j_1}^{'}) \subseteq C_{i}$, $qr_{j}^{'}$ represents $j^{th}$ subset of range query rectangle spanning cell $C_{i}$. This is followed by calculation of mapped values of 
-$qr_{j}$'s vertices. We use $m_{l}^{(0)}, m_{u}^{(0)},\cdots,m_{l}^{(Q)}, m_{u}^{(Q)}$ to denote $\mathcal{M}((l_{0_0},l_{0_1} )), \mathcal{M}((u_{0_0},u_{0_1} )), \cdots, \mathcal{M}((l_{Q_0},l_{Q_1} )), \mathcal{M}((u_{Q_0},u_{Q_1} ))$ respectively. After creating corresponding shard values,  $\mathcal{SP}(m_{l}^{0}), \mathcal{SP}(m_{u}^{0}), \cdot, \mathcal{SP}(m_{l}^{Q}), \mathcal{SP}(m_{u}^{Q})$, it is easy to select the keys that overlap with qr using sequential scan.
-
-
 
 \subsubsection{KNN Query}
 We do not know the analytical representation of shards, as we use machine learning model $ \mathcal{SP}$ to generate shards. Thus,it is difficult to apply traditional KNN query pruning strategies applicable for KD-Trees, to LISA model. 

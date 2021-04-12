@@ -1,55 +1,9 @@
-B-Tree and its variants have been widely used as indexes in
-databases. For example, the PostgreSQL uses B-Tree as its index. B-Trees
-can be considered as a natural generalisation of binary search tree. In
-binary search tree, there is only one key and two possible children in
-the internal node. However, an internal node of B-Tree can contain
-several keys and children. The keys in a node serve as dividing points
-and separate the range of keys. With this structure, we make a
-multi-way decision based on comparisons with the keys stored at the node
-$x$. The image below illustrates a simple B-Tree.
+B-Tree and its variants have been widely used as indexes in databases. B-Trees can be considered as a generalisation of binary search tree: In binary search tree, there is only one key and two children at most in the internal node. B-Tree extends the nodes such that each node can contain several keys and children. The keys in a node serve as dividing points and separate the range of keys. With this structure, we make a multi-way decision based on comparisons with the keys stored at the node $x$.
 
-In this section, we introduce the construction and query processes
+In this section, we introduce the construction and search processes
 of B-Trees and then analyse their properties.
 
-\subsubsection{Motivation}
-
-In computers, the memories are organised in an hierarchical way. For example, a classical computer system consists three layers of memory: the CPU cache, main memory and the hard disk. In such a system, the CPU cache is the fastest but the most expensive while and hard disk is the cheapest but also the slowest. When querying for an item, the CPU will first try to fetch it from the CPU cache. If not there the CPU will then try to fetch it from the main memory, and then the hard disk.
-
-%TODO: Some statements are needed to show the data is stored in blocks in the memory.
-
-At the same time, the traditional hard disk drive (HDD) is made by a moving mechanical structure.
-
-%TODO: Illustrate the mechanical structure.
-% Should we be writing this since we are using in-memory ?
-
-In summary, there are two properties in classical computer systems that we need to take into account:
-
-\begin{enumerate}
-	\item The memory is not flat, meaning that memory references are not equally expensive. 
-	\item 
-\end{enumerate}
-
-\subsubsection{Definition and Terms}
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=0.6\textwidth]{graphs/B-Tree_definitions.png}
-    \caption{B-Tree}
-    \label{fig:B-Tree}
-\end{figure}
-
-Before we formally define B-Trees, we assume the following terms:
-
-\begin{itemize}
-\item
-  \textbf{Keys}: The key in a database is a special attribute that could identify a row in the database. In our work, each key corresponds to a 1-dimensional
-  \textbf{value} and forms a key-value pair.
-\item
-  \textbf{Order}: The Order of a B-Tree is the maximum number of children that a node can have. Number of keys in a node is always one less than the order of the tree at the maximum.
-\item
-  \textbf{Internal Node}: An internal node is any node of the tree that has child nodes and is not a root node.
-\item
-  \textbf{Leaf Node}: A leaf node is any node that does not have child nodes.
-\end{itemize}
+\subsubsection{Attributes}
 
 Each node in a B-Tree has the following attributes:
 
@@ -76,13 +30,27 @@ following properties:
   fixed integer $t$.
 \end{itemize}
 
-\subsubsection{Insertion of B-Tree}
-
 When inserting keys into a binary search tree, we search for the leaf
 position at which to insert the new key. However, with B-Tree, we cannot
 simply find the position, create a new node and insert the value because
 the tree will be imbalanced again. Hence, in this section, we illustrate
 an operation that splits a full node around its median key
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=0.6\textwidth]{graphs/B-Tree_example01.png}
+    \caption{B-Tree key insertion}
+    \label{fig:B-Tree key insertion1}
+\end{figure}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=0.3\textwidth]{graphs/B-Tree_example02.png}
+    \caption{B-Tree key insertion}
+    \label{fig:B-Tree key insertion2}
+\end{figure}
+
+\subsubsection{Insertion in a B-Tree}
 
 \begin{algorithm}[H]
     \SetAlgoLined
@@ -109,24 +77,8 @@ an operation that splits a full node around its median key
      \label{B-Tree Insertion}
 \end{algorithm}
 
-
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=0.6\textwidth]{graphs/B-Tree_example01.png}
-    \caption{B-Tree key insertion}
-    \label{fig:B-Tree key insertion1}
-\end{figure}
-
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=0.3\textwidth]{graphs/B-Tree_example02.png}
-    \caption{B-Tree key insertion}
-    \label{fig:B-Tree key insertion2}
-\end{figure}
-
-\subsubsection{Insertion in a B-Tree}
-
 There are two conditions in insertion:
+
 \begin{itemize}
 \item
 \textbf{When the node is empty or not created at all}:

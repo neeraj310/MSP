@@ -12,14 +12,12 @@ As shown in Fig. \ref{rmi_structure}. A recursive model can be regarded as a tre
 
 \begin{figure*}[h]
 \centering
-\includegraphics[scale=0.4]{graphs/rmi_demo}
+\includegraphics[scale=0.4]{graphs/implementation/one-dim/rmi_demo.pdf}
 \caption{An example recursive model index with one root model and three leaf model.}
 \label{rmi_structure}
 \end{figure*}
 
-
-
-\subsubsection{Definitions}
+\subsubsection{Properties}
 
 Similar to a tree, we define the following terms in a recursive model:
 
@@ -122,7 +120,8 @@ y_1 \\ y_2\\ \vdots \\ y_n
 \end{bmatrix}
 $$ which can be written as $Y=\boldsymbol{X}\boldsymbol{\beta}$. 
  
- Our goal is to find $\beta$ such that the sum of squared error, i.e. $\text{S}(\boldsymbol{\beta})=\sum_{i=1}^n(\hat{y}-y)^2$ is minimal. This optimisation problem can be resolved by ordinary least square estimation as shown below.
+ \begin{mscproof}
+ 	 Our goal is to find $\beta$ such that the sum of squared error, i.e. $$\text{S}(\boldsymbol{\beta})=\sum_{i=1}^n(\hat{y}-y)^2$$ is minimal. This optimisation problem can be resolved by ordinary least square estimation as shown below.
  
  First we have the error as
  
@@ -155,5 +154,8 @@ $$ which can be written as $Y=\boldsymbol{X}\boldsymbol{\beta}$.
  	& \implies \boldsymbol{\beta}= (\boldsymbol{X}^T\boldsymbol{X})^{-1}\boldsymbol{X}^T\boldsymbol{y}
  \end{split}
  \end{equation}
+ 
+ \end{mscproof}
+ 
 
   

@@ -29,6 +29,9 @@ class PointQuery(Query):
        
         return self.models[model_idx].predict_knn_query(query,k)
 
+    def evaluate(self, test_data):
+        return self.evaluate_point(test_data)
+
     def evaluate_point(self, test_data):
         data_size = test_data.shape[0]
         print("[Point Query] Evaluating {} datapoints".format(data_size))

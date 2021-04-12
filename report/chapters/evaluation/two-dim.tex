@@ -1,0 +1,455 @@
+For two dimensional data, the evaluation covers the following tasks:
+
+\begin{itemize}
+  \item Point Query for $K$D-Tree.
+  \item Range Query for $K$D-Tree
+  \item KNN Query for $K$D-Tree
+	\item Find hyper-parameters for the Lisa model empirically.
+	\item Compares the performance between kd-tree, baseline model and Lisa implementation.
+	\item Find the hyper-parameters for the LISA model empirically.
+	\item Compare the performance between $K$D-tree, baseline model and LISA implementation.
+\end{itemize}
+
+\subsection{Dataset}
+
+For two dimensional case, we manually generate three columns of the data:
+
+\begin{itemize}
+	\item The first two columns contain the  2 dimensional keys $\boldsymbol{X} \in \mathbb{R}^{2}$, which are independently sampled from a given distribution. %% TOOD: What distributions?
+	\item Then we assign the keys into different pages according to a preset parameter $N_{page}$ for page size. Specifically, the first $N_{page}$ keys will be assigned into the first page, the second $N_{page}$ keys will be assigned into the second page and so on so forth. After the assignments, we set the second column $Y$ to be the page index of the corresponding $x$.
+\end{itemize}
+
+\subsection{Point Query $K$D-Tree}
+
+\subsection{Range Query $K$D- Tree}
+
+\begin{table}
+	\centering
+	\begin{tabular}{||p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}| p{0.1\textwidth}<{\centering}|p{0.1\textwidth}<{\centering}|p{0.1\textwidth}<{\centering}|p{0.1\textwidth}<{\centering}||}
+		\hline
+		Training/Test Data Size & Query Size & Build Time(s) & Avg Query Time(s) & Memory Size(KB) & Evaluation Error(MSE)\\ 
+		[0.5ex] 
+        \hline
+		\hline
+		10,000& 1000 & 0.0653 & 1.88E-05 & 2459.02&0.0\\
+		\hline
+		10,000& 2000 & 0.0653 & 1.87E-05 & 2459.02& 0.0\\
+		\hline
+		100,000& 1000 & 0.0739 & 1.82E-05 & 2459.02& 0.0\\
+		\hline
+		100,000& 2000 & 0.0739 & 1.80E-05 & 2459.02& 0.0\\
+		\hline
+		10,00,000& 1000 & 0.0654 & 1.82E-05 & 2630.2& 0.0\\
+		\hline
+		10,00,000& 2000 & 0.0654 & 1.80E-05 & 2630.2& 0.0\\
+		\hline 
+		10,000,000& 1000 & 0.0677 & 1.91E-05 & 2631.6& 0.0\\
+		\hline
+		10,000,000& 2000 &0.0677 & 1.88E-05 & 2631.6& 0.0\\
+		\hline
+		19,000,000& 1000 & 0.06968 & 1.87E-05 & 2631.6& 0.0\\
+		\hline
+		19,000,000& 2000 & 0.06968 & 1.86E-05 & 2631.6& 0.0\\
+        \hline
+		\hline
+	\end{tabular}
+    \label{lognormal_KD_Tree_Range_Query}
+	\caption{Experimental results for $K$D Tree model(Range Query) for lognormal data}
+\end{table}
+
+\subsection{KNN Query $K$D- Tree}
+\begin{table}
+	\centering
+	\begin{tabular}{||p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}| p{0.1\textwidth}<{\centering}|p{0.1\textwidth}<{\centering}|p{0.1\textwidth}<{\centering}|p{0.1\textwidth}<{\centering}||}
+		\hline
+		Training/Test Data Size& $K$ Size & Build Time(s) & Avg Query Time(s) & Memory Size(KB) & Evaluation Error(MSE)\\ [0.5ex] 
+		\hline
+		\hline
+		10,000& 5 & 0.0653 & 0.000388 & 2459.02 & 0.0\\
+		\hline
+		10,000& 10 & 0.0653 & 0.000173 & 2459.02 & 0.0\\
+		\hline
+		100,000& 5 & 0.0737 & 0.00049 & 2621.76 & 0.0\\
+		\hline
+		100,000&  10 & 0.0737 & 0.00017 & 2621.76 & 0.0\\
+		\hline
+		10,00,000&  5 & 0.075 & 0.00043 & 2631.91 & 0.0\\
+		\hline
+		10,00,000&  10 & 0.0759 & 0.000183 & 2631.91 & 0.0\\
+		\hline 
+		10,000,000&  5 & 0.0662 & 0.000417 & 2632.04 & 0.0\\
+		\hline
+		10,000,000&  10 & 0.0662 & 0.00018 & 2632.04 & 0.0\\
+		\hline
+		19,000,000&  5 & 0.0695 & 0.00039 & 2632.04 & 0.0\\
+		\hline
+		19,000,000& 10 & 0.0695 & 0.000248 & 2632.04 & 0.0\\
+        \hline
+		\hline
+	\end{tabular}
+    \label{lognormal_KD_Tree_KNN_Query}
+	\caption{Experimental results for $K$D Tree model(KNN Query) for lognormal data}
+\end{table}
+
+\subsection{Task 1 : Hyper-parameters Search }
+After generating dataset as mentioned in previous section, we sample a smaller subset from it. We repeat our experiments for 3 different sample sizes of 10000, 100000 and 1000000 points. Test and training data is same for all our experiments. For Baseline and Lisa models, final prediction is given by linear search through a range of values(identified as a Cell for Baseline and Shard for LISA model) and mean square error(MSE) is zero as test points are already learned during training. This is where Learned Index models differ from traditional machine learning models where model performance is evaluated on unseen data. 
+
+\subsubsection {Hyper-parameter search for the baseline implementation}
+Baseline model has one hyper parameter: No$\_$of\_Cells specifying the number of equal length intervals into which mapped values are divided. As discussed in section, the query search consists of two parts, first is binary search to locate the cell into which the query key is located, followed by sequentially comparison of the query key value with keys in the found cell until a match is found. The time complexity of first search is $log_{2}N_{1}$, where $N_{1}$ is the number of cells. The time complexity of second search is  $ \left \lceil {N_{2} / 2}\right \rceil $, where $N_{2}$ is the number of keys per cell. As shown in table, build time increases and query time decreases with increase in value of this hyper-parameter for all training data sizes. 
+% Disable the big table for the moment
+\comm{
+\begin{table}
+	\centering
+	\begin{tabular}{||p{0.15\textwidth}<{\centering}|p{0.2\textwidth}<{\centering}| p{0.1\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}||}
+		\hline
+		Training/Test Data Size& Model & No. of cells & Build Time(s) & Avg Query Time(s) & Memory Size(KB)\\ [0.5ex] 
+		\hline
+		\hline
+		10,000& Lisa Baseline & 10 & 0.034 & 0.013 & 313.77\\
+		\hline
+		10,000& Lisa Baseline & 100 & 0.026 & 0.001 & 315.85\\
+		\hline
+		10,000& Lisa Baseline & 1000 & 0.019 & 0.0006 & 336.97\\
+		\hline
+		100,000& Lisa Baseline & 10 & 0.166 & 0.135 & 3126.2\\
+		\hline
+		100,000& Lisa Baseline & 100 & 0.208 & 0.013 & 3128.3\\
+		\hline
+		100,000& Lisa Baseline & 1000 & 0.218 & 0.002 & 3149.4\\
+		\hline 
+		1,000,000& Lisa Baseline & 10 & 2.613 & 1.27 & 31251.3\\
+		\hline
+		1,000,000& Lisa Baseline & 100 &1.592 & 0.113 & 31253.4\\
+		\hline
+		1,000,000& Lisa Baseline & 1000 & 2.985 & 0.018 & 31274.5\\
+
+		\hline
+		\hline
+	\end{tabular}
+    \label{small_lognormal_lisa_baseline}
+	\caption{Experimental results for lisa baseline model for small lognormal data}
+\end{table}
+}
+
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{||p{0.15\textwidth}<{\centering}|p{0.2\textwidth}<{\centering}| p{0.1\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}||}
+		\hline
+		Training/Test Data Size& Model & No. of cells & Build Time(ms) & Avg Query Time(ms) & Memory Size(KB)\\ [0.5ex] 
+		\hline
+		\hline
+		10,000& Lisa Baseline & 10 & 11.171 & 4.34261 & 313.77\\
+		\hline
+		10,000& Lisa Baseline & 100 & 11.252 & 0.71891 & 315.85\\
+		\hline
+		10,000& Lisa Baseline & 1000 & 13.542 & 0.32806 & 336.97\\
+		\hline
+		\hline
+	\end{tabular}
+    \label{small_lognormal_lisa_baseline_10000}
+	\caption{Experimental results for lisa baseline model: Training Data Size : 10,000 Points}
+\end{table}
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{||p{0.15\textwidth}<{\centering}|p{0.2\textwidth}<{\centering}| p{0.1\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}||}
+		\hline
+		Training/Test Data Size& Model & No. of cells & Build Time(ms) & Avg Query Time(ms) & Memory Size(KB)\\ [0.5ex] 
+		\hline
+		\hline
+		100,000& Lisa Baseline & 10 & 109.287 & 46.7233 & 3126.2\\
+		\hline
+		100,000& Lisa Baseline & 100 & 111.596 & 4.8086 & 3128.3\\
+		\hline
+		100,000& Lisa Baseline & 1000 & 111.978 & 0.7271 & 3149.4\\
+		\hline
+		100,000& Lisa Baseline & 10000 & 128.496 & 0.3301 & 3168.7\\
+		\hline
+		\hline
+	\end{tabular}
+    \label{small_lognormal_lisa_baseline_10000}
+	\caption{Experimental results for lisa baseline model: Training Data Size : 100,000 Points}
+\end{table}
+
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{||p{0.15\textwidth}<{\centering}|p{0.2\textwidth}<{\centering}| p{0.1\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}||}
+		\hline
+		Training/Test Data Size& Model & No. of cells & Build Time(ms) & Avg Query Time(ms) & Memory Size(KB)\\ [0.5ex] 
+		\hline
+		\hline
+		1,000,000& Lisa Baseline & 10 & 1094.99 & 347.561 & 31251.3\\
+		\hline
+		1,000,000& Lisa Baseline & 100 &1099.68 &40.145 & 31253.4\\
+		\hline
+		1,000,000& Lisa Baseline & 1000 & 1104.65 & 4.473 & 31274.5\\
+		\hline
+		1,000,000& Lisa Baseline & 10000 & 1143.73 & 0.669 & 31485.4\\
+		\hline
+		1,000,000& Lisa Baseline & 100000 & 1273.56 & 0.294 & 31638.5\\
+		\hline
+		\hline
+	\end{tabular}
+    \label{small_lognormal_lisa_baseline_10000}
+	\caption{Experimental results for lisa baseline model: Training Data Size : 1,000,000 Points}
+\end{table}
+
+
+\subsubsection {Lisa Baseline model search optimization}
+%In lisa baseline model, we need to linearly search for the query key in a cell. 
+In case of high dimensional key values, key with in a page can not be searched with mapped value, as a large number of keys can have the same mapped value. However for the 2 dimensional scenario, we can get considerable savings in search cost by replacing sequential scan based on keys values to binary search based on mapped value. Once mapped value is found using binary search, we do a look up in its neighbourhood based on 2 dimensional key value. As shown in table \ref{baselinesearch_optimization}, we get significant savings in the query time with this approach.
+
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{||p{0.15\textwidth}<{\centering}|p{0.2\textwidth}<{\centering}| p{0.1\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}||}
+		\hline
+		Training/Test Data Size& Model & No. of cells & Build Time(ms) & Avg Query Time(ms) & Memory Size(KB)\\ [0.5ex] 
+		\hline
+		\hline
+		10,000& Lisa Baseline & 10 & 11.1208 & 0.284191 & 313.77\\
+		\hline
+		10,000& Lisa Baseline & 100 & 12.0108 & 0.277918 & 315.85\\
+		\hline
+		10,000& Lisa Baseline & 1000 & 12.7589 & 0.276572 & 336.97\\
+		\hline
+		\hline
+	\end{tabular}
+	\label{baseline_search_optimization}
+	\caption{Experimental results for baseline model with search optimization, Training Data Size : 10,000 points}
+\end{table}
+
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{||p{0.15\textwidth}<{\centering}|p{0.2\textwidth}<{\centering}| p{0.1\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}||}
+		\hline
+		Training/Test Data Size& Model & No. of cells & Build Time(ms) & Avg Query Time(ms) & Memory Size(KB)\\ [0.5ex] 
+		\hline
+		\hline
+		100,000& Lisa Baseline & 10 & 112.973 & 0.285525 & 313.77\\
+		\hline
+		100,000& Lisa Baseline & 100 & 114.318 & 0.282053 & 315.85\\
+		\hline
+		100,000& Lisa Baseline & 1000 & 116.699 & 0.280637 & 336.97\\
+		\hline
+		\hline
+	\end{tabular}
+	\label{baseline_search_optimization}
+	\caption{Experimental results for baseline model with search optimization, Training Data Size : 100,000 points}
+\end{table}
+
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{||p{0.15\textwidth}<{\centering}|p{0.2\textwidth}<{\centering}| p{0.1\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}||}
+		\hline
+		Training/Test Data Size& Model & No. of cells & Build Time(ms) & Avg Query Time(ms) & Memory Size(KB)\\ [0.5ex] 
+		\hline
+		\hline
+		1,000,000& Lisa Baseline & 10 & 1116.51 & 0.240508 & 313.77\\
+		\hline
+		1,000,000& Lisa Baseline & 100 & 1118.85 &0.235858 & 315.85\\
+		\hline
+		1,000,000& Lisa Baseline & 1000 & 1134.88 & 0.234435 & 336.97\\
+		\hline
+		\hline
+	\end{tabular}
+	\label{baseline_search_optimization}
+	\caption{Experimental results for baseline model with search optimization, Training Data Size : 1,000,000 points}
+\end{table}
+
+\comm{
+\begin{table}
+	\centering
+	\begin{tabular}{||p{0.15\textwidth}<{\centering}|p{0.2\textwidth}<{\centering}| p{0.1\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}||}
+		\hline
+		Training/Test Data Size& Model & No. of cells & Build Time(s) & Avg Query Time(s) & Memory Size(KB)\\ [0.5ex] 
+		\hline
+		\hline
+		10,000& Lisa Baseline & 10 & 0.034 & 0.0005 & 313.77\\
+		\hline
+		10,000& Lisa Baseline & 100 & 0.023 & 0.0005 & 315.85\\
+		\hline
+		10,000& Lisa Baseline & 1000 & 0.021 & 0.0005 & 336.97\\
+		\hline
+		100,000& Lisa Baseline & 10 & 0.175 & 0.0005 & 3126.2\\
+		\hline
+		100,000& Lisa Baseline & 100 & 0.167 & 0.0005 & 3128.3\\
+		\hline
+		100,000& Lisa Baseline & 1000 & 0.204 & 0.0005 & 3149.4\\
+		\hline 
+		1,000,000& Lisa Baseline & 10 & 1.559 & 0.0005 & 31251.3\\
+		\hline
+		1,000,000& Lisa Baseline & 100 &1.705 & 0.0005 & 31253.4\\
+		\hline
+		1,000,000& Lisa Baseline & 1000 & 2.002 & 0.0005 & 31274.5\\
+
+		\hline
+		\hline
+	\end{tabular}
+	\label{baseline_search_optimization}
+	\caption{Experimental results for lisa baseline model with search optimization for small lognormal data}
+\end{table}
+}
+\subsubsection {Hyper-parameter search for the Lisa implementation}
+For Lisa model, we have 2 hyper parameters:
+\begin{enumerate}
+	\item GridCellSize : Number of grid cells into which the key space is divided. In our implementation, we use a square grid cell, and total number of cells is given by $GridCellSize$ $\times GridCellSize$.
+	\item NumberOfShardsPerInterval : Number of shards to learn per mapped interval. 
+\end{enumerate}
+
+Experiments results are consistent across all 3 training sizes and have following interpretation. 
+\begin{enumerate}
+    \item In general, average query time decreases and memory size increases with increasing values of GridCellSize and NumberOfShardsPerInterval.
+	\item For a particular value of GridCellSize, average query time decreases and memory size increases with increase in value of parameter NumberOfShardsPerInterval.
+	\item After shard prediction, we sequentially compare the query point key values with keys in the Shard. For query points at the Shard boundaries, if the query point is not found in the predicted shard, we continue our search in adjacent left and right shards. During test experiments we found that if Shard size is less than 30 keys then Shard prediction error can be more than 1. To avoid Shard Prediction error of more than 1 Shard, we limit minimum number of keys per Shard to be 30 keys. This is the reason that in table, we restrict the value of parameter NumberOfShardsPerInterval to 25 for GridCellSize of 25 and 30.   
+
+\end{enumerate}
+
+% Disable the big table for the moment
+\comm{
+\begin{table}
+	\centering
+	\begin{tabular}{||p{0.15\textwidth}<{\centering}|p{0.08\textwidth}<{\centering}|p{0.20\textwidth}<{\centering}| p{0.12\textwidth}<{\centering}|p{0.1\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.10\textwidth}<{\centering}||}
+		\hline
+		Training/Test Data Size& Model & GridCellSize & No of Shards Per Interval & Build Time(s) & Avg Query Time(ms) & Memory Size(KB)\\ [0.5ex] 
+		\hline
+		\hline
+		10,000& Lisa& 4*4=16 & 5& 4.335 & 1.13135 & 324.72\\
+		\hline
+		10,000& Lisa& 4*4=16 & 10& 3.370& 0.96036 & 329.07\\
+		\hline
+		10,000& Lisa& 4*4=16 & 20&1.127& 0.86184 & 323.47\\
+		\hline
+		100,000& Lisa& 4*4=16 & 5& 45.846& 5.93345 & 3137.2\\
+		\hline
+		100,000& Lisa& 4*4=16 & 10& 42.398& 3.29308 & 3141.6\\
+		\hline
+		100,000& Lisa& 4*4=16 & 20& 59.036&1.52851 & 3150.3\\
+		\hline
+		100,000& Lisa& 4*4=16 & 50& 122.64& 1.51173 & 3176.6\\
+		\hline
+		100,000& Lisa& 4*4=16 & 100& 30.211& 1.44518 & 3220.3\\
+		\hline
+		100,000& Lisa& 6*6=36 & 5& 24.428&3.19491 & 3149.4\\
+		\hline
+		100,000& Lisa& 6*6=36 & 20&33.637&1.52851 & 3178.9\\
+		\hline
+		100,000& Lisa& 6*6=36 & 50& 66.375& 1.43397 & 3238.1\\
+		\hline
+		100,000& Lisa& 8*8=64 & 5& 22.645& 2.53317 & 3166.2\\
+		\hline
+		100,000& Lisa& 8*8=64 & 20& 35.638& 1.59742 & 3218.7\\
+		\hline
+		100,000& Lisa& 8*8=64 & 50& 45.014& 1.55903 & 3323.6\\
+		\hline
+		1,000,000&Lisa& 10*10=100 & 5& 122.64& 1.51173 & 3176.6\\
+		\hline
+		1,000,000& Lisa& 10*10=100 & 10& 30.211& 1.44518 & 3220.3\\
+		\hline
+		1,000,000& Lisa& 10*10=100 & 20& 24.428&3.19491 & 3149.4\\
+		\hline
+		1,000,000& Lisa& 10*10=100 & 50&33.637&1.52851 & 3178.9\\
+		\hline
+		1,000,000& Lisa& 10*10=100 & 100& 66.375& 1.43397 & 3238.1\\
+		\hline
+		1,000,000& Lisa& 20*20=400 & 25& 22.645& 2.53317 & 3166.2\\
+		\hline
+		1,000,000& Lisa& 20*20=400 & 50& 35.638& 1.59742 & 3218.7\\
+		\hline
+		1,000,000& Lisa& 25*25=625 & 25& 45.014& 1.55903 & 3323.6\\
+		\hline
+		1,000,000& Lisa& 30*30=900 & 25& 45.014& 1.55903 & 3323.6\\
+		\hline
+		\hline
+	\end{tabular}
+	\label{baseline_search_optimization}
+	\caption{Experimental results for lisa baseline model with search optimization for small lognormal data}
+\end{table}
+}
+
+\begin{table}
+	\centering
+	\begin{tabular}{||p{0.15\textwidth}<{\centering}|p{0.08\textwidth}<{\centering}|p{0.20\textwidth}<{\centering}| p{0.12\textwidth}<{\centering}|p{0.1\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.10\textwidth}<{\centering}||}
+		\hline
+		Training/Test Data Size& Model & GridCellSize & No of Shards Per Interval & Build Time(s) & Avg Query Time(ms) & Memory Size(KB)\\ [0.5ex] 
+		\hline
+		\hline
+		10,000& Lisa& 4*4=16 & 5& 4.335& 1.13135 & 324.72\\
+		\hline
+		10,000& Lisa& 4*4=16 & 10& 3.370& 0.96036 & 329.07\\
+		\hline
+		10,000& Lisa& 4*4=16 & 20&1.127& 0.86184 & 323.47\\
+		\hline
+	    \hline
+	\end{tabular}
+	\label{baseline_search_optimization}
+	\caption{Point Query experimental results for LISA model, Training Data Size : 10,000 points}
+\end{table}
+
+\begin{table}
+	\centering
+	\begin{tabular}{||p{0.15\textwidth}<{\centering}|p{0.08\textwidth}<{\centering}|p{0.20\textwidth}<{\centering}| p{0.12\textwidth}<{\centering}|p{0.1\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.10\textwidth}<{\centering}||}
+		\hline
+		Training/Test Data Size& Model & GridCellSize & No of Shards Per Interval & Build Time(s) & Avg Query Time(ms) & Memory Size(KB)\\ [0.5ex] 
+		\hline
+		\hline
+	    100,000& Lisa& 4*4=16 & 5& 45.846& 5.93345 & 3137.2\\
+		\hline
+		100,000& Lisa& 4*4=16 & 10& 42.398& 3.29308 & 3141.6\\
+		\hline
+		100,000& Lisa& 4*4=16 & 20& 59.036&1.52851 & 3150.3\\
+		\hline
+		100,000& Lisa& 4*4=16 & 50& 122.64& 1.51173 & 3176.6\\
+		\hline
+		100,000& Lisa& 4*4=16 & 100& 30.211& 1.44518 & 3220.3\\
+		\hline
+		100,000& Lisa& 6*6=36 & 5& 24.428&3.19491 & 3149.4\\
+		\hline
+		100,000& Lisa& 6*6=36 & 20&33.637&1.59742 & 3178.9\\
+		\hline
+		100,000& Lisa& 6*6=36 & 50& 66.375& 1.55903 & 3238.1\\
+		\hline
+		100,000& Lisa& 8*8=64 & 5& 22.645& 2.53317 & 3166.2\\
+		\hline
+		100,000& Lisa& 8*8=64 & 20& 35.638& 1.52851 & 3218.7\\
+		\hline
+		100,000& Lisa& 8*8=64 & 50& 45.014& 1.43397 & 3323.6\\
+		\hline
+		\hline
+	\end{tabular}
+	\label{baseline_search_optimization}
+	\caption{Point Query experimental results for LISA model, Training Data Size : 100,000 points}
+\end{table}
+
+\begin{table}
+	\centering
+	\begin{tabular}{||p{0.15\textwidth}<{\centering}|p{0.08\textwidth}<{\centering}|p{0.20\textwidth}<{\centering}| p{0.12\textwidth}<{\centering}|p{0.1\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.10\textwidth}<{\centering}||}
+		\hline
+		Training/Test Data Size& Model & GridCellSize & No of Shards Per Interval & Build Time(s) & Avg Query Time(ms) & Memory Size(KB)\\ [0.5ex] 
+		\hline
+		\hline
+	 	1,000,000&Lisa& 10*10=100 & 5& 122.64& 1.51173 & 3176.6\\
+		\hline
+		1,000,000& Lisa& 10*10=100 & 10& 30.211& 1.44518 & 3220.3\\
+		\hline
+		1,000,000& Lisa& 10*10=100 & 20& 24.428&3.19491 & 3149.4\\
+		\hline
+		1,000,000& Lisa& 10*10=100 & 50&33.637&1.52851 & 3178.9\\
+		\hline
+		1,000,000& Lisa& 10*10=100 & 100& 66.375& 1.43397 & 3238.1\\
+		\hline
+		1,000,000& Lisa& 20*20=400 & 25& 22.645& 2.53317 & 3166.2\\
+		\hline
+		1,000,000& Lisa& 20*20=400 & 50& 35.638& 1.59742 & 3218.7\\
+		\hline
+		1,000,000& Lisa& 25*25=625 & 25& 45.014& 1.55903 & 3323.6\\
+		\hline
+		1,000,000& Lisa& 30*30=900 & 25& 45.014& 1.55903 & 3323.6\\
+		\hline
+		\hline
+	\end{tabular}
+	\label{baseline_search_optimization}
+	\caption{Point Query experimental results for LISA model, Training Data Size : 1,000,000 points}
+\end{table}
+
+\subsubsection {Range Query Experiments}
+Table shows evaluation results for LISA and KDTree models for range sizes of 10, 100, 1000, and 10000 for different training sizes. For a given range query size, we perform 20 trials and take the average. For each trial, we sample a random point from the test set and find the range from sampled point to the range query size. 
+
