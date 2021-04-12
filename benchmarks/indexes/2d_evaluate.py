@@ -88,41 +88,7 @@ def point_query_eval(models, ptq, test_data,build_times):
     
     print(tabulate(result, header))
 
-# def range_query_eval(models, ptq, test_data, build_times):
-#     i = 100
-#     result = []
-#     header = [
-#         "Name", "Query Size", "Build Time (s)", "Evaluation Time (s)",
-#         "Average Evaluation Time (s)", "Evaluation Error (MSE)", "Storage"
-#     ]
-#     print(test_data.size, "test data size")
-#     print(test_data.shape, "test data shape")
-#     idx = np.random.randint(test_data.shape[0]-1001)
-#     while (i <= 4000):
-#         print(idx)
-#         query_l = test_data.iloc[idx, 0:2]
-#         if (idx+i) > test_data.shape[0]:
-#             break
-        
-#         query_u = test_data.iloc[idx+i, 0:2]
-#         print('idx = %d i = %d ' %(idx, idx+i) )
-#         print('query_l = %d %d' %(query_l[0],query_l[1]))
-#         print('query_u = %d %d' %(query_u[0],query_u[1]))
-#         test_range_query = test_data.iloc[idx:idx+i, :]
-#         mses, eval_times, storage = ptq.evaluate_range_query(test_range_query)
-        
-#         for index, model in enumerate(models):
-#             if (model.name == 'Scipy KD-Tree') or (model.name == 'Lisa Baseline') :
-#                 continue
-#             result.append([
-#                 model.name, i, build_times[index], eval_times[index],
-#                 eval_times[index] / i, mses[index], storage[index]
-#             ])
-            
-#         print(len(result))
-       
-#         i = i +100
-#     print(tabulate(result, header))
+
 
 def range_query_eval(models, ptq, test_data,build_times):
     i = 10
@@ -153,7 +119,7 @@ def range_query_eval(models, ptq, test_data,build_times):
             mses, eval_times, storage = ptq.evaluate_range_query(test_range_query)
             
             for index, model in enumerate(models):
-                if (model.name == 'Scipy KD-Tree') or (model.name == 'Lisa Baseline') :
+                if (model.name == 'Scipy KD-Tree'):
                     continue
                 result.append([
                     model.name, j, build_times[index], eval_times[index],

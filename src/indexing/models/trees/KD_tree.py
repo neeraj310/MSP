@@ -149,8 +149,9 @@ class KDTreeModel():
 
         y_pred = self.predict_knn_query_find(point,k,dim,kd_node,return_distances,i,heap)
         y_pred = np.array(y_pred)
-        yhat=np.vstack(y_pred[:,1])[:,2]
-        return yhat
+        # yhat=np.vstack(y_pred[:,1])[:,2]
+        yhat=np.vstack(y_pred[:,0])
+        return np.sqrt(yhat)
                       
 
 

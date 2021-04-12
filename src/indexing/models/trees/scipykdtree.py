@@ -40,11 +40,11 @@ class ScipyKDTreeModel():
 
         dist, indx = self.kdtree.query(key, k=k_nearest)
         # y_predict = []
-        y_predict = np.array(self.y_train[indx])
+        # y_predict = np.array(self.y_train[indx])
 
         # y_predict = self.y_train[indx]
 
-        return y_predict
+        return dist
 
     def predict(self, key, k_nearest=1):
 

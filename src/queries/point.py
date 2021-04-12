@@ -103,7 +103,7 @@ class PointQuery(Query):
         print("Get %d nearest neighbours for query %d %d" %(k, query[0], query[1]))
         for idx, model in enumerate(self.models):
             if model.name == 'Scipy KD-Tree':
-                 y_pred = self.models[idx].predict(query, k)
+                 y_pred = self.models[idx].predict_knn_query(query, k)
                  print('Grounftruth for query %d %d for %d neighbours' %(query[0],query[1], k))
                  print(y_pred)
                  return y_pred
