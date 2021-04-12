@@ -14,6 +14,7 @@ class ScipyKDTreeModel():
         self.kdtree = None
         self.leafsize = leafsize
         self.y_train = None
+        self.page_size = 1
 
     def train(self, x_train, y_train, x_test, y_test):
 
@@ -23,6 +24,7 @@ class ScipyKDTreeModel():
         end_time = timer()
         build_time = end_time - start_time
         self.y_train = y_train
+        self.x_train = x_train
 
         mse = 0.0
         y_predict_test = []
@@ -34,18 +36,34 @@ class ScipyKDTreeModel():
 
         return mse, build_time
 
+    def predict_knn_query(self, key, k_nearest=1):
+
+        dist, indx = self.kdtree.query(key, k=k_nearest)
+        # y_predict = []
+        # y_predict = np.array(self.y_train[indx])
+
+        # y_predict = self.y_train[indx]
+
+        return dist
+
     def predict(self, key, k_nearest=1):
 
         dist, indx = self.kdtree.query(key, k=k_nearest)
+  
 
-        y_predict = self.y_train[indx]
+        y_predict = np.array(self.y_train[indx])
+      
 
-        return y_predict
+        return np.expand_dims(y_predict, axis=0)
 
     def build(self, x):
         self.kdtree = ScipyKDTree(x, leafsize=self.leafsize)
 
         return 0
+    
+    def get_storage(self):
+     
+        return self.kdtree
 
 
 if __name__ == "__main__":
@@ -59,7 +77,7 @@ if __name__ == "__main__":
 
     x_train = np.array(points)
 
-    tree = ScipyKDTreeModel(leafsize=1000)
+    tree = ScipyKDTreeModel(leafsize=1)
     tree.build(x_train)
 
-    x_test
+    
