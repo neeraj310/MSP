@@ -2,24 +2,7 @@
 #
 # This software is released under the MIT License.
 # https://opensource.org/licenses/MIT
-'''
-// In the end, every function needs to have a strucutr like this. 
-def _switch_to_np_array(input_):
-        r"""
-        Check the input, if it's not a Numpy array transform it to one.
-        Parameters
-        ----------
-        input_ : array_like
-            The object that requires a check.
-        Returns
-        -------
-        input_ : ndarray
-            The input data that's been transformed when required.
-        """
-        if isinstance(input_, np.ndarray) is False:
-            input_ = np.array(input_)
-        return input_
-'''
+
 import sys
 from typing import List
 from random import randrange
@@ -88,41 +71,51 @@ def point_query_eval(models, ptq, test_data,build_times):
     
     print(tabulate(result, header))
 
-def range_query_eval(models, ptq, test_data, build_times):
-    i = 100
-    result = []
+def range_query_eval(models, ptq, test_data,build_times):
+    i = 10
+   
     header = [
         "Name", "Query Size", "Build Time (s)", "Evaluation Time (s)",
-        "Average Evaluation Time (s)", "Evaluation Error (MSE)", "Storage"
+        "Average Evaluation Time (s)", "Total Evaluation Time (s)", "Evaluation Error (MSE)"
     ]
     print(test_data.size)
     print(test_data.shape)
-    idx = np.random.randint(test_data.shape[0]-1001)
-    while (i <= 4000):
-        print(idx)
-        query_l = test_data.iloc[idx, 0:2]
-        if (idx+i) > test_data.shape[0] :
-            break
-        
-        query_h = test_data.iloc[idx+i, 0:2]
-        print('idx = %d i = %d ' %(idx, idx+i) )
-        print('query_l = %d %d' %(query_l[0],query_l[1]))
-        print('query_u = %d %d' %(query_h[0],query_h[1]))
-        test_range_query = test_data.iloc[idx:idx+i, :]
-        mses, eval_times, storage = ptq.evaluate_range_query(test_range_query)
-        
-        for index, model in enumerate(models):
-            if (model.name == 'Scipy KD-Tree') or (model.name == 'Lisa Baseline') :
-                continue
-            result.append([
-                model.name, i, build_times[index], eval_times[index],
-                eval_times[index] / i, mses[index], storage[index]
-            ])
+    
+    range_size_list =  [10, 100,1000, 10000]
+    averag_eval_time_across_ranges = np.zeros(len(models))
+    average_loop_size = 20
+    for j in range_size_list:
+        i = 0
+        result = []
+        total_eval_time_per_range_size = np.zeros(len(models))
+        while (i <= average_loop_size):
+            random_point_idx = test_data.shape[0]-j
+            if (random_point_idx !=0):
+                idx = np.random.randint(test_data.shape[0]-j)
+            else:
+                idx = 0
+            if (idx+j) > test_data.shape[0] :
+                break
+            test_range_query = test_data.iloc[idx:idx+j, :]
+            mses, eval_times = ptq.evaluate_range_query(test_range_query)
             
-        print(len(result))
+            for index, model in enumerate(models):
+                result.append([
+                    model.name, j, build_times[index], eval_times[index],
+                    eval_times[index] / j, mses[index]])
+                total_eval_time_per_range_size[index]  += (eval_times[index]/j)
+            
+            i = i+1
+        print(tabulate(result, header))
+        for index, model in enumerate(models):
+                print('Average Eval time for model %s query size %d is %f' %(model.name, j, total_eval_time_per_range_size[index]/average_loop_size))
+                averag_eval_time_across_ranges[index] += total_eval_time_per_range_size[index]/average_loop_size
+        #print(len(result))
        
-        i = i +100
-    print(tabulate(result, header))
+        
+    for index, model in enumerate(models):
+        print('average query time for model %s across different ranges %f' 
+              %( model.name, averag_eval_time_across_ranges[index] /len(range_size_list)))      
     
 def knn_query_eval(models, ptq, test_data,build_times):
     i = 5
@@ -160,34 +153,6 @@ def knn_query_eval(models, ptq, test_data,build_times):
     
         i = i + 5
     print(tabulate(result, header))
-'''
-def evaluate_range(filename):
-    data, test_data = load_2D_Data(filename)
-    kdtree = KDTreeModel()
-    lisa = LisaModel(cellSize=10, nuOfShards=5)
-
-    # models = [lisaBm, kdtree, scipykdtree, lisa]
-    models = [lisa, kdtree]       #add trees here
-    rq = RangeQuery(models)
-    build_times = rq.build(data, 0.00002)
-
-    lower_left = []
-    upper_right = []
-    for i in range(2):
-        lower_left.append(randrange(100,200))
-        upper_right.append(randrange(200,300))
-
-    
-    # Area = (x_min,y_min,x_max,y_max)
-    area=(lower_left[0],lower_left[1],upper_right[0],upper_right[1])
-    
-    range_points=rq.range_query(area)
-
-    print(range_points)
-
-    return range_points
-'''
-   
 
 def models_predict_point(data, models: List[BaseModel]):
     data = data.to_numpy()
