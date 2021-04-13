@@ -44,12 +44,10 @@ def create_models(filename):
     lisa = LisaModel(cellSize=4, nuOfShards=5)
 
     models = [kdtree, scipykdtree]
-    # models = [lisa,scipykdtree]
-    #models = [scipykdtree]
     ptq = PointQuery(models)
     build_times = ptq.build(data, 0.002,use_index = False)
     return(models, ptq,test_data, build_times)
-    # print("Build time",build_times)
+ 
 
 def point_query_eval(models, ptq, test_data,build_times):
     i = 1000
@@ -149,8 +147,8 @@ def knn_query_eval(models, ptq, test_data,build_times):
             mses, eval_times = ptq.evaluate_knn_query(query, y_gt, k = i)
         
             for index, model in enumerate(models):
-                if (model.name == 'Scipy KD-Tree') or (model.name == 'Lisa Baseline') :
-                    continue
+                # if (model.name == 'Scipy KD-Tree') or (model.name == 'Lisa Baseline') :
+                    # continue
                 result.append([
                     model.name, i, build_times[index], eval_times[index],
                     eval_times[index] / i, mses[index]])

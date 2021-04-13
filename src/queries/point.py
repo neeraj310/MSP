@@ -103,8 +103,8 @@ class PointQuery(Query):
         build_times = []
         mses = []
         for idx, model in enumerate(self.models):
-            if (model.name == 'Scipy KD-Tree') or (model.name == 'Lisa Baseline'):
-                continue
+            # if (model.name == 'Scipy KD-Tree') or (model.name == 'Lisa Baseline'):
+            #     continue
             start_time = timer()
             y_pred = np.array(self.predict_knn_query(idx, query, k))
             end_time = timer()
