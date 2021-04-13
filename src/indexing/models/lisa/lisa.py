@@ -1049,7 +1049,6 @@ class LisaModel():
     def findKnnNeighbours (self, queryPoint, k):
         for scale in range (1,5):
             delta = self.initDelta**scale
-            print('delta = %d'%(delta))
             query_l = (queryPoint[0]-delta, queryPoint[1]-delta)
             query_h = (queryPoint[0]+delta, queryPoint[1]+delta)
             if (query_l < (self.train_array[0,0], self.train_array[0,1])):
@@ -1071,13 +1070,12 @@ class LisaModel():
             #neighboursKeySet = np.array(neighboursKeySet[:, 0:2])
             neighboursKeySet = np.hstack((neighboursKeySet, np.zeros((neighboursKeySet.shape[0], 1),dtype=neighboursKeySet.dtype)))
             idx = np.where((neighboursKeySet[:, 0] == queryPoint[0] ) & (neighboursKeySet[:, 1] == queryPoint[1]))
-            print('idx is %d' %(idx))
-            #neighboursKeySet[:, 3] = self.distance(queryPoint,(neighboursKeySet[:, 0], neighboursKeySet[:,1]))
-            neighboursKeySet[:, 3] = np.sqrt(((neighboursKeySet[:, 2]- neighboursKeySet[idx, 2]) ** 2))
+            neighboursKeySet[:, 3] = self.distance(queryPoint,(neighboursKeySet[:, 0], neighboursKeySet[:,1]))
+            #neighboursKeySet[:, 3] = np.sqrt(((neighboursKeySet[:, 2]- neighboursKeySet[idx, 2]) ** 2))
                                              
             neighboursKeySet = neighboursKeySet[neighboursKeySet[:,3].argsort()]
            
-            return neighboursKeySet[0:k, 2]
+            return neighboursKeySet[0:k, 3]
         return (None, None)
     
     '''
