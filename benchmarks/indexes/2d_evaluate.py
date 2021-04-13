@@ -56,16 +56,16 @@ def point_query_eval(models, ptq, test_data,build_times):
     result = []
     header = [
         "Name", "Test Data Size", "Build Time (s)", "Evaluation Time (s)",
-        "Average Evaluation Time (s)", "Evaluation Error (MSE)", "Storage"
+        "Average Evaluation Time (s)", "Evaluation Error (MSE)"
     ]
     # while (i <= 10000):
         #Sample a point
-    mses, eval_times, storage = ptq.evaluate_point(test_data.iloc[:i, :])
+    mses, eval_times = ptq.evaluate_point(test_data.iloc[:i, :])
 
     for index, model in enumerate(models):
         result.append([
             model.name, i, build_times[index], eval_times[index],
-            eval_times[index] / i, mses[index], storage[index]
+            eval_times[index] / i, mses[index]
         ])
     print(len(result))
     
@@ -101,6 +101,8 @@ def range_query_eval(models, ptq, test_data,build_times):
             mses, eval_times = ptq.evaluate_range_query(test_range_query)
             
             for index, model in enumerate(models):
+                if (model.name == 'Scipy KD-Tree') :
+                    continue
                 result.append([
                     model.name, j, build_times[index], eval_times[index],
                     eval_times[index] / j, mses[index]])
@@ -130,8 +132,8 @@ def knn_query_eval(models, ptq, test_data,build_times):
         "Average Evaluation Time (s)", "Evaluation Error (MSE)"
     ]
     k_list = [3, 4, 5, 6, 7, 10]
-    print(test_data.size)
-    print(test_data.shape)
+    print(test_data.size, "test data size")
+    print(test_data.shape, " test data shape")
     averag_eval_time_across_knn_queries = np.zeros(len(models))
     for i in k_list:
         average_loop_size = 10

@@ -2,11 +2,13 @@ import csv
 import heapq
 import pickle
 import random
-from timeit import default_timer as timer
 import sys
-
 import numpy as np
+
+from timeit import default_timer as timer
 from sklearn.neighbors import KDTree
+from collections import Sequence
+from itertools import chain, count
 
 sys.path.append('')
 from src.indexing.utilities.metrics import mean_squared_error
@@ -67,7 +69,14 @@ class KDTreeModel():
                 self.predict_range_query(self.query_l, self.query_u,kd_node[1],(i+1)%2,out)
         
         return out
-
+    def depth(seq):
+        seq = iter(seq)
+        try:
+            for level in count():
+                seq = chain([next(seq)], seq)
+                seq = chain.from_iterable(s for s in seq if isinstance(s, Sequence))
+        except StopIteration:
+            return level
     def predict(self, key):
         nearest = self.get_nearest(key, dim=2)
         return nearest[1][-1]
@@ -193,25 +202,6 @@ class KDTreeModel():
 
         return self.kdtree
 
-# #Below is the code to test the ground truth using sklearn KDtree
-# def sklearn_kdtree(points, dim):
-#     points = np.array(points)
-#     tree = KDTree(points, leaf_size=2)
-#     s = pickle.dumps(tree)
-#     pickle.loads(s)
-#     dist, _ = tree.query(test, k=3)
-#     return dist**2
-
-
-# def sanity_check():
-#     list_kdtree = []
-#     for i in range(1,10):
-#         dist_sklearn = sklearn_kdtree(points, k)
-#         dist_kdtree = KDTreeModel.get_k_nearest(point, k, dim, kd_node[b],return_distances, i, heap)
-#         for i in range(len(dist_kdtree)):
-#             list_kdtree.append(dist_kdtree[i][0])
-#         mse = metrics.mean_squared_error(np.array(list_kdtree), np.array(dist_sklearn))
-#         i = i+1
 """
 Below is all the testing code
 """
@@ -236,17 +226,10 @@ if __name__ == "__main__":
 
     kdtree = KDTreeModel()
     bt = kdtree.build_kd_tree(points, dim)
+    levels = kdtree.depth(bt)
 
+    print(levels, "levels of KDTree")
     print(bt, " build time for kd")
 
-    # # t_start = timer()
-    # for t in test:
-    #     result.append(tuple(kdtree.get_k_nearest(t, 2, dim)))
-    # # t_end = timer()
-
-    # dis_grnd_truth = sklearn_kdtree(points, dim)
-    # print(result, "result")
-    # # print(t_end-t_start, "Time taken")
-    # print(dis_grnd_truth, "dis_grnd_truth")
-
+    
 
