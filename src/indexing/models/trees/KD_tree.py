@@ -10,8 +10,10 @@ from sklearn.neighbors import KDTree
 from collections import Sequence
 from itertools import chain, count
 
+
 sys.path.append('')
 from src.indexing.utilities.metrics import mean_squared_error
+from src.indexing.utilities.metrics import get_memory_size
 
 
 class KDTreeModel():
@@ -69,14 +71,16 @@ class KDTreeModel():
                 self.predict_range_query(self.query_l, self.query_u,kd_node[1],(i+1)%2,out)
         
         return out
-    def depth(seq):
-        seq = iter(seq)
+    def depth(self, tree):
+        tree_init = tree
+        tree = iter(tree)
         try:
             for level in count():
-                seq = chain([next(seq)], seq)
-                seq = chain.from_iterable(s for s in seq if isinstance(s, Sequence))
+                tree = chain([next(tree)], tree)
+                tree = chain.from_iterable(s for s in tree if isinstance(s, Sequence))
         except StopIteration:
-            return level
+            return level, get_memory_size(tree_init)
+
     def predict(self, key):
         nearest = self.get_nearest(key, dim=2)
         return nearest[1][-1]
@@ -84,7 +88,7 @@ class KDTreeModel():
     def build_kd_tree(self, points, dim=2):
         start_time = timer()
         self.kdtree = self.build(points, dim)
-        end_time = timer()
+        end_time = timer()       
         build_time = end_time - start_time
         return build_time
 
@@ -209,11 +213,16 @@ if __name__ == "__main__":
 
     # filename=sys.argv[1]
     # dim = sys.argv[2]
-
-    filename = 'data/2d_lognormal_lognormal_1000000.csv'
-    dim = 2
+    m = 100
+    # for i in range(0,4):
+    #     m = m*10
+    #     filename = 'data/2d_lognormal_lognormal_' + str(m) + '.csv'
+    #     print(filename)
+    #     dim = 2
 
     # ***** Reading data points from csv ******
+    filename = 'data/2d_lognormal_lognormal_' + str(19000000) + '.csv'
+    dim =2
     points = []
     with open(filename, 'r') as csvfile:
         points_reader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -226,10 +235,12 @@ if __name__ == "__main__":
 
     kdtree = KDTreeModel()
     bt = kdtree.build_kd_tree(points, dim)
-    levels = kdtree.depth(bt)
+
+    levels, storage = kdtree.depth(kdtree.kdtree)
 
     print(levels, "levels of KDTree")
-    print(bt, " build time for kd")
+
+    print(storage, "Storage of KDTree")
 
     
 
