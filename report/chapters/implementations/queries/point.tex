@@ -1,0 +1,54 @@
+A point query is a database operation that finds the records that exactly match our query conditions. In this project, we perform point query on $1$-dimensional data. In addition, we assign the database records into pages, predict the page index with the index models and then perform sequential search on the predicted page. In order to evaluate the errors that different index models are making, we focus on predicting the page indices and ignore the sequential search operation on a specific page. 
+
+\begin{mscexample}
+For example, assume we have an $1$-dimensional array $[1,2,3,4]$ and two pages such that $[1,2]\in P_0$ and $[3,4]\in P_1$. A point query for $x=2$ is expected to return 0 as the page index.
+\end{mscexample}
+
+\subsubsection{Point Query with B-Tree}
+
+
+Point query in a B-Tree is basically the comparison of the value of the key that needs to be searched with the keys in the node. It first linearly checks the value in the root key and looks for a key value which is greater than the searched key. As soon as it finds a key greater than the searched key it will search in the child of the key before it. For example if we were to search of key [41] in the example of the B-Tree used above, we would first check the value [11] and since it smaller than [31] and there are no keys greater than this in the root node it will search in the right child of the root node. It will then linearly search the node and locate it's associated value and return it.
+
+\begin{algorithm}[H]
+    \SetAlgoLined
+    \SetKwInOut{Input}{Input}
+     \Input{\texttt{k ; key, root ; Root of the B-Tree}}
+    \SetKwInOut{Output}{Output}
+     \Output{\texttt{Value associated with key}}
+     \For{$i\gets0$ \KwTo $len(Root Node)$}{
+         \If{keys in root greater than k}
+         {
+            \texttt{SEARCH\_CHILD(key)} //Search linearly the child associated with the key location one before\\
+            \eIf{Child is a leaf}
+            {
+                \texttt{Linearly search until the key is reached}
+            }
+            {
+                \texttt{SEARCH\_CHILD(key)}
+            }
+            
+         }
+    }
+     \caption{Algorithm for B-Tree Search}
+     \label{B-Tree Search}
+\end{algorithm}
+
+\subsubsection{Point Query with Baseline Index Model}
+
+\subsubsection{Point Query with Recursive Model Index}
+
+\begin{algorithm}[H]
+    \SetAlgoLined
+    \SetKwInOut{Input}{input}
+    \Input{\texttt{x; models; num\_of\_stages; max\_y}}
+     \texttt{stage$\gets 0$} \\
+ 	 \texttt{next\_model$\gets 0$} \\
+     \While{\texttt{stage} \textless \texttt{num\_of\_stages}}{
+        \texttt{output = model.predict(x)} \\
+        \texttt{next\_model=output*len(models[stage+1])/max\_y}\\ 
+      \uIf{last stage} {
+		\texttt{y = next}
+      }
+     }
+     \caption{Training of Recursive Model Index}
+\end{algorithm}

@@ -1,4 +1,4 @@
-A range query is a database operation that retrieves all the records that lies in a range. In this project, we perform range query on 2-dimension data only. In addition, we only consider a range query where the range is defined as a rectangle. Under these assumptions, a range query can be formalised as a query $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ where $l,u\in\mathbb{R}^2$.
+A range query is a database operation that retrieves all the records that lies in a range. In this project, we perform range query on 2-dimensional data only. In addition, we only consider a range query where the range is defined as a rectangle. Under these assumptions, a range query can be formalised as a query $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ where $l,u\in\mathbb{R}^2$.
 
 \begin{mscexample}
 	For example, assume we have the points
@@ -47,18 +47,21 @@ We then check if the root of the tree lies within the range of the bounds and on
 
 \subsubsection{Range Query with LISA}
 
-For a range query $\mathcal{Q}(\boldsymbol{l},\boldsymbol{u})$, we first find the cells that overlap with $\mathcal{Q}$. Then we decompose $\mathcal{Q}$ into the union of smaller query rectangles $\cap \mathcal{Q}_i$ such that each smaller query rectangles intersects only one cell.
+For a range query $\mathcal{Q}(\boldsymbol{l},\boldsymbol{u})$, we first find the cells that overlap with $\mathcal{Q}$. Then we decompose $\mathcal{Q}$ into the union of smaller query rectangles $\bigcup \mathcal{Q}_i$ such that each smaller query rectangles intersects only one cell, as shown in the Fig. \ref{fig:Range_Query_Lisa}.
 
 \begin{figure*}[t]
     \centering
     \includegraphics[width=1\textwidth]{graphs/range_query_lisa.png}
     \caption{Range Query Search in Lisa.
-    1)Find the cells that overlap with query rectangle qr.    2)Decompose qr into the unions of smaller query rectangles, each of which intersect one only one cell    3)Find shards corresponding to lower and upper coordinates for each query rectangle, and perform a sequential search. }
+    1) Find the cells that overlap with query rectangle qr. \\
+    2) Decompose qr into the unions of smaller query rectangles, each of which intersect one only one cell. \\
+    3) Find shards corresponding to lower and upper coordinates for each query rectangle, and perform a sequential search. }
     \label{fig:Range_Query_Lisa}
 \end{figure*}
 
- as shown in the Fig. \ref{fig:Range_Query_Lisa}. 
+ Suppose that $\mathcal{Q}=\bigcup \mathcal{Q}_i$ where $\mathcal{Q}_i=[l_{i_0}, u_{i_o})\times [l_{i_1}, u_{i_1})$, i.e. we have $\mathcal{Q}_i$ representing the $i$th smaller query rectangles of one cell $C_j$.
  
- Suppose qr = $\bigcup\limits_{j=0}^{Q^{'}}qr_{j}^{'}$ with $qr_{j}^{'}$=$[l_{j_0}^{'},u_{j_0}^{'})\times[l_{j_1}^{'},u_{j_1}^{'}) \subseteq C_{i}$, $qr_{j}^{'}$ represents $j^{th}$ subset of range query rectangle spanning cell $C_{i}$. This is followed by calculation of mapped values of 
-$qr_{j}$'s vertices. We use $m_{l}^{(0)}, m_{u}^{(0)},\cdots,m_{l}^{(Q)}, m_{u}^{(Q)}$ to denote $\mathcal{M}((l_{0_0},l_{0_1} )), \mathcal{M}((u_{0_0},u_{0_1} )), \cdots, \mathcal{M}((l_{Q_0},l_{Q_1} )), \mathcal{M}((u_{Q_0},u_{Q_1} ))$ respectively. After creating corresponding shard values,  $\mathcal{SP}(m_{l}^{0}), \mathcal{SP}(m_{u}^{0}), \cdot, \mathcal{SP}(m_{l}^{Q}), \mathcal{SP}(m_{u}^{Q})$, it is easy to select the keys that overlap with qr using sequential scan.
+ Then we can calculate the mapped values of $\mathcal{Q}_i$, i.e. $\mathcal{M}(l_{i_0}, l_{i_1})$ and $\mathcal{M}(u_{i_0}, u_{i_1})$. For simplicity, we use $m_l^{(i)}$ and $m_u^{(i)}$ to denote $\mathcal{M}(l_{i_0}, l_{i_1})$ and $\mathcal{M}(u_{i_0}, u_{i_1})$ respectively.
+ 
+After creating corresponding mapped values, we then apply the shard prediction function $\mathcal{SP}(m_{l}^{i})$ and $\mathcal{SP}(m_{u}^{i})$ to predict the shard that could possibly contain keys that lie in the query rectangle $\mathcal{Q}_i$. Then in each shard, we perform a sequential search to find the desired keys. 
 

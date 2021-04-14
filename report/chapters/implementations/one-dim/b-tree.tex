@@ -87,31 +87,3 @@ In the algorithm, initially when the first key is inserted and there is no root 
 \textbf{When the node is full}:
 As soon as the maximum number of allowed children has reached for the root node a new empty node is created. Suppose we have inserted [1,11,21] to a node of a B-Tree with degree 4. Now if we want to insert a new value 31 into the tree, since it has reached the maximum number of children it will find the median of the existing node [1,11,21] which is 11 and increase the level of the B-tree to 2 and make [1] and [21] child nodes of [11]. So now if a new value is to be inserted it can be inserted. Splitting of the node happens each time it reaches it's maximum allowed keys. Now 31 will be compared with 11 and since 31 > 11 it will be inserted in the right child and it will have an updated value of [21,31]. More keys can then be inserted until it reaches it's maximum and splits again. Once the node is split it's parent is also updated to the median value i.e., [11] in this case for nodes [1] and [21,31,41] as can be seen in \ref{fig:B-Tree key insertion2}.
 \end{itemize}
-
-\subsubsection{Search in a B-Tree}
-
-\begin{algorithm}[H]
-    \SetAlgoLined
-    \SetKwInOut{Input}{Input}
-     \Input{\texttt{k ; key, root ; Root of the B-Tree}}
-    \SetKwInOut{Output}{Output}
-     \Output{\texttt{Value associated with key}}
-     \For{$i\gets0$ \KwTo $len(Root Node)$}{
-         \If{keys in root greater than k}
-         {
-            \texttt{SEARCH\_CHILD(key)} //Search linearly the child associated with the key location one before\\
-            \eIf{Child is a leaf}
-            {
-                \texttt{Linearly search until the key is reached}
-            }
-            {
-                \texttt{SEARCH\_CHILD(key)}
-            }
-            
-         }
-    }
-     \caption{Algorithm for B-Tree Search}
-     \label{B-Tree Search}
-\end{algorithm}
-
-Search in a B-Tree is basically the comparison of the value of the key that needs to be searched with the keys in the node. It first linearly checks the value in the root key and looks for a key value which is greater than the searched key. As soon as it finds a key greater than the searched key it will search in the child of the key before it. For example if we were to search of key [41] in the example of the B-Tree used above, we would first check the value [11] and since it smaller than [31] and there are no keys greater than this in the root node it will search in the right child of the root node. It will then linearly search the node and locate it's associated value and return it. 

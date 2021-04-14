@@ -35,9 +35,21 @@ For two dimensional case, we manually generate three columns of the data:
 		\hline
 		10,000& 2000 & 0.0653 & 1.87E-05 & 2459.02& 0.0\\
 		\hline
+		10,000& 2000 & 0.0653 & 1.87E-05 & 2459.02& 0.0\\
+		\hline
+		10,000& 2000 & 0.0653 & 1.87E-05 & 2459.02& 0.0\\
+		\hline
 		100,000& 1000 & 0.0739 & 1.82E-05 & 2459.02& 0.0\\
 		\hline
 		100,000& 2000 & 0.0739 & 1.80E-05 & 2459.02& 0.0\\
+		\hline
+		100,000& 2000 & 0.0739 & 1.80E-05 & 2459.02& 0.0\\
+		\hline
+		100,000& 2000 & 0.0739 & 1.80E-05 & 2459.02& 0.0\\
+		\hline
+		10,00,000& 1000 & 0.0654 & 1.82E-05 & 2630.2& 0.0\\
+		\hline
+		10,00,000& 1000 & 0.0654 & 1.82E-05 & 2630.2& 0.0\\
 		\hline
 		10,00,000& 1000 & 0.0654 & 1.82E-05 & 2630.2& 0.0\\
 		\hline
@@ -45,7 +57,15 @@ For two dimensional case, we manually generate three columns of the data:
 		\hline 
 		10,000,000& 1000 & 0.0677 & 1.91E-05 & 2631.6& 0.0\\
 		\hline
+		10,000,000& 1000 & 0.0677 & 1.91E-05 & 2631.6& 0.0\\
+		\hline
+		10,000,000& 1000 & 0.0677 & 1.91E-05 & 2631.6& 0.0\\
+		\hline
 		10,000,000& 2000 &0.0677 & 1.88E-05 & 2631.6& 0.0\\
+		\hline
+		19,000,000& 1000 & 0.06968 & 1.87E-05 & 2631.6& 0.0\\
+		\hline
+		19,000,000& 1000 & 0.06968 & 1.87E-05 & 2631.6& 0.0\\
 		\hline
 		19,000,000& 1000 & 0.06968 & 1.87E-05 & 2631.6& 0.0\\
 		\hline
@@ -194,100 +214,7 @@ Baseline model has one hyper parameter: No$\_$of\_Cells specifying the number of
 \end{table}
 
 
-\subsubsection {Lisa Baseline model search optimization}
-%In lisa baseline model, we need to linearly search for the query key in a cell. 
-In case of high dimensional key values, key with in a page can not be searched with mapped value, as a large number of keys can have the same mapped value. However for the 2 dimensional scenario, we can get considerable savings in search cost by replacing sequential scan based on keys values to binary search based on mapped value. Once mapped value is found using binary search, we do a look up in its neighbourhood based on 2 dimensional key value. As shown in table \ref{baselinesearch_optimization}, we get significant savings in the query time with this approach.
 
-\begin{table}[ht]
-	\centering
-	\begin{tabular}{||p{0.15\textwidth}<{\centering}|p{0.2\textwidth}<{\centering}| p{0.1\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}||}
-		\hline
-		Training/Test Data Size& Model & No. of cells & Build Time(ms) & Avg Query Time(ms) & Memory Size(KB)\\ [0.5ex] 
-		\hline
-		\hline
-		10,000& Lisa Baseline & 10 & 11.1208 & 0.284191 & 313.77\\
-		\hline
-		10,000& Lisa Baseline & 100 & 12.0108 & 0.277918 & 315.85\\
-		\hline
-		10,000& Lisa Baseline & 1000 & 12.7589 & 0.276572 & 336.97\\
-		\hline
-		\hline
-	\end{tabular}
-	\label{baseline_search_optimization}
-	\caption{Experimental results for baseline model with search optimization, Training Data Size : 10,000 points}
-\end{table}
-
-\begin{table}[ht]
-	\centering
-	\begin{tabular}{||p{0.15\textwidth}<{\centering}|p{0.2\textwidth}<{\centering}| p{0.1\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}||}
-		\hline
-		Training/Test Data Size& Model & No. of cells & Build Time(ms) & Avg Query Time(ms) & Memory Size(KB)\\ [0.5ex] 
-		\hline
-		\hline
-		100,000& Lisa Baseline & 10 & 112.973 & 0.285525 & 313.77\\
-		\hline
-		100,000& Lisa Baseline & 100 & 114.318 & 0.282053 & 315.85\\
-		\hline
-		100,000& Lisa Baseline & 1000 & 116.699 & 0.280637 & 336.97\\
-		\hline
-		\hline
-	\end{tabular}
-	\label{baseline_search_optimization}
-	\caption{Experimental results for baseline model with search optimization, Training Data Size : 100,000 points}
-\end{table}
-
-\begin{table}[ht]
-	\centering
-	\begin{tabular}{||p{0.15\textwidth}<{\centering}|p{0.2\textwidth}<{\centering}| p{0.1\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}||}
-		\hline
-		Training/Test Data Size& Model & No. of cells & Build Time(ms) & Avg Query Time(ms) & Memory Size(KB)\\ [0.5ex] 
-		\hline
-		\hline
-		1,000,000& Lisa Baseline & 10 & 1116.51 & 0.240508 & 313.77\\
-		\hline
-		1,000,000& Lisa Baseline & 100 & 1118.85 &0.235858 & 315.85\\
-		\hline
-		1,000,000& Lisa Baseline & 1000 & 1134.88 & 0.234435 & 336.97\\
-		\hline
-		\hline
-	\end{tabular}
-	\label{baseline_search_optimization}
-	\caption{Experimental results for baseline model with search optimization, Training Data Size : 1,000,000 points}
-\end{table}
-
-\comm{
-\begin{table}
-	\centering
-	\begin{tabular}{||p{0.15\textwidth}<{\centering}|p{0.2\textwidth}<{\centering}| p{0.1\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}||}
-		\hline
-		Training/Test Data Size& Model & No. of cells & Build Time(s) & Avg Query Time(s) & Memory Size(KB)\\ [0.5ex] 
-		\hline
-		\hline
-		10,000& Lisa Baseline & 10 & 0.034 & 0.0005 & 313.77\\
-		\hline
-		10,000& Lisa Baseline & 100 & 0.023 & 0.0005 & 315.85\\
-		\hline
-		10,000& Lisa Baseline & 1000 & 0.021 & 0.0005 & 336.97\\
-		\hline
-		100,000& Lisa Baseline & 10 & 0.175 & 0.0005 & 3126.2\\
-		\hline
-		100,000& Lisa Baseline & 100 & 0.167 & 0.0005 & 3128.3\\
-		\hline
-		100,000& Lisa Baseline & 1000 & 0.204 & 0.0005 & 3149.4\\
-		\hline 
-		1,000,000& Lisa Baseline & 10 & 1.559 & 0.0005 & 31251.3\\
-		\hline
-		1,000,000& Lisa Baseline & 100 &1.705 & 0.0005 & 31253.4\\
-		\hline
-		1,000,000& Lisa Baseline & 1000 & 2.002 & 0.0005 & 31274.5\\
-
-		\hline
-		\hline
-	\end{tabular}
-	\label{baseline_search_optimization}
-	\caption{Experimental results for lisa baseline model with search optimization for small lognormal data}
-\end{table}
-}
 \subsubsection {Hyper-parameter search for the Lisa implementation}
 For Lisa model, we have 2 hyper parameters:
 \begin{enumerate}
@@ -312,9 +239,9 @@ Experiments results are consistent across all 3 training sizes and have followin
 		Training/Test Data Size& Model & GridCellSize & No of Shards Per Interval & Build Time(s) & Avg Query Time(ms) & Memory Size(KB)\\ [0.5ex] 
 		\hline
 		\hline
-		10,000& Lisa& 4*4=16 & 5& 4.335 & 1.13135 & 324.72\\
+		10,000& Lisa& 4^2=16 & 5& 4.335 & 1.13135 & 324.72\\
 		\hline
-		10,000& Lisa& 4*4=16 & 10& 3.370& 0.96036 & 329.07\\
+		10,000& Lisa& 4^2=16 & 10& 3.370& 0.96036 & 329.07\\
 		\hline
 		10,000& Lisa& 4*4=16 & 20&1.127& 0.86184 & 323.47\\
 		\hline
@@ -452,4 +379,7 @@ Experiments results are consistent across all 3 training sizes and have followin
 
 \subsubsection {Range Query Experiments}
 Table shows evaluation results for LISA and KDTree models for range sizes of 10, 100, 1000, and 10000 for different training sizes. For a given range query size, we perform 20 trials and take the average. For each trial, we sample a random point from the test set and find the range from sampled point to the range query size. 
+
+\subsubsection {KNN Query Experiments}
+Table shows evaluation results for LISA and KDTree models for KNN Queries for various value of K and training sizes. For a given K value, we perform 20 trials and take the average of query time. For each trial, we sample a random point from the test set and find K neighbours around that point
 

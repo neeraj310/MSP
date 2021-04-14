@@ -8,7 +8,7 @@ from src.indexing.utilities.metrics import get_memory_size
 import numpy as np
 from scipy.spatial import KDTree
 
-ns = [10,100,1000]
+ns = [10,100,1000,10000]
 for n in ns:
     x, y = np.mgrid[0:n, 0:n]
     tree = KDTree(np.c_[x.ravel(), y.ravel()])
