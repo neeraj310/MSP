@@ -6,10 +6,7 @@
 import numpy as np
 from matplotlib.pyplot import xlabel
 from numpy.core.fromnumeric import mean
-import sys
-sys.path.append('')
 from src.indexing.utilities.metrics import mean_squared_error
-
 
 class PiecewiseRegression():
     '''
@@ -24,10 +21,6 @@ class PiecewiseRegression():
         self.stop_threshold = stop_threshold
         self.max_epochs = max_epochs
         self.lrs = lrs
-
-    '''
-    utilities
-    '''
 
     def calculate_error(self, X, y, alphas, betas):
         _, A = self._calculate_alphas(betas, X, y)
