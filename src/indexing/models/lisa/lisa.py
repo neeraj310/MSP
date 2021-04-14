@@ -433,7 +433,8 @@ class LisaModel():
             Y_inverse = np.linalg.inv(Y)
             s = -Y_inverse.dot(g)
         except np.linalg.LinAlgError:
-            print('Y_inverse not avaliable')
+            if self.debugPrint:
+                print('Y_inverse not avaliable')
             s = 0
         pass
         
@@ -854,9 +855,10 @@ class LisaModel():
             for i in range (self.nuOfKeysToSearchinAdjacentShard):
                  if (self.train_array[shard_offset-i,0] == query[0]) and (self.train_array[shard_offset-i,1]== query[1]):
                      return self.train_array[shard_offset-i,2]
-                
-        print('query point %d %d not found in shard Id %d interval_id = %d sharrd_offset %d %d' %(query[0], query[1], shardId,interval_id, shard_offset, end_offset))    
-        print('Shard Id %d start %d %d end point %d %d '%(shardId, self.train_array[shard_offset,0],self.train_array[shard_offset,1], self.train_array[end_offset-1,0],self.train_array[end_offset-1,1],))
+        if self.debugPrint:        
+            print('query point %d %d not found in shard Id %d interval_id = %d sharrd_offset %d %d' %(query[0], query[1], shardId,interval_id, shard_offset, end_offset))    
+            print('Shard Id %d start %d %d end point %d %d '%(shardId, self.train_array[shard_offset,0],self.train_array[shard_offset,1], self.train_array[end_offset-1,0],self.train_array[end_offset-1,1],))
+            
         return -1
     
     
@@ -903,13 +905,13 @@ class LisaModel():
             if(predShardId >= self.nuOfShards):
                 predShardId = self.nuOfShards-1
                 
-            #if(predShardId !=gtShardId):
-                #self.shardPredictionErrorCount =   self.shardPredictionErrorCount+1
-                #print('query point %d %d pred shard id %d gt shard id %d v_pred = %d' %(query[0], query[1], predShardId, gtShardId, v_pred[0]))   
+             
             y_pred = self.scan_shard(intervalId,predShardId, query)
             if(y_pred == -1):
-                  print('query point %d %d not found with mapped value %f predicted shard id %d' 
+                if self.debugPrint"
+                    print('query point %d %d not found with mapped value %f predicted shard id %d' 
                         %(query[0], query[1], mapped_value,predShardId ))    
+                return 0
             return y_pred    
     
     
@@ -949,7 +951,7 @@ class LisaModel():
         if(lowerBound == False):
             if(self.debugPrint):
                 print('Query Rectangle Outside the range')
-                return cell_list
+            return cell_list
         else:
             if(self.debugPrint):
                 print('lowerbound is a equal to %d'%(idx))
@@ -1008,10 +1010,8 @@ class LisaModel():
         for i in cellList:
             nuOfKeys = self.keysPerCell
             startOffset = int(self.cellMatrix[i][6]*(self.keysPerCell))
-            print(startOffset)
             if i == ((self.cellSize*self.cellSize)-1):
                 nuOfKeys = nuOfKeys + self.additionalKeysInLastCell 
-                print(nuOfKeys)
             for j in range(startOffset, startOffset+nuOfKeys):
                  if(self.train_array[j, 0] >= query_l[0] and self.train_array[j, 0] <= query_u[0] )and \
                          (self.train_array[j, 1] >= query_l[1] and self.train_array[j, 1] <= query_u[1] ):
@@ -1053,21 +1053,18 @@ class LisaModel():
             query_h = (queryPoint[0]+delta, queryPoint[1]+delta)
             if (query_l < (self.train_array[0,0], self.train_array[0,1])):
                 query_l = (self.train_array[0,0], self.train_array[0,1])
-                print('query_l changed to %d %d ' %(query_l[0], query_l[1]))
             if (query_h  > (self.train_array[-1,0], self.train_array[-1,1])):
                 query_h = (self.train_array[-1,0], self.train_array[-1,1])
-                print('query_h changed to %d %d ' %(query_h[0], query_h[1]))
                 
             cellList =self.range_query(query_l,query_h)
             if(len(cellList) == 0):
                 print('range query is empty')
                 return None
             neighboursKeySet = self.getKeysInRangeQuery(cellList,query_l,query_h )
-            #print(neighboursKeySet)
             if (len(neighboursKeySet) < k):
-                print('No of keys found = %d' %(len(neighboursKeySet) ))
+                if self.debugPrint:
+                    print('No of keys found = %d' %(len(neighboursKeySet) ))
                 continue   
-            #neighboursKeySet = np.array(neighboursKeySet[:, 0:2])
             neighboursKeySet = np.hstack((neighboursKeySet, np.zeros((neighboursKeySet.shape[0], 1),dtype=neighboursKeySet.dtype)))
             idx = np.where((neighboursKeySet[:, 0] == queryPoint[0] ) & (neighboursKeySet[:, 1] == queryPoint[1]))
             neighboursKeySet[:, 3] = self.distance(queryPoint,(neighboursKeySet[:, 0], neighboursKeySet[:,1]))
