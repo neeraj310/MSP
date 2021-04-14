@@ -56,7 +56,7 @@ class PointQuery(Query):
                 print("{} model tested in {:.4f} seconds with mse {:.4f}".format(
                 model.name, end_time - start_time, mse))
             build_times.append(end_time - start_time)
-        return mses, build_times, storage
+        return mses, build_times
 
     def evaluate_range_query(self, test_range_query):
         data_size = np.array(test_range_query.shape[0])
@@ -103,8 +103,8 @@ class PointQuery(Query):
         build_times = []
         mses = []
         for idx, model in enumerate(self.models):
-            if (model.name == 'Scipy KD-Tree') or (model.name == 'Lisa Baseline'):
-                continue
+            # if (model.name == 'Scipy KD-Tree') or (model.name == 'Lisa Baseline'):
+            #     continue
             start_time = timer()
             y_pred = np.array(self.predict_knn_query(idx, query, k))
             end_time = timer()
@@ -131,7 +131,7 @@ class PointQuery(Query):
                     model.name, end_time - start_time, mse))
             build_times.append(end_time - start_time)
             
-        return mses, build_times, storage
+        return mses, build_times
        
             
       

@@ -2,14 +2,18 @@ import csv
 import heapq
 import pickle
 import random
-from timeit import default_timer as timer
 import sys
-
 import numpy as np
+
+from timeit import default_timer as timer
 from sklearn.neighbors import KDTree
+from collections import Sequence
+from itertools import chain, count
+
 
 sys.path.append('')
 from src.indexing.utilities.metrics import mean_squared_error
+from src.indexing.utilities.metrics import get_memory_size
 
 
 class KDTreeModel():
@@ -67,6 +71,15 @@ class KDTreeModel():
                 self.predict_range_query(self.query_l, self.query_u,kd_node[1],(i+1)%2,out)
         
         return out
+    def depth(self, tree):
+        tree_init = tree
+        tree = iter(tree)
+        try:
+            for level in count():
+                tree = chain([next(tree)], tree)
+                tree = chain.from_iterable(s for s in tree if isinstance(s, Sequence))
+        except StopIteration:
+            return level, get_memory_size(tree_init)
 
     def predict(self, key):
         nearest = self.get_nearest(key, dim=2)
@@ -75,7 +88,7 @@ class KDTreeModel():
     def build_kd_tree(self, points, dim=2):
         start_time = timer()
         self.kdtree = self.build(points, dim)
-        end_time = timer()
+        end_time = timer()       
         build_time = end_time - start_time
         return build_time
 
@@ -193,25 +206,6 @@ class KDTreeModel():
 
         return self.kdtree
 
-# #Below is the code to test the ground truth using sklearn KDtree
-# def sklearn_kdtree(points, dim):
-#     points = np.array(points)
-#     tree = KDTree(points, leaf_size=2)
-#     s = pickle.dumps(tree)
-#     pickle.loads(s)
-#     dist, _ = tree.query(test, k=3)
-#     return dist**2
-
-
-# def sanity_check():
-#     list_kdtree = []
-#     for i in range(1,10):
-#         dist_sklearn = sklearn_kdtree(points, k)
-#         dist_kdtree = KDTreeModel.get_k_nearest(point, k, dim, kd_node[b],return_distances, i, heap)
-#         for i in range(len(dist_kdtree)):
-#             list_kdtree.append(dist_kdtree[i][0])
-#         mse = metrics.mean_squared_error(np.array(list_kdtree), np.array(dist_sklearn))
-#         i = i+1
 """
 Below is all the testing code
 """
@@ -219,11 +213,16 @@ if __name__ == "__main__":
 
     # filename=sys.argv[1]
     # dim = sys.argv[2]
-
-    filename = 'data/2d_lognormal_lognormal_1000000.csv'
-    dim = 2
+    m = 100
+    # for i in range(0,4):
+    #     m = m*10
+    #     filename = 'data/2d_lognormal_lognormal_' + str(m) + '.csv'
+    #     print(filename)
+    #     dim = 2
 
     # ***** Reading data points from csv ******
+    filename = 'data/2d_lognormal_lognormal_' + str(19000000) + '.csv'
+    dim =2
     points = []
     with open(filename, 'r') as csvfile:
         points_reader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -237,16 +236,11 @@ if __name__ == "__main__":
     kdtree = KDTreeModel()
     bt = kdtree.build_kd_tree(points, dim)
 
-    print(bt, " build time for kd")
+    levels, storage = kdtree.depth(kdtree.kdtree)
 
-    # # t_start = timer()
-    # for t in test:
-    #     result.append(tuple(kdtree.get_k_nearest(t, 2, dim)))
-    # # t_end = timer()
+    print(levels, "levels of KDTree")
 
-    # dis_grnd_truth = sklearn_kdtree(points, dim)
-    # print(result, "result")
-    # # print(t_end-t_start, "Time taken")
-    # print(dis_grnd_truth, "dis_grnd_truth")
+    print(storage, "Storage of KDTree")
 
+    
 
