@@ -1,3 +1,8 @@
+# Copyright (c) 2021 Xiaozhe Yao et al.
+# 
+# This software is released under the MIT License.
+# https://opensource.org/licenses/MIT
+
 import sys
 from typing import List
 
@@ -29,11 +34,11 @@ def load_1D_Data(filename):
 def evaluate(filename):
     data, test_data, page_size = load_1D_Data(filename)
     btm = BTreeModel(page_size, b_tree_degree)
-    fcnm = FCNModel(page_size=page_size, layers=[1,32,32,1], activations=['relu','relu', 'relu'],epochs=1000)
+    fcnm = FCNModel(page_size=page_size, layers=[1,32,32,1], activations=['relu','relu', 'relu'])
     sgm1 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 200, 4000], page_size)
-    models = [fcnm, sgm1]
+    models = [fcnm]
     ptq = PointQuery(models)
-    build_times = ptq.build(data, ratio)
+    build_times = ptq.build(data, ratio, use_index=False)
     mses, eval_times = ptq.evaluate(test_data)
     result = []
     header = [

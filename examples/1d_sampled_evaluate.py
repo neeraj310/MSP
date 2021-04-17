@@ -1,3 +1,8 @@
+# Copyright (c) 2021 Xiaozhe Yao et al.
+# 
+# This software is released under the MIT License.
+# https://opensource.org/licenses/MIT
+
 import sys
 from typing import List
 
@@ -11,6 +16,7 @@ from src.indexing.models.nn.fcn import FCNModel
 from src.indexing.models.rmi.staged import StagedModel
 from src.indexing.models.trees.b_tree import BTreeModel
 from src.indexing.utilities.metrics import get_memory_size
+from src.indexing.utilities.dataloaders import uniform_sample
 from src.queries.point import PointQuery
 from src.indexing.utilities.results import write_results
 import uuid
@@ -28,12 +34,13 @@ def load_1D_Data(filename):
 
 def evaluate(filename):
     data, test_data, page_size = load_1D_Data(filename)
+    train_data = uniform_sample(data, size=1000)
     btm = BTreeModel(page_size, b_tree_degree)
-    fcnm = FCNModel(page_size=page_size, layers=[1,32,32,1], activations=['relu','relu', 'relu'],epochs=1000)
+    fcnm = FCNModel(page_size=page_size, layers=[1,9,9,1], activations=['relu','relu', 'relu'], epochs=10000)
     sgm1 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 200, 4000], page_size)
-    models = [fcnm, sgm1]
+    models = [sgm1]
     ptq = PointQuery(models)
-    build_times = ptq.build(data, ratio)
+    build_times = ptq.build(train_data, ratio, use_index=False)
     mses, eval_times = ptq.evaluate(test_data)
     result = []
     header = [
@@ -45,11 +52,10 @@ def evaluate(filename):
             model.name, build_times[index], eval_times[index], mses[index],
             get_memory_size(model)
         ])
-    write_results(experiment_id, result)
+    # write_results(experiment_id, result)
     print("Experiment ID: {}".format(experiment_id))
     print(tabulate(result, header))
     models_predict(data, models)
-
 
 def models_predict(data, models: List[BaseModel]):
     x = data.iloc[:, :-1].values

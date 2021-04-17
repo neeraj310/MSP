@@ -161,12 +161,15 @@ class BTreeModel(BaseModel):
         start_time = timer()
         for i in range(self.total_data_size):
             self.btree.insert(Item(x[i], y[i]))
+            print('{}/{} inserted into B-Tree'.format(i, self.total_data_size), end='\r')
         end_time = timer()
         test_data_size = x_test.shape[0]
         pred_y = []
         for i in range(test_data_size):
             pred_y.append(
                 self.btree.search(x_test[i])[2].value // self.page_size)
+            print('{}/{} tested B-Tree'.format(i, test_data_size), end='\r')
+
         pred_y = np.array(pred_y)
         mse = metrics.mean_squared_error(y_test, pred_y)
         return mse, end_time - start_time

@@ -2,9 +2,10 @@ import sys
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-
+from src.indexing.utilities.dataloaders import uniform_sample
 def visualize(dist_name,filename):
     data = pd.read_csv(filename)
+    data = uniform_sample(data, size=1000)
     x = data.iloc[:, :-1].values
     y = data.iloc[:, 1].values
     plt.scatter(x, y, s=np.pi*3, alpha=0.5)
