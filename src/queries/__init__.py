@@ -16,7 +16,9 @@ class Query(object):
         super().__init__()
         self.models = models
 
-    def build(self, data, test_ratio, use_index=True):
+    def build(self, data, test_ratio, use_index=True, sample_ratio=1):
+        # WARNING: sample_ratio should be used only when use_index=True
+        self.sample_ratio = sample_ratio
         if use_index:
             return self.build_with_index(data, test_ratio)
         else:

@@ -1,3 +1,8 @@
+# Copyright (c) 2021 Xiaozhe Yao et al.
+#
+# This software is released under the MIT License.
+# https://opensource.org/licenses/MIT
+
 import sys
 import uuid
 from typing import List
@@ -10,52 +15,27 @@ from src.indexing.models import BaseModel
 from src.indexing.models.ml.polynomial_regression import PRModel
 from src.indexing.models.nn.fcn import FCNModel
 from src.indexing.models.rmi.staged import StagedModel
-from src.indexing.models.trees.b_tree import BTreeModel
+from src.indexing.models.trees.b_tree import BTree, BTreeModel
+from src.indexing.utilities.dataloaders import uniform_sample
 from src.indexing.utilities.metrics import get_memory_size
 from src.indexing.utilities.results import write_results
 from src.queries.point import PointQuery
 
-ratio = 0.2
-b_tree_degree = 20
-experiment_id = uuid.uuid4().__str__()[0:8]
+TEST_RATIO = 0.2
+B_TREE_DEGREE = 20
 
 
-def load_1D_Data(filename):
+def load_data(filename, sample_size=None):
     data = pd.read_csv(filename)
-    test_data = data.sample(n=int(ratio * len(data)))
+    train_data = data
+    test_data = data.sample(n=int(TEST_RATIO * len(data)))
+    if sample_size is not None:
+        train_data = uniform_sample(data, sample_size)
     page_size = len(data) // np.max(data.iloc[:, 1])
-    return data, test_data, page_size
+    return train_data, test_data, data, page_size
 
 
-def evaluate(filename):
-    data, test_data, page_size = load_1D_Data(filename)
-    BTreeModel(page_size, b_tree_degree)
-    fcnm = FCNModel(page_size=page_size,
-                    layers=[1, 32, 32, 1],
-                    activations=['relu', 'relu', 'relu'],
-                    epochs=1000)
-    sgm1 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 200, 4000], page_size)
-    models = [fcnm, sgm1]
-    ptq = PointQuery(models)
-    build_times = ptq.build(data, ratio)
-    mses, eval_times = ptq.evaluate(test_data)
-    result = []
-    header = [
-        "Name", "Build Time (s)", "Evaluation Time (s)",
-        "Evaluation Error (MSE)", "Memory Size (KB)"
-    ]
-    for index, model in enumerate(models):
-        result.append([
-            model.name, build_times[index], eval_times[index], mses[index],
-            get_memory_size(model)
-        ])
-    write_results(experiment_id, result)
-    print("Experiment ID: {}".format(experiment_id))
-    print(tabulate(result, header))
-    models_predict(data, models)
-
-
-def models_predict(data, models: List[BaseModel]):
+def predict_all(models, data, experiment_id):
     x = data.iloc[:, :-1].values
     x = x.reshape(-1)
     gt_y = data.iloc[:, 1].values
@@ -74,11 +54,58 @@ def models_predict(data, models: List[BaseModel]):
     for idx, model in enumerate(models):
         results[model.name] = pred_ys[idx]
     df = pd.DataFrame.from_dict(results)
-    df.to_csv('result_10k_{}.csv'.format(experiment_id), index=False)
-    print("Results of experiment {} have been saved to result.csv".format(
-        experiment_id))
+    df.to_csv('result_{}.csv'.format(experiment_id), index=False)
+    print("Results of experiment {} have been saved to result.csv".format(experiment_id))
+
+
+def train(filename, settings={}):
+    experiment_id = uuid.uuid4().__str__()[0:8]
+    train_data, test_data, data, page_size = load_data(
+        filename, settings['sample_size'])
+    models = []
+    sample_ratio = len(train_data)/len(data)
+    if settings['b-tree']:
+        model = BTreeModel(page_size, B_TREE_DEGREE)
+        models.append(model)
+    if settings['fcn']:
+        model = FCNModel(page_size=page_size, layers=[1, 9, 9, 1], activations=[
+                         'relu', 'relu', 'relu'], epochs=10000)
+        models.append(model)
+    if settings['staged']:
+        model = StagedModel(['fcn', 'fcn', 'fcn'], [1, 200, 4000], page_size)
+        models.append(model)
+    if len(models) == 0:
+        raise ValueError("There must be at least one model!")
+    ptq = PointQuery(models)
+    build_times = ptq.build(train_data, TEST_RATIO,
+                            use_index=True, sample_ratio=sample_ratio)
+    mses, eval_times = ptq.evaluate(data)
+    result = []
+    header = [
+        "Name", "Build Time (s)", "Evaluation Time (s)", "Evaluation Error (MSE)", "Memory Size (KiB)"
+    ]
+    for index, model in enumerate(models):
+        result.append([
+            model.name, build_times[index], eval_times[index], mses[index], get_memory_size(
+                model)
+        ])
+    if settings['write']:
+        write_results(experiment_id, result)
+    print("Experiment ID: {}".format(experiment_id))
+    print(tabulate(result, header))
+    if settings['draw_curve']:
+        predict_all(models, data, experiment_id)
 
 
 if __name__ == "__main__":
+    settings = {
+        "b-tree": False,
+        "fcn": False,
+        "staged": True,
+        "write": False,
+        "draw_curve": False,
+        "sample_size": 1000,
+    }
     filename = sys.argv[1]
-    evaluate(filename)
+    print(settings)
+    train(filename, settings)

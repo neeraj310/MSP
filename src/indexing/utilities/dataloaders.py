@@ -21,9 +21,5 @@ def uniform_sample(data, size=10000):
     sampled = np.sort(sampled)
     ypos = np.searchsorted(X, sampled)
     Y = Y[ypos]
-    data = np.zeros((size, 2))
-    data[:, 0] = sampled
-    data[:, 1] = Y
-    data = data.astype(int)
-    sampled = pd.DataFrame({'val': data[:, 0], 'block': data[:, 1]})
+    sampled = pd.DataFrame({'val': sampled, 'block': Y})
     return sampled
