@@ -161,7 +161,8 @@ class BTreeModel(BaseModel):
         start_time = timer()
         for i in range(self.total_data_size):
             self.btree.insert(Item(x[i], y[i]))
-            print('{}/{} inserted into B-Tree'.format(i, self.total_data_size), end='\r')
+            print('{}/{} inserted into B-Tree'.format(i, self.total_data_size),
+                  end='\r')
         end_time = timer()
         test_data_size = x_test.shape[0]
         pred_y = []

@@ -18,9 +18,11 @@ class BFNet(nn.Module):
         self.fc1 = nn.Conv2d(10, classes, 1)
 
         # ConvTranspose
-        self.upscore1 = nn.ConvTranspose2d(
-            classes, classes, stride=2, bias=False)
-    
+        self.upscore1 = nn.ConvTranspose2d(classes,
+                                           classes,
+                                           stride=2,
+                                           bias=False)
+
     def forward(self, x):
         h = x
         h = self.conv1(h)
@@ -30,6 +32,7 @@ class BFNet(nn.Module):
         h = self.upscore1(h)
         return h
 
+
 class BFModel(object):
     def __init__(self, num_breaks) -> None:
         super().__init__()
@@ -38,6 +41,5 @@ class BFModel(object):
 
     def train(self, X, breaks):
         for epoch in range(500):
-            loss = 0.0
             for i in X:
                 pass

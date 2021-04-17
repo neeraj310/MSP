@@ -1,5 +1,6 @@
-from timeit import default_timer as timer
 import sys
+from timeit import default_timer as timer
+
 sys.path.append('')
 import src.indexing.utilities.metrics as metrics
 from src.indexing.learning.polynomial_regression import PolynomialRegression

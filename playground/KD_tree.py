@@ -1,4 +1,3 @@
-import csv
 import time
 from timeit import default_timer as timer
 
@@ -21,6 +20,7 @@ def make_kd_tree(points, dim, i=0):
     elif len(points) == 1:
         return [None, None, points[0]]
 
+
 # def range_points(self, data, kd_node=None, i=0, upper_right, lower_left):
 #     data_train = np.hstack((x_train, y_train))
 #     data_train = data_train.tolist()
@@ -32,10 +32,8 @@ def make_kd_tree(points, dim, i=0):
 #             if lower_left
 #             i = (i + 1) % dim
 #         if lower_left[i] <= kd_node[2][i] and  kd_node[2][i]>= upper_right[i]:
-#             pass 
+#             pass
 #             i = (i + 1) % dim
-
-
 
 
 # Adds a point to the kd-tree
@@ -51,24 +49,29 @@ def add_point(kd_node, point, dim, i=0):
             elif c:
                 add_point(kd_node[j], point, dim, i)
 
-def get_range(kd_node,area,i=0,out=None):
 
-    if out==None:
+def get_range(kd_node, area, i=0, out=None):
+
+    if out == None:
         out = []
     if kd_node is not None:
-        xmin,ymin,xmax,ymax=area
+        xmin, ymin, xmax, ymax = area
 
         # acceptance of point within range
-        if kd_node[2][0]>=xmin and kd_node[2][0]<=xmax and kd_node[2][1]>=ymin and kd_node[2][1]<=ymax:
+        if kd_node[2][0] >= xmin and kd_node[2][0] <= xmax and kd_node[2][
+                1] >= ymin and kd_node[2][1] <= ymax:
             out.append(kd_node[2])
 
         #for traversing left
-        if (kd_node[2][i]>= xmin and i==0) or (kd_node[2][i]>= ymin and i==1):
-            get_range(kd_node[0],area,(i+1)%2,out)
-        if (kd_node[2][i]>= xmin and i==0) or (kd_node[2][i]>= ymin and i==1):
-            get_range(kd_node[1],area,(i+1)%2,out)
-    
+        if (kd_node[2][i] >= xmin and i == 0) or (kd_node[2][i] >= ymin
+                                                  and i == 1):
+            get_range(kd_node[0], area, (i + 1) % 2, out)
+        if (kd_node[2][i] >= xmin and i == 0) or (kd_node[2][i] >= ymin
+                                                  and i == 1):
+            get_range(kd_node[1], area, (i + 1) % 2, out)
+
     return out
+
 
 # k nearest neighbors
 def get_knn(kd_node,
@@ -101,20 +104,21 @@ def get_knn(kd_node,
         neighbors = sorted((-h[0], h[1]) for h in heap)
         return neighbors if return_distances else [n[1] for n in neighbors]
 
-def test_recursion(a=[1,4,3,2,12,11],i=0,out=None):
-    if out==None:
-        out=[]
-    if len(a)<=i:
+
+def test_recursion(a=[1, 4, 3, 2, 12, 11], i=0, out=None):
+    if out == None:
+        out = []
+    if len(a) <= i:
         return out
 
-    if a[i]%2==0:
+    if a[i] % 2 == 0:
         out.append(a[i])
-        out=test_recursion(a,i+1,out)
+        out = test_recursion(a, i + 1, out)
     else:
-        test_recursion(a,i+1,out)
-    
+        test_recursion(a, i + 1, out)
+
     return out
-        
+
 
 # For the closest neighbor
 def get_nearest(kd_node,
@@ -194,15 +198,14 @@ if __name__ == "__main__":
     #     for point in points_reader:
     #         points.append(list(np.float_(point[:2])))
 
-    
-    points=[[5,6],[4,2],[7,9],[3,1],[5,5],[10,7],[2,11]]
-    area=(2,3,6,7)
+    points = [[5, 6], [4, 2], [7, 9], [3, 1], [5, 5], [10, 7], [2, 11]]
+    area = (2, 3, 6, 7)
 
     points = points
     test = [[3, 1]]
     result = []
     dim = 2
-    
+
     t_start = time.time()
     start_time = timer()
     kd_tree = make_kd_tree(points, dim)
@@ -211,8 +214,8 @@ if __name__ == "__main__":
     print(t_end - t_start, 'kd_tree')
     print(end_time - start_time, 'kd_tree time')
     # result.append(tuple(get_knn(kd_tree, [0] * dim, 2, dim, dist_sq_dim)))
-    
-    output=get_range(kd_tree,area)
+
+    output = get_range(kd_tree, area)
 
     for t in test:
         result.append(tuple(get_knn(kd_tree, t, 5, dim, dist_sq_dim)))

@@ -5,6 +5,7 @@
 import numpy as np
 from pympler import asizeof
 
+
 def mean_squared_error(yhat, y):
     if not isinstance(yhat, np.ndarray):
         yhat = np.array(yhat)

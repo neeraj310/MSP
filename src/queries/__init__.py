@@ -3,8 +3,9 @@
 # This software is released under the MIT License.
 # https://opensource.org/licenses/MIT
 
-from typing import List
 import sys
+from typing import List
+
 sys.path.append('')
 from src.indexing.models import BaseModel
 from src.indexing.utilities.dataloaders import split_train_test

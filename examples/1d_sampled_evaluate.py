@@ -1,9 +1,10 @@
 # Copyright (c) 2021 Xiaozhe Yao et al.
-# 
+#
 # This software is released under the MIT License.
 # https://opensource.org/licenses/MIT
 
 import sys
+import uuid
 from typing import List
 
 import numpy as np
@@ -15,15 +16,15 @@ from src.indexing.models.ml.polynomial_regression import PRModel
 from src.indexing.models.nn.fcn import FCNModel
 from src.indexing.models.rmi.staged import StagedModel
 from src.indexing.models.trees.b_tree import BTreeModel
-from src.indexing.utilities.metrics import get_memory_size
 from src.indexing.utilities.dataloaders import uniform_sample
-from src.queries.point import PointQuery
+from src.indexing.utilities.metrics import get_memory_size
 from src.indexing.utilities.results import write_results
-import uuid
+from src.queries.point import PointQuery
 
 ratio = 0.2
 b_tree_degree = 20
 experiment_id = uuid.uuid4().__str__()[0:8]
+
 
 def load_1D_Data(filename):
     data = pd.read_csv(filename)
@@ -35,8 +36,11 @@ def load_1D_Data(filename):
 def evaluate(filename):
     data, test_data, page_size = load_1D_Data(filename)
     train_data = uniform_sample(data, size=1000)
-    btm = BTreeModel(page_size, b_tree_degree)
-    fcnm = FCNModel(page_size=page_size, layers=[1,9,9,1], activations=['relu','relu', 'relu'], epochs=10000)
+    BTreeModel(page_size, b_tree_degree)
+    fcnm = FCNModel(page_size=page_size,
+                    layers=[1, 9, 9, 1],
+                    activations=['relu', 'relu', 'relu'],
+                    epochs=10000)
     sgm1 = StagedModel(['fcn', 'fcn', 'fcn'], [1, 200, 4000], page_size)
     models = [sgm1]
     ptq = PointQuery(models)
@@ -56,6 +60,7 @@ def evaluate(filename):
     print("Experiment ID: {}".format(experiment_id))
     print(tabulate(result, header))
     models_predict(data, models)
+
 
 def models_predict(data, models: List[BaseModel]):
     x = data.iloc[:, :-1].values
@@ -77,7 +82,8 @@ def models_predict(data, models: List[BaseModel]):
         results[model.name] = pred_ys[idx]
     df = pd.DataFrame.from_dict(results)
     df.to_csv('result_10k_{}.csv'.format(experiment_id), index=False)
-    print("Results of experiment {} have been saved to result.csv".format(experiment_id))
+    print("Results of experiment {} have been saved to result.csv".format(
+        experiment_id))
 
 
 if __name__ == "__main__":

@@ -1,6 +1,7 @@
 import sys
+import uuid
 from typing import List
-import csv
+
 import numpy as np
 import pandas as pd
 from tabulate import tabulate
@@ -13,11 +14,11 @@ from src.indexing.models.trees.b_tree import BTreeModel
 from src.indexing.utilities.metrics import get_memory_size
 from src.indexing.utilities.results import write_results
 from src.queries.point import PointQuery
-import uuid
 
 ratio = 0.2
 b_tree_degree = 20
 experiment_id = uuid.uuid4().__str__()[0:8]
+
 
 def load_1D_Data(filename):
     data = pd.read_csv(filename)
@@ -28,11 +29,13 @@ def load_1D_Data(filename):
 
 def evaluate(filename):
     data, test_data, page_size = load_1D_Data(filename)
-    btm = BTreeModel(page_size, b_tree_degree)
-    fcnm = FCNModel(page_size=page_size, layers=[1,8,8,1], activations=['relu','relu', 'relu'])
+    BTreeModel(page_size, b_tree_degree)
+    fcnm = FCNModel(page_size=page_size,
+                    layers=[1, 8, 8, 1],
+                    activations=['relu', 'relu', 'relu'])
 
-    lrm = PRModel(1, page_size)
-    prm = PRModel(2, page_size)
+    PRModel(1, page_size)
+    PRModel(2, page_size)
     sgm1 = StagedModel(['lr', 'lr', 'fcn'], [1, 200, 4000], page_size)
     sgm2 = StagedModel(['lr', 'fcn', 'fcn'], [1, 200, 4000], page_size)
     sgm3 = StagedModel(['fcn', 'fcn', 'lr'], [1, 200, 4000], page_size)
@@ -49,7 +52,7 @@ def evaluate(filename):
         "Name", "Build Time (s)", "Evaluation Time (s)",
         "Evaluation Error (MSE)", "Memory Size (KB)"
     ]
-    
+
     for index, model in enumerate(models):
         result.append([
             model.name, build_times[index], eval_times[index], mses[index],
@@ -81,7 +84,8 @@ def models_predict(data, models: List[BaseModel]):
         results[model.name] = pred_ys[idx]
     df = pd.DataFrame.from_dict(results)
     df.to_csv('result_10k_{}.csv'.format(experiment_id), index=False)
-    print("Results of experiment {} have been saved to result.csv".format(experiment_id))
+    print("Results of experiment {} have been saved to result.csv".format(
+        experiment_id))
 
 
 if __name__ == "__main__":

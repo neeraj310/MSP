@@ -49,10 +49,8 @@ class ScipyKDTreeModel():
     def predict(self, key, k_nearest=1):
 
         dist, indx = self.kdtree.query(key, k=k_nearest)
-  
 
         y_predict = np.array(self.y_train[indx])
-      
 
         return np.expand_dims(y_predict, axis=0)
 
@@ -60,9 +58,9 @@ class ScipyKDTreeModel():
         self.kdtree = ScipyKDTree(x, leafsize=self.leafsize)
 
         return 0
-    
+
     def get_storage(self):
-     
+
         return self.kdtree
 
 
@@ -79,5 +77,3 @@ if __name__ == "__main__":
 
     tree = ScipyKDTreeModel(leafsize=1)
     tree.build(x_train)
-
-    

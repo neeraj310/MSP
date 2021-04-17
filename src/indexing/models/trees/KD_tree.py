@@ -1,19 +1,16 @@
 import csv
 import heapq
-import pickle
 import random
 import sys
-import numpy as np
-
-from timeit import default_timer as timer
-from sklearn.neighbors import KDTree
 from collections import Sequence
 from itertools import chain, count
+from timeit import default_timer as timer
 
+import numpy as np
+from sklearn.neighbors import KDTree
 
 sys.path.append('')
-from src.indexing.utilities.metrics import mean_squared_error
-from src.indexing.utilities.metrics import get_memory_size
+from src.indexing.utilities.metrics import get_memory_size, mean_squared_error
 
 
 class KDTreeModel():
@@ -40,8 +37,13 @@ class KDTreeModel():
         mse = mean_squared_error(y_test, y_predict_test)
 
         return mse, build_time
-    
-    def predict_range_query(self,query_l, query_u,kd_node='init',i=0,out=None):
+
+    def predict_range_query(self,
+                            query_l,
+                            query_u,
+                            kd_node='init',
+                            i=0,
+                            out=None):
         xmin = query_l[0]
         xmax = query_u[0]
         ymin = query_l[1]
@@ -49,35 +51,42 @@ class KDTreeModel():
         self.query_l = query_l
         self.query_u = query_u
 
-        if out==None:
+        if out == None:
             out = []
 
-        if kd_node=='init':
+        if kd_node == 'init':
             kd_node = self.kdtree
 
         if kd_node is not None:
             # xmin,ymin,xmax,ymax=area
-            area = xmin,ymin,xmax,ymax
+            xmin, ymin, xmax, ymax
             # acceptance of point within range
-            if kd_node[2][0]>=xmin and kd_node[2][0]<=xmax and kd_node[2][1]>=ymin and kd_node[2][1]<=ymax:
+            if kd_node[2][0] >= xmin and kd_node[2][0] <= xmax and kd_node[2][
+                    1] >= ymin and kd_node[2][1] <= ymax:
                 out.append(kd_node[2][2])
 
             #for traversing left
-            if (kd_node[2][i]>= xmin and i==0) or (kd_node[2][i]>= ymin and i==1):
-                self.predict_range_query(self.query_l, self.query_u,kd_node[0],(i+1)%2,out)
+            if (kd_node[2][i] >= xmin and i == 0) or (kd_node[2][i] >= ymin
+                                                      and i == 1):
+                self.predict_range_query(self.query_l, self.query_u,
+                                         kd_node[0], (i + 1) % 2, out)
 
             #for traversing right
-            if (kd_node[2][i]<= xmax and i==0) or (kd_node[2][i]<= ymax and i==1):
-                self.predict_range_query(self.query_l, self.query_u,kd_node[1],(i+1)%2,out)
-        
+            if (kd_node[2][i] <= xmax and i == 0) or (kd_node[2][i] <= ymax
+                                                      and i == 1):
+                self.predict_range_query(self.query_l, self.query_u,
+                                         kd_node[1], (i + 1) % 2, out)
+
         return out
+
     def depth(self, tree):
         tree_init = tree
         tree = iter(tree)
         try:
             for level in count():
                 tree = chain([next(tree)], tree)
-                tree = chain.from_iterable(s for s in tree if isinstance(s, Sequence))
+                tree = chain.from_iterable(s for s in tree
+                                           if isinstance(s, Sequence))
         except StopIteration:
             return level, get_memory_size(tree_init)
 
@@ -88,7 +97,7 @@ class KDTreeModel():
     def build_kd_tree(self, points, dim=2):
         start_time = timer()
         self.kdtree = self.build(points, dim)
-        end_time = timer()       
+        end_time = timer()
         build_time = end_time - start_time
         return build_time
 
@@ -111,21 +120,22 @@ class KDTreeModel():
         if kd_node is not None:
             dx = kd_node[2][i] - point[i]
             i = (i + 1) % dim  # i is to alternate bw x and y
-            for j, c in ((0, dx >= 0), (1, dx < 0)):  # j is for left and right addition  and c is to check where to add
+            for j, c in (
+                (0, dx >= 0), (1, dx < 0)
+            ):  # j is for left and right addition  and c is to check where to add
                 if c and kd_node[j] is None:
                     kd_node[j] = [None, None, point]
                 elif c:
                     self.add_point(point, dim, kd_node[j], i)
 
-
     def predict_knn_query_find(self,
-                      point,
-                      k,
-                      dim=2,
-                      kd_node='init',
-                      return_distances=True,
-                      i=0,
-                      heap=None):
+                               point,
+                               k,
+                               dim=2,
+                               kd_node='init',
+                               return_distances=True,
+                               i=0,
+                               heap=None):
 
         if kd_node == 'init':
             kd_node = self.kdtree
@@ -145,28 +155,27 @@ class KDTreeModel():
             for b in [dx < 0] + [dx >= 0] * (
                     dx * dx < -heap[0][0]
             ):  # dx*dx is r' and decide whether to check other branch or not.
-                self.predict_knn_query_find(point, k, dim, kd_node[b], return_distances,
-                                   i, heap)
+                self.predict_knn_query_find(point, k, dim, kd_node[b],
+                                            return_distances, i, heap)
         if is_root:
             neighbors = sorted((-h[0], h[1]) for h in heap)
             return neighbors if return_distances else [n[1] for n in neighbors]
 
     def predict_knn_query(self,
-                      point,
-                      k,
-                      dim=2,
-                      kd_node='init',
-                      return_distances=True,
-                      i=0,
-                      heap=None):
+                          point,
+                          k,
+                          dim=2,
+                          kd_node='init',
+                          return_distances=True,
+                          i=0,
+                          heap=None):
 
-        y_pred = self.predict_knn_query_find(point,k,dim,kd_node,return_distances,i,heap)
+        y_pred = self.predict_knn_query_find(point, k, dim, kd_node,
+                                             return_distances, i, heap)
         y_pred = np.array(y_pred)
         # yhat=np.vstack(y_pred[:,1])[:,2]
-        yhat=np.vstack(y_pred[:,0])
+        yhat = np.vstack(y_pred[:, 0])
         return np.sqrt(yhat)
-                      
-
 
     def get_nearest(self,
                     point,
@@ -206,6 +215,7 @@ class KDTreeModel():
 
         return self.kdtree
 
+
 """
 Below is all the testing code
 """
@@ -222,7 +232,7 @@ if __name__ == "__main__":
 
     # ***** Reading data points from csv ******
     filename = 'data/2d_lognormal_lognormal_' + str(19000000) + '.csv'
-    dim =2
+    dim = 2
     points = []
     with open(filename, 'r') as csvfile:
         points_reader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -241,6 +251,3 @@ if __name__ == "__main__":
     print(levels, "levels of KDTree")
 
     print(storage, "Storage of KDTree")
-
-    
-

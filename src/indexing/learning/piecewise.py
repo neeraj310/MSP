@@ -6,7 +6,9 @@
 import numpy as np
 from matplotlib.pyplot import xlabel
 from numpy.core.fromnumeric import mean
+
 from src.indexing.utilities.metrics import mean_squared_error
+
 
 class PiecewiseRegression():
     '''

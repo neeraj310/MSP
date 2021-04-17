@@ -10,7 +10,7 @@ def get_data(distribution, size):
     if distribution == "UNIFORM":
         data = random.sample(range(size * FACTOR), size)
     elif distribution == "BINOMIAL":
-        data = np.random.binomial(size*FACTOR, 0.4, size)
+        data = np.random.binomial(size * FACTOR, 0.4, size)
     elif distribution == "POISSON":
         data = np.random.poisson(200, size)
     elif distribution == "EXPONENTIAL":
