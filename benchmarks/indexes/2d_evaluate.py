@@ -14,8 +14,8 @@ import numpy as np
 
 import src.indexing.utilities.metrics as metrics
 from src.indexing.models import BaseModel
-from src.indexing.models.lisa.basemodel import LisaBaseModel
-from src.indexing.models.lisa.lisa import LisaModel
+# from src.indexing.models.lisa.basemodel import LisaBaseModel
+# from src.indexing.models.lisa.lisa import LisaModel
 from src.indexing.models.trees.KD_tree import KDTreeModel
 from src.indexing.models.trees.scipykdtree import ScipyKDTreeModel
 from src.queries.point import PointQuery
@@ -37,10 +37,10 @@ def load_2D_Data(filename):
 
 def create_models(filename):
     data, test_data = load_2D_Data(filename)
-    LisaBaseModel(100)
+    # LisaBaseModel(100)
     kdtree = KDTreeModel()
     scipykdtree = ScipyKDTreeModel(leafsize=10)
-    lisa = LisaModel(cellSize=4, nuOfShards=5)
+    # lisa = LisaModel(cellSize=4, nuOfShards=5)
 
     models = [kdtree, scipykdtree]
     ptq = PointQuery(models)
