@@ -1,0 +1,32 @@
+\begin{tikzpicture}[font=\small]
+	\pgfplotsset{compat=1.10, width=\textwidth, height=\textwidth}
+	\begin{axis}[
+		xmode=log,
+		axis y line*=left,
+		xlabel=Number of datapoints,
+		ylabel=Average Query time,
+		xtick={1000,10000,100000,1000000},
+	]
+	\addplot[smooth, mark=x, blue]
+	coordinates{
+		(1000, 4.93824E-05)
+		(10000, 6.10835E-05)
+		(100000, 6.41705E-05)
+		(1000000, 6.67412E-05)
+	}; \label{plot_one}
+	\end{axis}
+	
+	\begin{axis}[
+  		axis y line*=right,
+  		axis x line=none,
+ 	  	ylabel=Memory Usage,
+	]
+	\addplot[smooth,mark=o,red]
+  	coordinates{
+    	(1000,444.0729167)
+    	(10000,4417.733333)
+    	(100000,44146)
+    	(1000000,442610.6667)
+	};
+	\end{axis}	
+\end{tikzpicture}

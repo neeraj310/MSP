@@ -20,6 +20,8 @@ In this example, the range query should return the points that lies inside the r
 
 \subsubsection{Range Query with $K$D-Tree}
 
+% TODO: THIS ALGORITHM IS STILL NOT COMPLETE, and hard to follow.
+
 \begin{figure}[htp]
     \centering
     \includegraphics[width=0.4\textwidth]{graphs/Range_Query_Tree.png}
@@ -34,8 +36,8 @@ In this example, the range query should return the points that lies inside the r
     \label{fig:KD_Tree_Range_Query_Plot}
 \end{figure}
 
-% This looks very weird
-We then check if the root of the tree lies within the range of the bounds and only then start traversing the tree. 
+
+We check the validity of a point lying withing the rectangle by checking the range of x coordinate and y coordinate of a point.
 
 \begin{mscexample}
     For example we have a tree with Point list as 

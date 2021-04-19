@@ -1,3 +1,4 @@
+#!/bin/bash
 # Copyright (c) 2021 Xiaozhe Yao et al.
 #
 # This software is released under the MIT License.
@@ -7,9 +8,17 @@ evaluate() {
     local id=$1
     local distribution=$2
     local numberOfData=100000
-    python3 src/utilities/1d_generator.py "$distribution" $numberOfData
-    echo "$i/3: Evaluating $distribution with $numberOfData points"
-    python3 examples/1d_evaluate.py data/1d_"$distribution"_$numberOfData.csv > "$distribution"_"$numberOfData"_$i.log
+    if [[ "$distribution" == "lognormal" ]] 
+    then
+        echo "c-generator for lognormal..."
+        src/utilities/c-generator/lognormal."$numberOfData".run
+        echo "$i/3: Evaluating $distribution with $numberOfData points"
+        python3 examples/1d_evaluate.py data/1d_"$distribution"_$numberOfData.csv > "$distribution"_"$numberOfData"_$i.log
+    else
+        python3 src/utilities/1d_generator.py "$distribution" $numberOfData
+        echo "$i/3: Evaluating $distribution with $numberOfData points"
+        python3 examples/1d_evaluate.py data/1d_"$distribution"_$numberOfData.csv > "$distribution"_"$numberOfData"_$i.log
+    fi
 }
 
 batch_evaluate() {
@@ -19,7 +28,7 @@ batch_evaluate() {
     done
 }
 
-for dist in "normal" "lognormal" "uniform"
+for dist in "lognormal" "normal" "uniform"
 do
-    batch_evaluate "$dist"
-doneu
+    batch_evaluate "$dist" &
+done

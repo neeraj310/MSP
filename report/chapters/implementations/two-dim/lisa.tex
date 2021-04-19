@@ -4,15 +4,15 @@ for one-dimensional data, this section explores the application of learned index
 
 \subsubsection{Motivation}
 
-In the last section, we described a recursive model index (RMI) that consists of a number of machine learning models staged into a hierarchy to enable synthesis of specialised index structures, termed learned indexes. Provided with a search key $x$, RMI predicts the position of $x$'s data with some error bound, by learning the CDF over the key search space. However, as shown in Fig.  \ref{fig:Key_Distribution}, the idea of RMI is not applicable in the context of spatial data as spatial data invalidates the assumption required by RMI that the data is sorted by key and that any imprecision can be easily corrected by a localised search. Although it is possible to learn multi-dimensional CDFs, such CDFs will result in searching local regions qualified on one dimension but not all dimensions.
-
+In the last section, we described a recursive model index (RMI) that consists of a number of machine learning models staged into a hierarchy to enable synthesis of specialised index structures, termed learned indexes. Provided with a search key $x$, RMI predicts the position of $x$'s data with some error bound, by learning the CDF over the key search space. However, the idea of RMI is not applicable in the context of spatial data as spatial data invalidates the assumption required by RMI that the data is sorted by key and that any imprecision can be easily corrected by a localised search. Although it is possible to learn multi-dimensional CDFs, such CDFs will result in searching local regions qualified on one dimension but not all dimensions.
+\comm{  
 \begin{figure*}[t]
     \centering
     \includegraphics[width=0.6\textwidth]{graphs/Lisa_Key_distribution.png}
     \caption{Key Distribution in 2 dimensional case:Idea of learned indexes is not applicable in the context of spatial data as data is not sorted by key. Learning multidimensional CDFs will result in searching local regions qualified on one dimension but not all dimensions.}
     \label{fig:Key_Distribution}
 \end{figure*}
-
+}
 \begin{mscexample}
 For example, consider the joint cumulative function of two random variables X and Y defined as $F_{XY}(x, y)=P(X\leq x, Y\leq y)$.
 The joint CDF satisfies the following properties:
@@ -49,9 +49,15 @@ We can extend the learned index method for range queries on spatial data by usin
 For a range query, we have a query rectangle $qr = [l_{0},u_{0}) \times [l_{1},u_{1})$, we only need to predict the indices of $(l_{0}, l_{1})$ and $(u_{0},u_{1})$ namely $i_{1}$ and $i_{2}$ respectively. Then we scan the keys in $i_{2}-i_{1}+1$ cells, and find those keys that fall in the query rectangle qr. 
 
 \begin{mscexample}
-As shown in Fig. \ref{fig:BaseLine_Method_Limitation}, the key space is divided into 3 cells using the mapping function $\mathcal{M}((x,y))= x+y$. The query rectangle consisting of only $1$ key, falls inside the second part. During prediction, we need to find out the cells to which our query rectangle belongs (the $2^{nd}$ cell in our example). Once the cell is found, we need to compare the key of the query point, against all the possible keys in that cell until a match is found. This results in $8$ irrelevant points accessed for the range query that only contains one relevant key.
+As shown in Fig. \ref{fig:BaseLine_Method}, the key space is divided into 3 cells using the mapping function $\mathcal{M}((x,y))= x+y$. The query rectangle consisting of only $1$ key, falls inside the second part. During prediction, we need to find out the cells to which our query rectangle belongs (the $2^{nd}$ cell in our example). Once the cell is found, we need to compare the key of the query point, against all the possible keys in that cell until a match is found. This results in $8$ irrelevant points accessed for the range query that only contains one relevant key.
 \end{mscexample}
 
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=1.3\textwidth]{graphs/Baseline_limitation.pdf}
+    \caption{LISA Baseline Method}
+    \label{fig:BaseLine_Method}
+\end{figure*}
 \subsubsection{Training}
 
 The training dataset for the baseline model can be notated as $(\boldsymbol{X}, Y)$ with entries notated as $(\boldsymbol{x},y)$. $\boldsymbol{X}$ represents the two dimensional key coordinates, and $Y$ represents the corresponding data item. 
@@ -125,8 +131,12 @@ Given a spatial dataset, we generate the mapping function $\mathcal{M}$, the sha
 
 \begin{figure*}[t]
     \centering
-    \includegraphics[width=17cm,height=4cm]{graphs/Lisa_Overview.png}
-    \caption{Lisa Framework }
+    %\includegraphics[width=17cm,height=4.5cm]{graphs/implementation/lisa_overview}
+\includegraphics[width=1\textwidth]{graphs/implementation/lisa_overview.pdf}
+    \caption{Lisa Framework\\
+     1) Generate grid cells, and apply Lebesgue Measure to each cell to map two dimensional key value to a scalar.\\
+    2) Sort mapped values and divide them across equal length intervals termed as mapped intervals(3 in the figure)\\
+    3) For each mapped interval,divide the mapped value range in shards(3 in the figure) and learn a linear regression function per shard }
     \label{fig:Lisa_Framework}
 \end{figure*}
 
@@ -174,7 +184,7 @@ We need to sort the key space along the sequence of axis before we partition the
 
 \begin{figure*}[t]
     \centering
-    \includegraphics[width=1\textwidth]{graphs/Grid_Cell_Generation_Strategy_1.png}
+    \includegraphics[width=1\textwidth]{graphs/implementation/cell_generation.pdf}
     \caption{Cell Partition Strategy: \\
     1) : Sort Keys on x dimension and divide into 3 vertical columns each containing 9 keys\\
     2) : Sort each vertical column keys on y dimension and divide into 3 horizontal columns each containing 3 keys}
@@ -218,10 +228,10 @@ As shown in figure \ref{fig:Lebesgue_Measure}, in $2$-dimensional case, $\frac {
 
 \begin{figure*}[t]
     \centering
-    \includegraphics[width=0.6\textwidth]{graphs/Lebesgue_Measure.png}
+    \includegraphics[width=0.6\textwidth]{graphs/implementation/Lebesgue_Measure.pdf}
     \caption{Lebesgue Measure Representation for 2 dimensional data\\
-    1) Lebesgue Measure for the green point in first cell will be ratio of area of red rectangle divided by the total area of $1^{st}$ cell \\
-    1) Lebesgue Measure for the green point in second cell will be ratio of area of blue rectangle divided by the total area of $2^{nd}$ cell}
+    1) Lebesgue Measure for the black point in first cell will be ratio of area of red rectangle divided by the total area of $1^{st}$ cell = $50/100=0.5$ \\
+    1) Lebesgue Measure for the green point in second cell will be ratio of area of blue rectangle divided by the total area of $2^{nd}$ cell = $20/100= 0.2$}
     \label{fig:Lebesgue_Measure}
 \end{figure*}
 
@@ -257,9 +267,17 @@ $$
 Then the problem left is to train the linear regression functions $\mathcal{F}_i$. Let $\boldsymbol{x}=(x_0,\cdots,x_v)$ be the keys' mapped value that fall in $[m_{i-1}, m_i)$. Suppose that $\boldsymbol{x}$ is sorted, i.e. $x_i\leq x_j, \forall 0\leq i<j\leq v$. Let $\boldsymbol{y}=(0,\cdots, V)$. Then we build a piecewise linear regression function $f_i$ with inputs $\boldsymbol{x}$ and ground truth $\boldsymbol{y}$. For a given point with mapped value $m\in[m_{i-1}, m_i)$, its shard id is given by $\ceil{\frac{f_i(m)}{\Psi}}+i\times D$, i.e. $\mathcal{F}_i(x)=\frac{f_i(m)}{\Psi}$.
 
 \begin{mscexample}
-	In our previous example, in the interval $[0,3)$, we have $\boldsymbol{x}=(1,1.2,2.2)$ and $\boldsymbol{y}=(0,1,2)$. Then for a point with the mapped value $m=1.2$, the expected output will be $f_i(m)=1$ and the shard id is given by $\ceil{\frac{1}{2}}+0\times 2=1$. Hence, the point with mapped value $m=1.2$ will be allocated to the first shard. Then the problem is to train a continuous piecewise linear regression function in each interval. We constrain the piecewise linear regression function to be continuous so that it is guaranteed be monotonic.
+	In our previous example, in the interval $[0,3)$, we have $\boldsymbol{x}=(1,1.2,2.2)$ and $\boldsymbol{y}=(0,1,2)$. Then for a point with the mapped value $m=1.2$, the expected output will be $f_i(m)=1$ and the shard id is given by $\ceil{\frac{1}{2}}+0\times 2=1$. Hence, the point with mapped value $m=1.2$ will be allocated to the first shard. Then the problem is to train a continuous piecewise linear regression function in each interval. We constrain the piecewise linear regression function to be continuous so that it is guaranteed be monotonic as shown in Figure \ref{shardPrediction}.
 \end{mscexample}
 
+\begin{figure*}[t]
+    \centering
+    %\includegraphics[width=17cm,height=4.5cm]{graphs/implementation/lisa_overview}
+\includegraphics[width=0.6\textwidth]{graphs/implementation/shardPrediction.pdf}
+    \caption{Piecewise linear regression functions learnt by ShardTrainingAlgorithm, V is the number of keys per mapped interval}
+     
+    \label{shardPrediction}
+\end{figure*}
 Formally, a piecewise linear function can be described as 
 
 \begin{equation}
