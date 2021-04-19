@@ -14,8 +14,8 @@ import numpy as np
 
 import src.indexing.utilities.metrics as metrics
 from src.indexing.models import BaseModel
-from src.indexing.models.lisa.basemodel import LisaBaseModel
-from src.indexing.models.lisa.lisa import LisaModel
+# from src.indexing.models.lisa.basemodel import LisaBaseModel
+# from src.indexing.models.lisa.lisa import LisaModel
 from src.indexing.models.trees.KD_tree import KDTreeModel
 from src.indexing.models.trees.scipykdtree import ScipyKDTreeModel
 from src.queries.point import PointQuery
@@ -30,17 +30,17 @@ def load_2D_Data(filename):
     # Remove duplicates
     col_names = list(data.columns)[:-1]
     data.drop_duplicates(subset=col_names, ignore_index=True, inplace=True)
-    data = data[0:10000]
+    data = data[0:10000000]
     test_data = data  #data.sample(n=int(ratio * len(data)))
     return data, test_data
 
 
 def create_models(filename):
     data, test_data = load_2D_Data(filename)
-    LisaBaseModel(100)
+    # LisaBaseModel(100)
     kdtree = KDTreeModel()
     scipykdtree = ScipyKDTreeModel(leafsize=10)
-    lisa = LisaModel(cellSize=4, nuOfShards=5)
+    # lisa = LisaModel(cellSize=4, nuOfShards=5)
 
     models = [kdtree, scipykdtree]
     ptq = PointQuery(models)
@@ -110,8 +110,8 @@ def range_query_eval(models, ptq, test_data, build_times):
             i = i + 1
         print(tabulate(result, header))
         for index, model in enumerate(models):
-            if (model.name == 'Scipy KD-Tree') or (model.name
-                                                   == 'Lisa Baseline'):
+            if (model.name == 'Scipy KD-Tree') or (model.name == 'Lisa Baseline'):
+            # if (model.name == 'Lisa Baseline'):
                 continue
             print('Average Eval time for model %s query size %d is %f' %
                   (model.name, j,

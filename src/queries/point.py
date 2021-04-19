@@ -81,7 +81,7 @@ class PointQuery(Query):
             end_time = timer()
             if (y_pred.shape[0] != data_size):
                 print(
-                    'Nu of predicted entries in range query %d versus expected entries %d',
+                    'Num of predicted entries in range query %d versus expected entries %d',
                     y_pred.shape[0], data_size)
                 mse = -1
 
