@@ -17,9 +17,11 @@
 	\end{axis}
 	
 	\begin{axis}[
+		xmode=log,
   		axis y line*=right,
   		axis x line=none,
  	  	ylabel=Memory Usage,
+ 	  	xtick={1000,10000,100000,1000000},
 	]
 	\addplot[smooth,mark=o,red]
   	coordinates{

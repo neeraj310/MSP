@@ -42,7 +42,9 @@
 \usepackage{float}
 \usepackage{subcaption}
 \usepackage{placeins}
+
 \usepgfplotslibrary{groupplots}
+
 \hypersetup{
     colorlinks,
     citecolor=black,
@@ -52,24 +54,28 @@
 }
 \definecolor{pastelgray}{rgb}{0.81, 0.81, 0.77}
 
-\newcounter{example}[chapter]
+\newcounter{example}[section]
 \newenvironment{mscexample}[1][]
 	{\refstepcounter{example}\par\medskip
-		\begin{mdframed}[backgroundcolor=white]
 		\noindent \textbf{Example~\thechapter.\theexample #1} \rmfamily
 		}{ $\hfill\clubsuit$
-		\end{mdframed}
 	} {\medskip}
 	
 \newcounter{proof}[chapter]
 \newenvironment{mscproof}[1][]
 	{\refstepcounter{proof}\par\medskip
-		\begin{mdframed}[backgroundcolor=lightgray]
 		\noindent \textbf{Proof~\thechapter.\theproof #1} \rmfamily
 		}{ $\hfill\blacksquare$
-		\end{mdframed}
+	} {\medskip}
+
+\newcounter{conclusion}[chapter]
+\newenvironment{mscconclusion}[1][]
+	{\refstepcounter{conclusion}\par\medskip
+		\noindent \textbf{Conclusion~\thechapter.\theconclusion #1} \rmfamily
+		}{ $\hfill\square$
 	} {\medskip}
 	
+
 \newcommand{\comm}[1]{}
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
@@ -83,7 +89,7 @@
   \scriptsize Matrikelnummer: 19-759-570\\[-5pt]
   \scriptsize Email: \texttt{xiaozhe.yao@uzh.ch}
 }
-\date{\vspace*{2cm}January 11, 2010}
+\date{\vspace*{2cm}\today}
 \publishers{
   \small supervised by \\ 
   Prof.\ Dr.\ Michael H. Böhlen and \\ Mr. Qing\ Chen \\[5cm]

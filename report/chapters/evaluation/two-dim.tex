@@ -21,29 +21,39 @@ For two dimensional case, we manually generate three columns of the data:
 After generating dataset as mentioned in previous section, we sample a smaller subset from it. We repeat our experiments for 3 different sample sizes of 10000, 100000 and 1000000 points. Test data is a copy of training data for all our experiments. For Baseline and Lisa models, final prediction is given by linear search through a range of values (identified as a Cell for Baseline and Shard for LISA model) and mean square error (MSE) is zero as test points are already learned during training. This is where Learned Index models differ from traditional machine learning models where model performance is evaluated on unseen data. 
 
 \subsubsection {Hyper-parameter search for the LISA Baseline implementation}
-Baseline model has one hyper parameter: N (Number of cells specifying the number of equal length intervals into which mapped values are divided). As discussed in section, the query search consists of two parts, first is binary search to locate the cell into which the query key is located, followed by sequentially comparison of the query key value with keys in the found cell until a match is found. The time complexity of first search is $log_{2}N_{1}$, where $N_{1}$ is the number of cells. The time complexity of second search is  $ \left \lceil {N_{2} / 2}\right \rceil $, where $N_{2}$ is the number of keys per cell.
+Baseline model has one hyper-parameter: N (Number of cells specifying the number of equal length intervals into which mapped values are divided). As discussed in section, the query search consists of two parts, first is binary search to locate the cell into which the query key is located, followed by sequentially comparison of the query key value with keys in the found cell until a match is found. The time complexity of first search is $log_{2}N_{1}$, where $N_{1}$ is the number of cells. The time complexity of second search is  $ \left \lceil {N_{2} / 2}\right \rceil $, where $N_{2}$ is the number of keys per cell. Optimum value of hyper-parameter N is to assign 1 key per page to mimimize the sequential search cost. 
 
-\begin{table}[ht]
+\begin{table}
 	\centering
 	\begin{tabular}{||p{0.15\textwidth}<{\centering}|p{0.2\textwidth}<{\centering}| p{0.1\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}||}
 		\hline
-		Training/Test Data Size& Model & No. of cells & Build Time (ms) & Avg Query Time (ms) & Memory Size (KB)\\ [0.5ex] 
+		Training/Test Data Size& Model & $N$ & Build Time (ms) & Avg Query Time (ms) & Memory Size (KB)\\ [0.5ex] 
 		\hline
 		\hline
-		%10,000& Lisa Baseline & 10 & 11.171 & 4.34261 & 313.77\\
+		%10,000& Lisa Baseline & 10 & 11.171 & 4.3426 & 313.77\\
 		%\hline
-		10,000& LISA Baseline & 100 & 11.252 & 0.71891 & 315\\
+		10,000& LISA Baseline & 100 & 11.25 & 0.7189 & 315\\
+		%\hline
+		%10,000& LISA Baseline & 1000 & 13.542 & 0.32806 & 336\\
 		\hline
-		10,000& LISA Baseline & 1000 & 13.542 & 0.32806 & 336\\
+		10,000& LISA Baseline & 10000 &26.83 & 0.1985 & 547\\
 		\hline
-		10,000& LISA Baseline & 10000 &26.831 & 0.19857 & 547\\
+		100,000& LISA Baseline & 1000 & 111.97 & 0.7271 & 3149\\
+		\hline
+		100,000& LISA Baseline & 100000 & 272.93 & 0.2381 & 5469\\
+		\hline
+		1,000,000& LISA Baseline & 1000 & 1104.65 & 4.4732 & 31274\\
+		\hline
+		1,000,000& LISA Baseline & 1000000 & 2717.65 & 0.2436 & 54688\\
 		\hline
 		\hline
 	\end{tabular}
-    \caption{Hyper-parameters Search LISA Baseline Model: Training Size:10,000 Points}
+    \caption{Hyper-parameters Search LISA Baseline Model\\
+    a) For any training size, optimum value of $N$ will be equal to the number of keys in training data.\\
+    b) If $N$ is assigned as numbers of keys in database, number of keys per cell will be 1, and query search cost will be reduced to $log_{2}N$.}
     \label{small_lognormal_lisa_baseline_10000}
 \end{table}
-
+\comm{
 \begin{table}[ht]
 	\centering
 	\begin{tabular}{||p{0.15\textwidth}<{\centering}|p{0.2\textwidth}<{\centering}| p{0.1\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}||}
@@ -66,14 +76,15 @@ Baseline model has one hyper parameter: N (Number of cells specifying the number
    \caption{Hyper-parameters Search LISA Baseline Model: Training Size:100,000 Points}
     \label{small_lognormal_lisa_baseline_100000}
 \end{table}
+}
 
-\textbf{Conclusion} As shown in tables \ref{small_lognormal_lisa_baseline_10000}, \ref{small_lognormal_lisa_baseline_100000} and \ref{small_lognormal_lisa_baseline_1000000}, following conclusions can be drawn:
+\textbf{Conclusion} As shown in table \ref{small_lognormal_lisa_baseline_10000}, following conclusions can be drawn:
 \begin{enumerate}
 	\item Build time : Build time increases with increase in value of N, as metadata for additional cells needs to be calculated. 
 	\item Average Query Time :  Average Query Time decreases with increase in value of N as number of keys per cell decreases.
-	\item Memory Size :  Memory requirements of the model increases with increase in value of N, as metadata for additional cells needs to be stored. Increase  in memory size is not significant with increase in number of cells as we maintain only two values per cell, mapped value of first key in the cell and mapped value of last key in the cell.
+	\item Memory Size :  Memory requirements of the model increases with increase in value of N, as metadata for additional cells needs to be stored. Increase  in memory size is not significant with increase in N as we maintain only two values per cell, mapped value of first key in the cell and mapped value of last key in the cell.
 \end{enumerate}
-
+\comm{
 \begin{table}[ht]
 	\centering
 	\begin{tabular}{||p{0.15\textwidth}<{\centering}|p{0.2\textwidth}<{\centering}| p{0.1\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}||}
@@ -99,7 +110,7 @@ Baseline model has one hyper parameter: N (Number of cells specifying the number
 	\caption{Hyper-parameters Search LISA Baseline Model: Training Size:1,000,000 Points}
 	\label{small_lognormal_lisa_baseline_1000000}
 \end{table}
-
+}
 
 
 \subsubsection {Hyper-parameter search for the LISA implementation}
@@ -112,11 +123,14 @@ For LISA model, we have 3 hyper parameters:
 
 \textbf{Conclusion} Experiments results shown in tables \ref{small_lognormal_lisa_10000}, \ref{small_lognormal_lisa_100000} and \ref{small_lognormal_lisa_1000000} are consistent across all 3 training sizes and have following interpretation. 
 \begin{enumerate}
+
+    \item For a particular value of $G$, average query time decreases and memory size increases with increase in value of S.
+    
     \item Average query time decreases and memory size increases with increase in values of $G$ and $S$. 
-	\item For a particular value of $G$, average query time decreases and memory size increases with increase in value of S.
-	\item We need to choose S such that there are at least 35 keys per shard. We see mse errors if number of keys per shard are less than 35 for following reasons. 
+	
+	\item We need to choose S such that there are at least 35 keys per shard. We see mean square errors(mse) if number of keys per shard are less than 35 for following reasons. 
 	\begin{enumerate}
-	    \item Total number of keys are first divided equally among grid cells, and for each cell, we divide the keys falling in that cell equally among number of shards.
+	    %\item Total number of keys in training set are first divided equally among grid cells.For each cell, its corresponding keys are further divided equally among number of shards.
 	    \item For point query search, we first predict a shard and then sequentially compare the query point key values with all the keys in the predicted shard until a match is found
 		\item For query points near the shard boundaries, there can be a mismatch in groundtruth shardId and predicted shardId.If the query point is not found in the predicted shard, we continue our search in adjacent left and right shards in an empirically found range.
 	\end{enumerate}
@@ -160,7 +174,7 @@ For LISA model, we have 3 hyper parameters:
 		%\hline
 		%100,000& Lisa& 4*4=16 & 10& 42.398& 3.29308 & 3141.6&0\\
 		%\hline
-		100,000& LISA& 4*4=16 & 20& 59.036&1.52851 & 3150.3&0\\
+		%100,000& LISA& 4*4=16 & 20& 59.036&1.52851 & 3150.3&0\\
 		\hline
 		100,000& LISA& 4*4=16 & 50& 122.64& 1.51173 & 3176.6&0\\
 		\hline
@@ -186,6 +200,7 @@ For LISA model, we have 3 hyper parameters:
 	\label{small_lognormal_lisa_100000}
 \end{table}
 
+\comm{
 \begin{table}
 	\centering
 \centering
@@ -217,8 +232,11 @@ For LISA model, we have 3 hyper parameters:
     \caption{Hyper-parameters Search LISA Model: Training Size:1,000,000 Points}
 	\label{small_lognormal_lisa_1000000}
 \end{table}
+}
+\subsection{Performance Comparison for $K$D-Tree, LISA-Baseline and LISA Models }
+During following experiments, for each training data size, we have used hyper-parameters optimized for that particular data set size. 
 
-\subsection{Point Query Comparison for $K$D-Tree, LISA-Baseline and LISA Models }
+\subsubsection{Point Query Comparison for $K$D-Tree, LISA-Baseline and LISA Models }
 Table \ref{Point_Query_Comparision} shows the performance evaluation for $K$D-Tree, LISA-Baseline and LISA Models for different training data sizes. For a given training set, we perform point query evaluation for every point in the dataset and take the average. As shown in the Fig. \ref{fig:Point_Query_Comparision}, LISA outperforms $K$D-tree in terms of average query time and memory requirements, however its build time is significantly higher than $K$D-Tree 
 
 \begin{table}
@@ -268,14 +286,14 @@ Table \ref{Point_Query_Comparision} shows the performance evaluation for $K$D-Tr
     \label{fig:Point_Query_Comparision}
 \end{figure*}
 \subsubsection {Range Query Experiments}
-Table \ref{Range_Query_Experimental_Results} shows evaluation results for LISA,Baseline and $K$D-tree models for range sizes of 10, 100, 1000 for different training sizes. For a given range query size, we perform 20 trials and take the average. For each trial, we sample a random point from the test set and find the range from sampled point to the range query size. Average query time for each range is further divided by the range size to compare the query time across various ranges. 
+Table \ref{Range_Query_Experimental_Results} shows evaluation results for LISA,Baseline and $K$D-tree models for range sizes of 10, 100, 1000 for different training sizes. For a given range query size, we perform 20 trials and take the average. For each trial, we sample a random point from the test set and find the range from sampled point to the range query size. Average query time for each range is further divided by the range size to compare the query time across various ranges. As shown in the Fig. \ref{fig:Range_Query_Comparision}, LISA outperforms $K$D-tree for range query size of 10000 for all training sizes, however its range query time for smaller range sizes is significantly higher than $K$D-Tree.
 
 \begin{figure*}
     \centering
     \includegraphics[width=1.1\textwidth]{graphs/evaluation/RangeQueryPlot.pdf}
     \caption{Range Query experimental results for $K$D-Tree, Baseline and LISA models\\
-    a) Plot A shows average query time for a fixed training size of 1M points. LISA outperforms $K$D-Tree for larger range queries. \\
-     b) Plot B shows average query time for a fixed range query of size 10000 for various training sizes. Lisa outperforms $K$D-Tree for all training data sizes for range queries of size 10000 }
+    a) Plot A shows average range query time for a fixed training size of 1M points. LISA outperforms $K$D-Tree for larger range queries. \\
+     b) Plot B shows average range query time for a fixed range query of size 10000 for various training sizes. Lisa outperforms $K$D-Tree for all training data sizes for range queries of size 10000 }
     \label{fig:Range_Query_Comparision}
 \end{figure*}
 
@@ -287,19 +305,19 @@ Table \ref{Range_Query_Experimental_Results} shows evaluation results for LISA,B
 		Training/Test Data Size& Range Query Size & Avg Query Time(ms)($K$D-tree) & Avg Query Time(ms)(Baseline)&Avg Query Time(ms)(LISA)\\ [0.5ex] 
 		\hline
 		\hline
-	 	10,000& 10& 0.2062 & 0.1113& 0.8204 \\
+	 	10,000& 10& 0.1361 & 0.1113& 0.8204 \\
 	 	\hline
-	 	10,000& 100& 0.0839 & 0.0451& 0.1201 \\
+	 	10,000& 100& 0.0533 & 0.0451& 0.1201 \\
 	 	\hline
-	 	10,000& 1000& 0.0701 & 0.0399& 0.0294 \\
+	 	10,000& 1000& 0.0438 & 0.0399& 0.0294 \\
  	 	\hline
  	 	10,000& 10000& 0.0648&0.0382&0.0061 \\
 	 	\hline
-	 	100,000& 10& 0.2123 & 0.1298&2.8961 \\
+	 	100,000& 10& 0.1392 & 0.1298&2.8961 \\
 	 	\hline
-	 	100,000& 100& 0.0912 & 0.0505&0.2792 \\
+	 	100,000& 100& 0.0539 & 0.0505&0.2792 \\
 	 	\hline
-	 	100,000& 1000& 0.0726 & 0.0428&  0.0563 \\
+	 	100,000& 1000& 0.043 & 0.0428&  0.0563 \\
  	 	\hline
  	 	100,000& 10000&0.0718& 0.0392& 0.0129 \\
 	 	\hline
@@ -328,10 +346,17 @@ Table \ref{Range_Query_Experimental_Results} shows evaluation results for LISA,B
 
 \end{table}
 
-
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\textwidth]{graphs/evaluation/one-d/KNN Query.pdf}
+    \caption{KNN Query experimental results for $K$D-Tree and LISA models\\
+    a) Plot A shows average KNN query time for a fixed training size of $1M$ points for different values of K. LISA outperforms $K$D-Tree for all values of K. \\
+     b) Plot B shows average KNN query time for various training sizes with K = 10. Lisa outperforms $K$D-Tree for all training data sizes. }
+    \label{fig:KNN_Query_Comparision}
+\end{figure*}
 
 \subsubsection {$\boldsymbol{K}$NN Query Experiments}
-Table \ref{KNN_Query_Experimental_Results} shows evaluation results for LISA and $K$D-tree models for $\boldsymbol{K}$NN Queries for various value of K and training sizes. For a given $\boldsymbol{K}$ value, we perform 20 trials and take the average of query time. For each trial, we sample a random point from the test set and find K neighbours around that point. Average query Time is further divided by $\boldsymbol{K}$ to compare the Query time across various values of $\boldsymbol{K}$.
+Table \ref{KNN_Query_Experimental_Results} shows evaluation results for LISA and $K$D-tree models for $\boldsymbol{K}$NN Queries for various value of K and training sizes. For a given $\boldsymbol{K}$ value, we perform 20 trials and take the average of query time. For each trial, we sample a random point from the test set and find K neighbours around that point. Average query Time is further divided by $\boldsymbol{K}$ to compare the Query time across various values of $\boldsymbol{K}$.As shown in the Fig. \ref{fig:KNN_Query_Comparision}, LISA outperforms $K$D-tree for different training sizes and K values.
 
 \begin{table}
 	\centering
@@ -341,7 +366,7 @@ Table \ref{KNN_Query_Experimental_Results} shows evaluation results for LISA and
 		Training/Test Data Size& K & Avg Query Time(ms)($K$D-tree) & Avg Query Time(ms)(LISA)\\ [0.5ex] 
 		\hline
 		\hline
-	 	10,000& 3& 1.4069 &0.1927 \\
+	 	10,000& 3& 1.4069 &0.2020 \\
 	 	\hline
 	 	10,000& 5& 0.8753 &0.1181\\
 	 	\hline
@@ -349,21 +374,29 @@ Table \ref{KNN_Query_Experimental_Results} shows evaluation results for LISA and
 	 	\hline
 	 	10,000 & 10& 0.4368 &0.0549 \\
 	 	\hline
-	 	100,000 & 3& 2.0325 &0.3406 \\
+	 	100,000 & 3& 2.0325 &0.5867 \\
 	 	\hline
-	 	100,000 & 5& 1.2004 &0.2884 \\
+	 	100,000 & 5& 1.2004 &0.3549 \\
 	 	\hline
-	 	100,000 & 7& 0.8812 &0.2158 \\
+	 	100,000 & 7& 0.8812 &0.2779 \\
 	 	\hline
-	 	100,000 & 10&  0.6618 &0.1577 \\
+	 	100,000 & 10&  0.6618 &0.2161 \\
 	 	\hline
-	    1,000,000 & 3& 2.7865 & 0.4272 \\
+	    1,000,000 & 3& 2.7865 & 1.218 \\
 	 	\hline
-	 	1,000,000 & 5& 1.7072 &0.6466 \\
+	 	1,000,000 & 5& 1.7072 &0.9414 \\
 	 	\hline
-	 	1,000,000 & 7& 1.3255 &0.6024 \\
+	 	1,000,000 & 7& 1.3255 &0.7681 \\
 	 	\hline
-	 	1,000,000 & 10& 0.9172 &0.3291 \\
+	 	1,000,000 & 10& 0.9172 &0.5779 \\
+	 	%\hline
+	    %1,000,000 & 3& 3.888 & 3.361 \\
+	 	%\hline
+	 	%1,000,000 & 5& 2.3613 &3.192 \\
+	 	%\hline
+	 	%1,000,000 & 7& 1.6812 & 1.748 \\
+	 	%\hline
+	 	%1,000,000 & 10& 1.2151 & 1.378 \\
 		\hline
 		\hline
 	\end{tabular}

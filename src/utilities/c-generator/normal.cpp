@@ -1,3 +1,8 @@
+// Copyright (c) 2021 Xiaozhe Yao et al.
+// 
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
 #include <algorithm>
 #include <climits>
 #include <fstream>
@@ -6,14 +11,20 @@
 #include <set>
 #include <vector>
 
-int main() {
+int main(int argc, char ** argv) {
+  int nelements = 190000000;
+  if (argc > 2)
+    {
+        std::cerr<<"Wrong Number of Arguments"<<std::endl;
+    }
+  nelements = atoi(argv[1]);
+  std::cout<<"Generating %d elements..."<<nelements<<std::endl;
   double scale = 1e+9;
   double max = double(INT_MAX) / scale;
-  int nelements = 190000000;
   int block_size = 10;
   std::mt19937 rng;
   rng.seed(std::random_device()());
-  std::lognormal_distribution<double> dist(0.0, 2.0);
+  std::normal_distribution<double> dist(0.0, 1.0);
 
   std::set<int> samples;
 
