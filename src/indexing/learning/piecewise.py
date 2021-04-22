@@ -4,8 +4,6 @@
 # https://opensource.org/licenses/MIT
 
 import numpy as np
-from matplotlib.pyplot import xlabel
-from numpy.core.fromnumeric import mean
 
 from src.indexing.utilities.metrics import mean_squared_error
 
@@ -76,7 +74,6 @@ class PiecewiseRegression():
             first_grad, second_grad = self._calculate_gradient(
                 A, alphas, betas, X, y)
             s = -np.linalg.pinv(second_grad) @ first_grad
-            # TODO: this needs to be double confirmed.
             # The idea is that we do not optimize the first beta
             s = s[1:]
             # Finds the best learning rate

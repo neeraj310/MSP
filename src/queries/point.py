@@ -16,7 +16,6 @@ from src.queries import Query
 
 sys.path.append('')
 
-
 class PointQuery(Query):
     def __init__(self, models: List[BaseModel]) -> None:
         super().__init__(models)

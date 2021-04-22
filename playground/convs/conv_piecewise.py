@@ -10,12 +10,11 @@ import numpy as np
 import pandas as pd
 import pwlf
 
-from playground.convs.fcn_net import BFNet
+from playground.convs.fcn_net import BFModel
 from src.indexing.learning.piecewise import PiecewiseRegression
 from src.indexing.utilities.dataloaders import normalize
 
-NUM_BREAKPOINTS = 16
-
+NUM_BREAKPOINTS = 6
 
 def generate_X(filename, sample=None):
     '''
@@ -67,28 +66,51 @@ def process_X(X, betas):
     dists = []
     for x in Xs:
         dist = np.abs(np.asarray(x) - np.asarray(betas)).min()
-        if dist == 0:
-            dist = 1
-        else:
-            dist = 1 / dist
         dists.append(dist)
     dists = normalize(dists)
+    dists = np.power((1 - dists),3)
+    print(dists.max())
     Y = np.array(dists)
     return Y
 
 
-def visualize(X, betas, Y):
+def visualize(X, betas, Y, indices=None):
     plt.scatter(X[:, 0], X[:, 1], linewidths=0.5)
     plt.scatter(X[:, 0], Y, marker='+')
+    if not indices is None:
+        plt.vlines(indices, 0, 1, colors='r', linestyles='solid')
     plt.vlines(betas, 0, 1, linestyles='dotted')
     plt.show()
 
+def train_nn(X, Y):
+    bfmodel = BFModel(6)
+    bfmodel.train(X, Y)
+    return bfmodel
+
+def nn_predict(model:BFModel, X):
+    return model.predict(X)
+
+def load_nn():
+    bfmodel = BFModel(6)
+    bfmodel.load()
+    return bfmodel
+
+
+def find_locations(predicted_betas, num_breaks):
+    indices = (-predicted_betas).argsort()[:num_breaks]
+    indices = normalize(indices)
+    return indices
 
 if __name__ == "__main__":
     filename = sys.argv[1]
     X = generate_X(filename, None)
     betas = fake_betas(X)
     Y = process_X(X, betas)
-    print(Y)
-    print(betas)
-    visualize(X, betas, Y)
+    print(Y.shape)
+    #model = train_nn(X, Y)
+    model=load_nn()
+    predicted_betas = nn_predict(model, X)
+    predicted_betas = predicted_betas.reshape(Y.shape[0],)
+    indices = find_locations(predicted_betas, NUM_BREAKPOINTS)
+    print(indices)
+    visualize(X, betas, Y, indices)

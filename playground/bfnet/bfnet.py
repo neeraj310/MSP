@@ -8,6 +8,7 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import TensorDataset, DataLoader
 
+# The Beta Finder Network
 class BFNet(nn.Module):
     def __init__(self, classes=2):
         super(BFNet, self).__init__()
@@ -53,7 +54,7 @@ class BFModel(object):
         Y = torch.Tensor(Y)
         train_data = TensorDataset(X, Y)
         dataloader = DataLoader(train_data, batch_size=1)
-        for epoch in range(20):
+        for epoch in range(30):
             for i, data in enumerate(dataloader, 0):
                 inputs, labels = data
                 ypred = self.net.forward(inputs)
