@@ -1,0 +1,26 @@
+\begin{tikzpicture}[font=\small]
+	\pgfplotsset{compat=1.10, width=\textwidth, height=\textwidth, every axis legend/.append style={
+		at={(1,0)},
+		anchor=south east}}
+	\begin{axis}[
+		xmode=log,
+		xlabel=Training Size,
+		ylabel=Average Query Time (ms),
+		xtick={10000, 100000,1000000},
+		legend style={nodes={scale=1, transform shape}}
+	]
+	\addplot[smooth, mark=x, blue]
+	coordinates{
+		(10000, 0.4368)
+		(100000, 0.6618)
+		(1000000, 0.9172)
+	};
+	\addplot[smooth,mark=+,black!60!green]
+	coordinates{
+		(10000, 0.0549)
+		(100000, 0.2161)
+		(1000000, 0.4779)
+	};
+	\legend{$K$D-Tree,LISA}
+	\end{axis}
+\end{tikzpicture}

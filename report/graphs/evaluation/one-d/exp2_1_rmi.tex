@@ -4,15 +4,15 @@
 		xmode=log,
 		axis y line*=left,
 		xlabel=Number of datapoints,
-		ylabel=Average Query time,
+		ylabel=Average Query time (ms),
 		xtick={1000,10000,100000,1000000},
 	]
 	\addplot[smooth, mark=x, blue]
 	coordinates{
-		(1000, 0.000279265)
-		(10000, 0.000272018)
-		(100000, 0.000255443)
-		(1000000, 0.000325924)
+		(1000, 0.279265)
+		(10000, 0.272018)
+		(100000, 0.255443)
+		(1000000, 0.325924)
 	}; \label{plot_one}
 	\end{axis}
 	

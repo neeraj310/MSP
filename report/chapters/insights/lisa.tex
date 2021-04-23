@@ -1,11 +1,12 @@
-\subsubsection{Limitation}
+\comm{
+\subsubsection{LISA Baseline model Limitation}
 
 Prediction cost in baseline method consists of following two parts.
 
 \begin{enumerate}
 	\item Search cost for the cell which contains the key. This cost will be equal to $log_{2}N_{1}$, where $N_{1}$ is the number of cells into which mapped values are divided.
 	
-	\item Cost associated with sequentially comparing the query point key value against keys inside the cell found in previous search. On average this cost will be equal to $N_{2}\div2$, where $N_{2}$ is the number of keys in a cell.   
+	\item Cost associated with sequentially comparing the query point key value against keys inside the cell found in previous search. On average this cost will be equal to $N_{2}\slash2$, where $N_{2}$ is the number of keys in a cell.   
 	
 If cell size is large, number of cells will be smaller, number of keys per cell will be higher, resulting in higher cost of sequential scan with in the cell. 
 \end{enumerate}
@@ -17,12 +18,17 @@ Consider the example in figure \ref{fig:BaseLine_Method_Limitation}. Dataset is 
     \caption{Baseline Method Limitation }
     \label{fig:BaseLine_Method_Limitation}
 \end{figure*}
-
+}
 
 
 \subsubsection {Lisa Baseline model search optimization}
 %In lisa baseline model, we need to linearly search for the query key in a cell. 
-In case of high dimensional key values, key with in a page can not be searched with mapped value, as a large number of keys can have the same mapped value. However for the 2 dimensional scenario, we can get considerable savings in search cost by replacing sequential scan based on keys values to binary search based on mapped value. Once mapped value is found using binary search, we do a look up in its neighbourhood based on 2 dimensional key value. As shown in table \ref{baselinesearch_optimization}, we get significant savings in the query time with this approach.
+In case of high dimensional key values, key with in a cell can not be searched with mapped value, as a large number of keys can have the same mapped value. However for the 2 dimensional scenario, we can get considerable savings in search cost by replacing sequential scan based on keys values to binary search based on mapped value. As in the original method, search process  will consist of two parts. 
+\begin{enumerate}
+	\item Find the cell which contains the query key based on mapped value using binary search. 
+	\item With in the cell, replace sequential search based on query key value with the  binary search based on query key mapped value. Once mapped value is found, do a lookup in the neighbourhood of the found key based on query key 2 dimensional value. 
+\end{enumerate}
+Once mapped value is found using binary search, we do a look up in its neighbourhood based on 2 dimensional key value. As shown in table \ref{baselinesearch_optimization}, we get significant savings in the query time with this approach.
 
 \begin{table}[ht]
 	\centering

@@ -199,12 +199,35 @@ To tackle these challenges, we take the following strategies:
 	\item Finally, we collect the query time from $10$ pieces and sum them to get the total query time of the full training set. Then we divide it by the number of pairs in total, i.e. $19$ million and get the average query time per key. For the mean square error, we take the average of errors from each piece.
 \end{enumerate}
 
+With these two approaches, we achieved the results as shown below:
 
+\begin{table}[h!]
+\centering
+\begin{tabular}{ | c | c| c | c | }
+\hline
+Model & Construction Time (s) & Avery Query Time & Memory Usage (MB)\\ 
+\hline
+B-Tree (degree=20) & 26356 (1.00x) & \textbf{0.3489 (1.00x)} & 96911\\ 
+\hline
+Recursive Model & \textbf{334 (0.013x)} & 2.6505 (7.60x) & \textbf{8.836} \\ 
+\hline
+\end{tabular}
+\caption{The construction time, average query time and memory usage of B-Tree (with a degree=20) and recursive model.}
+\label{exp3}
+\end{table}
 
-
-
-
-
+\begin{mscconclusion}
+	From Table \ref{exp3}, we have the following conclusions:
+	\begin{enumerate}
+		\item The construction time of recursive model can be significantly less than the construction of B-Tree, for two reasons: 
+			\begin{itemize}
+				\item We sampled from the training dataset, and avoid iterating over all the data points. In contrast, B-Tree has to iterate all the data points and insert them one-by-one.
+				\item The recursive model trains relatively fast as it can converge in one to a few passes over the data points.
+			\end{itemize}
+			\item Then query time for recursive model is higher than B-Tree, but not significantly higher. The computation costs is mainly on the calculation in fully connected neural networks. The query time for recursive model can be improved by either using a well-established library, such as PyTorch, that provides faster matrix computation, or using faster hardware, such as GPU to improve the query.
+			\item The memory usage of B-Tree is significantly higher than the recursive model. As we showed above, the memory usage of B-Tree is $\mathcal{O}(n)$ and hence growing linearly. For recursive model, the memory usage is mainly depends on how many models in each layer. Therefore, the memory usage of recursive model has an upper bound (if all models are used), and then does not grow as the number of data points is growing.
+	\end{enumerate}
+\end{mscconclusion}
 
 
 

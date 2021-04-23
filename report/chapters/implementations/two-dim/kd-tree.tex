@@ -15,6 +15,7 @@ $K$D-Tree is a space partitioning structure that can be used to organise data po
 
     \item\textbf{Levels}: Nodes are at the same level when they have the same distance from root. Hence, a level increases as the distance of the nodes increase from root. In the \ref{fig:$K$D-Tree} we can see the key at root is at level $1$ and then we have level $2$ and level $3$. 
     \item\textbf{Dimensions}: Every $K$D-Tree can be structured in such a way that the data points are divided into $k$-dimensions. Each node is recursively cut into as many dimensions as is mentioned in the dimensions. In our case the data points are $2$-dimensional and hence the space is divided into $2$-dimensions alternatively until a leaf is reached.
+    \item\textbf{Cell}: The subdivision of space consists of rectangular regions, called cells (possibly unbounded).
 \end{enumerate}
     
 \begin{algorithm}[H]
@@ -60,6 +61,7 @@ In the algorithm above, we first sort all the values obtained in the Point list.
     centre being the root: $(5,6)$. \\
     ([Left Subtree, Right subtree, Root Point])
 \end{mscexample}
+
 \subsubsection{Construction time and space complexity of $2$-dimensional $K$D-Tree:}
 
 The most expensive part of the construction of $K$D-Tree is sorting the points on both the axis. Instead of working with more complex algorithm to find the median we first presorted the values on x-axis and then on y-axis.\\

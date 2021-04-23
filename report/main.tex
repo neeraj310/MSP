@@ -26,6 +26,7 @@
 \usepackage{multirow}
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
+\usepackage{caption}
 \usepackage[noend]{algpseudocode}
 \usepackage[ruled,vlined,linesnumbered]{algorithm2e}
 \usepackage{tabularx}
@@ -54,11 +55,13 @@
 }
 \definecolor{pastelgray}{rgb}{0.81, 0.81, 0.77}
 
-\newcounter{example}[section]
+\newcounter{example}[chapter]
 \newenvironment{mscexample}[1][]
 	{\refstepcounter{example}\par\medskip
+		\begin{mdframed}[backgroundcolor=pastelgray, topline=false, leftline=false, rightline=false]
 		\noindent \textbf{Example~\thechapter.\theexample #1} \rmfamily
-		}{ $\hfill\clubsuit$
+		} {
+		\end{mdframed}
 	} {\medskip}
 	
 \newcounter{proof}[chapter]
@@ -71,8 +74,10 @@
 \newcounter{conclusion}[chapter]
 \newenvironment{mscconclusion}[1][]
 	{\refstepcounter{conclusion}\par\medskip
+		\begin{mdframed}[backgroundcolor=lightgray, topline=false, leftline=false, rightline=false]
 		\noindent \textbf{Conclusion~\thechapter.\theconclusion #1} \rmfamily
-		}{ $\hfill\square$
+		}{
+		\end{mdframed}
 	} {\medskip}
 	
 
@@ -194,6 +199,7 @@
 
 \begin{appendices}
 \chapter{Appendix}
+\input{chapters/appendix/2d_Evaluation}
 \end{appendices}
 
 \input{chapters/appendix/experiments}

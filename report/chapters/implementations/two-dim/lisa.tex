@@ -13,33 +13,40 @@ In the last section, we described a recursive model index (RMI) that consists of
     \label{fig:Key_Distribution}
 \end{figure*}
 }
+
+For the one-dimensional data, we can learn the CDF by using a recursive model as shown in previous section. However, when the data is two-dimensional, the learned CDF (the marginal CDF) through recursive model cannot be applied directly to predict the position of the key. Formally, we could learn the marginal CDF for each dimension by using recursive model, i.e. $F(X)$ and $F(Y)$. However, to predict the position of a $2$-dimensional key, we need to joint CDF $F(X,Y)$, which cannot be induced from the marginal CDFs. We show an example as below to illustrate this limitation.
+
 \begin{mscexample}
-For example, consider the joint cumulative function of two random variables X and Y defined as $F_{XY}(x, y)=P(X\leq x, Y\leq y)$.
-The joint CDF satisfies the following properties:
+	Assume that $X$ and $Y$ are distributed as shown in Fig \ref{fig:2d_limitation_rmi}. In this example, we have $F(x\leq A)=\frac{1}{3}$, which means that the point $A$ should be assigned into the first third pages. With learned indexes in one-dimensional, then there comes the problem below:
+	
+	\begin{enumerate}
+		\item There will be duplicate keys. In this example, if we only consider the $X$ axis, we will get an array $[0.7, 0.7, 1.5]$ which contains duplicate keys. 
+		\item If we remove the duplicate keys, then $F(x\leq A)=\frac{1}{2}$, which is not what we expect.
+		\item If we do not remove the duplicate keys, then $F(x\leq A)=F(x\leq B)$, which is still not we expect.
+	\end{enumerate}
+	
 
-\begin{itemize}
-  \item  {$F_X(x)=F_{XY}(x,\infty)$, for any x (marginal CDF of X)}
-  \item  {$F_Y(y)=F_{XY}(\infty,y)$, for any y (marginal CDF of Y)}
-  \item  {if $X$ and $Y$ are independent, then $F_{XY}(x,y)=F_X(x)F_Y(y)$}
-\end{itemize}
+		\centering
+		\includegraphics[scale=0.5]{graphs/implementation/2d/2d_rmi_limitation}
+		\captionof{figure}{An example demonstrating the limitations of one-dimensional learned index in two-dimensional data. In this graph we have $F(x\leq A)=\frac{1}{3}$ but with learned index in one-dimensional, we cannot learned such joint CDF.}
+		\label{fig:2d_limitation_rmi}
 
+	
 \end{mscexample}
 
-\textcolor{blue} {Need to find a solid argument to explain why learning multi dimensional CDFs will result in  searching local regions qualified on one dimension. }
 
 LISA solves this problem by partitioning search space into a series of grid cells based on the data distribution and building a\comment{partially monotonic} function map the data from $\mathbb{R}^d$ into $\mathbb{R}$, in our case, we have $d=2$. We call this function as \textit{Mapping Function}.
 \subsubsection{Definitions}
 
 This section presents the definition
+
 \begin{enumerate}
 	\item \textbf{Key}. A key k is a unique identifier for a data record with $k = (x_{0}, x_{1}) \in \mathbb{R}^{2}$. 
-    %\textcolor{blue} {Need to check how to write d-1 in subscript }
     
-	\item \textbf{Cell}. A grid cell is a rectangle whose lower and upper corners are points $(l_{0},l_{1}) and  (u_{0},u_{1})$, i.e.,  cell = $(l_{0},u_{0}) \times [l_{1},u_{1})$
+	\item \textbf{Cell}. A grid cell is a rectangle whose lower and upper corners are points $(l_0, l_1)$ and  $(u_0,u_1)$, i.e.,  cell = $(l_{0},u_{0}) \times [l_{1},u_{1})$.
 	
-	\item \textbf{Mapping Function}. A mapping function $\mathcal{M}$ is a function on the domain $\mathbb{R}^{2}$ to the non-negative range, i.e $M:[0,X_{0}]\times[0,X_{1}]\to [0,+\infty)$ such that $M(x_{0},x_{1}) \leq M(y_{0},y_{1})$ when $x_{0} \leq y_{0}$ and $x_{1} \leq y_{1}$.
+	\item \textbf{Mapping Function}. A mapping function $\mathcal{M}$ is a function on the domain $\mathbb{R}^2$ to the non-negative range, i.e $M:[0,X_{0}]\times [0,X_{1}]\to [0,+\infty)$ such that $M(x_0,x_{1}) \leq \mathcal{M}(y_{0},y_1)$ when $x_0 \leq y_0$ and $x_1 \leq y_1$.
 	%TODO: add some example mapping functions
-	
 \end{enumerate}
 
 \subsection{Baseline Method}  
@@ -77,8 +84,6 @@ As described in Algorithm \ref{Training_Lisa_Baseline}, during training, we perf
 	\item Divide the keys into equal sized cells
 	\item Store the mapped values of first and last key for each cell into an array
 \end{enumerate}
-
-
 
 \begin{algorithm}[H]
     \SetAlgoLined
@@ -451,11 +456,3 @@ As described in Algorithm \ref{Shard_Training_Lisa}, we perform  following opera
 
 \subsubsection{Local Models for Shards}
 Local models are not relevant to our implementation as all the data is contained in the memory.  
-
-
-
-
-
-
-
-
