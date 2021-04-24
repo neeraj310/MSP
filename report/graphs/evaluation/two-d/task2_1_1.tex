@@ -1,14 +1,11 @@
 \begin{tikzpicture}[font=\small]
-	\pgfplotsset{compat=1.10, width=\textwidth, height=\textwidth,every axis
-	legend/.append style={
-		at={(1,0)},
-		anchor=south east}}
+	\pgfplotsset{compat=1.10, width=\textwidth, height=\textwidth}
 	\begin{axis}[
 		xmode=log,
 		xlabel=Training Size,
 		ylabel=Average Query Time (ms),
 		xtick={10000,100000,1000000,10000000},
-		legend style={nodes={scale=0.35, transform shape}}
+		legend style={nodes={scale=0.8, transform shape}}
 	]
 	\addplot[smooth, mark=x, blue]
 	coordinates{

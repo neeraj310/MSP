@@ -1,0 +1,11 @@
+\subsubsection{Future work}
+
+In current work, we have implemented RMI and LISA, two novel learned index structures
+for one and two dimensional data respectively. This work opens up several directions for future research on learned indexes for database systems. We are listing some of them here. 
+
+\begin{enumerate}
+	\item Read only and in-memory database are two major constraints applicable to our LISA implementation that are supported by the original paper. Adding support for insertion, deletion and disk resident training data will be taken in next phase.
+	\item LISA paper supports Lattice Regression model to learn an appropriate distance bound from underlying training data for every query point and specific value of $K$. This distance bound is used to convert the $K$NN query to range query. It will be interesting to add support for the Lattice Regression Implementation in future work. 
+	\item It will be interesting to study other query types (e.g., spatial joins and closest pairs) using LISA
+	
+\end{enumerate}

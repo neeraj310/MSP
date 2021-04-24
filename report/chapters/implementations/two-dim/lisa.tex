@@ -63,7 +63,7 @@ As shown in Fig. \ref{fig:BaseLine_Method}, the key space is divided into 3 cell
     \centering
     \includegraphics[width=1.1\textwidth]{graphs/implementation/Baseline_limitation_new.pdf}
     \caption{LISA Baseline Method \\
-    a) key space is divided into 3 cells with equal nu of keys\\
+    a) Key space is divided into 3 cells with equal number of keys\\
     b) To search for a query, we first need to find out the cell which contain the query point\\
     c) Once the query point is found, we need to compare the query point key values with all the keys in the cell until a match is found}
     \label{fig:BaseLine_Method}
@@ -89,14 +89,14 @@ As described in Algorithm \ref{Training_Lisa_Baseline}, during training, we perf
     \SetAlgoLined
     \SetKwInOut{Input}{input}
     \SetKwInOut{Output}{Output}
-    \Input{num\_of\_cells; trainset=[$(x,y);x \in \mathbb{R}^{2};y \in \mathbb{R}$]}
+    \Input{$N$; trainset=[$(x,y);x \in \mathbb{R}^{2};y \in \mathbb{R}$]}
     \Output{M:Mapped Function}
      \For{$i\gets0$ \KwTo $len(x)$}{
             	\texttt{x[i].mapped\_value = x[i][0]+x[i][1]} \\
             
      }
-     \texttt{Sort x based on x.mapped\_value}\\
-     \texttt{Divide x into equal size pages according to num\_of\_cells}\\
+     \texttt{sortXBasedOnMappedValue()}\\
+     \texttt{divide x into equal size pages according to num\_of\_cells}\\
      \texttt{Store mapped value of first and last key for each page }\\
       \For{$i\gets0$ \KwTo num\_of\_cells}
      {
@@ -226,6 +226,7 @@ We need to sort the key space along the sequence of axis before we partition the
 \end{algorithm}
 
 \subsubsection{Mapping Function}
+\label{sssec:Mapping_Function}
 A mapping function $\mathcal{M}$ is a function on the domain $\mathbb{R}^{2}$ to the non-negative range, i.e $M:[0,X_{0}]\times[0,X_{1}]\to [0,+\infty)$ such that
     $ M(x_{i} \in V) <  M(x_{j} \in V)$ if $i<j$, where $x_{i} \in C_{i}$ and $x_{j} \in C_{j}$. That means the mapped value of a key in cell $i$ will always be less than mapped values of a key in cell $j$, if $i <j$. 
     
@@ -455,4 +456,4 @@ As described in Algorithm \ref{Shard_Training_Lisa}, we perform  following opera
 \end{algorithm}
 
 \subsubsection{Local Models for Shards}
-Local models are not relevant to our implementation as all the data is contained in the memory.  
+Local models are not relevant to our implementation as full data-set is loaded in the main memory.  

@@ -47,6 +47,47 @@
 
 \begin{table}
 	\centering
+	\begin{tabular}{||p{0.15\textwidth}<{\centering}|p{0.2\textwidth}<{\centering}| p{0.1\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}||}
+		\hline
+		Training/Test Data Size& Model & N & Build Time(ms) & Avg Query Time(ms) & Memory Size(KB)\\ [0.5ex] 
+		\hline
+		\hline
+		10,000& LISA Baseline Optimized& 10 & 11.1208 & 0.2841 & 313\\
+		\hline
+		10,000& LISA Baseline Optimized & 100 & 12.0108 & 0.2779 & 315\\
+		\hline
+		10,000& LISA Baseline Optimized & 1000 & 12.7589 & 0.2765 & 336\\
+		\hline
+		10,000& LISA Baseline Optimized & 10000 & 25.8732 & 0.2752 & 547\\
+		\hline
+		100,000& LISA Baseline Optimized & 10 & 112.973 & 0.2855 & 3126\\
+		\hline
+		100,000& LISA Baseline Optimized & 100 & 114.318 & 0.2823 & 3128\\
+		\hline
+		100,000& LISA Baseline Optimized & 1000 & 116.699 & 0.2806 & 3149\\
+		\hline
+		100,000& LISA Baseline Optimized & 10000 & 129.514 & 0.2794 & 3360\\
+		
+		\hline
+		1,000,000& LISA Baseline Optimized & 10 & 1116.51 & 0.2905 & 31251\\
+		\hline
+		1,000,000& LISA Baseline Optimized & 100 & 1118.85 &0.2858 & 31253\\
+		\hline
+		1,000,000& LISA Baseline Optimized & 1000 & 1134.88 & 0.2844 & 31274\\
+		\hline
+		1,000,000& LISA Baseline Optimized & 10000 & 1134.88 & 0.2831 & 31485\\
+		
+		\hline
+		\hline
+	\end{tabular}
+	\caption{Experimental results for LISA Baseline model with search optimization}
+	\label{baseline_search_optimization_10000}
+
+\end{table}
+
+
+\begin{table}
+	\centering
 	\begin{tabular}{||p{0.14\textwidth}<{\centering}|p{0.08\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}| p{0.07\textwidth}<{\centering}|p{0.1\textwidth}<{\centering}|p{0.125\textwidth}<{\centering}|p{0.125\textwidth}<{\centering}|p{0.07\textwidth}<{\centering}||}
 		\hline
 		Training/Test Data Size& Model & G & S& Build Time(s) & Avg Query Time(ms) & Memory Size(KB) &mse\\ [0.5ex] 
@@ -267,3 +308,6 @@
 	\label{KNN_Query_Experimental_Results}
 
 \end{table}
+
+
+

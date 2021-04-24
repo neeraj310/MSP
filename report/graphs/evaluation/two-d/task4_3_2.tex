@@ -7,8 +7,9 @@
 		xmode=log,
 		xlabel=$N$,
 		ylabel=Average Query Time (ms),
-		xtick={10,100,1000,10000,100000},
-		legend style={nodes={scale=0.55, transform shape}}
+		xtick={10,100,1000,10000},
+		legend style={nodes={scale=0.75, transform shape}},
+		scaled y ticks = base 10:-2,
 	]
 	\addplot[smooth, mark=x, blue]
 	coordinates{
@@ -16,17 +17,17 @@
 		(100, 40.1451)
 		(1000, 4.4732)
 		(10000,0.6697)
-		(100000,0.2944)
+		%(100000,0.2944)
 	};
 	\addplot[smooth,mark=o,red]
   	coordinates{
-        (10, 0.2405)
-		(100,0.2358)
-		(1000, 0.2344)
-		(10000,0.2331)
-		(100000,0.2322)
+        (10, 0.2905)
+		(100,0.2858)
+		(1000, 0.2844)
+		(10000,0.2831)
+		%(100000,0.2322)
 	};
   
-    \legend{LISA Baseline, Lisa Baseline Optimized}
+    \legend{LISA Baseline, LISA Baseline Optimized}
 	\end{axis}
 \end{tikzpicture}

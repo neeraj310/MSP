@@ -1,0 +1,18 @@
+The point query with baseline model is the same with forward pass in the training process. As the baseline model is a two-layer fully connected neural network with \texttt{ReLU} activation functions, we calculate the output of a given input $x$ with the equation below:
+
+\begin{equation}
+	\hat{y}=\boldsymbol{w_3}\text{max}(\boldsymbol{w_2}\text{max}(\boldsymbol{w_1}x+\boldsymbol{b_1},0)+\boldsymbol{b_2},0)+\boldsymbol{b_3}
+\end{equation}
+
+As we assumed, the baseline model is approximating the CDF of $X$. Hence, for a certain $x$, the output is the probability that $F(X\leq x)$. Since we are working with a static array without insertion and deletion, we can assume that we know the total number of records as $N$. We also define the page size to be $S$ as a parameter. Then we can calculate the position of this key as $\hat{p}=\floor{\hat{y}* N}$.
+
+After knowing the position of the key in the static array, we then calculate the page where it should be allocated to as below
+
+\begin{equation}
+	\hat{o}=\floor{\frac{\hat{p}}{S}}=\floor{\frac{\hat{y}*N}{S}}
+\end{equation}
+
+\noindent
+\textbf{Complexity Analysis}
+
+For any key, the computation complexities of $\hat{o}$ are the same, as there are only fixed number of computations needed. Hence, the time complexity of query with the baseline model is $\mathcal{O}(1)$, i.e. constant for any training data size.

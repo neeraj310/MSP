@@ -21,105 +21,31 @@ Consider the example in figure \ref{fig:BaseLine_Method_Limitation}. Dataset is 
 }
 
 
-\subsubsection {Lisa Baseline model search optimization}
+\subsubsection {LISA Baseline model search optimization for smaller values of N}
 %In lisa baseline model, we need to linearly search for the query key in a cell. 
-In case of high dimensional key values, key with in a cell can not be searched with mapped value, as a large number of keys can have the same mapped value. However for the 2 dimensional scenario, we can get considerable savings in search cost by replacing sequential scan based on keys values to binary search based on mapped value. As in the original method, search process  will consist of two parts. 
+In case of high dimensional key values, key with in a cell can not be searched with mapped value, as a large number of keys can have the same mapped value. However for the 2 dimensional scenario, we can get considerable savings in search cost by replacing sequential scan based on keys values to binary search based on mapped value. As in the original method, search process  will consist of two parts.
 \begin{enumerate}
 	\item Find the cell which contains the query key based on mapped value using binary search. 
 	\item With in the cell, replace sequential search based on query key value with the  binary search based on query key mapped value. Once mapped value is found, do a lookup in the neighbourhood of the found key based on query key 2 dimensional value. 
 \end{enumerate}
-Once mapped value is found using binary search, we do a look up in its neighbourhood based on 2 dimensional key value. As shown in table \ref{baselinesearch_optimization}, we get significant savings in the query time with this approach.
+As shown in Fig. \ref{fig:LISA_Baseline_Optimization}, we get significant savings in the query time with this approach for smaller values of N. As the value of N increases, number of Keys per cell decreases, and savings in avoiding sequential search gets normalized. 
 
-\begin{table}[ht]
-	\centering
-	\begin{tabular}{||p{0.15\textwidth}<{\centering}|p{0.2\textwidth}<{\centering}| p{0.1\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}||}
-		\hline
-		Training/Test Data Size& Model & No. of cells & Build Time(ms) & Avg Query Time(ms) & Memory Size(KB)\\ [0.5ex] 
-		\hline
-		\hline
-		10,000& Lisa Baseline & 10 & 11.1208 & 0.284191 & 313.77\\
-		\hline
-		10,000& Lisa Baseline & 100 & 12.0108 & 0.277918 & 315.85\\
-		\hline
-		10,000& Lisa Baseline & 1000 & 12.7589 & 0.276572 & 336.97\\
-		\hline
-		\hline
-	\end{tabular}
-	\caption{Experimental results for baseline model with search optimization, Training Data Size : 10,000 points}
-	\label{baseline_search_optimization_10000}
 
-\end{table}
+\begin{figure}
+ \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \input{graphs/evaluation/two-d/task4_3_1.tex}
+         \caption{Training Size 100K}
+         \label{fig:2d_exp4_3_1}
+     \end{subfigure}
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \input{graphs/evaluation/two-d/task4_3_2.tex}
+         \caption{Training Size 1M}
+         \label{fig:2d_exp4_3_2}
+     \end{subfigure}
+     \caption{Point query results comparison between LISA Baseline and Optimized Model for different training sizes.}
+     \label{fig:LISA_Baseline_Optimization}
+\end{figure}
 
-\begin{table}[ht]
-	\centering
-	\begin{tabular}{||p{0.15\textwidth}<{\centering}|p{0.2\textwidth}<{\centering}| p{0.1\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}||}
-		\hline
-		Training/Test Data Size& Model & No. of cells & Build Time(ms) & Avg Query Time(ms) & Memory Size(KB)\\ [0.5ex] 
-		\hline
-		\hline
-		100,000& Lisa Baseline & 10 & 112.973 & 0.285525 & 313.77\\
-		\hline
-		100,000& Lisa Baseline & 100 & 114.318 & 0.282053 & 315.85\\
-		\hline
-		100,000& Lisa Baseline & 1000 & 116.699 & 0.280637 & 336.97\\
-		\hline
-		\hline
-	\end{tabular}
-	\caption{Experimental results for baseline model with search optimization, Training Data Size : 100,000 points}
-	\label{baseline_search_optimization_100000}
-
-\end{table}
-
-\begin{table}[ht]
-	\centering
-	\begin{tabular}{||p{0.15\textwidth}<{\centering}|p{0.2\textwidth}<{\centering}| p{0.1\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}||}
-		\hline
-		Training/Test Data Size& Model & No. of cells & Build Time(ms) & Avg Query Time(ms) & Memory Size(KB)\\ [0.5ex] 
-		\hline
-		\hline
-		1,000,000& Lisa Baseline & 10 & 1116.51 & 0.240508 & 313.77\\
-		\hline
-		1,000,000& Lisa Baseline & 100 & 1118.85 &0.235858 & 315.85\\
-		\hline
-		1,000,000& Lisa Baseline & 1000 & 1134.88 & 0.234435 & 336.97\\
-		\hline
-		\hline
-	\end{tabular}
-	\caption{Experimental results for baseline model with search optimization, Training Data Size : 1,000,000 points}
-	\label{baseline_search_optimization_1000000}
-
-\end{table}
-
-\comm{
-\begin{table}
-	\centering
-	\begin{tabular}{||p{0.15\textwidth}<{\centering}|p{0.2\textwidth}<{\centering}| p{0.1\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}|p{0.15\textwidth}<{\centering}||}
-		\hline
-		Training/Test Data Size& Model & No. of cells & Build Time(s) & Avg Query Time(s) & Memory Size(KB)\\ [0.5ex] 
-		\hline
-		\hline
-		10,000& Lisa Baseline & 10 & 0.034 & 0.0005 & 313.77\\
-		\hline
-		10,000& Lisa Baseline & 100 & 0.023 & 0.0005 & 315.85\\
-		\hline
-		10,000& Lisa Baseline & 1000 & 0.021 & 0.0005 & 336.97\\
-		\hline
-		100,000& Lisa Baseline & 10 & 0.175 & 0.0005 & 3126.2\\
-		\hline
-		100,000& Lisa Baseline & 100 & 0.167 & 0.0005 & 3128.3\\
-		\hline
-		100,000& Lisa Baseline & 1000 & 0.204 & 0.0005 & 3149.4\\
-		\hline 
-		1,000,000& Lisa Baseline & 10 & 1.559 & 0.0005 & 31251.3\\
-		\hline
-		1,000,000& Lisa Baseline & 100 &1.705 & 0.0005 & 31253.4\\
-		\hline
-		1,000,000& Lisa Baseline & 1000 & 2.002 & 0.0005 & 31274.5\\
-
-		\hline
-		\hline
-	\end{tabular}
-	\label{baseline_search_optimizationabsbsb}
-	\caption{Experimental results for lisa baseline model with search optimization for small lognormal data}
-\end{table}
-}

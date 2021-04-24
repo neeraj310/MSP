@@ -1,4 +1,4 @@
-A range query is a database operation that retrieves all the records that lies in a range. In this project, we perform range query on 2-dimensional data only. In addition, we only consider a range query where the range is defined as a rectangle. Under these assumptions, a range query can be formalised as a query $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ where $l,u\in\mathbb{R}^2$.
+A range query is a database operation that retrieves all the records that lies in a range. In this project, we perform range query on $2$-dimensional data only. In addition, we only consider a range query where the range is defined as a rectangle. Under these assumptions, a range query can be formalised as a query $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ where $l,u\in\mathbb{R}^2$.
 
 \begin{mscexample}
 	For example, assume we have the points
@@ -33,23 +33,26 @@ In this example, the range query should return the points that lies inside the r
 
 % TODO: THIS ALGORITHM IS STILL NOT COMPLETE, and hard to follow.
 
+% DONE: It is finished now.
+
 \begin{algorithm}[H]
     \SetAlgoLined
     \SetKwInOut{Input}{Input}
     \SetKwInOut{Output}{Output}
-    \Input{Lower and Upper bound of query range rectangle $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u}); [l \in \mathbb{R};u \in \mathbb{R}]$}
-    \Output{\texttt{List of Points within query range rectangle($Rectangle$)}}
-    \texttt{SEARCH\_RANGE\_QUERY($Rectangle$)}\\
-    \eIf{node.leftChild is leaf}
+    \Input{\texttt{Rectangle range (Lower;l and upper;u) $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u}); [l \in \mathbb{R};u \in \mathbb{R}]$}}
+    \Output{\texttt{List of points within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$}}
+    % \texttt{SEARCH\_RANGE\_QUERY($\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$)}\\
+    \eIf{\texttt{node.leftChild is leaf}}
         {
-            \If {$cell(v) \subseteq Rectangle$}
-                {add all points within cell to list}
-            \eIf {$cell(v) \cap Rectangle = \varnothing$}
-                {add nothing to list}
-            {add all points reported within $cell(v) \cap Rectangle$}
+            \If {$cell(v) \subseteq \mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$}
+                {\texttt{add all points within cell to list}}
+            \eIf {$cell(v) \cap \mathcal{Q}(\boldsymbol{l}, \boldsymbol{u}) = \varnothing$}
+                {\texttt{add nothing to list}}
+            {\texttt{add all points reported within $cell(v) \cap \mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$}}
         }
         {
-            \texttt{SEARCH\_RANGE\_QUERY($Rectangle$)} //Recursively function is called\\
+            % \texttt{SEARCH\_RANGE\_QUERY($\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$)} //Recursively function is called\\
+            \texttt{Search subtree of $v$ recursively.}
         }
         
     \texttt{Similarly, steps are repeated for node.rightChild}
@@ -58,74 +61,84 @@ In this example, the range query should return the points that lies inside the r
     \label{Range_Query_Algorithm_$K$D-Tree}
 \end{algorithm}
 
-In algorithm \ref{Range_Query_Algorithm_$K$D-Tree} we first check the root of the tree in the function SEARCH\_RANGE\_QUERY(). We pass the lower and upper bound of the rectangles and check if the point at the root fall within the range rectangle. If point falls within the range then the point is added to the list.
-In fig \ref{fig:KD-Tree_for_Range_Query_Algorithm} we see how the space is partitioned on x-axis and y-axis alternatively. The subdivision consists of rectangular regions, called cells (possibly unbounded). Suppose current splitting line is vertical. Let v, w be left and right children nodes. After checking the root, root.leftChild (v) is searched to see if the it is a leaf node. Since v is not a leaf node a decision to traverse the right or left subtree is made by checking it's x-axis, y-axis and split axis. In  fig \ref{fig:KD-Tree_for_Range_Query_Algorithm} we can see that all cells that intersect the range rectangle is checked (highlighted by orange color) and all the cells that are not intersected by the rectangle are pruned and not checked (highlighted in blue). This improves the performance of the range query and hence results in much faster query.
+In algorithm \ref{Range_Query_Algorithm_$K$D-Tree} 
 
+\begin{enumerate}
+    \item On line $1$, start with the root of the tree in the function SEARCH\_RANGE\_QUERY(). We pass $\mathcal{Q}(\boldsymbol{l})$ and $\mathcal{Q}(\boldsymbol{u})$ and check if the point at the root falls within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$. If the point falls within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ then the point is added to the result list.
+    
+    \item In fig \ref{fig:KD-Tree_for_Range_Query_Algorithm} we see how the space is partitioned on x-axis and y-axis alternatively. The subdivision consists of rectangular regions, called cells (possibly unbounded). Suppose current splitting line is vertical. Let $v$, $w$ be left and right children nodes. 
+    
+    \item On line $2$, after checking the root, $v$ of root is searched to see if it is a leaf node. Since $v$ is not a leaf node, a decision to traverse the right or left subtree is made by checking its x-axis, y-axis and split axis. 
+    
+    \item On line $3$, check if the entire cell of $v$ lie within the range of $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$. If it does then add all the points to the result.
+    
+    \item On line $6$, check if there is no intersection of the cell of $v$ with the $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$. If there is no intersection then nothing is added to the result list.
+    
+    \item On line $8$, since there must be a partial intersection of the cell of $v$, add the points from the cell that lie within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$. 
+    
+    \item On line $11$, keep traversing within the subtree as in above steps until we get all the points within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$
+    % \item In fig \ref{fig:KD-Tree_for_Range_Query_Algorithm} we can see that all cells that intersect $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ are checked and all the cells that are not intersected by $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ are pruned. This improves the performance of the range query and hence results in much faster query.\\
+\end{enumerate}
 
 There are two cases in range query search:
 \begin{enumerate}
-    \item\textbf{Case 1}: When en entire subtree lie within range of rectangle.
-    \item\textbf{Case 2}: When only a part of the subtree lie within range of rectangle.
+    \item\textbf{Case 1}: When an entire subtree lie within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$.
+    \item\textbf{Case 2}: When only a part of the subtree lie within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$.
 \end{enumerate}
-
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=0.4\textwidth]{graphs/Range_Query_Tree.png}
-    \caption{$K$D-Tree for Range Query (Case 1)}
-    \label{fig:KD-Tree_for_Range Query}
-\end{figure}
-
-
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=0.6\textwidth]{graphs/Range_Query_plot.png}
-    \caption{$K$D-Tree Range Query Plot on 2-dimensional plane (Case 1)}
-    \label{fig:KD_Tree_Range_Query_Plot}
-\end{figure}
-
-
-\begin{figure}[htp]
-        \centering
-        \includegraphics[width=0.4\textwidth]{graphs/Range_Query_Tree_02.png}
-        \caption{$K$D-Tree for Range Query (Case 2)}
-        \label{fig:KD-Tree_for_Range_Query_Case2}
-\end{figure}
-
-
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=0.6\textwidth]{graphs/Range_Query_plot_02.png}
-    \caption{$K$D-Tree Range Query Plot on 2-dimensional plane (Case 2)}
-    \label{fig:KD_Tree_Range_Query_Plot_Case2}
-\end{figure}
 
 \begin{mscexample}
 
+    
+    \begin{minipage}[t]{\linewidth}
+    \centering
+    \includegraphics[width=6cm]{graphs/Range_Query_Tree.png}
+    \label{fig:KD-Tree_for_Range Query}
+    \hfill
+    \includegraphics[width=6cm]{graphs/Range_Query_plot.png}
+    \label{fig:KD_Tree_Range_Query_Plot}
+    % \caption{Case 1: $K$D-Tree for Range Query (Case 1). Points highlighted in orange are returned in the query.}
+    \end{minipage}
 
-    \textbf{Case 1} : For example we have a tree with Point list as 
+
+    
+\begin{enumerate}
+    \item\textbf{Case 1} : For example we have a tree with Point list as 
+	$$((5,6),(4,2),(7,9),(3,1),(5,5),(10,7),(2,11))$$
+	
+	 with $\mathcal{Q}(\boldsymbol{l}) = (2,3)$ and $\mathcal{Q}(\boldsymbol{u}) = (6,7)$. \\
+	 We can see the points along with $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ plotted in \ref{fig:KD_Tree_Range_Query_Plot}.
+	Firstly, the root point is checked and since the x-axis and y-axis both lie within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ i.e., $2 > 5 > 6$ and $3 > 6 > 7$, it is added to the result list.\\
+	Secondly, we have to check whether to traverse left or  right of tree. To do this, we then check if the x-axis of root is greater than or equal to the $\mathcal{Q}(\boldsymbol{l}$) x-axis. Since this value is larger ($5 > 2$), it will then traverse to the left. We have root.leftChild to be $(4,2)$. Next, we will check if both the axis lie within  $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$. Since the y-axis doesn't lie in $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$, this point is not selected ($2 \notin [3,7]$). Similarly, it recursively traverses the tree and checks if the point lie within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ until it reaches a leaf.\\
+	
+	\begin{minipage}[t]{\linewidth}
+        \centering
+        \includegraphics[width=6cm]{graphs/Range_Query_Tree_02.png}
+        % \caption{Case 2: $K$D-Tree for Range Query. Points highlighted in orange are returned in the query.}
+        \label{fig:KD-Tree_for_Range_Query_Case2}
+        \hfill
+        \includegraphics[width=6cm]{graphs/Range_Query_plot_02.png}
+        % \caption{Case 2: $K$D-Tree Range Query Plot on 2-dimensional plane. Points $(4,2)$, $(3,1)$ and $(5,5)$ lie within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$}
+        \label{fig:KD_Tree_Range_Query_Plot_Case2}
+        \end{minipage}
+    
+	 \item\textbf{Case 2} : For example, we have a tree with Point list as: 
 
 	$$((5,6),(4,2),(7,9),(3,1),(5,5),(10,7),(2,11))$$
 	
-	 with \textbf{lower bound} = $(2,3)$ and \textbf{upper bound} = $(6,7)$, we will get a tree as is shown in \ref{fig:KD-Tree_for_Range Query}. We can see the points along with range rectangle plotted in \ref{fig:KD_Tree_Range_Query_Plot}. Points $(5,5)$ and $(5,6)$ are returned in the query since they lie within the rectangle as seen in the plot.\\
-	Firstly, the root point is checked and since the x-coordinate and y-coordinate both lie within the rectangle bounds i.e., $2 > 5 > 6$ and $3 > 6 > 7$. It is added to the result list.\\
-	Secondly, we have to check weather to traverse left or the right of the tree. To do this, we then checks if the x-coordinate of root is greater than or equal to the lower bound x-coordinate of range rectangle. Since the value is larger than lower bound x-coordinate that is $5 > 2$ it will then traverse to the left. In the left, root has leftChild node $(4,2)$ however, here we will check if both the coordinates lie within the rectangle. Since the y-coordinate doesn't lie in the range of the rectangle, this point is not selected i.e., $2 \notin [3,7]$. Similarly, it recursively traverses the tree and checks if the point lies within the bound until it reaches a leaf.\\
-	
-	\textbf{Case 2} : For example we have a tree with Point list as 
-
-	$$((5,6),(4,2),(7,9),(3,1),(5,5),(10,7),(2,11))$$
-	
-	with \textbf{lower bound} = $(2,0.5)$ and \textbf{upper bound} = $(6,4.75)$, we will get a tree as shown in \ref{fig:KD-Tree_for_Range_Query_Case2}. We can see the points along with range rectangle plotted in \ref{fig:KD_Tree_Range_Query_Plot_Case2}.Points $(4,2)$, $(3,1)$ and $(5,5)$ are returned in the query since they lie within the rectangle as seen in the plot.\\
-	Firstly, the root point is checked and since the y-coordinate both do not lie within the rectangle bounds i.e., $6 \notin [0.5, 4.75]$ it is not added to the list.\\
-	Secondly, we will check weather to traverse left or right of the tree. To do this, we then checks if the x-coordinate of root is greater than or equal to the lower bound x-coordinate of range rectangle. Since the value is larger than lower bound x-coordinate that is $5 > 2$ it will then traverse to the left. In the left, root has leftChild node $(4,2)$ and since both the x-coordinate and y-coordinate lie within the range of rectangle it is added to the result list. \\ We will then traverse to both left and then right since all the points in this cell lie within the range of rectangle and hence are added to the list.
+	with $\mathcal{Q}(\boldsymbol{l}) = (2,0.5)$ and $\mathcal{Q}(\boldsymbol{u}) = (6,4.75)$. \\
+	We can see the points along with $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ plotted in \ref{fig:KD_Tree_Range_Query_Plot_Case2}.
+	Firstly, the root point is checked and since both x-axis and y-axis do not lie within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ i.e., $6 \notin [0.5, 4.75]$ it is not added to the list.\\
+	Secondly, we will check whether to traverse left or right of the tree. To do this, we then checks if the x-axis of root is greater than or equal to $\mathcal{Q}(\boldsymbol{l})$ x-axis. Since the value is larger ($5 > 2$), it will then traverse to the left. Root.leftChild node is $(4,2)$. Since both, x-axis and y-axis lie within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ it is added to the result list. \\  Since all the points in this cell lie within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$, they are all added to the list.
+\end{enumerate}
 \end{mscexample}
 
 \begin{figure*}[t]
     \centering
     \includegraphics[width=1\textwidth]{graphs/range_query_lisa.png}
     \caption{Range Query Search in Lisa.
-    1) Find the cells that overlap with query rectangle qr. \\
-    2) Decompose qr into the unions of smaller query rectangles, each of which intersect one only one cell. \\
-    3) Find shards corresponding to lower and upper coordinates for each query rectangle, and perform a sequential search. }
+    1) Find the cells that overlap with $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$. \\
+    2) Decompose $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ into the unions of smaller query rectangles, each of which intersect only one cell. \\
+    3) Find shards corresponding to lower and upper coordinates for each $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$, and perform a sequential search. }
     \label{fig:Range_Query_Lisa}
 \end{figure*}
 
