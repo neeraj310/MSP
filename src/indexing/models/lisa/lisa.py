@@ -908,7 +908,7 @@ class LisaModel():
              
             y_pred = self.scan_shard(intervalId,predShardId, query)
             if(y_pred == -1):
-                if self.debugPrint"
+                if self.debugPrint:
                     print('query point %d %d not found with mapped value %f predicted shard id %d' 
                         %(query[0], query[1], mapped_value,predShardId ))    
                 return 0
