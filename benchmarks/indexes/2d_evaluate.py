@@ -38,12 +38,12 @@ def load_2D_Data(filename):
 
 def create_models(filename):
     data, test_data = load_2D_Data(filename)
-    # LisaBaseModel(100)
+    lisaBm = LisaBaseModel(100)
     kdtree = KDTreeModel()
     scipykdtree = ScipyKDTreeModel(leafsize=10)
     lisa = LisaModel(cellSize=4, nuOfShards=5)
 
-    models = [lisa]
+    models = [lisa,lisaBm,kdtree, scipykdtree  ]
     ptq = PointQuery(models)
     build_times = ptq.build(data, 0.002, use_index=False)
     return (models, ptq, test_data, build_times)
@@ -151,7 +151,7 @@ def knn_query_eval(models, ptq, test_data, build_times):
                     model.name, i, build_times[index], eval_times[index],
                     eval_times[index] / i, mses[index]])
                 total_eval_time_per_k_size[index] += (eval_times[index] / i)*1000
-        print(tabulate(result, header))
+        #print(tabulate(result, header))
         for index, model in enumerate(models):
             if (model.name == 'Scipy KD-Tree') or (model.name == 'Lisa Baseline'):
                 continue
