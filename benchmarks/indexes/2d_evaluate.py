@@ -14,10 +14,11 @@ import numpy as np
 
 import src.indexing.utilities.metrics as metrics
 from src.indexing.models import BaseModel
-# from src.indexing.models.lisa.basemodel import LisaBaseModel
-# from src.indexing.models.lisa.lisa import LisaModel
+from src.indexing.models.lisa.basemodel import LisaBaseModel
+from src.indexing.models.lisa.lisa import LisaModel
 from src.indexing.models.trees.KD_tree import KDTreeModel
 from src.indexing.models.trees.scipykdtree import ScipyKDTreeModel
+from src.indexing.utilities.metrics import get_memory_size
 from src.queries.point import PointQuery
 from src.queries.range import RangeQuery
 
@@ -30,7 +31,7 @@ def load_2D_Data(filename):
     # Remove duplicates
     col_names = list(data.columns)[:-1]
     data.drop_duplicates(subset=col_names, ignore_index=True, inplace=True)
-    data = data[0:10000000]
+    data = data[0:10000]
     test_data = data  #data.sample(n=int(ratio * len(data)))
     return data, test_data
 
@@ -40,9 +41,9 @@ def create_models(filename):
     # LisaBaseModel(100)
     kdtree = KDTreeModel()
     scipykdtree = ScipyKDTreeModel(leafsize=10)
-    # lisa = LisaModel(cellSize=4, nuOfShards=5)
+    lisa = LisaModel(cellSize=4, nuOfShards=5)
 
-    models = [kdtree, scipykdtree]
+    models = [lisa]
     ptq = PointQuery(models)
     build_times = ptq.build(data, 0.002, use_index=False)
     return (models, ptq, test_data, build_times)
@@ -53,18 +54,17 @@ def point_query_eval(models, ptq, test_data, build_times):
     result = []
     header = [
         "Name", "Test Data Size", "Build Time (s)", "Evaluation Time (s)",
-        "Average Evaluation Time (s)", "Evaluation Error (MSE)"
+        "Average Evaluation Time (s)", "Evaluation Error (MSE)", "Memory Size (KB)"
     ]
-    # while (i <= 10000):
     #Sample a point
     mses, eval_times = ptq.evaluate_point(test_data.iloc[:i, :])
 
     for index, model in enumerate(models):
         result.append([
             model.name, i, build_times[index], eval_times[index],
-            eval_times[index] / i, mses[index]
+                eval_times[index] / i, mses[index], get_memory_size(model)
         ])
-    print(len(result))
+    
 
     print(tabulate(result, header))
 
@@ -74,7 +74,7 @@ def range_query_eval(models, ptq, test_data, build_times):
 
     header = [
         "Name", "Query Size", "Build Time (s)", "Evaluation Time (s)",
-        "Average Evaluation Time (s)", "Evaluation Error (MSE)"
+        "Average Evaluation Time (ms)", "Evaluation Error (MSE)"
     ]
     print(test_data.size)
     print(test_data.shape)
@@ -102,31 +102,22 @@ def range_query_eval(models, ptq, test_data, build_times):
                     continue
                 result.append([
                     model.name, j, build_times[index], eval_times[index],
-                    eval_times[index] / j, mses[index]
-                ])
-                total_eval_time_per_range_size[index] += (eval_times[index] /
-                                                          j)
+                    eval_times[index] / j, mses[index]])
+                total_eval_time_per_range_size[index]  += (eval_times[index]/j)*1000
 
             i = i + 1
-        print(tabulate(result, header))
+        
         for index, model in enumerate(models):
-            if (model.name == 'Scipy KD-Tree') or (model.name == 'Lisa Baseline'):
-            # if (model.name == 'Lisa Baseline'):
+            if (model.name == 'Scipy KD-Tree')  :
                 continue
-            print('Average Eval time for model %s query size %d is %f' %
-                  (model.name, j,
-                   total_eval_time_per_range_size[index] / average_loop_size))
-            averag_eval_time_across_ranges[
-                index] += total_eval_time_per_range_size[
-                    index] / average_loop_size
-        #print(len(result))
-
+            print('Average Eval time for model %s query size %d is %f' %(model.name, j, total_eval_time_per_range_size[index]/average_loop_size))
+            averag_eval_time_across_ranges[index] += total_eval_time_per_range_size[index]/average_loop_size
+        
     for index, model in enumerate(models):
         if (model.name == 'Scipy KD-Tree') or (model.name == 'Lisa Baseline'):
             continue
         print('average query time for model %s across different ranges %f' %
-              (model.name,
-               averag_eval_time_across_ranges[index] / len(range_size_list)))
+              (model.name, averag_eval_time_across_ranges[index] / len(range_size_list)))
 
 
 def knn_query_eval(models, ptq, test_data, build_times):
@@ -154,32 +145,27 @@ def knn_query_eval(models, ptq, test_data, build_times):
             mses, eval_times = ptq.evaluate_knn_query(query, y_gt, k=i)
 
             for index, model in enumerate(models):
-                # if (model.name == 'Scipy KD-Tree') or (model.name == 'Lisa Baseline') :
-                # continue
+                if (model.name == 'Scipy KD-Tree') or (model.name == 'Lisa Baseline') :
+                    continue
                 result.append([
                     model.name, i, build_times[index], eval_times[index],
-                    eval_times[index] / i, mses[index]
-                ])
-                total_eval_time_per_k_size[index] += (eval_times[index] / i)
+                    eval_times[index] / i, mses[index]])
+                total_eval_time_per_k_size[index] += (eval_times[index] / i)*1000
         print(tabulate(result, header))
         for index, model in enumerate(models):
-            if (model.name == 'Scipy KD-Tree') or (model.name
-                                                   == 'Lisa Baseline'):
+            if (model.name == 'Scipy KD-Tree') or (model.name == 'Lisa Baseline'):
                 continue
             print(
                 'Average Eval time for model %s for knn query with k = %d, is %f'
-                % (model.name, i,
-                   total_eval_time_per_k_size[index] / average_loop_size))
-            averag_eval_time_across_knn_queries[
-                index] += total_eval_time_per_k_size[index] / average_loop_size
+                % (model.name, i,total_eval_time_per_k_size[index] / average_loop_size))
+            averag_eval_time_across_knn_queries[index] += total_eval_time_per_k_size[index] / average_loop_size
 
         i = i + 1
     for index, model in enumerate(models):
         if (model.name == 'Scipy KD-Tree') or (model.name == 'Lisa Baseline'):
             continue
         print('average query time for model %s across different ranges %f' %
-              (model.name,
-               averag_eval_time_across_knn_queries[index] / len(k_list)))
+              (model.name, averag_eval_time_across_knn_queries[index] / len(k_list)))
 
 
 def models_predict_point(data, models: List[BaseModel]):
