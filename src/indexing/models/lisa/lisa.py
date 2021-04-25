@@ -334,7 +334,7 @@ class LisaModel():
     '''
     def lstsq(self,A, y_gt):
 
-        alpha, ssr, _, _ = np.linalg.lstsq(A, y_gt)
+        alpha, ssr, _, _ = np.linalg.lstsq(A, y_gt, rcond = -1)
         # ssr is only calculated if self.n_data > self.n_parameters
         # in this case we ll need to calculate ssr manually
         # where ssr = sum of square of residuals
@@ -1005,7 +1005,7 @@ class LisaModel():
                            
     '''
     
-    def getKeysInRangeQuery(self, cellList, query_l, query_u):
+    def getKeysInRangeQuerySlow(self, cellList, query_l, query_u):
         keyList = []
         for i in cellList:
             nuOfKeys = self.keysPerCell
@@ -1017,6 +1017,102 @@ class LisaModel():
                          (self.train_array[j, 1] >= query_l[1] and self.train_array[j, 1] <= query_u[1] ):
                         keyList.append(self.train_array[j, 0:3])
      
+        return np.array(keyList)
+    
+    def predict_first_shard_range_query(self,query_l,query_u,cell_id,keyList):
+       
+        
+        keyArea = np.abs((query_l[1] - self.cellMatrix[cell_id][1])*
+                   (query_l[0] - self.cellMatrix[cell_id][0]))
+    
+        mapped_value =   self.cellMatrix[cell_id][7] + ((keyArea/self.cellMatrix[cell_id][8])*self.keysPerCell)
+        intervalId =   self.search_mapped_interval(mapped_value)
+        if(intervalId == -1):
+            intervalId = self.sequentially_scan_mapped_interval(mapped_value)
+            if(intervalId == -1):
+                return keyList
+    
+        v_pred = self.predictShardId(mapped_value, self.alphas_list[intervalId], self.betas_list[intervalId]).astype(int)
+        predShardId = v_pred[0]//self.keysPerShard
+        if(predShardId < 0):
+            predShardId= 0
+        if(predShardId >= self.nuOfShards):
+            predShardId = self.nuOfShards-1
+        
+        mapped_interval_offset = intervalId*self.numOfKeysPerInterval
+        end_offset = mapped_interval_offset+self.numOfKeysPerInterval
+        if (predShardId>0):
+            predShardId = predShardId-1
+        shard_offset = mapped_interval_offset + predShardId*self.keysPerShard
+        for j in range(shard_offset, end_offset):
+            if(self.train_array[j, 0] >= query_l[0] and self.train_array[j, 0] <= query_u[0] )and \
+                (self.train_array[j, 1] >= query_l[1] and self.train_array[j, 1] <= query_u[1] ):
+                keyList.append(self.train_array[j, 0:3])
+        return keyList
+    
+    
+    def predict_last_shard_range_query(self,query_l,query_u,cell_id,keyList):
+       
+    
+        keyArea = np.abs((query_u[1] - self.cellMatrix[cell_id][1])*
+                   (query_u[0] - self.cellMatrix[cell_id][0]))
+    
+        mapped_value =   self.cellMatrix[cell_id][7] + ((keyArea/self.cellMatrix[cell_id][8])*self.keysPerCell)
+        intervalId =   self.search_mapped_interval(mapped_value)
+        if(intervalId == -1):
+            intervalId = self.sequentially_scan_mapped_interval(mapped_value)
+            if(intervalId == -1):
+                return keyList
+    
+        v_pred = self.predictShardId(mapped_value, self.alphas_list[intervalId], self.betas_list[intervalId]).astype(int)
+        predShardId = v_pred[0]//self.keysPerShard
+        if(predShardId < 0):
+            predShardId= 0
+        if(predShardId >= self.nuOfShards):
+            predShardId = self.nuOfShards-1
+        
+        mapped_interval_offset = intervalId*self.numOfKeysPerInterval
+        if (predShardId<(self.nuOfShards -1)):
+           predShardId = predShardId+1
+        start_offset = mapped_interval_offset
+        shard_offset = mapped_interval_offset + predShardId*self.keysPerShard
+        end_offset = shard_offset+self.keysPerShard
+        if(predShardId == self.nuOfShards -1):
+            if (intervalId != (self.nuOfIntervals-1)):
+                end_offset = end_offset+ (self.numOfKeysPerInterval % self.keysPerShard)
+            else:
+                end_offset = self.nuOfKeys
+       
+        for j in range(start_offset, end_offset):
+            if(self.train_array[j, 0] >= query_l[0] and self.train_array[j, 0] <= query_u[0] )and \
+                (self.train_array[j, 1] >= query_l[1] and self.train_array[j, 1] <= query_u[1] ):
+                keyList.append(self.train_array[j, 0:3])
+               
+       
+        return keyList
+
+
+        
+    def getKeysInRangeQuery(self,cellList, query_l, query_u):
+        keyList = []
+        cellId = cellList[0]
+        keyList = self.predict_first_shard_range_query(query_l, query_u, cellId,keyList)
+        cellList.pop(0)
+        if len(cellList) == 0:
+            return np.array(keyList)
+        cellId = cellList[-1]
+        cellList.pop(-1)
+        for i in cellList:
+            nuOfKeys = self.keysPerCell
+            startOffset = int(self.cellMatrix[i][6]*(self.keysPerCell))
+            if i == ((self.cellSize*self.cellSize)-1):
+                nuOfKeys = nuOfKeys + self.additionalKeysInLastCell 
+            for j in range(startOffset, startOffset+nuOfKeys):
+                 #if(lisa.train_array[j, 0] >= query_l[0] and lisa.train_array[j, 0] <= query_u[0] )and \
+                 #        (lisa.train_array[j, 1] >= query_l[1] and lisa.train_array[j, 1] <= query_u[1] ):
+                keyList.append(self.train_array[j, 0:3])
+       
+        keyList = self.predict_last_shard_range_query(query_l,query_u, cellId, keyList)
         return np.array(keyList)
 
     '''
@@ -1125,7 +1221,7 @@ class LisaModel():
         print(x_test.shape)
         print(y_train.shape)
         print(y_test.shape)
-        print(y_train[0:100])
+    
         
         np.set_printoptions(threshold=100000)
         start_time = timer()
@@ -1159,6 +1255,10 @@ class LisaModel():
         #mse = metrics.mean_absolute_error(y_test, pred_y)
         mse = metrics.mean_squared_error(y_test, pred_y)
         print('error count is %d, test size is %d ratio is %f' %(error_count,test_data_size, error_count/test_data_size ))
+        print('nuOfIntervals =%d, numOfKeysPerInterval = %d nuOfShards = %d keysperShard = %d NuofKeys = %d keysInLastInterval = %d'
+                      %(self.nuOfIntervals, self.numOfKeysPerInterval,self.nuOfShards,self.keysPerShard, self.nuOfKeys, self.keysInLastInterval) )
+
+        print('cellSize = %d, keysPerCell = %d, nuOfKeys = %d additionalKeysInLastCell = %d' %(self.cellSize, self.keysPerCell,  self.nuOfKeys, self.additionalKeysInLastCell ))
         if self.debugPrint:
             print(self.cellMatrix)
         return mse, end_time - start_time
