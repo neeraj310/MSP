@@ -1,4 +1,4 @@
-A range query is a database operation that retrieves all the records that lies in a range. In this project, we perform range query on $2$-dimensional data only. In addition, we only consider a range query where the range is defined as a rectangle. Under these assumptions, a range query can be formalised as a query $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ where $l,u\in\mathbb{R}^2$.
+A range query is a database operation that retrieves all the records that lies in a range. In this project, we perform range query on $2$-dimensional data only. In addition, we only consider a range query where the range is defined as a rectangle. Under these assumptions, a range query can be formalised as a query $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ where $l,u\in\mathbb{R}^2$ and $split\_axis$ as $\mathcal{S}$.
 
 \begin{mscexample}
 	For example, assume we have the points
@@ -64,11 +64,11 @@ In this example, the range query should return the points that lies inside the r
 In algorithm \ref{Range_Query_Algorithm_$K$D-Tree} 
 
 \begin{enumerate}
-    \item On line $1$, start with the root of the tree in the function SEARCH\_RANGE\_QUERY(). We pass $\mathcal{Q}(\boldsymbol{l})$ and $\mathcal{Q}(\boldsymbol{u})$ and check if the point at the root falls within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$. If the point falls within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ then the point is added to the result list.
+    \item On line $1$, start with the root of tree in the function SEARCH\_RANGE\_QUERY(). We pass $\mathcal{Q}(\boldsymbol{l})$ and $\mathcal{Q}(\boldsymbol{u})$ and check if the point at the root falls within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$. If the point falls within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ then the point is added to the result list.
     
-    \item In fig \ref{fig:KD-Tree_for_Range_Query_Algorithm} we see how the space is partitioned on x-axis and y-axis alternatively. The subdivision consists of rectangular regions, called cells (possibly unbounded). Suppose current splitting line is vertical. Let $v$, $w$ be left and right children nodes. 
+    \item Let $v$, $w$ be left and right children nodes.(Refer fig \ref{fig:KD-Tree_for_Range_Query_Algorithm} for space partition of space)
     
-    \item On line $2$, after checking the root, $v$ of root is searched to see if it is a leaf node. Since $v$ is not a leaf node, a decision to traverse the right or left subtree is made by checking its x-axis, y-axis and split axis. 
+    \item On line $2$, after checking the root, $v$ of root is searched to see if it is a leaf node. Since $v$ is not a leaf node, a decision to traverse the right or left subtree is made by checking its x-axis, y-axis and $\mathcal{S}$. 
     
     \item On line $3$, check if the entire cell of $v$ lie within the range of $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$. If it does then add all the points to the result.
     
@@ -103,13 +103,24 @@ There are two cases in range query search:
     
 \begin{enumerate}
     \item\textbf{Case 1} : For example we have a tree with Point list as 
-	$$((5,6),(4,2),(7,9),(3,1),(5,5),(10,7),(2,11))$$
+	$$[(5,6),(4,2),(7,9),(3,1),(5,5),(10,7),(2,11)]$$
 	
 	 with $\mathcal{Q}(\boldsymbol{l}) = (2,3)$ and $\mathcal{Q}(\boldsymbol{u}) = (6,7)$. \\
-	 We can see the points along with $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ plotted in \ref{fig:KD_Tree_Range_Query_Plot}.
-	Firstly, the root point is checked and since the x-axis and y-axis both lie within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ i.e., $2 > 5 > 6$ and $3 > 6 > 7$, it is added to the result list.\\
-	Secondly, we have to check whether to traverse left or  right of tree. To do this, we then check if the x-axis of root is greater than or equal to the $\mathcal{Q}(\boldsymbol{l}$) x-axis. Since this value is larger ($5 > 2$), it will then traverse to the left. We have root.leftChild to be $(4,2)$. Next, we will check if both the axis lie within  $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$. Since the y-axis doesn't lie in $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$, this point is not selected ($2 \notin [3,7]$). Similarly, it recursively traverses the tree and checks if the point lie within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ until it reaches a leaf.\\
-	
+	 We follow below steps in order to get the results:
+% 	 We can see the points along with $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ plotted in \ref{fig:KD_Tree_Range_Query_Plot}.
+	 \begin{enumerate}
+	 
+        \item Root point is checked and since its x-axis and y-axis both lie within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ i.e., $2 > 5 > 6$ and $3 > 6 > 7$, it is added to result list.
+        
+         \item In order to check whether to traverse left or right, we check if the x-axis($\mathcal{Q} = 0$) of root is greater than or equal to the $\mathcal{Q}(\boldsymbol{l}$) x-axis. Since this value is larger ($5 > 2$), it will then traverse to the left. 
+         
+         \item Increase $\mathcal{S}$ to $1$.
+         
+         \item We have root.leftChild to be $(4,2)$. Check if both the x-axis and y-axis lie within  $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$. Since the y-axis doesn't lie in $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$, this point is not added ($2 \notin [3,7]$). 
+         
+         \item Similarly, it keeps adding points to list while it recursively traverses the tree and checks if the points lie within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ until it reaches a leaf.
+         
+	\end{enumerate}
 	\begin{minipage}[t]{\linewidth}
         \centering
         \includegraphics[width=6cm]{graphs/Range_Query_Tree_02.png}
@@ -123,12 +134,19 @@ There are two cases in range query search:
     
 	 \item\textbf{Case 2} : For example, we have a tree with Point list as: 
 
-	$$((5,6),(4,2),(7,9),(3,1),(5,5),(10,7),(2,11))$$
+	$$[(5,6),(4,2),(7,9),(3,1),(5,5),(10,7),(2,11)]$$
 	
 	with $\mathcal{Q}(\boldsymbol{l}) = (2,0.5)$ and $\mathcal{Q}(\boldsymbol{u}) = (6,4.75)$. \\
-	We can see the points along with $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ plotted in \ref{fig:KD_Tree_Range_Query_Plot_Case2}.
-	Firstly, the root point is checked and since both x-axis and y-axis do not lie within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ i.e., $6 \notin [0.5, 4.75]$ it is not added to the list.\\
-	Secondly, we will check whether to traverse left or right of the tree. To do this, we then checks if the x-axis of root is greater than or equal to $\mathcal{Q}(\boldsymbol{l})$ x-axis. Since the value is larger ($5 > 2$), it will then traverse to the left. Root.leftChild node is $(4,2)$. Since both, x-axis and y-axis lie within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ it is added to the result list. \\  Since all the points in this cell lie within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$, they are all added to the list.
+	We follow below steps in order to get the results:
+% 	We can see the points along with $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ plotted in \ref{fig:KD_Tree_Range_Query_Plot_Case2}.
+	\begin{enumerate}
+    	\item Root point is checked and since both x-axis and y-axis do not lie within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ i.e., $6 \notin [0.5, 4.75]$ it is not added to the list.
+    	
+    	\item In order to check whether to traverse left or right of the tree, we check if the x-axis of root is greater than or equal to $\mathcal{Q}(\boldsymbol{l})$ x-axis. Since the value is larger ($5 > 2$), it will then traverse to the left. Root.leftChild node is $(4,2)$. Since both, x-axis and y-axis lie within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$, it is added to the result list. 
+    	
+    	\item Since all the points in this cell lie within $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$, they are all added to the list.
+    	
+    \end{enumerate}	
 \end{enumerate}
 \end{mscexample}
 

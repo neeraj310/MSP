@@ -1,6 +1,9 @@
 $K$-Nearest Neighbours ($K$NN), as the name suggests, is the process of finding $K$ nearest neighbours to a given query point. In this project, $K$NN query is only performed on $2$-dimensional data. We use $\ell_2$ norm as the distance metric. A $K$NN query will be formalised as $\mathcal{K}(\boldsymbol{X})$ where $\boldsymbol{X}\in\mathbb{R}^2$.
 
 \subsubsection{$K$NN query with $K$D-Tree}
+As a baseline, we first perform $K$NN query with $K$D-tree.\\
+The main advantage of $K$D-Tree is that we can exploit the tree structure and prune points we don't think will have distance smaller than the ones we have already calculated. This improves the time complexity as compared to finding the distance of point with every other point in space to get the closest neighbours. 
+
 
 \begin{algorithm}[H]
     \SetAlgoLined
@@ -11,11 +14,11 @@ $K$-Nearest Neighbours ($K$NN), as the name suggests, is the process of finding 
     \For{$i\gets0$ \KwTo $len(TestPoints)$}
     {
         \texttt{Start at root}\\
-        \texttt{Traverse subtree where the $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y})_i$ can be added.}\\
-        \texttt{Find the leaf; Calculate the distance and store it as $d$}\\
+        \texttt{Traverse subtree where $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y})_i$ can be added.}\\
+        \texttt{Find the leaf; Calculate the distance and store it as $\mathcal{D}$}\\
         \eIf{$len(ResultList) < K$}
             {
-                \eIf {\texttt{Perpendicular distance of Parent with $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y}) <= d$}}
+                \eIf {\texttt{Perpendicular distance of Parent with $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y}) <= \mathcal{D}$}}
                     {
                         \texttt{Go on the other side of subtree} 
                     }
@@ -34,15 +37,15 @@ $K$-Nearest Neighbours ($K$NN), as the name suggests, is the process of finding 
 
 In algorithm \ref{$K$NN_Query_Algorithm_$K$D-Tree},
 \begin{enumerate}
-    \item Start with the root to traverse the tree until we reach the leaf. We find the subtree where the new $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y})$ could be added and finally reach the leaf of this subtree. 
+    \item Start with the root to traverse tree until we reach the leaf. We find the subtree where the new $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y})$ could be added and finally reach the leaf of this subtree. 
 
     \item Calculate the square of the euclidean distance of this point from the $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y})$. We add it to the list and push and pop values from the list depending on the distances we calculate while traversing the tree upwards from here.
     
-    \item The main advantage of $K$D-Tree is that we can exploit the tree structure and prune the points we don't think will have distance smaller than the ones we have already calculated. We do this by checking if we should either go up another level or go the other side of the subtree to get a point that could have a distance smaller than the last best calculated distance in the list. \\\\\\\\
-
+    \item From the leaf we could either go up another level or go the other side of the subtree to get a point that could have a distance smaller than the last best calculated distance in the list. 
+    
+    \item Once we make a decision in the above step, we can recursively traverse the tree upwards until we reach the root. 
 \end{enumerate}
 
-As a baseline, we first perform $K$NN query with $K$D-tree.
 
 \begin{mscexample}
 
@@ -59,10 +62,27 @@ As a baseline, we first perform $K$NN query with $K$D-tree.
     \end{minipage}
 	For example, we have Point list as $$((5,4),(2,6),(13,3),(8,7),(3,1),(10,2))]$$ 
 	
-	\textbf{test point; $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y})$} = $(9,4)$, we will have a tree structure as shown in \ref{fig:$K$D-Tree_for_KNN Query} and it's plot on $2$-dimensional plane is shown in \ref{fig:KD_Tree_KNN_Plot}. \\
-	In fig \ref{fig:KD_Tree_KNN_Plot} we can see that although point $(8,7)$ is the leaf we will reach when we traverse the tree to search where test point $(9,4)$ can be added, it is not in fact the nearest point to the test point. \\
-	In this case if we want to look for $4$ nearest neighbour, we will first traverse to $(8,7)$ and then make a decision weather to traverse to the other side of the subtree to point $(10,2)$. We decide this by checking the perpendicular distance of $(13,3)$ with test point $(9,4)$ and compare this with the distance of $(8,7)$ and test point $(9,4)$. We do this to verify if there is even a possibility to find a point smaller than the last best distance on the other side of the subtree. Since the perpendicular distance is smaller than the best calculated distance we will check the distance of test point $(9,4)$ and $(10,2)$ on the other side of the subtree ($A > B$). This distance in our case is indeed smaller than the best calculated distance of test point $(9,4)$ with $(8,7)$ so far and so point $(10,2)$ will be added to the list.\\
-	Similarly, we traverse until we have $K$ nearest neighbour to the test point in the list.
+	\textbf{Test point; $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y})$} = $(9,4)$\\
+	
+% 	we will have a tree structure as shown in \ref{fig:$K$D-Tree_for_KNN Query} and it's plot on $2$-dimensional plane is shown in \ref{fig:KD_Tree_KNN_Plot}. *****\ref{fig:KD_Tree_KNN_Plot} \\
+% 	In the fig above, we can see that although point $(8,7)$ is the leaf we will reach when we traverse the tree to search where test point $(9,4)$ can be added, it is not in fact the nearest point to the test point. \\
+	
+	Below are the steps followed to get the $4$ nearest neighbours:
+	\begin{enumerate}
+    	\item Traverse to $(8,7)$ by searching for a location where $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y})$ could be added.
+    	
+    	\item Add $(8,7)$ to result list.
+    	
+    	\item Calculate the distance of $(8,7)$ and $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y})$. Save the distance as $\mathcal{D}$
+    	
+    	\item Make a decision whether to traverse to the other side of the subtree to point $(10,2)$ by checking the perpendicular distance of $(13,3)$ with $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y})$ and compare this with $\mathcal{D}$.(We do this to verify if there is even a possibility to find a point smaller than the last best distance on the other side of the subtree.) 
+    	
+    	\item Since the perpendicular distance is smaller than the best calculated $\mathcal{D}$ ($A > B$), we will check the distance of $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y})$ and $(10,2)$. This distance in our case is indeed smaller than the best calculated distance of $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y})$ with $(8,7)$ so far.
+    	
+    	\item Add $(10,2)$ to result list.
+    	
+    	\item Similarly, we traverse until we have $4$ nearest neighbour to $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y})$ in the list.
+	\end{enumerate}
 \end{mscexample}
 
 
