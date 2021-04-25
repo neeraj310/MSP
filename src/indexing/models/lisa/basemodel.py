@@ -30,6 +30,8 @@ class LisaBaseModel():
         self.name = 'Lisa Baseline'
         #Book Keeping code
         self.page_size = 1
+        self.debugPrint = False
+
 
     '''
         Apply mapping function(key.x1+key.x2) to keys database.
@@ -186,6 +188,93 @@ class LisaBaseModel():
         # If we reach here, then the element was not present
         #print('\n returning page %d' %(-1))
         return -1
+
+    '''
+       Return keys belonging to range query from cells belonging to cell list
+       Parameters
+        ----------
+        query_l : tuple
+            Range Query lower coordinate
+        
+        query_u  : tuple
+            Range Query upper coordinate
+            
+        cellList : List
+            List contaning cells ids which are identified as part of 
+        query
+                     
+        Returns
+        -------
+        keylist :  npArray
+            Array of key/value pairs fetched by range query
+               
+                           
+    '''
+    def getKeysInRangeQuery(self, lowerPage, upperPage,query_l, query_u):
+        keyList = []
+        pageIdx = lowerPage
+        while(pageIdx <=upperPage):
+            pageStart = pageIdx * self.keysPerPage
+            # Last page may contain less nu of keys than self.keysPerPage
+            if (pageStart == (self.keysPerPage * (self.pageCount - 1))):
+                # Last page
+                pageEnd = self.nuofKeys
+            else:
+                pageEnd = pageStart + self.keysPerPage
+           
+            
+            for j in range(pageStart, pageEnd):
+                 if(self.train_array[j, 0] >= query_l[0] and self.train_array[j, 0] <= query_u[0] )and \
+                         (self.train_array[j, 1] >= query_l[1] and self.train_array[j, 1] <= query_u[1] ):
+                        keyList.append(self.train_array[j, 0:3])
+            pageIdx += 1
+     
+        return np.array(keyList)
+    
+    '''
+       Decompose range query into a union of smaller query rectangles each 
+       belong to one and only one cell. 
+        
+        Parameters
+        ----------
+        query_l : tuple
+            Range Query lower coordinate
+        
+        query_u  : tuple
+            Range Query upper coordinate
+                     
+        Returns
+        -------
+        cell_list :  union of smaller query rectangles each 
+       belong to one and only one cell.
+            
+    '''
+    def range_query(self,query_l, query_u):
+      
+        if self.debugPrint:
+              print('Get pages for range (%d, %d), (%d, %d)' %(query_l[0], query_l[1], query_u[0], query_u[1] )) 
+        lowerPage = self.search_page_index( query_l[0]+query_l[1]) 
+        upperPage = self.search_page_index( query_u[0]+query_u[1]) 
+        if self.debugPrint:
+            print("Pages to search from %d to %d" %(lowerPage,upperPage))
+        return (lowerPage,upperPage)
+    
+    
+    '''
+        Predict range query for lisa model
+                                
+    '''
+    def predict_range_query(self, query_l, query_u):
+        (lowerPage,upperPage) =self.range_query(query_l, query_u) 
+        if(lowerPage == -1) or (upperPage == -1)  :
+            if self.debugPrint:
+                print('range query not found')
+            return -1
+        else:
+            neighboursKeySet = self.getKeysInRangeQuery(lowerPage, upperPage,query_l,query_u )
+            return np.sort(neighboursKeySet[:, -1])
+        
+
 
     '''
        Predict the position of query point in the database
