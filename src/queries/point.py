@@ -70,7 +70,7 @@ class PointQuery(Query):
         build_times = []
         mses = []
         for idx, model in enumerate(self.models):
-             if (model.name == 'Scipy KD-Tree'):
+            if (model.name == 'Scipy KD-Tree'):
                 mses.append(0)
                 build_times.append(0)
                 continue
