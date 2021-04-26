@@ -67,7 +67,7 @@ def train(filename, settings={}):
     models = []
     sample_ratio = len(train_data)/len(data)
     if settings['conv']:
-        model = ConvModel(page_size=page_size, num_breaks=128)
+        model = ConvModel(page_size=page_size, num_breaks=32)
         models.append(model)
     if settings['b-tree']:
         model = BTreeModel(page_size, B_TREE_DEGREE)
@@ -108,8 +108,8 @@ if __name__ == "__main__":
         "fcn": True,
         "staged": True,
         "conv": True,
-        "write": True,
-        "draw_curve": True,
+        "write": False,
+        "draw_curve": False,
         "sample_size": None,
     }
     filename = sys.argv[1]

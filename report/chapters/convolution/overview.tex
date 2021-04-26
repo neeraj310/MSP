@@ -102,7 +102,36 @@ The calculated $\boldsymbol{\alpha}$ and $\boldsymbol{\beta}$ are what we need t
 
 \section{Experiment}
 
-We first present the break points that we found with the fully convolutional network as in Fig. \ref{fig:fcn_betas_found}.
+We first present the break points that we found with the fully convolutional network as in Fig. \ref{fig:fcn_betas_found}. We 
+
+% TODO: ADD MORE ANALYSIS TO FIGURE ABOVE.
+
+Then we perform an evaluation on $10$ thousands normal distributed keys. The results are shown in Table \ref{fig:conv_table}. From the table, we have the following analysis:
+
+\begin{enumerate}
+	\item The convolutional model outperformed other models in the construction time, which is due to the fact that we only train linear models on the predicted break points. As we can reuse the pre-trained convolutional models to find the break points, the time for training convolutional models is not included in this construction time.
+	\item the query time for convolutional model is larger than B-Tree and baseline model. It is because we need to iterate over 
+\end{enumerate}
+
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{ |c|c|c|c|c| }
+\hline
+Model & Build (s) & Query (ms) & MSE & Memory (KB)\\ 
+\hline
+B-Tree (degree=20) & 1.0311 & \textit{0.1395} & \textit{0} & 4056.05 \\ 
+\hline
+Baseline & 1045.25 & \textbf{0.3136} & 3.8825 & \textbf{11.0859} \\
+\hline
+Recursive Model & 503.72 & 0.7066 & 2.1483 & 15531.7\\ 
+\hline
+Convolution (breaks=32) & \textbf{0.01811} & 0.48522 & \textbf{0.6762} & 240.484 \\
+\hline
+\end{tabular}
+\caption{The construction time, average query time (Lookup), mean square error and memory usage of a B-Tree (with degree=20), a baseline model, a recursive model and a fully convolutional model (with 32 breakpoints). The experiment is performed on $10$ thousand normally distributed keys.} 
+\label{fig:conv_table}
+\end{table}
 
 \begin{figure}[t]
 \begin{subfigure}[b]{0.5\textwidth}\includegraphics[width=8cm]{graphs/fcn/normal}

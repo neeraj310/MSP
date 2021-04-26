@@ -205,7 +205,7 @@ With these two approaches, we achieved the results as shown below:
 \centering
 \begin{tabular}{ |c|c|c|c| }
 \hline
-Model & Construction Time (s) & Avery Query Time & Memory Usage (MB)\\ 
+Model & Construction Time (s) & Avery Query Time (ms) & Memory Usage (MB)\\ 
 \hline
 B-Tree (degree=20) & 26356 (1.00x) & \textbf{0.3489 (1.00x)} & 96912 \tablefootnote{The memory usage of each node is larger than previous experiments. It is because the tools for measuring memory usage (\texttt{pympler}) requires extra memory, and caused the program to be killed when there is not enough memory. Hence we use a different tool (\texttt{top}) to measure an approximate memory usage.} \\ 
 \hline
