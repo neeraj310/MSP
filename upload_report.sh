@@ -4,4 +4,7 @@
 # https://opensource.org/licenses/MIT
 
 rm -rf report/*
-cp -R ../msc-report/* 
+cp -R ../msc-report/* report/
+git add *
+git commit -m "update report"
+git push uzh master
