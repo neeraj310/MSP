@@ -14,6 +14,8 @@ from tabulate import tabulate
 from src.indexing.models import BaseModel
 from src.indexing.models.ml.polynomial_regression import PRModel
 from src.indexing.models.nn.fcn import FCNModel
+# from src.indexing.models.nn.conv import ConvModel
+from src.indexing.models.nn.pwlf_conv import ConvModel
 from src.indexing.models.rmi.staged import StagedModel
 from src.indexing.models.trees.b_tree import BTree, BTreeModel
 from src.indexing.utilities.dataloaders import uniform_sample
@@ -64,6 +66,9 @@ def train(filename, settings={}):
         filename, settings['sample_size'])
     models = []
     sample_ratio = len(train_data)/len(data)
+    if settings['conv']:
+        model = ConvModel(page_size=page_size, num_breaks=128)
+        models.append(model)
     if settings['b-tree']:
         model = BTreeModel(page_size, B_TREE_DEGREE)
         models.append(model)
@@ -99,12 +104,13 @@ def train(filename, settings={}):
 
 if __name__ == "__main__":
     settings = {
-        "b-tree": False,
-        "fcn": False,
+        "b-tree": True,
+        "fcn": True,
         "staged": True,
-        "write": False,
-        "draw_curve": False,
-        "sample_size": 1000,
+        "conv": True,
+        "write": True,
+        "draw_curve": True,
+        "sample_size": None,
     }
     filename = sys.argv[1]
     print(settings)

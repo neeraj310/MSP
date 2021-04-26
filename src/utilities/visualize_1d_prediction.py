@@ -1,30 +1,20 @@
 import sys
+from matplotlib import colors
 
 import pandas as pd
-from bokeh.io import show
-from bokeh.layouts import column
-from bokeh.models import ColumnDataSource, CustomJS, Select
-from bokeh.models.tools import HoverTool
-from bokeh.plotting import figure
+import matplotlib.pyplot as plt
 
-
-def visualize(filename):
-    df = pd.read_csv(filename)
-    ds = ColumnDataSource(df)
-    p = figure(title="title", toolbar_location="above", x_axis_type="linear")
-
-    line_renderer = p.line('x', 'ground_truth', source=ds)
-    handler = CustomJS(args=dict(line_renderer=line_renderer),
-                       code="""
-        line_renderer.glyph.y = {field: cb_obj.value};
-    """)
-
-    select = Select(title="Model Type:", options=list(df.columns))
-    select.js_on_change('value', handler)
-    select.js_link('value', p.title, 'text')
-    show(column(select, p))
-
-
-if __name__ == "__main__":
+def draw(filename):
+    data = pd.read_csv(filename)
+    x = data.iloc[:, 0]
+    gt = data.iloc[:, 1]
+    plt.scatter(x, gt, linewidths=0.01)
+    total_columns = len(data.columns)
+    for i in range(total_columns-2):
+        predictions = data.iloc[:, i+2]
+        plt.scatter(x, predictions, linewidths=0.01)
+    plt.show()
+    
+if __name__=="__main__":
     filename = sys.argv[1]
-    visualize(filename)
+    draw(filename)

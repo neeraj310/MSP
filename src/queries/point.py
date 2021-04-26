@@ -52,7 +52,7 @@ class PointQuery(Query):
                 if self.sample_ratio:
                     y = y / self.sample_ratio
                 ys.append(y)
-                print("Evaluating {}/{}".format(i, data_size), end='\r')
+                # print("Evaluating {}/{}".format(i, data_size), end='\r')
             end_time = timer()
             yhat = np.array(ys).reshape(-1, 1)
             ytrue = np.array(test_data.iloc[:, -1:])

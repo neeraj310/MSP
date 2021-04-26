@@ -5,8 +5,8 @@ import numpy as np
 
 sys.path.append('')
 import src.indexing.utilities.metrics as metrics
-# from src.indexing.learning.fully_connected_network import FullyConnectedNetwork
-from src.indexing.learning.pt_fcn import FullyConnectedNetwork
+from src.indexing.learning.fully_connected_network import FullyConnectedNetwork
+# from src.indexing.learning.pt_fcn import FullyConnectedNetwork
 from src.indexing.models import BaseModel
 from src.indexing.utilities.dataloaders import normalize
 
@@ -31,7 +31,7 @@ class FCNModel(BaseModel):
             self.max_y = np.max(y_train)
             self.min_y = np.min(y_train)
             x_train, y_train = normalize(x_train), normalize(y_train)
-
+            self.has_normalized = True
             if x_test is not None:
                 x_test = (x_test - self.min_x) / (self.max_x - self.min_x + 1)
             if y_test is not None:

@@ -10,6 +10,9 @@ class PolynomialRegression():
         self.degree = degree
         self.coeffs = None
 
+    def __repr__(self) -> str:
+        return str(self.coeffs)
+
     def fit(self, X, y) -> None:
         '''
         The function fit tries to fit a polynomial relation between X and y.
@@ -33,4 +36,4 @@ class PolynomialRegression():
         for power in range(self.degree):
             y_pred += self.coeffs[power + 1] * np.power(X, power + 1)
         y_pred + self.coeffs[0]
-        return y_pred.astype(int)
+        return y_pred

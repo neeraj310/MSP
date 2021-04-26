@@ -43,7 +43,7 @@ int main(int argc, char ** argv) {
   std::cerr << "max = " << vec[vec.size() - 1] << std::endl;
 
   std::ofstream myfile;
-  myfile.open("data/1d_lognormal_" + std::to_string(nelements) + ".csv");
+  myfile.open("data/1d_normal_" + std::to_string(nelements) + ".csv");
   myfile << "val,block\n";
   for (std::vector<int>::size_type i = 1; i != vec.size(); i++) {
     myfile << std::to_string(vec[i] - vec[0] + 1) + "," +
