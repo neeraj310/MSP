@@ -1,0 +1,127 @@
+A point query is a database operation that finds the records that exactly match our query conditions. In this project, we perform point query on $1$-dimensional data and $2$ dimensional data. We assign the database records into pages, predict the page index with the index models and then perform sequential search on the predicted page. In order to evaluate the errors that different index models are making, we focus on predicting the page indices and ignore the sequential search operation on a specific page. 
+
+\begin{mscexample}
+For example, assume we have an $1$-dimensional array $[1,2,3,4]$ and two pages such that $[1,2]\in P_0$ and $[3,4]\in P_1$. A point query for $x=2$ is expected to return 0 as the page index.
+\end{mscexample}
+
+\subsubsection{Point Query with B-Tree}
+
+Point query in a B-Tree is to search the key with the exact same value of key in the tree. By searching in a tree structure we can exploit the structure of tree to search for the key much faster. We do not have to linearly search the entire key space for the key anymore.\\
+If the root node is a leaf node as well then it will simply search linearly and return an exact match of the key. If it doesn't find the key it will not return any value.\\
+Since keys in B-tree are much larger in number and are usually of few levels we traverse the tree until we reach a leaf node and then search for an exact match to the point key in the leaf node. \\
+To do this, firstly, we compare the point key with each key in the root node and find a key value which is greater than the point key in the root node. It will then traverse and search in the child of the key before it. We do this because we know that there is no possibility of finding the key in the child node associated with the keys which have a value higher than the Point query key. We then recursively keep traversing down the tree until we reach the desired leaf node. We then search for the key linearly in the leaf node.
+
+\begin{mscexample}
+For example if we were to search for $\mathcal{K}(\boldsymbol{x})$ $(41)$ in the example \ref{B-Tree Insertion} of the B-Tree above, we would first compare point query $(41)$ and the only $\mathcal{K}(\boldsymbol{x})$ in root node is $(11)$. Since $(11) < (31)$ and there are no keys greater than this in the root node it will search in the right child of the root node. It will then linearly search the node and since there is an exact match it will return the associated value with it.
+\end{mscexample}
+
+% TODO: This algorithm needs to be revised for B-Tree 
+
+\begin{algorithm}[H]
+    \SetAlgoLined
+    \SetKwInOut{Input}{Input}
+     \Input{\texttt{$\mathcal{K}(\boldsymbol{x}) ; [x \in \mathbb{R}]$, root ; Root of the B-Tree}}
+    \SetKwInOut{Output}{Output}
+     \Output{\texttt{Value associated with key}}
+     \For{$i\gets0$ \KwTo $len(Root Node)$}{
+         \If{keys in root greater than k}
+         {
+            \texttt{SEARCH\_CHILD($\mathcal{K}(\boldsymbol{x}, \boldsymbol{y})$)} //Search linearly the child associated with the key location one before\\
+            \eIf{Child is a leaf}
+            {
+                \texttt{Linearly search until the $\mathcal{K}(\boldsymbol{x}, \boldsymbol{y})$ is reached}
+            }
+            {
+                \texttt{SEARCH\_CHILD($\mathcal{K}(\boldsymbol{x}, \boldsymbol{y})$)}
+            }
+            
+         }
+    }
+     \caption{Algorithm for B-Tree Search}
+     \label{B-Tree Search}
+\end{algorithm}
+
+\subsubsection{Point Query with $K$D-Tree Model Index}
+
+\begin{algorithm}[H]
+    \SetAlgoLined
+    \SetKwInOut{Input}{Input}
+    \SetKwInOut{Output}{Output}
+    \Input{\texttt{TestPoint $\mathcal{T}(\boldsymbol{x}, \boldsymbol{y}) ; [x \in \mathbb{R};y \in \mathbb{R}]$, $dim$; $2$, $split\_axis$ ($\mathcal{S}$) ; $0/1$ ($0$; $x\_axis$ and $1$; $y\_axis$)}}
+    \Output{\texttt{Value associated with $\mathcal{T}(\boldsymbol{x}, \boldsymbol{y})$}}
+    \texttt{SEARCH\_POINT\_QUERY($dim$, $\mathcal{S}$)}\\
+    \texttt{Start at root}\\
+    \eIf {node is leaf}
+        {
+            \texttt{return value associated with node}
+        }
+        {
+        \eIf{\texttt{$\mathcal{T}(\boldsymbol{x}, \boldsymbol{y})$ $\mathcal{S}$ value > node $\mathcal{S}$ value}}
+            {\texttt{Traverse to node.rightChild}\\ \texttt{SEARCH\_POINT\_QUERY($dim$, $(\mathcal{S}+1) \% dim$)}}
+        {\texttt{Traverse to node.leftChild}\\ 
+        \texttt{SEARCH\_POINT\_QUERY($dim$, $(\mathcal{S}+1) \% dim$)}}
+        }
+    \caption{Point Query Algorithm for $K$D-Tree}
+    \label{Point_Query_Algorithm_$K$D-Tree}
+\end{algorithm}
+
+In algorithm \ref{Point_Query_Algorithm_$K$D-Tree} 
+
+\begin{enumerate}
+
+    \item On line $2$, start traversing the tree from the root. 
+    
+    \item On line $3$, check if the point is a leaf. If it is a leaf then we can simply return the value associated with the point.
+    
+    \item On line $5$, if root point is not a leaf then we make a decision whether to go left or right.
+    
+    \item On line $6$, we make this decision based on $\mathcal{S}$ value associated with the point. At the root, we start with $\mathcal{S}$ as $0$ ($x\_axis$). 
+    \item On line $8$ and $11$, we then recursively call the function SEARCH\_POINT\_QUERY() and update the $\mathcal{S}$ between $0$ and $1$ alternatively as we increase levels until we reach a leaf.
+
+\end{enumerate}
+
+
+
+\begin{mscexample}
+    \begin{minipage}[t]{\linewidth}
+        \centering
+        \includegraphics[width=7cm]{graphs/KD_Tree_Point_Query_Tree.png}
+        % \caption{$K$D-Tree for Point Query (TestPoint $\mathcal{T}(\boldsymbol{x}, \boldsymbol{y})$ = $(5,5)$ is highlighted in orange)}
+        \label{fig:$K$D-Tree_for_Point Query}
+    \end{minipage}
+    
+    \textbf{Case 1} : For example we have a tree with Point list as 
+	$$[(5,6),(4,2),(7,9),(3,1),(5,5),(10,7),(2,11)]$$
+    Suppose we are looking for $\mathcal{T}(\boldsymbol{x}, \boldsymbol{y})$ = $(5,5)$.
+    Below are the steps we follow in order to search the point:
+    \begin{enumerate}
+         \item We start with root point $(5,6)$ and $\mathcal{S}$ as $0$. 
+         
+         \item Since $\mathcal{S}$ is $0$, we compare the $x\_axis$ of the $\mathcal{T}(\boldsymbol{x}, \boldsymbol{y})$ and root point. Since they are equal($5 = 5$), we move left of the root node. 
+         
+         \item Increase $\mathcal{S}$ to $1$. 
+         
+         \item Compare the $y\_axis$ of point $(4,2)$ and  $\mathcal{T}(\boldsymbol{x}, \boldsymbol{y})$. Since $5 > 2$, we move to the right of the tree. 
+         
+         \item Since node $(5,5)$ is a leaf, we return the value associated with the point. 
+    \end{enumerate}
+\end{mscexample}
+
+\subsubsection{Point Query with Baseline Index Model}
+
+\input{chapters/implementations/queries/points/baseline}
+
+\subsubsection{Point Query with Recursive Model Index}
+
+\input{chapters/implementations/queries/points/rmi}
+
+\subsubsection{Point Query with Lisa}
+Point query search in LISA is composed of following steps.
+
+\begin{enumerate}
+	\item Find the cell to which point query belongs by comparing the query key value with first and last key in each cell. This search will be linear in the number of grid cells.
+	\item Calculate mapped value of the query key as mentioned in the section \ref{sssec:Mapping_Function}
+	\item Find the mapped interval to which point query's mapped value belongs using binary search. 
+	\item Predict the shard Id for calculated mapped interval. Predicted shard Id can differ from ground-truth value by 1 for keys falling near the shard boundaries. 
+	\item Search for the query key in the predicted shard by sequentially comparing against all the keys in the shard until a match is found. If case of no match, search in adjacent left and right shards as predicted shard Id can have an error of 1. 
+\end{enumerate}

@@ -70,8 +70,9 @@ class PointQuery(Query):
         build_times = []
         mses = []
         for idx, model in enumerate(self.models):
-            if (model.name == 'Lisa Baseline'
-                    or model.name == 'Scipy KD-Tree'):
+            if (model.name == 'Scipy KD-Tree'):
+                mses.append(0)
+                build_times.append(0)
                 continue
             start_time = timer()
             y_pred = np.array(
@@ -90,22 +91,23 @@ class PointQuery(Query):
                                                  np.sort(ytrue))
 
             mses.append(mse)
-            print("{} model tested in {:.4f} seconds with mse {:.4f}".format(
-                model.name, end_time - start_time, mse))
+            if(self.debug_print):
+                print("{} model tested in {:.4f} seconds with mse {:.4f}".format(
+                    model.name, end_time - start_time, mse))
             build_times.append(end_time - start_time)
 
         return mses, build_times
 
     def evaluate_scipy_kdtree_knn_query(self, query, k):
 
-        print("Get %d nearest neighbours for query %d %d" %
+        if self.debug_print:
+            print("Get %d nearest neighbours for query %d %d" %
               (k, query[0], query[1]))
         for idx, model in enumerate(self.models):
             if model.name == 'Scipy KD-Tree':
                 y_pred = self.models[idx].predict_knn_query(query, k)
-                print('Grounftruth for query %d %d for %d neighbours' %
-                      (query[0], query[1], k))
-                print(y_pred)
+                if(self.debug_print):
+                     print('Grounftruth for query %d %d for %d neighbours' %(query[0],query[1], k))
                 return y_pred
             else:
                 continue
@@ -119,8 +121,10 @@ class PointQuery(Query):
         build_times = []
         mses = []
         for idx, model in enumerate(self.models):
-            # if (model.name == 'Scipy KD-Tree') or (model.name == 'Lisa Baseline'):
-            #     continue
+            if (model.name == 'Scipy KD-Tree') or (model.name == 'Lisa Baseline'):
+                mses.append(0)
+                build_times.append(0)
+                continue
             start_time = timer()
             y_pred = np.array(self.predict_knn_query(idx, query, k))
             end_time = timer()
@@ -145,8 +149,9 @@ class PointQuery(Query):
                                   (yhat[i], ytrue[i]))
 
             mses.append(mse)
-            print("{} model tested in {:.4f} seconds with mse {:.4f}".format(
-                model.name, end_time - start_time, mse))
+            if self.debug_print:
+                print("{} model tested in {:.4f} seconds with mse {:.4f}".format(
+                    model.name, end_time - start_time, mse))
             build_times.append(end_time - start_time)
 
         return mses, build_times
