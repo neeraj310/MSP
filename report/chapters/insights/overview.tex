@@ -1,11 +1,12 @@
+
 \subsubsection{Limitations}
 
 Though the learned index model, especially the recursive model has a potential to greatly reduce the memory usage and cost less time in making the query. It is still limited in several perspective.
 
 \begin{itemize}
-    \item \textbf{Read-only database}. Current recursive model index assumes that the data is a static, read-only array. Only when this assumption is hold, we can regard the database index as the CDF. However, in reality, we usually need to insert and delete the data in the array and violates this assumption.
+    \item \textbf{Read-only Database}. Current recursive model index assumes that the data is a static, read-only array. Only when this assumption is hold, we can regard the database index as the CDF. However, in reality, we usually need to insert and delete the data in the array and violates this assumption.
+    \item \textbf{Sorted Keys}. The recursive model and baseline model assume that the keys are sorted in ascending order, so that the CDF assumption applies.
+    \item \textbf{In-Memory Database}. In our implementations, we only consider the case where all the keys are stored in the memory. 
 \end{itemize}
 
-\subsubsection{Requirements}
-
-For a learned index.
+To apply the learned indexes into a general-purpose database, we will need to overcome these limitations. For example, the model needs to be trained again in order to support the read-and-write database. 

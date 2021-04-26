@@ -81,6 +81,7 @@
 		\end{mdframed}
 	} {\medskip}
 	
+\newenvironment{mscsummary}{\fbox{Summary}}{\\}
 
 \newcommand{\comm}[1]{}
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
@@ -132,6 +133,10 @@
 
 \chapter{Implementation}
 
+\begin{mscsummary}
+	In this chapter, we first describe how we implement the B-Tree, Baseline model and recursive model for one-dimensional data. After that, we illustrate the implementation of LISA and LISA Baseline, which are two index models for two-dimensional data. At the end, we describe how we use these indexes to perform point query, range query and $K$NN query.
+\end{mscsummary}
+
 \section{One Dimensional Data}
 
 \subsection{B-Tree}
@@ -162,7 +167,9 @@
 
 \chapter{Evaluation}
 
-\input{chapters/evaluation/overview}
+\begin{mscsummary}
+	In this chapter, we describe how we evaluate the database indexes that we have implemented in previous chapter. For both one and two dimensional data, we use manually synthesised dataset that are generated from a certain distribution as our dataset. This chapter is organised into two sections, where the first section describes the experiment settings and results for one-dimensional data and indexes and the second section describes the two-dimensional data.
+\end{mscsummary}
 
 \section{One Dimensional Data and Indexes}
 

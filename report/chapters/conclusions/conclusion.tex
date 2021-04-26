@@ -1,3 +1,12 @@
 In this project, we reviewed and implemented two classic tree structures, \textbf{B-Tree} and \textbf{$K$D-Tree}, used as database indexes. The tree structures are capable of finding elements precisely as it will traverse all possible nodes. The shortcomings of these tree structures also come from this property: the tree needs to save and traverse the possible nodes, which yields a space complexity that are proportional to the number of records. In the meanwhile, it yields a query time complexity that has a positive correlation with the number of records. As the volume of data is increasing rapidly, the time and space complexity becomes huge and becomes  a bottleneck of applications.
 
-We then implement two kinds of learned indexes: the \textbf{recursive model index} for one-dimensional data and the \textbf{LISA} model for two-dimensional data. We conclude that the recursive model and the baseline model have an upper bound 
+We then implement two kinds of learned indexes: the \textbf{recursive model index} for one-dimensional data and the \textbf{LISA} model for two-dimensional data. We conclude that the recursive model and its baseline model have a bounded time and space complexity for performing queries and storing the model.
+
+% ADD some advantages of LISA. 
+
+Having said these advantages of learned indexes, they all have their shortcomings.
+
+\begin{enumerate}
+	\item Even though the learned indexes have a constant time complexity for queries, the constant is relatively large. Therefore, if the number of records is not huge, learned index will not output classic tree structures.
+	\item The recursive model, baseline model and the convolutional model are prone to error. It may not be a big issue with in-memory database, but will cost much more time when it needs to search different disk pages, especially with traditional hard disk drive (HDD).
+\end{enumerate}
