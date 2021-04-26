@@ -1,0 +1,195 @@
+For two dimensional data, the evaluation covers the following tasks:
+
+\begin{itemize}
+ 	\item Find hyper-parameters for the LISA Baseline model empirically.
+	\item Find the hyper-parameters for the LISA model empirically.
+	\item Compares the performance between $K$D-tree, LISA Baseline and LISA models for point query.
+	\item Compare the performance between $K$D-tree, LISA Baseline and LISA models for range query.
+	\item Compare the performance between $K$D-tree and LISA models for KNN query. KNN Query has not been implemented for LISA Baseline as there is no description of KNN Query for Baseline model in the paper. 
+\end{itemize}
+
+\subsection{Dataset}
+
+For two dimensional case, we manually generate three columns of the data:
+
+\begin{itemize}
+	\item The first two columns contain the  2 dimensional keys $\boldsymbol{X} \in \mathbb{R}^{2}$, which are independently sampled from a given distribution. %% TOOD: What distributions?
+	\item Then we assign the keys into different pages according to a preset parameter $N_{page}$ for page size. Specifically, the first $N_{page}$ keys will be assigned into the first page, the second $N_{page}$ keys will be assigned into the second page and so on so forth. After the assignments, we set the second column $Y$ to be the page index of the corresponding $x$.
+\end{itemize}
+
+\subsection{Hyper-parameters Search}
+After generating dataset as mentioned in previous section, we sample a smaller subset from it. We repeat our experiments for 3 different sample sizes of 10000, 100000 and 1000000 points. Test data is a copy of training data for all our experiments. For Baseline and Lisa models, final prediction is given by linear search through a range of values (identified as a Cell for Baseline and Shard for LISA model) and mean square error (MSE) is zero as test points are already learned during training. This is where Learned Index models differ from traditional machine learning models where model performance is evaluated on unseen data. 
+
+\subsubsection {Hyper-parameter search for the LISA Baseline implementation}
+Baseline model has one hyper-parameter: N (Number of cells specifying the number of equal length intervals into which mapped values are divided). The point query search consists of two parts, first is binary search to locate the cell into which the query key is located, followed by sequentially comparison of the query key value with keys in the found cell until a match is found. The time complexity of first search is $log_{2}N_{1}$, where $N_{1}$ is the number of cells. The time complexity of second search is  $ \left \lceil {N_{2} / 2}\right \rceil $, where $N_{2}$ is the number of keys per cell.  
+
+\begin{figure}
+ \centering
+     \begin{subfigure}[b]{0.32\textwidth}
+         \centering
+         \input{graphs/evaluation/two-d/task3_1_1.tex}
+         \caption{Average Query Time (ms)}
+         \label{fig:2d_exp3_1_1}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.32\textwidth}
+         \centering
+         \input{graphs/evaluation/two-d/task3_1_2.tex}
+         \caption{Memory Size (KB)}
+         \label{fig:2d_exp3_1_2}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.32\textwidth}
+         \centering
+         \input{graphs/evaluation/two-d/task3_1_3.tex}
+         \caption{Build Time (s)}
+         \label{fig:2d_exp3_1_3}
+     \end{subfigure}
+     \hfill
+     \caption{Hyper-parameter search in LISA Baseline for training sizes $10K$, $100K$ and $1M$.}
+     \label{fig:LISA_Baseline_Hyperparameter_Search}
+\end{figure}
+
+
+\begin{mscconclusion}
+	Following conclusions can be drawn from experimental results shown in table \ref{small_lognormal_lisa_baseline_10000} and Fig. \ref{fig:LISA_Baseline_Hyperparameter_Search}
+\begin{enumerate}
+    \item Optimum value of hyper-parameter N will be equal to number of points in the training data-set, resulting in 1 key per cell and search query time of O($log_{2}N$).
+	
+	\item Average Query Time :  Average Query Time decreases with increase in value of N as number of keys per cell decreases.
+	\item Build time : Build time increases with increase in value of N, as metadata for additional cells needs to be calculated. 
+	\item Memory Size :  Memory requirements of the model increases with increase in value of N, as metadata for additional cells needs to be stored. Increase  in memory size is not significant with increase in N as we maintain only two values per cell, mapped value of first key in the cell and mapped value of last key in the cell.
+\end{enumerate}
+\end{mscconclusion}
+
+\subsubsection {Hyper-parameter search for the LISA implementation}
+For LISA model, we have 3 hyper parameters:
+\begin{enumerate}
+	\item $G$ : The size of the grid cell. Number of grid cells into which the key space is divided. In our implementation, we use a square grid cell, and total number of cells is given by $G$ $\times G$.
+	\item $N$ : Number of equal length intervals into which mapped value range is divided. During our experiments, we found that shard prediction algorithm gives better performance if mapped interval boundaries are aligned to grid cell boundaries. That's why this parameter is always initialised to $N$=$G$ $\times G$   
+	\item $S$ : Number of shards to learn per mapped interval. 
+\end{enumerate}
+
+\begin{mscconclusion}
+	Following conclusions can be drawn from experiments results shown in tables \ref{small_lognormal_lisa_10000}, \ref{small_lognormal_lisa_100000} and \ref{small_lognormal_lisa_1000000}. 
+\begin{enumerate}
+
+    \item For a particular value of $G$, average query time decreases and memory size increases with increase in value of S. This is expected as increasing S, will result in lesser number of keys per shard, thereby reducing the sequential search cost of scanning the query key through the Shard. 
+    
+    \item Average query time decreases and memory size increases with increase in values of $G$ and $S$. 
+	
+	\item We need to choose S such that there are at least 40 keys per shard. We may see mean square errors(mse) if number of keys per shard are less than 45 for following reasons. 
+	\begin{enumerate}
+	    %\item Total number of keys in training set are first divided equally among grid cells.For each cell, its corresponding keys are further divided equally among number of shards.
+	    \item For point query search, we first predict a shard and then sequentially compare the query point key values with all the keys in the predicted shard until a match is found
+		\item For query points near the shard boundaries, there can be a mismatch in ground truth shardId and predicted shardId.If the query point is not found in the predicted shard, we continue our search in adjacent left and right shards in an empirically found range.
+	\end{enumerate}
+	
+	During test experiments, we found that if shard size is less than 40 keys, then sometimes shard prediction error can be greater than 1 and point query search can fail resulting in MSE errors.  
+\end{enumerate}
+\end{mscconclusion}
+
+\subsection{Comparisons Across Models}
+
+During following experiments, for each training data size, we have used hyper-parameters optimized for that particular data set size. 
+
+\subsubsection{Point Query Comparison}
+Table \ref{Point_Query_Comparision} and  Fig. \ref{fig:Point_Query_Comparision} shows the performance evaluation for $K$D-Tree, LISA-Baseline and LISA Models for different training data sizes. For a given training set, we perform point query evaluation for every point in the data-set and take the average. 
+
+\begin{figure}
+ 	 \centering
+     \begin{subfigure}[b]{0.32\textwidth}
+         \centering
+         \input{graphs/evaluation/two-d/task2_1_1.tex}
+         \caption{Average Query Time (ms)}
+         \label{fig:2d_exp2_1_1}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.32\textwidth}
+         \centering
+         \input{graphs/evaluation/two-d/task2_1_2.tex}
+         \caption{Memory Size (KB)}
+         \label{fig:2d_exp2_1_2}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.32\textwidth}
+         \centering
+         \input{graphs/evaluation/two-d/task2_1_3.tex}
+         \caption{Build Time (s)}
+         \label{fig:2d_exp2_1_3}
+     \end{subfigure}
+     \hfill
+     \caption{Point Query experimental results for $K$D-Tree, Baseline and LISA models.}
+     \label{fig:Point_Query_Comparision}
+\end{figure}
+
+\begin{mscconclusion}
+The following conclusions can be concluded:
+
+	\begin{enumerate}
+    \item LISA outperforms $K$D-tree in terms of average query time. Search complexity of $K$D-Tree and LISA baseline is $O(N)$, and O($log_{2}N$) respectively where N is the number of points in the training data-set. On the other hand point query search cost in LISA is a combination of 3 costs.
+    \begin{enumerate}
+    \item Search cost to find the grid cell to which point query belongs. This cost increase linearly with increase in number of grid cells. 
+    %Once the grid cell is found, calculate the mapped value as specified in the section.
+    
+    \item Find the shard Id to which point query belongs. This cost is constant as shard prediction function weights are already learned during the build process. 
+    
+    \item Once the shard Id is found, search sequentially in the shard interval by comparing query point key value with all the keys in the shard until a match is found. This cost is relatively constant with respect to increase in training data-size as we try initialize our hyper-parameters in such a way that number of keys per shard remain close to 50. 
+\end{enumerate}
+    
+    \item LISA outperforms $K$D-tree in terms of memory size requirements, however its build time is significantly higher than $K$D-Tree and LISA Baseline. The storage consumption of LISA is considerably smaller than $K$D-Tree that has to construct a tree with all nodes and entries based on MBRs and parent-children relationships. In contrast, LISA only keeps the parameters of $M$ and $SP$. Specifically,$M$’s parameters contain several numbers and a small list only, and $SP$ is composed of a series of piecewise linear functions whose parameters are a number of coefficients.
+\end{enumerate}
+
+\end{mscconclusion}
+
+\subsubsection {Range Query Experiments}
+Table \ref{Range_Query_Experimental_Results} shows evaluation results for LISA,Baseline and $K$D-tree models for range sizes of 10, 100, 1000 for different training sizes. For a given range query size, we perform 20 trials and take the average. For each trial, we sample a random point from the test set and find the range from sampled point to the range query size. Average query time for each range is further divided by the range size to compare the query time across various ranges. As shown in the Fig. \ref{fig:Range_Query_Comparision}, LISA outperforms $K$D-tree for range query size of 10000 for all training sizes, however its range query time for smaller range sizes is significantly higher than $K$D-Tree.
+
+\begin{figure}
+ \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \input{graphs/evaluation/two-d/task2_2_1.tex}
+         \caption{Range Query Size}
+         \label{fig:2d_exp2_2_1}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \input{graphs/evaluation/two-d/task2_2_2.tex}
+         \caption{Training Size}
+         \label{fig:2d_exp2_2_2}
+     \end{subfigure}
+     \hfill
+     \caption{Range Query experimental results for $K$D-Tree, Baseline and LISA models.\\
+     a) Plot A shows average range query time for a fixed training size of 1M points. \\ %LISA outperforms $K$D-Tree for larger range queries.\\
+     b) Plot B shows average range query time for a fixed range query of size 10000 for various training sizes.} %Lisa outperforms $K$D-Tree for all training data sizes for range queries of size 10000}
+        \label{fig:Range_Query_Comparision}
+\end{figure}
+
+\begin{figure}
+ \centering
+     \begin{subfigure}[h]{0.45\textwidth}
+         \centering
+         \input{graphs/evaluation/two-d/task2_3_1.tex}
+         \caption{Range Query Size}
+         \label{fig:2d_exp2_3_1}
+     \end{subfigure}
+     \begin{subfigure}[h]{0.45\textwidth}
+         \centering
+         \input{graphs/evaluation/two-d/task2_3_2.tex}
+         \caption{Training Size}
+         \label{fig:2d_exp2_3_2}
+     \end{subfigure}
+     \caption{$K$NN Query experimental results for $K$D-Tree and LISA models.\\
+     a) Plot A shows average $K$NN query time for a fixed training size of $1M$ points for different values of $K$. \\
+     %LISA outperforms $K$D-Tree for all values of K. \\
+     b) Plot B shows average $K$NN query time for various training sizes with $K$ = 10. }
+     %Lisa outperforms $K$D-Tree for all training data sizes. }
+        \label{fig:KNN_Query_Comparision}
+\end{figure}
+
+\subsubsection {$K$NN Query Experiments}
+Table \ref{KNN_Query_Experimental_Results} shows evaluation results for LISA and $K$D-tree models for $K$NN Queries for various value of K and training sizes. For a given $K$ value, we perform 20 trials and take the average of query time. For each trial, we sample a random point from the test set and find K neighbours around that point. Average query Time is further divided by $K$ to compare the Query time across various values of $K$.As shown in the Fig. \ref{fig:KNN_Query_Comparision}, LISA outperforms $K$D-tree for different training sizes and K values.
+
+

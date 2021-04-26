@@ -65,7 +65,7 @@ As shown in Fig. \ref{fig:BaseLine_Method}, the key space is divided into 3 cell
     \caption{LISA Baseline Method \\
     a) Key space is divided into 3 cells with equal number of keys\\
     b) To search for a query, we first need to find out the cell which contain the query point\\
-    c) Once the query point is found, we need to compare the query point key values with all the keys in the cell until a match is found}
+    c) Once the query point is found, we need to compare the query point 2 dimensional key value with all the keys in the cell until a match is found}
     \label{fig:BaseLine_Method}
 \end{figure*}
 \subsubsection{Training}
@@ -92,7 +92,7 @@ As described in Algorithm \ref{Training_Lisa_Baseline}, during training, we perf
     \Input{$N$; trainset=[$(x,y);x \in \mathbb{R}^{2};y \in \mathbb{R}$]}
     \Output{M:Mapped Function}
      \For{$i\gets0$ \KwTo $len(x)$}{
-            	\texttt{x[i].mapped\_value = x[i][0]+x[i][1]} \\
+            	\texttt{x[$i$].mapped\_value = x[$i$][0]+x[$i][1$]} \\
             
      }
      \texttt{sortXBasedOnMappedValue()}\\
@@ -100,8 +100,8 @@ As described in Algorithm \ref{Training_Lisa_Baseline}, during training, we perf
      %\texttt{Store mapped value of first and last key for each cell }\\
       \For{$i\gets0$ \KwTo $N$}
      {
-         \texttt{denseArray[i].lower = first key in page i  } \\
-		 \texttt{denseArray[i].upper = last key in page i  }
+         \texttt{denseArray[$i$].lower = first key in cell $i$  } \\
+		 \texttt{denseArray[$i$].upper = last key in cell $i$  }
 		
      }
      \caption{Training Algorithm for Lisa Baseline Method}
@@ -115,18 +115,18 @@ For prediction, we find the cell corresponding to mapped value of the query poin
 \begin{algorithm}[H]
     \SetAlgoLined
     \SetKwInOut{Input}{input}
-    \Input{\texttt{x\_test}: Key; \texttt{d:}the denseArray}
+    \Input{\texttt{x\_test}: Key; \texttt{d:}Array with metadata for each cell}
     \texttt{x\_test.mapped\_value = x\_test[0]+x\_test[1] } \\
     \For{$i\gets0$ \KwTo $len(denseArray)$}
     {
         \If{$\mathcal{M}(x\_test) \in [d[i].lower,d[i].upper]$} 
         {
-		    \texttt{Key is in Page i } \\
+		    \texttt{Key is in Page $i$ } \\
 		    \texttt{break }
 		}
     }
   
- 	 \texttt{Sequentially search for x\_test in page j} \\
+ 	 \texttt{Sequentially search for x\_test in page $i$} \\
      \caption{Prediction Algorithm for Lisa Baseline Model }
 \end{algorithm}
 
@@ -135,7 +135,7 @@ For prediction, we find the cell corresponding to mapped value of the query poin
 
 %TODO: motivation 
 
-Given a spatial dataset, we generate the mapping function $\mathcal{M}$, the shard prediction function $\mathcal{SP}$. Based on them, we build our index structure, LISA, to process range query and $K$NN query. LISA consists of four parts: the representation of grid cells, the mapping function $\mathcal{M}$, the shard prediction function $\mathcal{SP}$, and the local models for all shards. As illustrated in the Fig \ref{fig:Lisa_Framework}. the procedure of building LISA is composed of four parts.
+Given a spatial dataset, we generate the mapping function $\mathcal{M}$ and the shard prediction function $\mathcal{SP}$. Based on them, we build our index structure, LISA, to process point, range and $K$NN queries. LISA consists of four parts: the representation of grid cells, the mapping function $\mathcal{M}$, the shard prediction function $\mathcal{SP}$, and the local models for all shards. As illustrated in the Fig \ref{fig:Lisa_Framework}. the procedure of building LISA is composed of four parts.
 
 \begin{figure*}[t]
     \centering
@@ -164,7 +164,7 @@ This section presents the additional definition specific to Lisa implementation.
 	\item \textbf{Shard}. The shard $S$ is the pre-image of an
 interval $[a, b) \subseteq [0, +1)$ under the mapping function $\mathcal{M}$,  i.e., $S = M^{-1}([a.b))$. \\
 %TODO: move this paragraph into somewhere more suitable
-Given an initial data set, we divide the key space into cell grids based on the data distribution, map keys values to an one dimensional space using mapping function, followed by learning several monotonic shard prediction functions. After sorted, the one dimensional mapped value space is then divided into equal-length intervals, and one shard prediction function is learned for each interval, to partition the keys belonging to a particular interval, into different shards. As keys are sorted by mapped values before partitioning them into equal sized intervals, and all shards exhibit a total order with respect to their corresponding intervals in the mapped range(Shard Prediction function for each interval is monotonically increasing), following relationship holds \\
+Given an initial data set, we divide the key space into cell grids based on the data distribution, map keys values to an one dimensional space using mapping function, followed by learning several monotonic shard prediction functions. After sorting, the one dimensional mapped value space is divided into equal-length intervals. One shard prediction function is learned for each interval, to partition the keys belonging to a particular interval, into different shards. As keys are sorted by mapped values before partitioning them into equal sized intervals, and all shards exhibit a total order with respect to their corresponding intervals in the mapped range(Shard Prediction function for each interval is monotonically increasing), following relationship holds \\
 $ inf (M(S_{i}))  > sup (M(S_{j}))$ when $i > j$.
 
 %TODO: claim that we will not work on the local models and tell the reason.
@@ -202,15 +202,15 @@ We need to sort the key space along the sequence of axis before we partition the
 \begin{algorithm}[H]
     \SetAlgoLined
     \SetKwInOut{Input}{input}
-     \Input{\texttt{N;$X$; $y$}}
-     \texttt{trainset=[$(X,y);X \in \mathbb{R}^{2};y \in \mathbb{R}$]} \\
-     \texttt{$keysPerCell =  len(X) \slash (N \times N) $}\\
-     \texttt{sort$X$BasedOnDimension\_0()} // Sort X based on first dimension \\
+     \Input{\texttt{N;$x$; $y$}}
+     \texttt{trainset=[$(x,y);x \in \mathbb{R}^{2};y \in \mathbb{R}$]} \\
+     \texttt{$keysPerCell =  len(x) \slash (N \times N) $}\\
+     \texttt{sort$x$BasedOnDimension\_0()} // Sort x based on first dimension. \\
      %\texttt{In first for loop, divide the keys into equal size subsets based on first dimension }\\
      \For{$i\gets0$ \KwTo $N$}  
      {
-        \texttt{Store the 1st dimensional coordinates of first and last key in cell i} \\
-        \texttt{Sort keys in cell i based on 2nd dimension,x[:][1] }\\
+        \texttt{Store the 1st dimensional coordinates of first and last key in cell $i$} \\
+        \texttt{Sort keys in cell $i$ based on 2nd dimension,x[:][1] }\\
         %cellArray[i][0] = FirstKeyInCell \\
         %cellArray[i][1] = LastKeyInCell
         %\texttt{cellArray[i] = xCoordinatesoFFirstnLastKeyInCell} // Store x coordinate of first and last key for each cell
@@ -222,7 +222,7 @@ We need to sort the key space along the sequence of axis before we partition the
       {
          \For{$j\gets0$ \KwTo $N$}
          {
-            \texttt{Store the 2nd dimensional coordinate of first and last key of cell[i][j] .} \\
+            \texttt{Store the 2nd dimensional coordinate of first and last key of cell[$i$][$j$] .} \\
 		 }
       }
      \caption{Grid Cell Generation Algorithm for Lisa Method}
@@ -416,16 +416,16 @@ $$
 As described in Algorithm \ref{Shard_Training_Lisa}, we perform  following operations during shard training, :
 
 \begin{enumerate}
-	\item Divide the sorted mapped values into equal sized U intervals.
-	\item Suppose V +1 is the number of mapped values in each interval and $\psi$ is the estimated average number of keys falling in a shard.
+	\item Divide the sorted mapped values into equal sized $U$ intervals. We found empirically that training algorithm generalizes better if mapped intervals are aligned with grid cell boundaries. $U$ is initialized to numbers of grid cells. 
+	\item Suppose $V +1$ is the number of mapped values in each interval and $D$ is the  number of shards learned per mapped interval.
 	\item For each interval, we want to build a monotonic regression
     model $ \mathcal {F}_{i}$ whose domain is $[m_{i-1},m_{i}]$ 
  
- 	\item Each $\mathcal{F}_{i}$ generates D = $\ceil{\frac{V+1}{\Psi}}$ number of shards 
+ 	\item Each $\mathcal{F}_{i}$ generates $D$ shards and every such shard contains $\Psi = \floor{\frac{V+1}{D}}$ number of keys 
     
     \item $x =[x_0,\cdots, x_V] $ specifies the keys' mapped values in interval i, $[m_{i-1},m_{i}]$ 
     
-    \item Given V +1 sorted mapped values $x =[x_0,\cdots, x_V]$ and their indices $y =[0,\cdots, V]$, each $\mathcal{F}_{i}$ is built and trained with the procedure mentioned in the algorithm \ref{Shard_Training_Lisa}.
+    \item Given $V +1$ sorted mapped values $x =[x_0,\cdots, x_V]$ and their indices $y =[0,\cdots, V]$, each $\mathcal{F}_{i}$ is built and trained with the procedure mentioned in the algorithm \ref{Shard_Training_Lisa}.
     
 
 \end{enumerate}
@@ -433,15 +433,15 @@ As described in Algorithm \ref{Shard_Training_Lisa}, we perform  following opera
 \begin{algorithm}[H]
     \SetAlgoLined
     \SetKwInOut{Input}{input}
-    \Input{\texttt{$M_{p}$}, $\Psi$, U}
+    \Input{\texttt{$M_{p}$}:sorted mapped value array,U: number of mapped intervals, $D$:number of shards per interval}
     \texttt{Partition $M_{p}$ into equal length U intervals $\boldsymbol{M}_p=[m_1,\cdots, m_U]$ }
     \For{$i\gets0$ \KwTo $U$}
     {   
         \texttt{$x =[x_0,\cdots, x_V] $ be the keys' mapped values
-        in interval i} \\
+        in interval $i$} \\
         \texttt{$y =[0,\cdots, V]$ } \\
-        \texttt{Initialize $\beta^{(0)}$ as $\beta^{(0)}=x_0$ and $\beta_i^{(0)}=x_{\floor{i\times \frac{V}{\Psi}}}, \forall i\in[1,\sigma]$} \\
-        \While{\texttt{k} \textless \texttt{1000}} 
+        \texttt{Initialize $\beta^{(0)}$ as $\beta^{(0)}=x_0$ and $\beta_i^{(0)}=x_{\floor{i\times D}}, \forall i\in[1,\sigma]$} \\
+        \While{\texttt{k} \textless \texttt{iter}} 
         {
             \texttt{Initialize $A^{(k)}$ according to \eqref{continuous_piecewise_linear_function}} \\
             \texttt{$\alpha^{(k)}= ((A^{(k)})^T A^{(k)})^{-1}(A^{(k)})^Ty$} \\

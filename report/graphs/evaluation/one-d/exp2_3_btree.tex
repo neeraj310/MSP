@@ -1,0 +1,18 @@
+\begin{tikzpicture}[font=\small]
+	\pgfplotsset{compat=1.10, width=\textwidth, height=\textwidth}
+	\begin{axis}[
+		xmode=log,
+		ymode=log,
+		xlabel=Number of datapoints,
+		ylabel=Construction Time,
+		xtick={1000,10000,100000,1000000},
+	]
+	\addplot[smooth, mark=x, blue]
+	coordinates{
+		(1000, 0.074044889)
+		(10000, 0.798198778)
+		(100000, 10.23407889)
+		(1000000, 119.5872338)
+	};
+	\end{axis}
+\end{tikzpicture}

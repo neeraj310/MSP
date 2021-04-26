@@ -3,8 +3,8 @@
 # This software is released under the MIT License.
 # https://opensource.org/licenses/MIT
 
-rm -rf report/*
-cp -R ../msc-report/* report/
+rm -rf ./report/*
+cp -R ../msc-project/* ./report/
 git add *
 git commit -m "update report"
 git push uzh master

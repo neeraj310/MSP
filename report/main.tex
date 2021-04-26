@@ -1,0 +1,215 @@
+\documentclass[a4paper,12pt]{scrreprt}
+\usepackage{scrlayer}
+\DeclareNewLayer[
+    foreground,
+    contents={%
+      \parbox[b][\layerheight][c]{\layerwidth}
+        {\centering (This page intentionally left blank)}%
+    }
+  ]{blankpage.fg}
+\DeclarePageStyleByLayers{blank}{blankpage.fg}
+\usepackage{scrhack}
+\usepackage{lscape}
+\usepackage{tablefootnote}
+\usepackage[utf8]{inputenc}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage[T1]{fontenc}
+\usepackage{silence}
+\WarningFilter{scrreprt}{Usage of package `fancyhdr'}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{times}
+\usepackage{listings}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{multirow}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{caption}
+\usepackage[noend]{algpseudocode}
+\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage[tikz]{mdframed}
+\usepackage[toc,page]{appendix}
+\usepackage{color}   %May be necessary if you want to color links
+\usepackage{hyperref}
+\usepackage{pgfplots}
+\usepackage{standalone}
+\usepackage[labelfont=bf,format=plain,justification=raggedright,singlelinecheck=false]{caption}
+\usepackage{mathtools}
+\usetikzlibrary{matrix}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{placeins}
+
+\usepgfplotslibrary{groupplots}
+
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+\definecolor{pastelgray}{rgb}{0.81, 0.81, 0.77}
+
+\newcounter{example}[chapter]
+\newenvironment{mscexample}[1][]
+	{\refstepcounter{example}\par\medskip
+		\begin{mdframed}[backgroundcolor=pastelgray, topline=false, leftline=false, rightline=false]
+		\noindent \textbf{Example~\thechapter.\theexample #1} \rmfamily
+		} {
+		\end{mdframed}
+	} {\medskip}
+	
+\newcounter{proof}[chapter]
+\newenvironment{mscproof}[1][]
+	{\refstepcounter{proof}\par\medskip
+		\noindent \textbf{Proof~\thechapter.\theproof #1} \rmfamily
+		}{ $\hfill\blacksquare$
+	} {\medskip}
+
+\newcounter{conclusion}[chapter]
+\newenvironment{mscconclusion}[1][]
+	{\refstepcounter{conclusion}\par\medskip
+		\begin{mdframed}[backgroundcolor=lightgray, topline=false, leftline=false, rightline=false]
+		\noindent \textbf{Conclusion~\thechapter.\theconclusion #1} \rmfamily
+		}{
+		\end{mdframed}
+	} {\medskip}
+	
+
+\newcommand{\comm}[1]{}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\titlehead{Institut für Informatik, Universität Zürich}
+\subject{\vspace*{2cm}MSc Project Report}
+\title{Implementing Learned Indexes on 1 and 2 Dimensional Data}
+\author{
+  Neeraj Kumar, Nivedita Nivedita, Xiaozhe Yao\\[-5pt]
+  %TODO: Add your matri.no and email here
+  \scriptsize Matrikelnummer: 19-759-570\\[-5pt]
+  \scriptsize Email: \texttt{xiaozhe.yao@uzh.ch}
+}
+\date{\vspace*{2cm}\today}
+\publishers{
+  \small supervised by \\ 
+  Prof.\ Dr.\ Michael H. Böhlen and \\ Mr. Qing\ Chen \\[5cm]
+  \begin{tikzpicture}[overlay]
+    \node at (-3,-3) {\includegraphics[height=1.5cm]{IFIlogo}};
+    \node at (7,-3) {\includegraphics[height=1.5cm]{dbtgBW}};
+  \end{tikzpicture}
+}
+ 
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newcommand{\comment}[1]{}
+\begin{document}
+
+\begingroup
+\let\newpage\relax%
+\maketitle
+\newpage\null\thispagestyle{blank}\newpage
+\setcounter{page}{0}
+\endgroup
+
+\begin{abstract}
+\input{chapters/introduction/abstract}
+\end{abstract}
+
+\setcounter{tocdepth}{2}
+\tableofcontents 
+
+\chapter{Introduction}
+
+\input{chapters/introduction/introduction}
+
+\chapter{Implementation}
+
+\section{One Dimensional Data}
+
+\subsection{B-Tree}
+
+\input{chapters/implementations/one-dim/b-tree}
+
+\subsection{Baseline Learned Index}
+
+\input{chapters/implementations/one-dim/baseline}
+
+\subsection{Recursive Model Index}
+
+\input{chapters/implementations/one-dim/rmi}
+
+\section{Two Dimensional Data}
+
+\subsection{$K$D-Tree}
+
+\input{chapters/implementations/two-dim/kd-tree}
+
+\subsection{LISA: Learned Index for Spatial Data}
+
+\input{chapters/implementations/two-dim/lisa}
+
+\section{Queries}
+
+\input{chapters/implementations/queries/query}
+
+\chapter{Evaluation}
+
+\input{chapters/evaluation/overview}
+
+\section{One Dimensional Data and Indexes}
+
+\input{chapters/evaluation/one-dim}
+
+\section{Two Dimensional Data and Indexes}
+
+\input{chapters/evaluation/two-dim}
+
+\chapter{Insights and Findings}
+
+\section{General Discussions}
+
+\input{chapters/insights/overview}
+
+\section{One Dimensional Learned Index}
+
+\subsection{Baseline Learned Index}
+
+\input{chapters/insights/baseline_1d}
+
+\section{Two Dimensional Learned Index}
+
+\input{chapters/insights/lisa}
+
+\section{Future Work}
+\input{chapters/insights/future_work}
+\chapter{Convolution and CNN for Learned Indexes}
+
+\input{chapters/convolution/overview}
+
+\chapter{Conclusion}
+
+\input{chapters/conclusions/conclusion}
+
+\section*{Acknowledgement}
+
+\input{chapters/introduction/ack}
+
+\begin{appendices}
+\chapter{Appendix}
+\input{chapters/appendix/2d_Evaluation}
+\end{appendices}
+
+\input{chapters/appendix/experiments}
+
+\bibliographystyle{alpha}
+\bibliography{refs}
+
+\end{document}

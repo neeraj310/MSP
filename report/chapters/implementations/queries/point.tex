@@ -119,9 +119,9 @@ In algorithm \ref{Point_Query_Algorithm_$K$D-Tree}
 Point query search in LISA is composed of following steps.
 
 \begin{enumerate}
-	\item Find the cell to which point query belongs by comparing the query key value with first and last key in each cell. This search will be linear in the number of grid cells.
-	\item Calculate mapped value of the query key as mentioned in the section \ref{sssec:Mapping_Function}
-	\item Find the mapped interval to which point query's mapped value belongs using binary search. 
-	\item Predict the shard Id for calculated mapped interval. Predicted shard Id can differ from ground-truth value by 1 for keys falling near the shard boundaries. 
-	\item Search for the query key in the predicted shard by sequentially comparing against all the keys in the shard until a match is found. If case of no match, search in adjacent left and right shards as predicted shard Id can have an error of 1. 
+	\item Find the cell to which point query belongs by comparing the query key value with first and last key in each cell. First key in the cell represents the lower corner of the cell, whereas last key in the cell represents the upper corner. This search will be linear in the number of grid cells.
+	\item Calculate mapped value of the query key as mentioned in the section 'Mapping Function' \ref{sssec:Mapping_Function}
+	\item During model training, 2 dimensional key space is mapped into a sorted one dimensional array. Find the mapped interval to which point query's mapped value belongs using binary search on this array.  
+	\item Predict the shard Id for calculated mapped interval. It is found empirically that predicted shard Id can differ from ground-truth value by 1 for keys falling near the shard boundaries. 
+	\item Search for the query key in the predicted shard by sequentially comparing against all the keys in the shard until a match is found. In case of no match, search in adjacent left and right shards as predicted shard Id can have an error of 1. 
 \end{enumerate}

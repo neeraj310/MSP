@@ -1,0 +1,25 @@
+\subsubsection{Future work}
+
+In current work, we have implemented RMI and LISA, two novel learned index structures
+for one and two dimensional data respectively. This work opens up several directions for future research on learned indexes for database systems. We are listing some of them here. 
+
+\begin{enumerate}
+	\item Read only and in-memory database are two major constraints applicable to our LISA implementation that are supported by the original paper. Adding support for insertion, deletion and disk resident training data can be taken in next phase for both one dimensional and spatial databases.
+	\item LISA paper suggests Lattice Regression model to learn an appropriate distance bound from underlying training data for every query point and specific value of $K$. This distance bound is used to convert the $K$NN query to range query. It will be interesting to try different learning models like Lattice Regression, Neural Network and Bayesian Neural Network to learn this distance bound from underlying data. 
+	\item It will be interesting to study other query types (e.g., spatial joins and closest pairs) using LISA
+	
+	\item Our results show that learned index models outperform traditional databases by utilizing the distribution of data being
+indexed.. It will be interesting to develop functional databases using learned index models and investigate their performance on real data   
+	
+\end{enumerate}
+
+\subsubsection{Conclusion}
+
+In this work, we have implemented RMI and LISA, two novel learned index structures and B-Tree and KD-Tree two traditional database indexes for one and two dimensional data respectively. We have conducted a number of experiments using real and synthetic datasets.
+The experimental results demonstrate that learned index models outperforms traditional  indexes in terms of storage and IO costs for point, range and KNN queries. Some of our learnings are listed below:
+
+\begin{enumerate}
+	\item The key idea in our work has been to map the key space into a sorted one dimensional array and use learned models to approximate the cumulative distribution function (CDF).While RMI uses a hierarchy of linear regression models, LISA makes use of piecewise linear models to learn the cdf. 
+	
+
+\end{enumerate}
