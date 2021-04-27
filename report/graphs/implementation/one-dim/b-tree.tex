@@ -1,0 +1,16 @@
+\begin{tikzpicture}
+\tikzstyle{bplus}=[rectangle split, rectangle split horizontal,rectangle split ignore empty parts,draw]
+\tikzstyle{every node}=[bplus]
+\tikzstyle{level 1}=[sibling distance=60mm]
+\tikzstyle{level 2}=[sibling distance=15mm]
+\node {31} [->]
+  child {node {11}
+    child {node {1}}
+    child {node {21}}    
+  } 
+  child {node {51 \nodepart{two} 71}
+    child {node {41}}
+    child {node {61}}
+    child {node {81 \nodepart{two} 91}} 
+  }
+;\end{tikzpicture}

@@ -1,89 +1,143 @@
-B-Tree and its variants have been widely used as indexes in databases. B-Trees can be considered as a generalisation of binary search tree: In binary search tree, there is only one key and two children at most in the internal node. B-Tree extends the nodes such that each node can contain several keys and children. The keys in a node serve as dividing points and separate the range of keys. With this structure, we make a multi-way decision based on comparisons with the keys stored at the node $x$.
+B-tree and its variants have been widely used as indexes in databases. B-trees can be considered as a generalisation of binary search tree: In binary search tree, there is only one key and two children at most in the internal node. B-tree extends the nodes such that each node can contain several keys and children. The keys in a node serve as dividing points and separate the range of keys. With this structure, we make a multi-way decision based on comparisons with the keys stored at the node $x$.
 
-In this section, we introduce the construction and search processes
-of B-Trees and then analyse their properties.
+In this section, we introduce the construction process of B-trees and then analyse its properties.
 
-\subsubsection{Attributes}
+\subsubsection{Attributes and Properties}
 
-Each node in a B-Tree has the following attributes:
-
-\begin{itemize}
-\item
-  $x.n$ is the number of keys currently stored in the node $x$.
-\item
-  Inside each node, the keys are sorted in non decreasing order, so that
-  we have $x.keys_1\leq x.keys_2\leq\cdots\leq x.keys_{x.n}$.
-\item
-  $x.leaf$, a Boolean value determines if current node is a leaf node.
-\end{itemize}
-
-With these properties, A B-Tree $T$ whose root is $T.root$ have the
-following properties:
+Each node \texttt{x} in a B-tree has the following attributes:
 
 \begin{itemize}
-\item
-  Each internal node $x$ contains $x.n+1$ children. We assume the
-  children are $x.c_1,\cdots,x.c_{x.n+1}$.
-\item
-  The nodes in the tree have lower and upper bounds on the number of
-  keys that can contain. These bounds can be expressed in terms of a
-  fixed integer $t$.
+\item \texttt{x.n}: the number of keys currently stored in the node $x$.
+\item \texttt{x.keys}: the stored keys of this node.
+\item \texttt{x.leaf}: a bool value that determines if current node is a leaf node.
+\item \texttt{x.children}: a list of its children. If \texttt{x} is a leaf node who has no children at all, then the list will be empty. We assume the children are \texttt{x.$c_1$,$\cdots$,x.$c_{x.n+1}$}, i.e. there will be $\texttt{x.n}+1$ children at most.
 \end{itemize}
 
-When inserting keys into a binary search tree, we search for the leaf
-position at which to insert the new key. However, with B-Tree, we cannot
-simply find the position, create a new node and insert the value because
-the tree will be imbalanced again. Hence, in this section, we illustrate
-an operation that splits a full node around its median key
+\noindent
+With these attributes, a B-tree has the following properties:
 
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=0.6\textwidth]{graphs/B-Tree_example01.png}
-    \caption{B-Tree key insertion}
-    \label{fig:B-Tree key insertion1}
+\begin{itemize}
+\item The number of children of a node is always $1$ bigger than the number of keys in a node.
+\item Nodes in this tree have lower and upper bounds on the number of keys they can contain. These two bounds can be expressed in terms of a fixed integer $t$, which we call the \textbf{degree} of this tree.
+	\begin{enumerate}
+		\item Each node, other than the root node, must contain at least $t-1$ keys. The root of the tree must have at least one key if the tree is not empty.
+		\item Each node can contain at most $2t-1$ keys. A node is called \textbf{full} if it contains exactly $2t-1$ keys.
+	\end{enumerate}
+\item Inside each node, the keys are sorted in the non-decreasing order, so that we have \texttt{x.keys$_1\leq $} \texttt{x.keys$_2\leq \cdots \leq$} \texttt{x.keys$_{\texttt{x.n}}$}.
+\item The keys \texttt{x.key$_i$} separate the ranges of keys stored in each subtree: if $k_i$ is any key stored in the subtree with a root \texttt{x.c$_i$}, then we have $k_1\leq$\texttt{x.keys$_1\leq $}$ k_2\leq$\texttt{x.keys$_2\leq $} $\cdots\leq$ \texttt{x.keys$_n\leq $}$k_{\texttt{x.n}+1}$.
+\end{itemize}
+
+In Fig. \ref{fig: B-tree}, we demonstrate an example B-tree whose degree is $2$. In the following section, we will illustrate how to construct and insert keys into a B-tree.
+
+\begin{figure}
+\centering
+\input{graphs/implementation/one-dim/B-tree}
+\caption{An example of B-tree with the degree $t=2$.}
+\label{fig: B-tree}
 \end{figure}
 
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=0.3\textwidth]{graphs/B-Tree_example02.png}
-    \caption{B-Tree key insertion}
-    \label{fig:B-Tree key insertion2}
-\end{figure}
+\subsubsection{Insertion in a B-tree}
 
-\subsubsection{Insertion in a B-Tree}
+With a B-tree, we cannot simply create a new leaf node and insert the new key as we do with binary search tree, as the resulting tree will fail to be a valid B-tree. Instead, we need to insert the new key into an existing leaf node. If the node is not full, we can safely insert the new key. Otherwise, we will need to split the node around the median of its keys into two new nodes and promote the median key into its parent. In this process, we need to split the parent if its parent is also full.
+
+In our implementation of insertion, we travel down the tree and search for the position where the key should be inserted and we split each full node along the way. By doing so, whenever we want to split a full node, we are assured that its parent is not full. The overall algorithm is shown in Algo. \ref{algo:b-tree-insertion}, which contains methods \texttt{splitChild} and \texttt{InsertNonFull} as described in Algo. \ref{algo:b-tree-split-child} and Algo. \ref{algo:b-tree-insert-nonfull} respectively.
 
 \begin{algorithm}[H]
-    \SetAlgoLined
-    \SetKwInOut{Input}{Input}
-     \Input{\texttt{$m$:order\_of\_tree ,$(k,v)$:(key, value), $N$:Node;}}
-    \SetKwInOut{Output}{Output}
-     \Output{\texttt{B-Tree}}
-     \eIf{$N$ is a leaf and not yet full}  
-     {
-        \texttt{insert $(k,v)$ into $N$}
-     }
-     {
-        \texttt{create new Node N'}\\
-        \texttt{Find the median of the node}\\
-        \texttt{Add the value at the median location to the new node N'}\\
-     }
-    \If{$N$ is root with no children and not full}
-    {
-    
-        \texttt{insert $(k,v)$ into $N$}
-        
-    }
-     \caption{Algorithm for B-Tree insertion}
-     \label{B-Tree Insertion}
+\SetAlgoLined
+\SetKwInOut{Input}{input}
+\Input{\texttt{T}: The tree with the root \texttt{T.root}; \texttt{k}: The key to be inserted}
+\KwResult{\texttt{T}: The tree with the inserted key \texttt{k}}
+	\texttt{r=T.root} \\
+ \uIf{\texttt{T.n==2t-1}} {
+  \texttt{s = NewNode()} \\
+  \texttt{T.root = s} \\
+  \texttt{s.leaf = False} \\
+  \texttt{s.n = 0} \\
+  \texttt{s.c$_1$ = r} \\
+  \texttt{SplitChild(s, 1)} \\
+  \texttt{InsertNonFull(s, k)} \\
+ }\uElse{
+   \texttt{InsertNonFull(r, k)}
+  }
+ \caption{B-tree Insertion}
+ \label{algo:b-tree-insertion}
 \end{algorithm}
 
-There are two conditions in insertion:
+In the Algo. \ref{algo:b-tree-insertion}, we first check if the root node \texttt{r} is full. If it is full, then the root splits and a new node \texttt{s} becomes the root. Then we insert the key \texttt{k} into the tree rooted at the non-full root node, i.e. \texttt{s} or \texttt{r}.
 
-\begin{itemize}
-\item
-\textbf{When the node is empty or not created at all}:
-In the algorithm, initially when the first key is inserted and there is no root to the tree it will check the condition if there are any nodes and if not create a new one. It will insert the new key in the node and keeps inserting the new keys until it is one less than the order of the B-Tree being created. 
-\item
-\textbf{When the node is full}:
-As soon as the maximum number of allowed children has reached for the root node a new empty node is created. Suppose we have inserted [1,11,21] to a node of a B-Tree with degree 4. Now if we want to insert a new value 31 into the tree, since it has reached the maximum number of children it will find the median of the existing node [1,11,21] which is 11 and increase the level of the B-tree to 2 and make [1] and [21] child nodes of [11]. So now if a new value is to be inserted it can be inserted. Splitting of the node happens each time it reaches it's maximum allowed keys. Now 31 will be compared with 11 and since 31 > 11 it will be inserted in the right child and it will have an updated value of [21,31]. More keys can then be inserted until it reaches it's maximum and splits again. Once the node is split it's parent is also updated to the median value i.e., [11] in this case for nodes [1] and [21,31,41] as can be seen in \ref{fig:B-Tree key insertion2}.
-\end{itemize}
+In the Algo. \ref{algo:b-tree-split-child}, the node \texttt{y} originally has $2t$ children (i.e. $2t-1$ keys) and is full. We take the following steps to split it:
+
+\begin{enumerate}
+	\item We first (from Line $1$ to Line $11$) create a new node \texttt{z} and give it the largest $t-1$ keys and the corresponding $t$ children of \texttt{y}.
+	\item Then we adjust the count of keys for \texttt{y} on Line $12$: after the split, \texttt{y} will have $t-1$ keys.
+	\item After that, from Line $13$ to Line $21$, we insert \texttt{z} as a child of \texttt{x}, move the median key from \texttt{y} up to \texttt{x}, and adjust the key count in \texttt{x}.
+\end{enumerate}
+
+\begin{algorithm}[H]
+\SetAlgoLined
+\SetKwInOut{Input}{input}
+\Input{\texttt{x}: The node whose children are being split; \texttt{i}: The index of \texttt{x}'s child who is full originally}
+\KwResult{\texttt{x}: The parent node whose children are not full}
+\texttt{z = NewNode()} \\
+\texttt{y = x.c$_i$}  \\
+\texttt{z.leaf = y.leaf} \\
+\texttt{z.n = t-1}\\
+\For{$j\gets1$ \KwTo $t-1$}{
+  \texttt{z.keys$_j$ = y.keys$_{j+t}$}\\
+}
+\uIf{not \texttt{y.leaf}} {
+	\For{$j\gets 1$\KwTo $t$} {
+		\texttt{z.c$_j$ = y.c$_{j+t}$} \\
+	}
+}
+\texttt{y.n = t-1}\\
+\For{$j\gets \texttt{x.n}$ \KwTo $i+1$} {
+	\texttt{x.c$_{j+1}$ = x.c$_j$}
+}
+\texttt{x.c$_{i+1}$ = z} \\
+\For{$j\gets \texttt{x.n}$ \KwTo $i$} {
+	\texttt{x.keys$_{j+1}$=x.keys$_j$}
+}
+\texttt{x.key$_i$ = y.key$_t$}\\
+\texttt{x.n = x.n+1}
+\caption{Split a Child Node in B-Tree}
+\label{algo:b-tree-split-child}	
+\end{algorithm}
+
+The Algo. \ref{algo:b-tree-insert-nonfull} works as follows:
+
+\begin{enumerate}
+	\item From Line $3$ to Line $6$, We first check if \texttt{x} is a leaf. If it is a leaf, then we insert the key \texttt{k} into \texttt{x}.
+	\item If \texttt{x} is not a leaf, then we must insert \texttt{k} into the appropriate leaf node in the subtree rooted at internal node \texttt{x}. From Line $8$ to Line $11$, we traverse the subtree rooted at \texttt{x} and determine the child of \texttt{x} to which the recursion descends. Then we check on Line $12$ if the child where the recursion descends is a full node.
+	\item If the child is a full node, we then split the child on Line $13$ into two non-full children. We then determine from Line $14$ to Line $15$ which of the two children is the appropriate node to insert.
+	\item At the last, on Line $16$ we look into the $i$th children of \texttt{x} and recursively insert the key \texttt{k} into it.
+\end{enumerate}
+
+\begin{algorithm}[H]
+\SetAlgoLined
+\SetKwInOut{Input}{input}
+\Input{\texttt{x}: The node to be inserted; \texttt{k}: The key to be inserted}
+\KwResult{\texttt{x}: The node with the inserted key \texttt{k}}
+\texttt{i=x.n} \\
+\uIf{\texttt{x.leaf}} {
+	\While{\texttt{i $\geq$ 1 and k < x.keys$_i$}} {
+		\texttt{x.key$_{i+1}$=k} \\
+		\texttt{x.n = x.n+1} \\
+	}
+}
+\uElse{
+	\While{\texttt{i $\geq$ 1 and k < x.keys$_i$}} {
+		\texttt{i=i-1}\\
+	}
+	\texttt{i=i+1} \\
+	\uIf{\texttt{x.c$_i$.n==2t-1}} {
+		\texttt{SplitChild(x,i)} \\
+		\uIf{\texttt{k>x.key$_i$}} {
+			\texttt{i=i+1} \\
+		}
+	}
+	\texttt{InsertNonFull(x.c$_i$, k)}
+}
+\caption{Insert into a Non-Full Node in B-Tree}
+\label{algo:b-tree-insert-nonfull}	
+\end{algorithm}

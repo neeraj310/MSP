@@ -1,0 +1,40 @@
+Searching in a B-tree is similar to searching in a binary search tree. In a binary search tree, we traverse the tree and make a binary decision at each node. Similarly in order to perform point query with a B-tree, we traverse the tree and make a \textbf{multi-way} decision at each node.
+
+In our implementation, the point query method with B-tree takes the root node \texttt{x} of a subtree and a key \texttt{k} to be searched for in that subtree. If \texttt{k} is in that subtree, the method returns the node \texttt{y} that contains the key \texttt{k} and an index \texttt{i} such that \texttt{y.key$_i$=k}. Otherwise the method will return \texttt{-1}. The point query algorithm for a B-tree is illustrated in Algo. \ref{algo:B-tree-point-query}.
+
+\begin{algorithm}
+\SetAlgoLined
+\SetKwInOut{Input}{input}
+\Input{\texttt{x}: The node of the subtree to be searched; \texttt{k}: The key to be searched}
+\KwResult{\texttt{y}: The node that contains the query key in its keys; \texttt{i}: the index of the query key}
+
+\texttt{i=1} \\
+\While{\texttt{i $\leq$ x.n and k>x.keys$_i$}} {
+	\texttt{i=i+1} \\
+	\uIf{\texttt{i $\leq$ x.n and k==x.keys$_i$}} {
+		\Return \texttt{x, i}
+	}
+	\uElseIf{\texttt{x.leaf}} {
+		\Return \texttt{NULL, -1}
+	}
+	\uElse {
+		\Return \texttt{BTreeSearch(x.c$_i$, k)}
+	}
+}
+
+\caption{B-tree Point Query}
+\label{algo:B-tree-point-query}
+\end{algorithm}
+
+In the point query algorithm of B-tree as illustrated in \ref{algo:B-tree-point-query}, the search is performed with the following steps:
+
+\begin{enumerate}
+	\item From Line $1$ to $3$, we use linear search to find the smallest index $i$ such that \texttt{k$\leq$x.key$_i$}. If there is no such $i$, we set $i$ to be \texttt{x.n+1}.
+	\item Then we check whether we have found the key in this node on Line $4$ to $5$. If we have, then the method returns current node and the index of the query key.
+	\item Otherwise, we check if current node is a leaf node. If it is a leaf node, then we know there is no such query key in this subtree. Hence, this method returns a null node and $-1$ to indicate there is no such key.
+	\item If current node is not a leaf node, we then recursively search the appropriate subtree of \texttt{x}.
+\end{enumerate}
+
+\begin{mscexample}
+For example if we were to search for $41$ in the Fig. \ref{fig: B-tree}, we would first compare query key $41$ and the keys in root node, which is $31$. Hence we go to the second subtree, whose root node contains two values $51$ and $71$. By comparison, we should go the first subtree of this node. Then we reach the leaf node, which contains our query key $41$ and hence the query will return this leaf node and the index $1$ as output. If there is no such key, then the method will return \texttt{NULL} and $-1$.
+\end{mscexample}

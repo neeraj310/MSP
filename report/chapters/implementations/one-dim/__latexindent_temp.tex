@@ -1,0 +1,33 @@
+B-Tree and its variants have been widely used as indexes in databases. B-Trees can be considered as a generalisation of binary search tree: In binary search tree, there is only one key and two children at most in the internal node. B-Tree extends the nodes such that each node can contain several keys and children. The keys in a node serve as dividing points and separate the range of keys. With this structure, we make a multi-way decision based on comparisons with the keys stored at the node $x$.
+
+In this section, we introduce the construction and search processes
+of B-Trees and then analyse their properties.
+
+\subsubsection{Attributes and Properties}
+
+Each node in a B-Tree has the following attributes:
+
+\begin{itemize}
+\item
+  $x.n$: the number of keys currently stored in the node $x$.
+\item Inside each node, the keys are sorted in non decreasing order, so that we have $x.keys_1\leq x.keys_2\leq\cdots\leq x.keys_{x.n}$.
+\item
+  $x.leaf$, a Boolean value determines if current node is a leaf node.
+\end{itemize}
+
+With these properties, A B-Tree $T$ whose root is $T.root$ have the
+following properties:
+
+\begin{itemize}
+\item
+  Each internal node $x$ contains $x.n+1$ children. We assume the
+  children are $x.c_1,\cdots,x.c_{x.n+1}$.
+\item
+  The nodes in the tree have lower and upper bounds on the number of
+  keys that can contain. These bounds can be expressed in terms of a
+  fixed integer $t$.
+\end{itemize}
+
+
+\subsubsection{Insertion in a B-Tree}
+

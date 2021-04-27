@@ -48,12 +48,12 @@ In the algorithm above, we first sort all the values obtained in the Point list.
 \begin{mscexample}
     For example if we have points sorted as: 
 
-                $$((1,2),(3,4),(5,6),(7,8),(9,10))$$
+                $$[(1,2),(3,4),(5,6),(7,8),(9,10)]$$
     
     we will take the median as $(5,6)$ and assign $(3,4)$ to the left and $(7,8)$ to the right. The reason node.leftChild = $(3,4)$ is because $3$ < $5$ and node.rightChild = $(7,8)$ is because $7$ > $5$ i.e., we compare the x-axis of the points to the root when we create the subsequent nodes. Now if we want to add point $[1,2]$ to the above tree it will check the x-coordinate at the root and since $1$ < $5$ it will go the left. In the left since we already have a node $(3,4)$ it will check the y-coordinate of the points i.e., $4>2$ and so it will go and check in the left of the node if this point can be added there and since it's empty it is added in the left. Further points are added in the same way by checking the x-coordinate and y-coordinate alternatively. This process is then carried out recursively and subtrees are created on the left and right until all the points are added to the tree. Similarly point $(9,10)$ is added in the right subtree as the rightChild of
     node $(7,8)$. $(None)$ is added when the rightChild or leftChild of the node is empty. The tree will now look like\\
 
-    $(((1,2),(None),(3,4)),((None),(9,10),(7,8)),(5,6))$\\
+    $$(((1,2),(None),(3,4)),((None),(9,10),(7,8)),(5,6))$$\\
 
     Points are added to left and right subtree as follows:\\
     left subtree points: $((1,2)(3,4))$ ,\\
