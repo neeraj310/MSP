@@ -1,0 +1,18 @@
+\begin{tikzpicture}
+\tikzstyle{bplus}=[rectangle split, rectangle split horizontal,rectangle split ignore empty parts,draw]
+\tikzstyle{every node}=[bplus]
+\tikzstyle{level 1}=[sibling distance=30mm]
+\tikzstyle{level 2}=[sibling distance=15mm]
+\node {(30,40)} [->]
+  child {node {(5,25)}
+    child {node {(10,12)}}
+    child[missing]{}    
+  } 
+  child {node {(70,70)}
+    child {node {(50,30)}
+    	child {node {(35,45)}}
+    	child[missing]{}
+    }
+    child[missing]{}
+  }
+;\end{tikzpicture}

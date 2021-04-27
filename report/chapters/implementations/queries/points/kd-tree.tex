@@ -1,11 +1,11 @@
+Similar to search with binary search tree, we also need to traverse the tree in order to perform point query. However, we need to switch the dimensions when we compare the values between the query key and the values in the nodes.
+
 \begin{algorithm}[H]
     \SetAlgoLined
     \SetKwInOut{Input}{Input}
     \SetKwInOut{Output}{Output}
-    \Input{\texttt{TestPoint $\mathcal{T}(\boldsymbol{x}, \boldsymbol{y}) ; [x \in \mathbb{R};y \in \mathbb{R}]$, $dim$; $2$, $split\_axis$ ($\mathcal{S}$) ; $0/1$ ($0$; $x\_axis$ and $1$; $y\_axis$)}}
-    \Output{\texttt{Value associated with $\mathcal{T}(\boldsymbol{x}, \boldsymbol{y})$}}
-    \texttt{SEARCH\_POINT\_QUERY($dim$, $\mathcal{S}$)}\\
-    \texttt{Start at root}\\
+    \Input{\texttt{t}: The node being searched; \texttt{x}: The query key; \texttt{cd}: Current dimension}
+    \Output{\texttt{n}: the node that contains the query key}
     \eIf {node is leaf}
         {
             \texttt{return value associated with node}
@@ -17,7 +17,7 @@
         \texttt{SEARCH\_POINT\_QUERY($dim$, $(\mathcal{S}+1) \% dim$)}}
         }
     \caption{Point Query Algorithm for $K$D-Tree}
-    \label{Point_Query_Algorithm_$K$D-Tree}
+    \label{algo: point_query_kdtree}
 \end{algorithm}
 
 In algorithm \ref{Point_Query_Algorithm_$K$D-Tree} 

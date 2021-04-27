@@ -45,7 +45,7 @@ This section presents the definition
     
 	\item \textbf{Cell}. A grid cell is a rectangle whose lower and upper corners are points $(l_0, l_1)$ and  $(u_0,u_1)$, i.e.,  cell = $(l_{0},u_{0}) \times [l_{1},u_{1})$.
 	
-	\item \textbf{Mapping Function}. A mapping function $\mathcal{M}$ is a function on the domain $\mathbb{R}^2$ to the non-negative range, i.e $M:[0,X_{0}]\times [0,X_{1}]\to [0,+\infty)$ such that $M(x_0,x_{1}) \leq \mathcal{M}(y_{0},y_1)$ when $x_0 \leq y_0$ and $x_1 \leq y_1$.
+	\item \textbf{Mapping Function}. A mapping function $\mathcal{M}$ is a function on the domain $\mathbb{R}^2$ to the non-negative range, i.e $\mathcal{M}:[0,X_{0}]\times [0,X_{1}]\to [0,+\infty)$ such that $M(x_0,x_{1}) \leq \mathcal{M}(y_{0},y_1)$ when $x_0 \leq y_0$ and $x_1 \leq y_1$.
 	%TODO: add some example mapping functions
 \end{enumerate}
 
@@ -53,10 +53,10 @@ This section presents the definition
 
 We can extend the learned index method for range queries on spatial data by using a mapping function. This baseline method works as follows. We first sort all keys according to their mapped values and divide the mapped values into some cells such that each cell contains the same number of keys (except the last one). If a point $(x,y)$’s mapped value is larger than those of the keys stored in the first $i$ cells, i.e. $\mathcal{M}(x,y) > \sup \bigcup\limits_{j=0}^{i-1} M(C_{j})$, we store $(x,y)$ in the $(i+1)$th cell. 
 
-For a range query, we have a query rectangle $qr = [l_{0},u_{0}) \times [l_{1},u_{1})$, we only need to predict the indices of $(l_{0}, l_{1})$ and $(u_{0},u_{1})$ namely $i_{1}$ and $i_{2}$ respectively. Then we scan the keys in $i_{2}-i_{1}+1$ cells, and find those keys that fall in the query rectangle qr. 
+For a range query, represented by the query rectangle $qr = [l_{0},u_{0}) \times [l_{1},u_{1})$, We only need to predict the indices of $(l_{0}, l_{1})$ and $(u_{0},u_{1})$ namely $i_{1}$ and $i_{2}$ respectively. Then we scan the keys in $i_{2}-i_{1}+1$ cells, and find those keys that fall in the query rectangle qr. 
 
 \begin{mscexample}
-As shown in Fig. \ref{fig:BaseLine_Method}, the key space is divided into 3 cells using the mapping function $\mathcal{M}((x,y))= x+y$. The query rectangle consisting of only $1$ key, falls inside the second part. During prediction, we need to find out the cells to which our query rectangle belongs (the $2^{nd}$ cell in our example). Once the cell is found, we need to compare the key of the query point, against all the possible keys in that cell until a match is found. This results in $8$ irrelevant points accessed for the range query that only contains one relevant key.
+As shown in Fig. \ref{fig:BaseLine_Method}, the key space is divided into 3 cells using the mapping function $\mathcal{M}((x,y))= x+y$. The query rectangle consisting of only $1$ key, falls inside the second cell. During prediction, we need to find out the cell to which our query rectangle belongs (the $2^{nd}$ cell in our example). Once the cell is identified, we need to compare the $2$ dimensional key value of the query point, against all the possible keys in that cell until a match is found. This results in $8$ irrelevant points accessed for the range query that only contains one relevant key.
 \end{mscexample}
 
 \begin{figure*}[t]
@@ -90,7 +90,7 @@ As described in Algorithm \ref{Training_Lisa_Baseline}, during training, we perf
     \SetKwInOut{Input}{input}
     \SetKwInOut{Output}{Output}
     \Input{$N$; trainset=[$(x,y);x \in \mathbb{R}^{2};y \in \mathbb{R}$]}
-    \Output{M:Mapped Function}
+    \Output{$\mathcal{M}$:Mapped Function}
      \For{$i\gets0$ \KwTo $len(x)$}{
             	\texttt{x[$i$].mapped\_value = x[$i$][0]+x[$i][1$]} \\
             
@@ -98,7 +98,7 @@ As described in Algorithm \ref{Training_Lisa_Baseline}, during training, we perf
      \texttt{sortXBasedOnMappedValue()}\\
      \texttt{Divide $x$ into $N$ equal size cells}\\
      %\texttt{Store mapped value of first and last key for each cell }\\
-      \For{$i\gets0$ \KwTo $N$}
+      \For{$i\gets0$ \KwTo $N$} 
      {
          \texttt{denseArray[$i$].lower = first key in cell $i$  } \\
 		 \texttt{denseArray[$i$].upper = last key in cell $i$  }
@@ -143,8 +143,8 @@ Given a spatial dataset, we generate the mapping function $\mathcal{M}$ and the 
 \includegraphics[width=1\textwidth]{graphs/implementation/lisa_overview.pdf}
     \caption{Lisa Framework\\
      1) Generate grid cells, and apply Lebesgue Measure to each cell to map two dimensional key value to a scalar.\\
-    2) Sort mapped values and divide them across equal length intervals termed as mapped intervals(3 in the figure)\\
-    3) For each mapped interval,divide the mapped value range in shards(3 in the figure) and learn a linear regression function per shard }
+    2) Sort mapped values and divide them across equal length intervals termed as mapped intervals ( 3 in our figure)\\
+    3) For each mapped interval, divide the mapped value range in shards  (3 in our figure) and learn a linear regression function to partition the keys belonging to a particular interval, into different shards }
     \label{fig:Lisa_Framework}
 \end{figure*}
 
@@ -170,7 +170,8 @@ $ inf (M(S_{i}))  > sup (M(S_{j}))$ when $i > j$.
 %TODO: claim that we will not work on the local models and tell the reason.
 \item \textbf{Local Model}. Local model $L_{i}$ is a model
 that processes operations within a shard $S_i$ . It keeps dynamic
-structures such as the addresses of pages contained by $S_{i}$ .
+structures such as the addresses of pages contained by $S_{i}$. Local models are not relevant to our implementation as full data-set is loaded in the main
+memory
 \end{enumerate}
 
 \subsection{Design and Implementation Details}
@@ -184,7 +185,7 @@ The first task in Lisa implementation is to partition the $2$ dimensional key sp
 i.e. mapped value of a key in cell $i$ will always be less than mapped values of a key in cell $j$, if $i <j$.
 
 \begin{mscexample}
-	Consider the example shown in the figure \ref{fig:Cell_Parttion}: 27 keys are partitioned into $9$ cell, resulting in $3$ keys per cell. To partition the key space, we first sort the keys values according to $1^{st}$ dimension and divide the keys into $3$ vertical columns each containing $9$ keys. Then for each vertical column of $9$ keys, we sort the keys again according to $2^{nd}$ dimension, and divide the keys in each column into $3$ new cells. The number of cells $N$ into which the keys space is divided, is a hyper-parameter and found empirically using grid search.
+	Consider the example shown in the figure \ref{fig:Cell_Parttion}: 27 keys are partitioned into $9$ cell,  resulting in $3$ keys per cell. To partition the key space, we first sort the keys values according to $1^{st}$ dimension and divide the keys into $3$ vertical columns each containing $9$ keys. Then for each vertical column of $9$ keys, we sort the keys again according to $2^{nd}$ dimension, and divide the keys in each column into $3$ new cells. The number of cells $N$ into which the keys space is divided, is a hyper-parameter and found empirically using grid search.
 
 \end{mscexample}
 
@@ -194,8 +195,8 @@ We need to sort the key space along the sequence of axis before we partition the
     \centering
     \includegraphics[width=1\textwidth]{graphs/implementation/cell_generation.pdf}
     \caption{Cell Partition Strategy: \\
-    1) : Sort Keys on x dimension and divide into 3 vertical columns each containing 9 keys\\
-    2) : Sort each vertical column keys on y dimension and divide into 3 horizontal columns each containing 3 keys}
+    1) : Sort Keys on $1^{st}$ dimension and divide into 3 vertical columns each containing 9 keys\\
+    2) : Sort each vertical column keys on $2^{nd}$ dimension and divide into 3 horizontal columns each containing 3 keys}
     \label{fig:Cell_Parttion}
 \end{figure*}
 
@@ -205,7 +206,7 @@ We need to sort the key space along the sequence of axis before we partition the
      \Input{\texttt{N;$x$; $y$}}
      \texttt{trainset=[$(x,y);x \in \mathbb{R}^{2};y \in \mathbb{R}$]} \\
      \texttt{$keysPerCell =  len(x) \slash (N \times N) $}\\
-     \texttt{sort$x$BasedOnDimension\_0()} // Sort x based on first dimension. \\
+     \texttt{sort$x$BasedOnDimension\_0()} // Sort x based on $1^{st}$ dimension. \\
      %\texttt{In first for loop, divide the keys into equal size subsets based on first dimension }\\
      \For{$i\gets0$ \KwTo $N$}  
      {
@@ -259,19 +260,19 @@ As shown in figure \ref{fig:Lebesgue_Measure}, in $2$-dimensional case, $\frac {
 
 \subsubsection{Shard Prediction Function}
 
-After the mapping function, we get a dense array of mapped values. Then we partition them evenly into $U$ parts and let $\boldsymbol{M}_p=[m_1,\cdots, m_U]$. We train linear regression functions $\mathcal{F}_i$ on each interval and suppose $V+1$ is the number of mapped values that each $\mathcal{F}_i$ needs to process and $\Psi$ is the average number of keys falling in a shard. With these definitions, we know that each $\mathcal{F}_i$ generates $D=\ceil{\frac{V+1}{\Psi}}$ shards.
+After the mapping function, we get a dense array of mapped values. Then we partition them evenly into $U$ parts and let $\boldsymbol{M}_p=[m_1,\cdots, m_U]$. We train linear regression functions $\mathcal{F}_i$ on each interval and suppose $V+1$ is the number of mapped values that each $\mathcal{F}_i$ needs to process and $D$ is the number of shards per interval. $\Psi$ =$\floor{\frac{V+1}{D}}$ is the number of keys falling in a shard. %With these definitions, we know that each $\mathcal{F}_i$ handles  $D=\ceil{\frac{V+1}{\Psi}}$ shards.
 
 \begin{mscexample}
-	For example, assume we have a dense array of mapped values as $$[1,1.2,2.2,3,3.4,4]$$ 
+	For example, assume we have a dense array of 9 mapped values as $$[1,1.2,2, 2.2,3,3.3,3.4,4, 4.5]$$
 	
-	We want to partition it into 2 parts, so we have $\boldsymbol{M}_p=[3]$ and $V+1=3$. In this case we will train $2$ linear regression functions. Suppose that the average number of keys in a shard is $\Psi=2$, then each $\mathcal{F}_i$ generates $D=\ceil{\frac{V+1}{\Psi}}=\ceil{\frac{3}{2}}=2$ shards.
+and $U$ and $D$ are initialized as 3. So we have $\boldsymbol{M}_p=[9]$ which is divided into 3 equal intervals, $\boldsymbol{M}_p=[m_1, m_2, m_3]$, each containing 3 keys. In this case we have $V+1 = 3$ and will train $3$ linear regression functions, 1 for each interval. Each $\mathcal{F}_i$ generates $D$ shards and number of keys falling in a shard will be $\Psi= \floor{\frac{V+1}{D}} = 1$.
 \end{mscexample}
 
 
 Then with a given $x$, the predicted shard is given by $\mathcal{SP}(x)=\mathcal{F}_i(x)+i\times D$, where $i=\text{binary-search}(\boldsymbol{M}_p,x)$. More specifically, we first determine $i$ by using binary search. The result tells which interval this $x$ should belong to. Then we find the corresponding linear regression function $\mathcal{F}_i$ and calculate $\mathcal{F}_i(x)$, which is the predicted shard.
 
 \begin{mscexample}
-	In the above example, given a key $x=2.2$, we first perform binary search in $\boldsymbol{M}_p$ and we found $i=1$. Then we find the first linear regression function $\mathcal{F}_1$ and calculate $\mathcal{F}_1(x)$. Since each linear regression function will yield $D=\ceil{\frac{V+1}{\Psi}}=2$ shards, the shards that the first linear regression function generates will be from $0$ to $1$ and the shards that the second linear regression function generates will be from $2$ to $3$. Hence, the predicted shard id is given by 
+	In the above example, given a key $x=1.2$, we first perform binary search in $\boldsymbol{M}_p$ and we found $i=1$. Then we find the first linear regression function $\mathcal{F}_1$ and calculate $\mathcal{F}_1(x)$. Since each linear regression function will yield $D=3$ shards, the shards that the first linear regression function generates will be from $0$ to $2$ and the shards that the second linear regression function generates will be from $3$ to $5$. Hence, the predicted shard id is given by 
 $$
 \mathcal{SP}(x)=\mathcal{F}_i(x)+i\times D
 $$
@@ -280,14 +281,14 @@ $$
 Then the problem left is to train the linear regression functions $\mathcal{F}_i$. Let $\boldsymbol{x}=(x_0,\cdots,x_v)$ be the keys' mapped value that fall in $[m_{i-1}, m_i)$. Suppose that $\boldsymbol{x}$ is sorted, i.e. $x_i\leq x_j, \forall 0\leq i<j\leq v$. Let $\boldsymbol{y}=(0,\cdots, V)$. Then we build a piecewise linear regression function $f_i$ with inputs $\boldsymbol{x}$ and ground truth $\boldsymbol{y}$. For a given point with mapped value $m\in[m_{i-1}, m_i)$, its shard id is given by $\ceil{\frac{f_i(m)}{\Psi}}+i\times D$, i.e. $\mathcal{F}_i(x)=\frac{f_i(m)}{\Psi}$.
 
 \begin{mscexample}
-	In our previous example, in the interval $[0,3)$, we have $\boldsymbol{x}=(1,1.2,2.2)$ and $\boldsymbol{y}=(0,1,2)$. Then for a point with the mapped value $m=1.2$, the expected output will be $f_i(m)=1$ and the shard id is given by $\ceil{\frac{1}{2}}+0\times 2=1$. Hence, the point with mapped value $m=1.2$ will be allocated to the first shard. Then the problem is to train a continuous piecewise linear regression function in each interval. We constrain the piecewise linear regression function to be continuous so that it is guaranteed be monotonic as shown in Figure \ref{shardPrediction}.
+	In our previous example, in the interval $[0,2]$, we have $\boldsymbol{x}=(1,1.2,2)$ and $\boldsymbol{y}=(0,1,2)$. Then for a point with the mapped value $m=1.2$, the expected output will be $f_i(m)=1$ and the shard id is given by $\ceil{\frac{1}{1}}+0\times 2=1$. Hence, the point with mapped value $m=1.2$ will be allocated to the second shard with shard id 1. Then the problem is to train a continuous piecewise linear regression function in each interval. We constrain the piecewise linear regression function to be continuous so that it is guaranteed be monotonic as shown in Figure \ref{shardPrediction}.
 \end{mscexample}
 
 \begin{figure*}[t]
     \centering
     %\includegraphics[width=17cm,height=4.5cm]{graphs/implementation/lisa_overview}
 \includegraphics[width=0.6\textwidth]{graphs/implementation/shardPrediction.pdf}
-    \caption{Piecewise linear regression functions learnt by ShardTrainingAlgorithm, V is the number of keys per mapped interval}
+    \caption{Piecewise linear regression functions learnt by ShardTrainingAlgorithm, V+1 is the number of keys per mapped interval}
      
     \label{shardPrediction}
 \end{figure*}

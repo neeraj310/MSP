@@ -1,74 +1,74 @@
-$K$D-Tree is a space partitioning structure that can be used to organise data points in $k$ dimensional space. We have fixed our dimensions of data points to $2$-dimensions and their values are stored as a scalar. In our implementation, $K$D-Tree is a binary tree with every node having data points partitioned in $2$-dimensional space. A $K$D-Tree is a binary tree since each node has two children and when the keys are multidimensional each node is partitioned at split axis based on the depth of the tree and the dimension of the key which in turn determines the number of split axis the tree will have. For example for a $3$-dimensional space the first split axis is x-coordinate and then at the next level it will be y-coordinate and lastly z-coordinate.
+$K$D-tree is a space partitioning structure that can be used to organise data points in $k$ dimensional space. In this project, we limit the dimension $k$ to be $2$. We implement the $K$D-tree as a binary tree in which every node is a $2$-dimensional point. Every non-leaf node is representing a splitting line that divides the space into two parts. Then every points to the left (or down) of this line are represented by the left subtree and points to the right (or up) of this line are represented by the right subtree. In Fig. \ref{fig:kd_tree_example} we illustrate an example of $K$D-tree.
 
-% The following is not strictly definitions, but more like properties.
-\subsubsection{Properties}
-
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=0.4\textwidth]{graphs/KD-Tree.png}
-    \caption{$K$D-Tree}
-    \label{fig:$K$D-Tree}
+\begin{figure}
+     \centering
+     \begin{subfigure}[b]{0.60\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{graphs/implementation/2d/kdtree_partition}
+         \caption{The $2$D space and the partition of $K$D-tree}
+         \label{fig:y equals x}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.35\textwidth}
+         \centering
+         \input{graphs/implementation/2d/kdtree}
+         \caption{The tree structure of the $K$D-tree}
+         \label{fig:three sin x}
+     \end{subfigure}
+        \caption{An example of $K$D-Tree}
+        \label{fig:kd_tree_example}
 \end{figure}
 
-\begin{enumerate}
-    \item\textbf{Node}: Node of a $K$D-Tree is essentially a $2$-dimensional data point. It can be k-dimensional for $K$D-Tree. Node is called a Root Node when it is at the top level as can be seen in Fig. \ref{fig:$K$D-Tree} and does not have a parent. A node is called a Leaf Node when it has no children and is at the bottom level. 
+\subsubsection{Insertion of $K$D-tree}
 
-    \item\textbf{Levels}: Nodes are at the same level when they have the same distance from root. Hence, a level increases as the distance of the nodes increase from root. In the \ref{fig:$K$D-Tree} we can see the key at root is at level $1$ and then we have level $2$ and level $3$. 
-    \item\textbf{Dimensions}: Every $K$D-Tree can be structured in such a way that the data points are divided into $k$-dimensions. Each node is recursively cut into as many dimensions as is mentioned in the dimensions. In our case the data points are $2$-dimensional and hence the space is divided into $2$-dimensions alternatively until a leaf is reached.
-    \item\textbf{Cell}: The subdivision of space consists of rectangular regions, called cells (possibly unbounded).
-\end{enumerate}
-    
+Similar to a binary search tree, we need to traverse the tree when we need to insert a point to the $K$D-tree. The only difference is that we need to switch the axes when inserting into a $K$D-tree. For example, since the dimension is $2$ in our case, we compare the $x$-coordinate at the root level. Then in the root's direct children, we compare the $y$-coordinate at that level. Formally, the insertion algorithm is expressed as in Algo. \ref{algo:kd-tree-insertion}.
+
 \begin{algorithm}[H]
-    \SetAlgoLined
-    \SetKwInOut{Input}{Input}
-    \SetKwInOut{Output}{Output}
-    \Input{pointList; Keys=[$(x,y);x \in \mathbb{R};y \in \mathbb{R}$], dimension = 2,  split\_axis; 0 or 1}
-    \Output{$K$D-Tree}
-    \For{$i\gets0$ \KwTo $len(pointList)$}{
-    \texttt{$int$ split\_axis := split\_axis mod $dimension$} // Select the split\_axis based on depth\\
-    \texttt{Sort point list and choose median}\\
-    \texttt{Create node at median}\\
-    \texttt{node.leftChild := kdtree(points in pointList before median, split\_axis+1); //SubTree Creation \\ 
-    node.rightChild := kdtree(points in pointList after median, split\_axis+1);}\\
-    return node
-     \caption{Construction Algorithm for $K$D-Tree}
-     \label{Training_$K$D-Tree}
-     }
+\SetAlgoLined
+\SetKwInOut{Input}{input}
+\Input{\texttt{t}: The node to be inserted; \texttt{k}: The key to be inserted; \texttt{cd}: Current dimension}
+\KwResult{\texttt{t}: The node with the inserted key \texttt{k}}
+	\texttt{DIM=2;}\\
+	\uIf{\texttt{t==NULL}} {
+		\texttt{t = NewNode(k)}
+	}
+	\uElseIf{\texttt{x[cd]<t.data[cd]}} {
+		\texttt{t.left=insert(x, t.left, (cd+1) \% DIM )}
+	}
+	\uElse{
+		\texttt{t.right=insert(x, t.right, (cd+1)\% DIM)}
+	}
+ 	\Return \texttt{N}
+ \caption{$K$D-tree Insertion}
+ \label{algo:kd-tree-insertion}
 \end{algorithm}
 
-For constructing the $K$D-Tree we have the following constraints:
+To insert a key \texttt{k} into the $K$D-tree with \texttt{T} as its node, we only need to apply this function with the root node as \texttt{insert(T, k, 0)}. 
 
+In the Algo. \ref{algo:kd-tree-insertion}, the insertion of a key is performed in the following steps:
 
 \begin{enumerate}
-    \item {As one moves down the tree, one cycles through the axes used to select the splitting planes. For example, in a $2$-dimensional plane we split the data on x-axis at the root and then split it on y-axis for it's children. We then split the grandchildren on x-axis again and so on.}
-    \item {Points are inserted by selecting the median of the points being put into the subtree, with respect to their coordinates in the axis being used to create the splitting plane. This ensures that the tree is balanced. A balanced tree is the one in which leaf node is approximately the same distance from the root.}\\
-\end{enumerate}    
-    
-In the algorithm above, we first sort all the values obtained in the Point list. We initialise the first split axis to $0$ and then toggle between $0$ and $1$ as we increase the depth. Once the data points are sorted, their median is chosen. 
+	\item On Line $1$, we specify the dimension to be $2$.
+	\item Then we first check if the node is \texttt{NULL}. If it is \texttt{NULL}, which means we should have a new leaf node, then we create a new node and give it our key.
+	\item Otherwise, from Line $4$ to $7$, we check the data at current dimension. If it is smaller than the data in the node \texttt{t} at current dimension, then we should insert into the left subtree. Otherwise, we should insert into the right subtree.
+	\item When we moves down to the left or right subtree, we switch the current dimension by calculating \texttt{(cd+1)\% DIM}.
+\end{enumerate}
+
 \begin{mscexample}
-    For example if we have points sorted as: 
-
-                $$[(1,2),(3,4),(5,6),(7,8),(9,10)]$$
-    
-    we will take the median as $(5,6)$ and assign $(3,4)$ to the left and $(7,8)$ to the right. The reason node.leftChild = $(3,4)$ is because $3$ < $5$ and node.rightChild = $(7,8)$ is because $7$ > $5$ i.e., we compare the x-axis of the points to the root when we create the subsequent nodes. Now if we want to add point $[1,2]$ to the above tree it will check the x-coordinate at the root and since $1$ < $5$ it will go the left. In the left since we already have a node $(3,4)$ it will check the y-coordinate of the points i.e., $4>2$ and so it will go and check in the left of the node if this point can be added there and since it's empty it is added in the left. Further points are added in the same way by checking the x-coordinate and y-coordinate alternatively. This process is then carried out recursively and subtrees are created on the left and right until all the points are added to the tree. Similarly point $(9,10)$ is added in the right subtree as the rightChild of
-    node $(7,8)$. $(None)$ is added when the rightChild or leftChild of the node is empty. The tree will now look like\\
-
-    $$(((1,2),(None),(3,4)),((None),(9,10),(7,8)),(5,6))$$\\
-
-    Points are added to left and right subtree as follows:\\
-    left subtree points: $((1,2)(3,4))$ ,\\
-    right subtree points: $(7,8),(9,10)$ \\ 
-    centre being the root: $(5,6)$. \\
-    ([Left Subtree, Right subtree, Root Point])
+	In Fig. \ref{fig:kd_tree_example}, we present an example of $K$D-tree. In this example, we will illustrate how it is constructed. Assume our data points is $$[(30,40), (5,25), (10,12), (70,70), (50,30), (35,45)]$$
+	
+	The construction of the $K$D-tree follows the steps below:
+	
+	\begin{enumerate}
+		\item We start with $(30,40)$ by creating a new node and give it the data point, which results in the root node in the figure.
+		\item After that we insert $(5,25)$, since \texttt{x[0]<t.data[0]}, we insert this node as the left subtree to the root.
+		\item Then we insert $(10, 12)$. First we compare the $x$-coordinate at the root level. As $10<30$, we go to the left subtree. Then we compare at the root's children level and compare the $y$-coordinate. As $12<25$, we go to the left subtree and create a new node there.
+		\item Similarly, we insert other keys one-by-one.
+	\end{enumerate}
+	
+	
+	
+	
+	
+	 
 \end{mscexample}
-
-\subsubsection{Construction time and space complexity of $2$-dimensional $K$D-Tree:}
-
-The most expensive part of the construction of $K$D-Tree is sorting the points on both the axis. Instead of working with more complex algorithm to find the median we first presorted the values on x-axis and then on y-axis.\\
-$T(n) = O(n)$, if $n = 1$\\
-$O(n) + 2T(n/2)$, if $n > 1$\\
-The above equations then solve to $O( n log n)$.\\
-
-Since $K$D-Tree is A binary tree, and every leaf and internal node uses $O(1)$ storage, hence the total storage is $O(n)$.
-
-
