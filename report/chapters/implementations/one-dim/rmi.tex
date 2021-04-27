@@ -45,25 +45,32 @@ In order to construct a recursive model, we need to have several parameters list
 
 The training process of recursive model is an up-bottom process. There will be only one root model that receives the whole training data. After the root model is trained, we iterate over all the training data and predict the page by the root model. After the iteration, we get a new set of pairs $(X, Y_0)$. Then we map $\forall y_0\in Y_0$ into the selected model id in next stage by $\texttt{next}=y_0 * N_M^{(i+1)}/\texttt{max(Y)}$.
 
+% REVISE THIS
 \begin{algorithm}[H]
     \SetAlgoLined
     \SetKwInOut{Input}{input}
-    \Input{\texttt{num\_of\_stages; num\_of\_models; types\_of\_models; x; y}}
+    \Input{\texttt{$N_S$: A scalar representing the number of stages; \\ $N_M$: An array representing the number of models at each stage; \\ x; y}}
      \texttt{trainset=[[(x,y)]]} \\
      \texttt{stage$\gets 0$} \\
-     \While{\texttt{stage} \textless \texttt{num\_of\_stages}}{
-      \While{\texttt{model} \textless \texttt{num\_of\_models[stage]}} {
+     \While{\texttt{stage} \textless \texttt{$N_S$}}{
+      \While{\texttt{model} \textless \texttt{$N_M$[stage]}} {
         \texttt{model.train(trainset[stage][model])} \\
         \texttt{models[stage].append(model)}
       }
-      \uIf{not last stage} {
-        \For{$i\gets0$ \KwTo $len(x)$}{
-            	\texttt{model=models[output from previous stage]} \\
-            	\texttt{output=model.predict(x[i])} \\
-            	\texttt{next=output * num\_of\_models[stage+1]/max\_y} \\
+      \uIf{\texttt{stage<$N_S$-1}} {
+        \For{\texttt{$i\gets0$ \KwTo $len(x)$}}{
+        	\texttt{next\_model = 0}\\
+        	\For{\texttt{$j\gets 0$ \KwTo stage-1}} {
+        		\texttt{output = models[stage][next\_model]} \\
+        		\texttt{next\_model = output * $N_M$[stage+1]/max\_y}\\
+        	}
+            	\texttt{model = models[next\_model]} \\
+            	\texttt{output = model.predict(x[i])} \\
+            	\texttt{next = output * $N_M$[stage+1]/max\_y} \\
             	\texttt{trainset[stage+1][next].add((x[i],y[i]))}
         }
       }
+     \texttt{stage=stage+1}
      }
      \caption{Training of Recursive Model Index}
 \end{algorithm}
