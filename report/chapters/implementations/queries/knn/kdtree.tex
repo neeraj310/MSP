@@ -1,83 +1,61 @@
-As a baseline, we first perform $K$NN query with $K$D-tree.\\
-The main advantage of $K$D-Tree is that we can exploit the tree structure and prune points we don't think will have distance smaller than the ones we have already calculated. This improves the time complexity as compared to finding the distance of point with every other point in space to get the closest neighbours. 
+In range query with $K$D-tree, we traverse the whole tree with a pruning strategy. Similarly, to perform $K$NN query with $K$D-tree, we also need to traverse the whole tree with a pruning strategy. We first present how to perform the nearest neighbour query (i.e. a $K$NN query with $K=1$), and then extend it into general $K$NN query.
 
+\begin{figure}[!htb]
+     \centering
+     \begin{subfigure}[b]{0.58\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{graphs/implementation/queries/knn_query_kdtree}
+         \caption{The $2$D space and the partition of $K$D-tree}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.40\textwidth}
+         \centering
+         \input{graphs/implementation/2d/kdtree-range}
+         \caption{The tree structure of the $K$D-tree}
+     \end{subfigure}
+        \caption{An example of $K$NN Query with $K$D-Tree}
+        \label{fig:kdtree-knnquery}
+\end{figure}
 
-\begin{algorithm}[H]
-    \SetAlgoLined
-    \SetKwInOut{Input}{Input}
-    \SetKwInOut{Output}{Output}
-    \Input{$K$; \texttt{Number of nearest neighbour, List of TestPoints; $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y}); [x \in \mathbb{R};y \in \mathbb{R}]$}}
-    \Output{\texttt{List of $K$ nearest points(ResultList)}}
-    \For{$i\gets0$ \KwTo $len(TestPoints)$}
-    {
-        \texttt{Start at root}\\
-        \texttt{Traverse subtree where $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y})_i$ can be added.}\\
-        \texttt{Find the leaf; Calculate the distance and store it as $\mathcal{D}$}\\
-        \eIf{$len(ResultList) < K$}
-            {
-                \eIf {\texttt{Perpendicular distance of Parent with $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y}) <= \mathcal{D}$}}
-                    {
-                        \texttt{Go on the other side of subtree} 
-                    }
-                        {
-                            \texttt{Go up another $level$}
-                        }
-            }
-            {
-                \texttt{return ResultList}
-            }
-        
-    }
-    \caption{$K$NN Query Algorithm for $K$D-Tree}
-    \label{$K$NN_Query_Algorithm_$K$D-Tree}
-\end{algorithm}
+\noindent
+\textbf{Nearest Neighbours}
 
-In algorithm \ref{$K$NN_Query_Algorithm_$K$D-Tree},
-\begin{enumerate}
-    \item Start with the root to traverse tree until we reach the leaf. We find the subtree where the new $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y})$ could be added and finally reach the leaf of this subtree. 
+During the query for the nearest neighbour, we use two global variables \texttt{best} and \texttt{best\_dist} to store the nearest node and the nearest distance. During the traversing of the tree, we update the best points and the best distance if we find a closer node to the query point.
 
-    \item Calculate the square of the euclidean distance of this point from the $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y})$. We add it to the list and push and pop values from the list depending on the distances we calculate while traversing the tree upwards from here.
-    
-    \item From the leaf we could either go up another level or go the other side of the subtree to get a point that could have a distance smaller than the last best calculated distance in the list. 
-    
-    \item Once we make a decision in the above step, we can recursively traverse the tree upwards until we reach the root. 
-\end{enumerate}
+Similar to the pruning strategy in the range query with $K$D-tree, we can calculate the distance between the query point to a bounding box of a node. If the query point is inside the bounding box, then the distance will be $0$. If the current shortest distance is larger than or equal to the distance between the query point and the bounding box, then there will not be any points that are closer to the query point than the current closes point. Therefore, we can avoid searching the subtree that will not contain any closer points.
 
+With the pruning strategy, we traverse the tree in an order that maximises the change for pruning. We always start with the subtree that are closer to the query point. In other words, we search the subtree that would contain the query point if we want to insert the query point below the root of a subtree.
 
 \begin{mscexample}
-
-
-    \begin{minipage}[t]{\linewidth}
-        \centering
-        \includegraphics[width=6cm]{graphs/KD-Tree_KNN_Tree.png}
-        % \caption{$K$D-Tree for KNN Query}
-        \label{fig:$K$D-Tree_for_KNN Query}
-        \hfill
-        \includegraphics[width=6cm]{graphs/KD-Tree_KNN_plot.png}
-        % \caption{$K$D-Tree KNN Plot on 2-dimentional plane}
-        \label{fig:KD_Tree_KNN_Plot}
-    \end{minipage}
-	For example, we have Point list as $$((5,4),(2,6),(13,3),(8,7),(3,1),(10,2))]$$ 
+	For example, we demonstrate an example $K$NN query $\mathcal{K}(5, 35, k)$ whose query point is $(5, 35)$ in Fig. \ref{fig:kdtree-knnquery}. We perform the nearest neighbour search in the following order.
 	
-	\textbf{Test point; $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y})$} = $(9,4)$\\
-	
-% 	we will have a tree structure as shown in \ref{fig:$K$D-Tree_for_KNN Query} and it's plot on $2$-dimensional plane is shown in \ref{fig:KD_Tree_KNN_Plot}. *****\ref{fig:KD_Tree_KNN_Plot} \\
-% 	In the fig above, we can see that although point $(8,7)$ is the leaf we will reach when we traverse the tree to search where test point $(9,4)$ can be added, it is not in fact the nearest point to the test point. \\
-	
-	Below are the steps followed to get the $4$ nearest neighbours:
 	\begin{enumerate}
-    	\item Traverse to $(8,7)$ by searching for a location where $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y})$ could be added.
-    	
-    	\item Add $(8,7)$ to result list.
-    	
-    	\item Calculate the distance of $(8,7)$ and $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y})$. Save the distance as $\mathcal{D}$
-    	
-    	\item Make a decision whether to traverse to the other side of the subtree to point $(10,2)$ by checking the perpendicular distance of $(13,3)$ with $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y})$ and compare this with $\mathcal{D}$.(We do this to verify if there is even a possibility to find a point smaller than the last best distance on the other side of the subtree.) 
-    	
-    	\item Since the perpendicular distance is smaller than the best calculated $\mathcal{D}$ ($A > B$), we will check the distance of $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y})$ and $(10,2)$. This distance in our case is indeed smaller than the best calculated distance of $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y})$ with $(8,7)$ so far.
-    	
-    	\item Add $(10,2)$ to result list.
-    	
-    	\item Similarly, we traverse until we have $4$ nearest neighbour to $\mathcal{P}(\boldsymbol{x}, \boldsymbol{y})$ in the list.
+		\item First we start with the root node, which is $(30,40)$. The bounding box of the root node is the whole space, and we cannot apply the pruning strategy. If we want to insert the query point $(5, 35)$ into the subtree rooted at the root node, we will insert it into the left subtree by comparing the $x$-coordinate. Hence, we go to the left subtree in the next step. At the root level, the best distance is $\sqrt{(30-5)^2+(40-35)^2}=25.5$ and the closet point is $(30,40)$.
+		\item Then we traverse to the left subtree and calculate the distance. The bounding box of this node is $\boldsymbol{l}=(0,0)$ and $\boldsymbol{u}=(30,100)$. The distance between the query point and the bounding box will be $0$ as it contains the query point. Hence we cannot apply the pruning strategy. The distance is $10$ and it is smaller than the old distance. Hence at this level, the best distance is $10$ and the closest point is $(5,25)$. Then if we want to insert the query point into the subtree under $(5,25)$, we will compare the $y$-coordinate and then we need to first traverse the right subtree.
+		\item As there is no right subtree, we still go to the left subtree. The bounding box of this node is $\boldsymbol{l}=(0,0), \boldsymbol{u}=(30,25)$ and the distance between the bounding box and the query point is $10$. The distance is the same with the best distance so far. Therefore we apply the pruning strategy and do not need to traverse the subtree.
+		\item Similarly, for the right subtree of the root node, $(70,70)$ whose bounding box is $\boldsymbol{l}=(30,0), \boldsymbol{u}=(100,70)$, the distance between the query point and the bounding box is $\sqrt{(30-5)^2+(40-35)^2}=25.5$, which is larger than the current best distance. Therefore we apply the pruning strategy and do not traverse the right subtree of the root.
 	\end{enumerate}
 \end{mscexample}
+
+\noindent
+\textbf{$K$-Nearest Neighbours}
+
+For general $K$NN query, we follow the same traversal and pruning strategy. The only difference is that we use a max heap of size $k$ to store the best $K$ distance we have.
+
+A max heap is a special binary tree that satisfies a property: if \texttt{P} is a parent node of \texttt{C}, then the data in \texttt{P} is greater than or equal to the data in \texttt{C}. We store the max heap as a binary tree and use a function \texttt{heapify} to make it a max heap.
+
+Then we following the steps below to construct the fill the max heap:
+
+\begin{enumerate}
+	\item First we construct an empty binary tree. 
+	\item We traverse the $K$D-tree with the pruning strategy as described in the nearest neighbour query. For each element, we decide if we need to push it into the max heap in the following way:
+	\begin{itemize}
+		\item For the first $K$ elements, it will be added to the binary tree no matter how close it is to the query point. We call the \texttt{heapify} function to ensure the resulting binary tree is a max heap.
+		\item After the $K$th element, we compare the distance between the element and the query point with the root of the binary tree. Since we have used \texttt{heapify} and the root is the largest distance so far.
+		\begin{itemize}
+			\item If the distance is smaller than the root, then we make it root and call \texttt{heapify}.
+			\item Otherwise, we ignore it.
+		\end{itemize}
+	\end{itemize}
+	\item Finally the max heap has $K$ smallest elements and the root of the heap is the $K$th smallest element.
+\end{enumerate}
