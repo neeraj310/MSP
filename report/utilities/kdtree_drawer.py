@@ -6,6 +6,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 import matplotlib
+from matplotlib.patches import Rectangle
 matplotlib.rcParams['text.usetex'] = True
 
 class KDTree:
@@ -70,7 +71,7 @@ class KDTree:
 #------------------------------------------------------------
 # Create a set of structured random points in two dimensions
 
-X=[[30,40],[5,25],[10,12],[70,70],[50,30],[35,45]]
+X=[[30,40],[5,25],[10,12],[70,70],[50,30],[35,45], [4,10]]
 
 #------------------------------------------------------------
 # Use our KD Tree class to recursively divide the space
@@ -97,11 +98,13 @@ def draw_regions():
     fig.suptitle('$k$d-tree Example')
     plt.show()
 
-def draw_tree():
+def draw_tree(with_query=False, bbox=False):
     for each in X:
         plt.scatter(each[0], each[1])
         if each==[30,40]:
             plt.annotate(r"$({},{})$".format(each[0], each[1]), (each[0]-10, each[1]+1))
+        elif each==[4,10]:
+            plt.annotate(r"$({},{})$".format(each[0], each[1]), (each[0]-4, each[1]-5))
         else:
             plt.annotate(r"$({},{})$".format(each[0], each[1]), (each[0]+1, each[1]+1))
     plt.vlines(30, 0, 100)
@@ -110,8 +113,20 @@ def draw_tree():
     plt.hlines(25, 0, 30)
     plt.hlines(45, 30, 50)
     plt.hlines(70, 30, 100)
+    plt.hlines(10, 0, 10)
+    if with_query:
+        rect = Rectangle((25, 0),80,80,linewidth=1,edgecolor='r',facecolor='none', linestyle=':')
+        ax = plt.gca()
+        ax.add_patch(rect)
+        ax.annotate(r'$\mathcal{Q}((25,0),(100,80))$', (80, 81))
+    if bbox:
+        rect = Rectangle((30,0),20, 70, linewidth=0, fill=None, hatch="//")
+        ax=plt.gca()
+        ax.add_patch(rect)
+        ax.annotate(r'Bounding Box of (35,45)', (-3,55))
     plt.axis('off')
-    plt.show()
+    # plt.show()
+    plt.savefig('./graphs/implementation/queries/range_query_kdtree.pdf', transparent=True)
 
 if __name__=="__main__":
-    draw_tree()
+    draw_tree(True, True)

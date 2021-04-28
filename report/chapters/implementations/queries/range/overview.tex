@@ -1,0 +1,23 @@
+A range query is a database operation that retrieves all the records that lies in a range. In this project, we perform range query on $2$-dimensional data only. In addition, we only consider a range query where the range is defined as a rectangle. Under these assumptions, a range query can be formalised as a query $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})$ where $l,u\in\mathbb{R}^2$ and $split\_axis$ as $\mathcal{S}$.
+
+\begin{mscexample}
+	For example, assume we have the points
+	$$
+	[(1,2), (3,4), (3.5, 4), (5,6)]
+	$$
+	and the range query $\mathcal{Q}((2,3), (5,5))$, as shown below:
+	\centering
+   	\includegraphics[width=10cm]{graphs/implementation/queries/range_query.pdf}
+   	\label{fig:range_query_demo}
+   	\captionof{figure}{A Range Query Example where $\mathcal{Q}(\boldsymbol{l}, \boldsymbol{u})=\mathcal{Q}((2,3),(5,5))$}
+	
+In this example, the range query should return the points that lies inside the red rectangle, i.e. $((3,4), (3.5, 4))$.
+\end{mscexample}
+
+\subsubsection{Range Query with $K$D-Tree}
+
+\input{chapters/implementations/queries/range/kdtree}
+
+\subsubsection{Range Query with LISA}
+
+\input{chapters/implementations/queries/range/lisa}

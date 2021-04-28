@@ -6,56 +6,40 @@ Similar to search with binary search tree, we also need to traverse the tree in 
     \SetKwInOut{Output}{Output}
     \Input{\texttt{t}: The node being searched; \texttt{x}: The query key; \texttt{cd}: Current dimension}
     \Output{\texttt{n}: the node that contains the query key}
-    \eIf {node is leaf}
-        {
-            \texttt{return value associated with node}
-        }
-        {
-        \eIf{\texttt{$\mathcal{T}(\boldsymbol{x}, \boldsymbol{y})$ $\mathcal{S}$ value > node $\mathcal{S}$ value}}
-            {\texttt{Traverse to node.rightChild}\\ \texttt{SEARCH\_POINT\_QUERY($dim$, $(\mathcal{S}+1) \% dim$)}}
-        {\texttt{Traverse to node.leftChild}\\ 
-        \texttt{SEARCH\_POINT\_QUERY($dim$, $(\mathcal{S}+1) \% dim$)}}
-        }
-    \caption{Point Query Algorithm for $K$D-Tree}
+    \texttt{DIM=2}\\
+    \uIf{\texttt{t==NULL}} {
+    	\Return \texttt{NULL}
+    }
+    \uIf{\texttt{x[0]==t.data[0]} and \texttt{x[1]==t.data[1]}} {
+    	\Return \texttt{t}
+    }
+    \uElseIf{\texttt{x[cd]<t.data}} {
+    	\Return \texttt{pointSearch(t.left, x, (cd+1) \% DIM)}
+    }
+    \uElseIf{\texttt{x[cd]>t.data}} {
+    	\Return \texttt{pointSearch(t.right, x, (cd+1) \% DIM)}
+    }
+    \caption{Point Query with $K$D-Tree}
     \label{algo: point_query_kdtree}
 \end{algorithm}
 
-In algorithm \ref{Point_Query_Algorithm_$K$D-Tree} 
+The point query works in the following steps:
 
 \begin{enumerate}
-
-    \item On line $2$, start traversing the tree from the root. 
-    
-    \item On line $3$, check if the point is a leaf. If it is a leaf then we can simply return the value associated with the point.
-    
-    \item On line $5$, if root point is not a leaf then we make a decision whether to go left or right.
-    
-    \item On line $6$, we make this decision based on $\mathcal{S}$ value associated with the point. At the root, we start with $\mathcal{S}$ as $0$ ($x\_axis$). 
-    \item On line $8$ and $11$, we then recursively call the function SEARCH\_POINT\_QUERY() and update the $\mathcal{S}$ between $0$ and $1$ alternatively as we increase levels until we reach a leaf.
-
+	\item From Line $2$ to $3$, we first check if current node is \texttt{NULL}. If so, that means that we have already traversed all the possible nodes and found nothing. In this case, the query returns \texttt{NULL}.
+	\item From Line $4$ to $5$, we check if the current node contains the same key as the query key. If so, the current node is the node that we are looking for. Hence, we return the current node in this case.
+	\item Otherwise, from Line $6$ to $9$, we check if the current dimension of the query key is smaller, larger or equal to the current dimension of the data in the node.
+	\begin{enumerate}
+	\item If it is smaller, then we search on the left subtree of current node, with the same query key and switched dimension.
+	\item If it is larger, then we search on the right subtree of current node, with the same query key and switched dimension.
+	\end{enumerate}
 \end{enumerate}
 
-\begin{mscexample}
-    \begin{minipage}[t]{\linewidth}
-        \centering
-        \includegraphics[width=7cm]{graphs/KD_Tree_Point_Query_Tree.png}
-        % \caption{$K$D-Tree for Point Query (TestPoint $\mathcal{T}(\boldsymbol{x}, \boldsymbol{y})$ = $(5,5)$ is highlighted in orange)}
-        \label{fig:$K$D-Tree_for_Point Query}
-    \end{minipage}
-    
-    \textbf{Case 1} : For example we have a tree with Point list as 
-	$$[(5,6),(4,2),(7,9),(3,1),(5,5),(10,7),(2,11)]$$
-    Suppose we are looking for $\mathcal{T}(\boldsymbol{x}, \boldsymbol{y})$ = $(5,5)$.
-    Below are the steps we follow in order to search the point:
-    \begin{enumerate}
-         \item We start with root point $(5,6)$ and $\mathcal{S}$ as $0$. 
-         
-         \item Since $\mathcal{S}$ is $0$, we compare the $x\_axis$ of the $\mathcal{T}(\boldsymbol{x}, \boldsymbol{y})$ and root point. Since they are equal($5 = 5$), we move left of the root node. 
-         
-         \item Increase $\mathcal{S}$ to $1$. 
-         
-         \item Compare the $y\_axis$ of point $(4,2)$ and  $\mathcal{T}(\boldsymbol{x}, \boldsymbol{y})$. Since $5 > 2$, we move to the right of the tree. 
-         
-         \item Since node $(5,5)$ is a leaf, we return the value associated with the point. 
-    \end{enumerate}
+\begin{mscexample}    
+	In the previous figure \ref{fig:kd_tree_example}, we showed an example $K$D-tree. If we want to search for $(50, 30)$ in this tree, we would follow the following steps:
+	\begin{enumerate}
+		\item We first check the root node and compares the $x$-coordinate. As $50>30$, we go to the right subtree of the root node.
+		\item Then in the subtree, we compare the $y$-coordinate. As $50<70$, we go to the left subtree of this node.
+		\item Then in the left subtree, the termination condition is reached, hence we return this node as result.
+	\end{enumerate}
 \end{mscexample}
