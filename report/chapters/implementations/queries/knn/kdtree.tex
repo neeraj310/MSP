@@ -44,13 +44,13 @@ For general $K$NN query, we follow the same traversal and pruning strategy. The 
 
 A max heap is a special binary tree that satisfies a property: if \texttt{P} is a parent node of \texttt{C}, then the data in \texttt{P} is greater than or equal to the data in \texttt{C}. We store the max heap as a binary tree and use a function \texttt{heapify} to make it a max heap.
 
-Then we following the steps below to construct the fill the max heap:
+Then we follow the steps below to construct and fill the max heap:
 
 \begin{enumerate}
 	\item First we construct an empty binary tree. 
 	\item We traverse the $K$D-tree with the pruning strategy as described in the nearest neighbour query. For each element, we decide if we need to push it into the max heap in the following way:
 	\begin{itemize}
-		\item For the first $K$ elements, it will be added to the binary tree no matter how close it is to the query point. We call the \texttt{heapify} function to ensure the resulting binary tree is a max heap.
+		\item For the first $K$ elements, they will be added to the binary tree no matter how close it is to the query point. We call the \texttt{heapify} function to ensure the resulting binary tree is a max heap.
 		\item After the $K$th element, we compare the distance between the element and the query point with the root of the binary tree. Since we have used \texttt{heapify} and the root is the largest distance so far.
 		\begin{itemize}
 			\item If the distance is smaller than the root, then we make it root and call \texttt{heapify}.
@@ -59,3 +59,45 @@ Then we following the steps below to construct the fill the max heap:
 	\end{itemize}
 	\item Finally the max heap has $K$ smallest elements and the root of the heap is the $K$th smallest element.
 \end{enumerate}
+
+Formally, we use the algorithms as illustrated in Algo. \ref{algo:kd-tree-knn} to perform $K$NN query with $K$D-tree.
+
+% Please double check this algorithm.
+
+\begin{algorithm}[H]
+\SetAlgoLined
+\SetKwInOut{Input}{input}
+\Input{\texttt{P}: The query point; \texttt{T}: The root node of a subtree to be searched; \texttt{K}: The number of nearest neighbours \texttt{H}: the binary tree that storing the result; \\ \texttt{cd}: Current dimension}
+\KwResult{\texttt{H}: The binary tree that storing the result}
+	\texttt{DIM = 2}\\
+	\uIf{\texttt{T==NULL}} {
+		\Return ;
+	}
+	\uIf{\texttt{H.size()<K}} {
+		\texttt{H.insert(T)}\\
+		\texttt{H.heapify()}\\
+		\Return ;
+	}
+	\uElseIf{\texttt{dist(P, T.range) > H.root.data}} {
+		\Return ;
+	}
+	\uElse{
+		\uIf{\texttt{dist(P, T.data) < H.root.data}} {
+			\texttt{N=NewBinaryTreeNode(dist(P, T.data))}\\
+			\texttt{N.insert(H)}\\
+			\texttt{N.heapify()}\\
+			\texttt{H=N}\\
+		}
+		\uIf{\texttt{P[cd]<T.data[cd]}}{
+			\texttt{KNN(P, T.left, K, H, (cd+1)\%DIM)} \\ 
+			\texttt{KNN(P, T.right, K, H, (cd+1)\%DIM)}
+		}
+		\uElse{
+			\texttt{KNN(P, T.right, (cd+1)\%DIM, K, H)} \\ 
+			\texttt{KNN(P, T.left, (cd+1)\%DIM, K, H)}
+
+		}
+	} 
+ \caption{$K$D-tree $K$NN Query}
+ \label{algo:kd-tree-knn}
+\end{algorithm}
