@@ -9,7 +9,7 @@ Formally, we define the index of each record as $x$ and the corresponding locati
 In order to ensure the learned index model to be the desired CDF, we need to make the following assumptions:
 
 \begin{enumerate}
-	\item All data records are stored statically in database, hence we do not take insertion and deletion into consideration. If there is some insertion or deletion, then the total size of the data records, $N$, will be different. Therefore, if insertion or deletion are involved, we cannot calculate the position as we show above.
+	\item All data records are stored statically. Hence we do not take insertion and deletion into consideration. If there is some insertion or deletion, then the total size of the data records, $N$, will be different. Therefore, if insertion or deletion are involved, we cannot calculate the position as we show above.
 	\item All data records are sorted according to theirs keys $\boldsymbol{X}$. Only when the data records are sorted according to the keys, we can regard the index model as CDF, i.e. $F(x)=\mathbb{P}(X\leq x)$.
 	\item For simplicity, we assume that our data records are stored in a continuous memory space. In other words, the indices of pages in this project is continuous integers and all the data records are loaded into memory.
 \end{enumerate}
