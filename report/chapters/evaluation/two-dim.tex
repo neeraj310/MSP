@@ -3,8 +3,8 @@ For two dimensional data, the evaluation covers the following tasks:
 \begin{itemize}
  	\item Find hyper-parameters for the LISA Baseline model empirically.
 	\item Find hyper-parameters for the LISA model empirically.
-	\item Compares the performance between $K$D-tree, LISA Baseline and LISA models for point query.
-	\item Compare the performance between $K$D-tree, LISA Baseline and LISA models for range query.
+	\item Compares the performance between $K$D-tree, LISA Baseline and LISA models for the point query.
+	\item Compare the performance between $K$D-tree, LISA Baseline and LISA models for the range query.
 	\item Compare the performance between $K$D-tree and LISA models for KNN query. $K$NN Query has not been implemented for LISA Baseline as there is no description of $K$NN Query for Baseline model in the paper. 
 \end{itemize}
 
@@ -13,19 +13,19 @@ For two dimensional data, the evaluation covers the following tasks:
 For two dimensional case, we manually generate three columns of the data:
 
 \begin{itemize}
-	\item The first two columns contain the  2 dimensional keys $\boldsymbol{X} \in \mathbb{R}^{2}$, which are independently sampled from Lognormal Distribution. Data set  
-contains 190 million key value pairs.
-	\item Then we assign the keys into different pages according to a preset parameter $N_{page}$ for page size. Specifically, the first $N_{page}$ keys will be assigned into the first page, the second $N_{page}$ keys will be assigned into the second page and so on so forth. After the assignments, we set the second column $Y$ to be the page index of the corresponding $x$.
+	\item The first two columns contain the  2-dimensional keys $\boldsymbol{X} \in \mathbb{R}^{2}$, which are independently sampled from a lognormal Distribution. The dataset contains 190 million key-value pairs.
+	\item Then we assign the keys into different pages according to a preset parameter $N_{page}$ for page size. Specifically, the first $N_{page}$ keys will be assigned to the first page, the second $N_{page}$ keys will be assigned into the second page and so on so forth. After the assignments, we set the second column $Y$ to be the page index of the corresponding $x$.
 \end{itemize}
 
-Our final data-set consists of 190 million key value pairs that are distributed under log-normal distribution
-As discussed in previous section, there are multiple challenges in using  the complete data-set for training and hyper-parameters tuning. Even on google cloud server, running experiments with the full data take considerable long times (Lisa model took 26 hours to build), we had limited cloud server budget and a large number of experiments to run. Therefore, for two dimensional indexes evaluation, we have used sampling to generate smaller training datasets.   
+Our final data-set consists of 190 million key-value pairs that are distributed under lognormal distribution.
 
+As discussed in previous section, there are multiple challenges in using the complete dataset for training and hyper-parameters tuning. Even on google cloud server, running experiments with the full data take considerable long times (Lisa model took 26 hours to build), we had limited cloud server budget and a large number of experiments to run. Therefore, for two dimensional indexes evaluation, we have used sampling to generate smaller training datasets.   
 
 \subsection{Hyper-parameters Search}
-After generating dataset as mentioned in previous section, we sample a smaller subset from it. We repeat our experiments for 3 different sample sizes of 10000, 100000 and 1000000 points. Test data is a copy of training data for all our experiments. For Baseline and Lisa models, final prediction is given by linear search through a range of values (identified as a Cell for Baseline and Shard for LISA model) and mean square error (MSE) is zero as test points are already learned during training. This is where Learned Index models differ from traditional machine learning models where model performance is evaluated on unseen data. 
 
-\subsubsection {Hyper-parameter search for the LISA Baseline implementation}
+After generating dataset as mentioned in previous section, we sample a smaller subset from it. We repeat our experiments for $3$ different sample sizes of 10000, 100000 and 1000000 points. Test data is a copy of training data for all our experiments. For Baseline and Lisa models, final prediction is given by linear search through a range of values (identified as a Cell for Baseline and Shard for LISA model) and mean square error (MSE) is zero as test points are already learned during training. This is where Learned Index models differ from traditional machine learning models where model performance is evaluated on unseen data. 
+
+\subsubsection {Hyper-parameter search for the LISA baseline}
 Baseline model has one hyper-parameter: N (Number of cells specifying the number of equal length intervals into which mapped values are divided). The point query search consists of two parts, first is binary search to locate the cell into which the query key is located, followed by sequentially comparison of the query key value with keys in the found cell until a match is found. The time complexity of first search is $log_{2}N_{1}$, where $N_{1}$ is the number of cells. The time complexity of second search is  $ \left \lceil {N_{2} / 2}\right \rceil $, where $N_{2}$ is the number of keys per cell.  
 
 \begin{figure}

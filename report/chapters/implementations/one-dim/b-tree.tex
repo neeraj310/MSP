@@ -38,9 +38,9 @@ In Fig. \ref{fig: B-tree}, we demonstrate an example B-tree whose degree is $2$.
 
 \subsubsection{Insertion in a B-tree}
 
-With a B-tree, we cannot simply create a new leaf node and insert the new key as we do with binary search tree, as the resulting tree will fail to be a valid B-tree. Instead, we need to insert the new key into an existing leaf node. If the node is not full, we can safely insert the new key. Otherwise, we will need to split the node around the median of its keys into two new nodes and promote the median key into its parent. In this process, we need to split the parent if its parent is also full.
+With a B-tree, we cannot simply create a new leaf node and insert the new key as we do with a binary search tree, because the resulting tree will fail to be a valid B-tree. Instead, we need to insert the new key into an existing leaf node. If the node is not full, we can safely insert the new key. Otherwise, we will need to split the node around the median of its keys into two new nodes and promote the median key into its parent. In this process, we need to split the parent if its parent is also full.
 
-In our implementation of insertion, we travel down the tree and search for the position where the key should be inserted and we split each full node along the way. By doing so, whenever we want to split a full node, we are assured that its parent is not full. The overall algorithm is shown in Algo. \ref{algo:b-tree-insertion}, which contains methods \texttt{splitChild} and \texttt{InsertNonFull} as described in Algo. \ref{algo:b-tree-split-child} and Algo. \ref{algo:b-tree-insert-nonfull} respectively.
+In the insertion, we travel down the tree and search for the position where the key should be inserted. During the traverse, we split each full node along the way. By doing so, whenever we want to split a full node, we are assured that its parent is not full. The overall algorithm is shown in Algo. \ref{algo:b-tree-insertion}, which contains methods \texttt{splitChild} and \texttt{InsertNonFull} as described in Algo. \ref{algo:b-tree-split-child} and Algo. \ref{algo:b-tree-insert-nonfull} respectively.
 
 \begin{algorithm}[H]
 \SetAlgoLined

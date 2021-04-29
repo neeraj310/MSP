@@ -11,10 +11,10 @@ For one dimensional case, we manually generate two columns of the data:
 
 \begin{itemize}
 	\item The first column contains the keys $X$, which is randomly sampled from a given distribution.
-	\item Then we assign the keys into different pages according to a preset parameter $N_{page}$ for page size. Specifically, the first $N_{page}$ keys will be assigned into the first page, the second $N_{page}$ keys will be assigned into the second page and so on so forth. After the assignments, we set the second column $Y$ to be the page index of the corresponding $x$.
+	\item Then we assign the keys into different pages according to a preset parameter $N_{page}$ for page size. Specifically, the first $N_{page}$ keys will be assigned to the first page, the second $N_{page}$ keys will be assigned to the second page and so on so forth. After the assignments, we set the second column $Y$ to be the page index of the corresponding $x$.
 \end{itemize}
 
-%%TODO: change this to a graph with multiple distributions
+%TODO: change this to a graph with multiple distributions
 
 \begin{figure}[htp]
     \centering
@@ -29,20 +29,20 @@ We first generate $10,000$ data points where $X$ is from a lognormal distributio
 
 We use three groups to find the best recursive model for lognormal data.
 \begin{itemize}
-	\item All models are fully connected neural networks. The number of second-level models are $200, 400,$ and $600$ respectively. The number of third-level models are $2000, 4000$ and $6000$ for each number of second-level models.
+	\item All models are fully connected neural networks. The numbers of second-level models are $200, 400,$ and $600$ respectively. The numbers of third-level models are $2000, 4000$ and $6000$ for each number of second-level models.
 	\item All models are linear regression models. The number of second-level models are $200, 400,$ and $600$ respectively. The number of third-level models are $2000, 4000$ and $6000$ for each number of second-level models.
-	\item Models are combinations of fully connected neural networks and linear regression models. The numbers of second-level and third-level models are determined by the best settings in previous two group.
+	\item Models are combinations of fully connected neural networks and linear regression models. The numbers of second-level and third-level models are determined by the best settings in the previous two group.
 \end{itemize}
 
 \begin{figure}
 	\input{graphs/evaluation/one-d/exp1}
 \end{figure}
 
-From the experiment results, we found that the second setting in group 1 (1 FCN model as root, 200 FCN models as second level models and 4000 FCN models as third level models) is the best regarding the mean square error. We also have the following findings in this searching process.
+From the experiment results, we found that the second setting in group 1 (1 FCN model as root, 200 FCN models as second-level models and 4000 FCN models as third-level models) is the best regarding the mean square error. We also have the following findings in this searching process.
 
 \begin{itemize}
-	\item Generally, the average error in group $1$, where all models are fully connected neural networks is less than the error in group $2$. Fully connected neural networks have a potential to be more accurate, i.e. it could achieve a small error if we tuned the models parameters properly.
-	\item Tuning a model is tedious and can be costly. There are lots of hyper-parameters to choose from, such as the number of models in each level, types of models in each level, number of levels, and the internal hyper-parameters in each model. Using grid search, as we did in this experiment can be costly and time-consuming.
+	\item Generally, the average error in the group $1$, where all models are fully connected neural networks, is less than the error in the group $2$. We conclude that the fully connected neural networks have the potential to be more accurate, i.e. it could achieve a small error if we tuned the parameters properly.
+	\item Tuning a model is tedious and can be costly. There are lots of hyper-parameters to choose from, such as the number of models in each level, types of models in each level, number of levels, and the internal hyper-parameters in each model. Using grid search, as we did in this experiment, can be costly and time-consuming.
 \end{itemize}
 
 \subsection{Comparisons across Distributions}
@@ -51,7 +51,7 @@ After the search process for a recursive model, we then conduct experiments on s
 
 \begin{itemize}
 	\item The $\boldsymbol{X}$ is generated from \textit{uniform}, \textit{normal} and \textit{lognormal} distribution.
-	\item For each distribution, we generate $1$ thousand, $10$ thousands, $100$ thousands and $1$ million data points. We then assign the generated data points into pages where $N_{page}=10$.
+	\item For each distribution, we generate $1$ thousand, $10$ thousand, $100$ thousand and $1$ million data points. We then assign the generated data points into pages where $N_{page}=10$.
 	\item We use a B-Tree with degree=$20$, a fully connected neural network with two layers and 32 nodes per layer, and a recursive model with 200 second-layer models and 4000 third-layer models.
 \end{itemize}
 
@@ -59,7 +59,7 @@ We compare the following performance metrics:
 
 \begin{itemize}
 	\item The query time per key and the memory usage among three index models.
-	\item The mean square error caused by fully connected network and recursive models, across different distributions.
+	\item The mean square error caused by the fully connected network and the recursive model across different distributions.
 	\item The construction time among three index models.
 \end{itemize}
 
@@ -90,12 +90,12 @@ We compare the following performance metrics:
 \end{figure}
 
 \begin{mscconclusion}
-	From Fig \ref{fig:exp2_1}, we analysed the time complexities for query and the space complexity for storing three different index models.
+	From Fig \ref{fig:exp2_1}, we analyse the time complexities for query and the space complexity for storing three different index models.
 	
 	\begin{enumerate}
 	\item From Fig \ref{fig:exp2_1_btree}, we verified that the average query time per key for a B-Tree is growing as the number of data points is increasing. It grows with a complexity of $\mathcal{O}(\log n)$, i.e. it grows slower when there are more data points. 
-	\item From Fig \ref{fig:exp2_1_fcn}, we found that the memory usage of a fully connected neural network is significantly less than the memory usage of B-Tree. Meanwhile, the fully connected neural network takes constant memory usage, as there are fixed number of nodes in the neural network. Similarly, the average query time is also a constant in theory. In the experiments, the average query time is changing, but very likely caused by turbulence.
-	\item From Fig \ref{fig:exp2_1_rmi}, we found that the memory usage of a recursive model is significantly higher than the memory usage of a fully connected neural network, but still less than a B-Tree, which is because the recursive model consists of thousands fully connected network. The memory usage of a recursive model is fluctuating, as the actually used number of fully connected network varies. The query time  is higher than B-Tree and single fully connected network, but still a constant in theory, as there are only fixed number of computations.
+	\item From Fig \ref{fig:exp2_1_fcn}, we found that the memory usage of a fully connected neural network is significantly less than the memory usage of B-Tree. Meanwhile, the fully connected neural network takes constant memory usage, as there is a fixed number of nodes in the neural network. Similarly, the average query time is also a constant in theory. In the experiments, the average query time is changing but likely caused by turbulence.
+	\item From Fig \ref{fig:exp2_1_rmi}, we found that the memory usage of a recursive model is significantly higher than the memory usage of a fully connected neural network, but still less than a B-Tree, which is because the recursive model consists of thousands fully connected network. The memory usage of a recursive model is fluctuating, as the actually used number of the fully connected network varies. The query time is higher than B-Tree and single fully connected network, but still a constant in theory, as there is only a fixed number of computations.
 	\end{enumerate}
 \end{mscconclusion}
 
@@ -126,10 +126,11 @@ We compare the following performance metrics:
 \end{figure}
 
 \begin{mscconclusion}
-	From Fig \ref{fig:exp2_2}, we analysed the errors of fully connected neural network and recursive model on different distributed dataset.
+	From Fig \ref{fig:exp2_2}, we analyse the errors of fully connected network and recursive model on several different distributed datasets.
 	\begin{enumerate}
-		\item From Fig \ref{fig:exp2_2_uniform}, we found that both fully connected neural network and recursive model are capable of modelling uniformly distributed dataset with a rather low error. In the mean while, fully connected neural network could achieve less error, especially when there is large amount of data.		\item From Fig \ref{fig:exp2_2_normal}, we found that the error is increasing exponentially as the number of data points is increasing. The error in fully connected neural network is significantly higher than recursive model.
-		\item From Fig \ref{fig:exp2_2_lognormal}, we found that the error from recursive model is significantly less than the error in fully connected neural network. Combined with \ref{fig:exp2_2_normal} and \ref{fig:exp2_2_uniform}, we conclude that the recursive model could surpass fully connected network when the data is not uniformly distributed. That means, the fully connected network is suitable for uniformly distributed data. We will analyse this property in more detail in the chapter \textit{Insights and Findings}.
+		\item From Fig \ref{fig:exp2_2_uniform}, we found that both fully connected neural network and recursive model are capable of modelling uniformly distributed dataset with a rather low error. The fully connected neural network could achieve relatively less error, especially when there is a large amount of data.		
+        \item From Fig \ref{fig:exp2_2_normal}, we found that the error is increasing exponentially as the number of data points is increasing. The error in the fully connected neural network is significantly higher than the recursive model.
+		\item From Fig \ref{fig:exp2_2_lognormal}, we found that the error from the recursive model is significantly less than the error in the fully connected neural network. Combined with \ref{fig:exp2_2_normal} and \ref{fig:exp2_2_uniform}, we conclude that the recursive model could surpass fully connected network when the data is not uniformly distributed. That means the fully connected network is suitable for uniformly distributed data. We will analyse this property in more detail in the chapter \textit{Insights and Findings}.
 	\end{enumerate}
 \end{mscconclusion}
 
@@ -160,9 +161,9 @@ We compare the following performance metrics:
 \end{figure}
 
 \begin{mscconclusion}
-	In \ref{fig:exp2_3}, we analysed the construction time of different models.
+	In \ref{fig:exp2_3}, we analyse the construction time of different models.
 	\begin{enumerate}
-		\item As shown in \ref{fig:exp2_3_btree} and \ref{fig:exp2_3_fcn}, the construction time of both B-Tree and fully connected neural network is increasing almost linearly as the number of datapoints is increasing. Theoretically, the construction time for B-Tree is $\mathcal{O}(n\log n)$ and $\mathcal{O}(n)$ for fully connected neural network.
+		\item As shown in \ref{fig:exp2_3_btree} and \ref{fig:exp2_3_fcn}, the construction time of both B-Tree and fully connected neural network is increasing almost linearly as the number of data points is increasing. Theoretically, the construction time for B-Tree is $\mathcal{O}(n\log n)$ and $\mathcal{O}(n)$ for fully connected neural network.
 		\item In \ref{fig:exp2_3_rmi}, we found that the construction time of recursive model is increasing as well. The time in construction varies by two factors:
 			\begin{itemize}
 				\item The number of data points will affect the construction time.
@@ -171,26 +172,26 @@ We compare the following performance metrics:
 	\end{enumerate}
 \end{mscconclusion}
 
-\subsection{Comparisons on Large Dataset} The last and largest dataset that we used is a large dataset that contains $190$ million key value pairs that are distributed under lognormal distribution. There are two challenges in this task:
+\subsection{Comparisons on Large Dataset} The last and largest dataset that we used is a large dataset that contains $190$ million key-value pairs that are distributed under lognormal distribution. There are two challenges in this task:
 
 \begin{enumerate}
-	\item The training set is too large to be trained and tuned. As our implementation only supports single process, it would take a tediously long time to train the recursive model.
-	\item It takes super long time (several days in our settings) to evaluate on the very large dataset, as only one CPU thread will be used.
+	\item The training set is too large to be trained and tuned. As our implementation only supports a single process, it would take a tediously long time to train the recursive model.
+	\item It takes a super long time (several days in our settings) to evaluate on the very large dataset, as only one CPU thread will be used.
 \end{enumerate}
 
 To tackle these challenges, we take the following strategies:
 
-\textbf{Training on Sampled Dataset} We first randomly and uniformed sample from the whole training dataset. By sampling uniformly, we could keep the shape of the distribution unchanged. Assume we sampled $S$ data pairs from the whole training dataset which contains $N$ pairs, then we define the sampling ratio as $R=\frac{S}{N}$. We then map the output $\tilde{y}$ from our index model to its approximate position by $\hat{y}=\frac{\tilde{y}}{R}$. An example is illustrated in Example 3.\ref{mscexample:sampled_training}.
+\textbf{Training on Sampled Dataset} We first randomly and uniformed sample from the whole training dataset. By sampling uniformly, we could keep the shape of the distribution unchanged. Assume we sampled $S$ data pairs from the whole training dataset of size $N$, then we define the sampling ratio as $R=\frac{S}{N}$. We then map the output $\tilde{y}$ from our index model to its approximate position by $\hat{y}=\frac{\tilde{y}}{R}$. We illustrate an example in Example 3.\ref{mscexample:sampled_training}.
 
 \begin{mscexample}
 	\label{mscexample:sampled_training}
 	Assume the \textbf{X} in training set is exponentially distributed as $$[1,2,4,8,16,32,64,128]$$ and we use a sample size $S=4$. As we know the size of the fully training dataset is $N=8$, we have $R=\frac{S}{N}=0.5$. We uniformly sample from the training set and we will get $[1,4,16,64]$. Then we train an index model based on $$[(1,0), (4,1), (16,2), (64,3)]$$ 
 	
-	For the key $32$ as an example, ideally, we want our index model $\mathcal{F}$ to have an output such that $\tilde{y}=\mathcal{F}(32)=2.5$. Then the original index of the key $32$ can be calculated as $\hat{y}=\frac{\tilde{y}}{R}=\frac{2.5}{0.5}=5$, which is exactly the index of $32$ in the original full training dataset.
+	For the key $32$ as an example, ideally, we want our index model $\mathcal{F}$ to have an output such that $\tilde{y}=\mathcal{F}(32)=2.5$. Then the original index of the key $32$ can be calculated as $\hat{y}=\frac{\tilde{y}}{R}=\frac{2.5}{0.5}=5$, which is the index of $32$ in the original full training dataset.
 \end{mscexample}
 
 
-\textbf{Evaluation with Multiple Processes} To evaluate our models on the full training set would take several days to complete because there is only one process working on it. As the query is independent from each other, we utilise multiple processes to work on it by taking the following steps:
+\textbf{Evaluation with Multiple Processes} To evaluate our models on the full training set would take several days to complete because there is only one process working on it. As the query is independent of each other, we utilise multiple processes to work on it by taking the following steps:
 
 \begin{enumerate}
 	\item We first train our model on the sampled dataset with $S=100,000$.
@@ -221,11 +222,11 @@ Recursive Model & \textbf{334 (0.013x)} & 2.6505 (7.60x) & \textbf{8.836} \\
 	\begin{enumerate}
 		\item The construction time of recursive model can be significantly less than the construction of B-Tree, for two reasons: 
 			\begin{itemize}
-				\item We sampled from the training dataset, and avoid iterating over all the data points. In contrast, B-Tree has to iterate all the data points and insert them one-by-one.
+				\item We sample from the training dataset and avoid iterating over all the data points. In contrast, B-Tree has to iterate all the data points and insert them one by one.
 				\item The recursive model trains relatively fast as it can converge in one to a few passes over the data points.
 			\end{itemize}
-			\item Then query time for recursive model is higher than B-Tree, but not significantly higher. The computation costs is mainly on the calculation in fully connected neural networks. The query time for recursive model can be improved by either using a well-established library, such as PyTorch, that provides faster matrix computation, or using faster hardware, such as GPU to improve the query.
-			\item The memory usage of B-Tree is significantly higher than the recursive model. As we showed above, the memory usage of B-Tree is $\mathcal{O}(n)$ and hence growing linearly. For recursive model, the memory usage is mainly depends on how many models in each layer. Therefore, the memory usage of recursive model has an upper bound (if all models are used), and then does not grow as the number of data points is growing.
+			\item Then average query time for the recursive model is higher than B-Tree, but not significantly higher. The computation costs are mainly on the calculation in fully connected neural networks. The query time for the recursive model can be improved by either using a well-established library, such as PyTorch, that provides faster matrix computation or using faster hardware such as the GPU to improve the query speed.
+			\item The memory usage of B-Tree is significantly higher than the recursive model. As we showed above, the memory usage of B-Tree is $\mathcal{O}(n)$ and hence growing linearly. For the recursive model, the memory usage mainly depends on how many models in each layer. Therefore, the memory usage of a recursive model has an upper bound (if all models are used), and then will not grow as the number of data points is growing.
 	\end{enumerate}
 \end{mscconclusion}
 
