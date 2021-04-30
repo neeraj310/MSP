@@ -19,11 +19,11 @@ For two dimensional case, we manually generate three columns of the data:
 
 Our final data-set consists of 190 million key-value pairs that are distributed under lognormal distribution.
 
-As discussed in previous section, there are multiple challenges in using the complete dataset for training and hyper-parameters tuning. Even on google cloud server, running experiments with the full data take considerable long times (Lisa model took 26 hours to build), we had limited cloud server budget and a large number of experiments to run. Therefore, for two dimensional indexes evaluation, we have used sampling to generate smaller training datasets.   
+As discussed in previous section, there are multiple challenges in using the complete dataset for training and hyper-parameters tuning. Even on google cloud server, running experiments with the full data take considerable long times (LISA model took 26 hours to build), we had limited cloud server budget and a large number of experiments to run. Therefore, for two dimensional indexes evaluation, we have used sampling to generate smaller training datasets.   
 
 \subsection{Hyper-parameters Search}
 
-After generating dataset as mentioned in previous section, we sample a smaller subset from it. We repeat our experiments for $3$ different sample sizes of 10000, 100000 and 1000000 points. Test data is a copy of training data for all our experiments. For Baseline and Lisa models, final prediction is given by linear search through a range of values (identified as a Cell for Baseline and Shard for LISA model) and mean square error (MSE) is zero as test points are already learned during training. This is where Learned Index models differ from traditional machine learning models where model performance is evaluated on unseen data. 
+After generating dataset as mentioned in previous section, we sample a smaller subset from it. We repeat our experiments for $3$ different sample sizes of 10000, 100000 and 1000000 points. Test data is a copy of training data for all our experiments. For Baseline and LISA models, final prediction is given by linear search through a range of values (identified as a Cell for Baseline and Shard for LISA model) and mean square error (MSE) is zero as test points are already learned during training. This is where Learned Index models differ from traditional machine learning models where model performance is evaluated on unseen data. 
 
 \subsubsection {Hyper-parameter search for the LISA baseline}
 Baseline model has one hyper-parameter: N (Number of cells specifying the number of equal length intervals into which mapped values are divided). The point query search consists of two parts, first is binary search to locate the cell into which the query key is located, followed by sequentially comparison of the query key value with keys in the found cell until a match is found. The time complexity of first search is $log_{2}N_{1}$, where $N_{1}$ is the number of cells. The time complexity of second search is  $ \left \lceil {N_{2} / 2}\right \rceil $, where $N_{2}$ is the number of keys per cell.  
@@ -150,7 +150,14 @@ The following conclusions can be concluded:
 \end{mscconclusion}
 
 \subsubsection {Range Query Experiments}
-Table \ref{Range_Query_Experimental_Results} shows evaluation results for LISA,Baseline and $K$D-tree models for range sizes of 10, 100, 1000 for different training sizes. For a given range query size, we perform 20 trials and take the average. For each trial, we sample a random point from the test set and find the range from sampled point to the range query size. Average query time for each range is further divided by the range size to compare the query time across various ranges. As shown in the Fig. \ref{fig:Range_Query_Comparision}, LISA outperforms $K$D-tree for range query size of 10000 for all training sizes, however its range query time for smaller range sizes is significantly higher than $K$D-Tree.
+Table \ref{Range_Query_Experimental_Results} shows evaluation results for LISA,Baseline and $K$D-tree models for range sizes of 10, 100, 1000 for different training sizes. For a given range query size, we perform 20 trials and take the average. For each trial, we sample a random point from the test set and find the range from sampled point to the range query size. Average query time for each range is further divided by the range size to compare the query time across various ranges. .
+
+	As shown in the Fig. \ref{fig:Range_Query_Comparision}, LISA outperforms $K$D-tree for range query size of 10000 for all training sizes, however its range query time for smaller range sizes is significantly higher than $K$D-Tree
+	\begin{enumerate}
+		\item Plot A shows average range query time for a fixed training size of $1M$ points. LISA outperforms $K$D-Tree for larger range queries
+		
+		\item  Plot B shows average range query time for a fixed range query of size 10000 for various training sizes. LISA outperforms $K$D-Tree for all training data sizes for range queries of size 10000.
+	\end{enumerate}
 
 \begin{figure}
  \centering
@@ -187,11 +194,22 @@ Table \ref{Range_Query_Experimental_Results} shows evaluation results for LISA,B
          \label{fig:2d_exp2_3_2}
      \end{subfigure}
      \caption{$K$NN Query experimental results for $K$D-Tree and LISA models}
-     %Lisa outperforms $K$D-Tree for all training data sizes. }
+     %LISA outperforms $K$D-Tree for all training data sizes. }
         \label{fig:KNN_Query_Comparision}
 \end{figure}
 
 \subsubsection {$K$NN Query Experiments}
-Table \ref{KNN_Query_Experimental_Results} shows evaluation results for LISA and $K$D-tree models for $K$NN Queries for various value of K and training sizes. For a given $K$ value, we perform 20 trials and take the average of query time. For each trial, we sample a random point from the test set and find K neighbours around that point. Average query Time is further divided by $K$ to compare the Query time across various values of $K$.As shown in the Fig. \ref{fig:KNN_Query_Comparision}, LISA outperforms $K$D-tree for different training sizes and K values.
+Table \ref{KNN_Query_Experimental_Results} shows evaluation results for LISA and $K$D-tree models for $K$NN Queries for various value of $K$ and training sizes. For a given $K$ value, we perform 20 trials and take the average of query time. For each trial, we sample a random point from the test set and find $K$ neighbours around that point. 
+%Average query Time is further divided by $K$ to compare the Query time across various values of $K$.
+%As shown in the Fig. \ref{fig:KNN_Query_Comparision}, LISA outperforms $K$D-tree for different training sizes and K values.
+
+
+	In Fig. \ref{fig:KNN_Query_Comparision}, we present the comparison of LISA and $K$D-tree models for $K$NN Queries.
+	\begin{enumerate}
+		\item Plot A shows average $K$NN query time (over $20$ trials) for a fixed training size of $1$M points and different values of $K$. LISA outperforms $K$D-Tree for all values of $K$
+		
+		\item Plot B shows average $K$NN query time for various training sizes with $K$ = 10. LISA outperforms $K$D-Tree for all training data sizes.
+	\end{enumerate}
+
 
 

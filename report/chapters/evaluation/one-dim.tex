@@ -14,18 +14,29 @@ For one dimensional case, we manually generate two columns of the data:
 	\item Then we assign the keys into different pages according to a preset parameter $N_{page}$ for page size. Specifically, the first $N_{page}$ keys will be assigned to the first page, the second $N_{page}$ keys will be assigned to the second page and so on so forth. After the assignments, we set the second column $Y$ to be the page index of the corresponding $x$.
 \end{itemize}
 
-%TODO: change this to a graph with multiple distributions
-
-\begin{figure}[htp]
+\begin{figure}
     \centering
-    \includegraphics[width=0.6\textwidth]{graphs/evaluation/lognormal_distribution_x_y.pdf}
-    \caption{The x-y graph where x is randomly sampled from a lognormal distribution}
-    \label{fig:lognormal_x_y}
+    \begin{subfigure}[b]{0.3\textwidth}
+    	\includegraphics[width=\textwidth]{graphs/evaluation/uniform.pdf}
+    	\caption{Uniform}
+    \end{subfigure}
+    \hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+    	\includegraphics[width=\textwidth]{graphs/evaluation/normal.pdf}
+    	\caption{Normal}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+    	\includegraphics[width=\textwidth]{graphs/evaluation/lognormal.pdf}
+    	\caption{Lognormal}
+    \end{subfigure}
+    \caption{The x-y graph where x is randomly sampled from a certain distribution}
+    \label{fig:dist_x_y}
 \end{figure}
 
 \subsection{Hyper-Parameter Searching}
 
-We first generate $10,000$ data points where $X$ is from a lognormal distribution $\text{Lognormal}(0, 4)$. In the Fig \ref{fig:lognormal_x_y}, we illustrate the $x-y$ relations where $X$ is randomly sampled from a lognormal distribution.
+We first generate $10,000$ data points where $X$ is from a lognormal distribution $\text{Lognormal}(0, 4)$. In the Fig \ref{fig:dist_x_y}, we illustrate the $x-y$ relations where $X$ is randomly sampled from a uniform, normal or lognormal distribution.
 
 We use three groups to find the best recursive model for lognormal data.
 \begin{itemize}

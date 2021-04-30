@@ -16,7 +16,8 @@ def visualize(dist_name, filename):
     plt.title('x-y of {} distribution'.format(dist_name))
     plt.xlabel('x')
     plt.ylabel('y')
-    plt.show()
+    # plt.show()
+    plt.savefig('{}.pdf'.format(dist_name))
 
 
 if __name__ == "__main__":

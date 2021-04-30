@@ -1,4 +1,4 @@
-For a range query $\mathcal{Q}(\boldsymbol{l},\boldsymbol{u})$, we first find the cells that overlap with $\mathcal{Q}$. Then we decompose $\mathcal{Q}$ into the union of smaller query rectangles $\bigcup \mathcal{Q}_i$ such that each smaller query rectangles intersects only one cell, as shown in the Fig. \ref{fig:Range_Query_Lisa}.
+For a range query $\mathcal{Q}(\boldsymbol{l},\boldsymbol{u})$, we first find the cells that overlap with $\mathcal{Q}$. Then we decompose $\mathcal{Q}$ into the union of smaller query rectangles $\bigcup \mathcal{Q}_i$ such that each smaller query rectangles intersects only one cell, as shown in the Fig. \ref{fig:Range_Query_LISA}.
 
  Suppose that $\mathcal{Q}=\bigcup \mathcal{Q}_i$ where $\mathcal{Q}_i=[l_{i_0}, u_{i_o})\times [l_{i_1}, u_{i_1})$, i.e. we have $\mathcal{Q}_i$ representing the $i$th smaller query rectangles of one cell $C_j$.
  
@@ -9,18 +9,18 @@ After creating corresponding mapped values, we then apply the shard prediction f
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=\textwidth]{graphs/range_query_lisa.png}
-    \caption{Range Query Search in Lisa} 
+    \caption{Range Query Search in LISA} 
     %1) Find the cells that overlap with query rectangle qr. \\
     %2) Decompose qr into the unions of smaller query rectangles, each of which intersect one only one cell. \\
     %3) Find shards corresponding to lower and upper coordinates for each query rectangle, and perform a sequential search.}
-    \label{fig:Range_Query_Lisa}
+    \label{fig:Range_Query_LISA}
 \end{figure}
 
 \begin{mscexample}
-	In Fig. \ref{fig:Range_Query_Lisa}, we present a range query example. Following steps show how we perform range query represented by the red rectangle.
+	In Fig. \ref{fig:Range_Query_LISA}, we present a range query example. Following steps show how we perform range query represented by the red rectangle.
 	\begin{enumerate}
 		\item Find the cells that overlap with query rectangle qr. In our example, 3 cells are overlapping with the query rectangle. 
-		\item Decompose qr into the unions of smaller query rectangles, each of which intersect one only one cell as represented by $qr_{0}^{'}$, $qr_{1}^{'}$ and $qr_{2}^{'}$ in Fig. \ref{fig:Range_Query_Lisa}.
+		\item Decompose qr into the unions of smaller query rectangles, each of which intersect one only one cell as represented by $qr_{0}^{'}$, $qr_{1}^{'}$ and $qr_{2}^{'}$ in Fig. \ref{fig:Range_Query_LISA}.
 		
 		\item Calculate mapped values of $qr_{0}^{'}$, $qr_{1}^{'}$ and $qr_{2}^{'}$ vertices represented by \\
 		$m_{l}^{0}, m_{u}^{0}, m_{l}^{1}, m_{u}^{1}, m_{l}^{2}, m_{u}^{2} $.

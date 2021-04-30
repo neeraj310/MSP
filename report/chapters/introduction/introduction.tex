@@ -10,13 +10,13 @@ From the above example, we found that there are two promising advantages of leve
   \item It may take less memory space, as we only need to save the model with constant size.
   \end{enumerate}
 
-Nowadays, to learn the distribution and apply it to database indexes, researchers proposed learned indexes \cite{kraska2018case}, where machine learning techniques are applied to automatically learn the distribution of the database entries and build the data-driven indexes. In this project, we implemented hand-engineered indexes and the learned index. After that, we explore the possibilities of using complex convolutional neural networks as database indexes. This report is organised into the following chapters:
+Nowadays, to learn the distribution and apply it to database indexes, researchers proposed learned indexes \cite{kraska2018case}, \cite{li2020lisa}, where machine learning techniques are applied to automatically learn the distribution of the database entries and build the data-driven indexes. In this project, we implemented both hand-engineered indexes and the learned index. After that, we explore the possibilities of using complex convolutional neural networks as database indexes. This report is organised into the following chapters:
 
 \begin{enumerate}
-	\item \textbf{Introduction}. In this chapter, we illustrate the organisation of this report. Besides, we go through the modern computer systems and introduce the general information about database indexes.
-	\item \textbf{Implementation}. In this chapter, we thoroughly describe the implementation of one and two dimensional indexes, including B-Tree, baseline learned index, recursive model, KD-Tree and LISA.
-	\item \textbf{Evaluation}. In this chapter, we perform evaluation among the indexes we implemented with different evaluation dataset. 
-	\item \textbf{Insights and Findings}. We demonstrate our findings during the implementation in this chapter. Besides, we also discuss the advantages and disadvantages of different indexes.
+	\item \textbf{Introduction}. In this chapter, we illustrate the organisation of this report and introduce the general information about database indexes.
+	\item \textbf{Implementation}. In this chapter, we present our implementation of the B-Tree for 1-D data and $K$D-Tree for 2-D data. We also present our implementation of the learned index for 1-D data \cite{kraska2018case} and 2-D data \cite{li2020lisa}. This includes a baseline learned index, a recursive model and all components of LISA framework. 
+	\item \textbf{Evaluation}. In this chapter, we report evaluation of our implementation. 
+	\item \textbf{Insights and Findings}. We demonstrate our findings in this chapter. Besides, we also discuss the advantages and disadvantages of different indexes.
 	\item \textbf{Convolution and CNN for Learned Indexes}. In this chapter we explore the possibilities of using convolution operation and convolutional neural network to build learned indexes.
 	\item \textbf{Conclusions}. 
 \end{enumerate}

@@ -6,7 +6,7 @@ In the last section, we described a recursive model index (RMI) that consists of
 \comm{  
 \begin{figure*}[t]
     \centering
-    \includegraphics[width=0.6\textwidth]{graphs/Lisa_Key_distribution.png}
+    \includegraphics[width=0.6\textwidth]{graphs/LISA_Key_distribution.png}
     \caption{Key Distribution in 2 dimensional case:Idea of learned indexes is not applicable in the context of spatial data as data is not sorted by key. Learning multidimensional CDFs will result in searching local regions qualified on one dimension but not all dimensions.}
     \label{fig:Key_Distribution}
 \end{figure*}
@@ -32,8 +32,8 @@ For the one-dimensional data, we can learn the CDF by using a recursive model as
 	
 \end{mscexample}
 
-
 LISA solves this problem by partitioning search space into a series of grid cells based on the data distribution and building a\comment{partially monotonic} function map the data from $\mathbb{R}^d$ into $\mathbb{R}$, in our case, we have $d=2$. We call this function as \textit{Mapping Function}.
+
 \subsubsection{Definitions}
 
 This section presents the definition
@@ -75,7 +75,7 @@ In order to construct the baseline model, we need to have several parameters lis
 	\item $N$, which represents the number of cells into which the key's mapped value space will be divided.
 \end{enumerate}
 
-As described in Algorithm \ref{Training_Lisa_Baseline}, during training, we perform the following operations:
+As described in Algorithm \ref{Training_LISA_Baseline}, during training, we perform the following operations:
 
 \begin{enumerate}
 	\item Sort all keys according to their mapped values.
@@ -102,8 +102,8 @@ As described in Algorithm \ref{Training_Lisa_Baseline}, during training, we perf
 		 \texttt{denseArray[$i$].upper = last key in cell $i$  }
 		
      }
-     \caption{Training Algorithm for Lisa Baseline Method}
-     \label{Training_Lisa_Baseline}
+     \caption{Training Algorithm for LISA Baseline Method}
+     \label{Training_LISA_Baseline}
 \end{algorithm}
 
 For prediction, we find the cell corresponding to mapped value of the query point using binary search, scan this cell sequentially and compare the values of keys in the cell against the query point, until a match is found.
@@ -125,25 +125,25 @@ For prediction, we find the cell corresponding to mapped value of the query poin
     }
   
  	 \texttt{Sequentially search for x\_test in page $i$} \\
-     \caption{Prediction Algorithm for Lisa Baseline Model }
+     \caption{Prediction Algorithm for LISA Baseline Model }
 \end{algorithm}
 
 
-\subsection{Lisa Overview}
+\subsection{LISA Overview}
 
 %TODO: motivation 
 
-Given a spatial dataset, we generate the mapping function $\mathcal{M}$ and the shard prediction function $\mathcal{SP}$. Based on them, we build our index structure, LISA, to process point, range and $K$NN queries. LISA consists of four parts: the representation of grid cells, the mapping function $\mathcal{M}$, the shard prediction function $\mathcal{SP}$, and the local models for all shards. As illustrated in the Fig \ref{fig:Lisa_Framework}. the procedure of building LISA is composed of four parts.
+Given a spatial dataset, we generate the mapping function $\mathcal{M}$ and the shard prediction function $\mathcal{SP}$. Based on them, we build our index structure, LISA, to process point, range and $K$NN queries. LISA consists of four parts: the representation of grid cells, the mapping function $\mathcal{M}$, the shard prediction function $\mathcal{SP}$, and the local models for all shards. As illustrated in the Fig \ref{fig:LISA_Framework}. the procedure of building LISA is composed of four parts.
 
 \begin{figure*}[t]
     \centering
     %\includegraphics[width=17cm,height=4.5cm]{graphs/implementation/lisa_overview}
 \includegraphics[width=1\textwidth]{graphs/implementation/lisa_overview.pdf}
-    \caption{Lisa Framework\\
+    \caption{LISA Framework\\
      1) Generate grid cells, and apply Lebesgue Measure to each cell to map two dimensional key value to a scalar.\\
     2) Sort mapped values and divide them across equal length intervals termed as mapped intervals ( 3 in our figure)\\
     3) For each mapped interval, divide the mapped value range in shards  (3 in our figure) and learn a linear regression function to partition the keys belonging to a particular interval, into different shards }
-    \label{fig:Lisa_Framework}
+    \label{fig:LISA_Framework}
 \end{figure*}
 
 \begin{enumerate}
@@ -155,7 +155,7 @@ Given a spatial dataset, we generate the mapping function $\mathcal{M}$ and the 
 
 \subsubsection{Definitions}
 
-This section presents the additional definition specific to Lisa implementation.
+This section presents the additional definition specific to LISA implementation.
 
 \begin{enumerate}
 \setcounter{enumi}{3}
@@ -170,7 +170,7 @@ $ inf (M(S_{i}))  > sup (M(S_{j}))$ when $i > j$.
 
 \subsection{Design and Implementation Details}
 \subsubsection{Grid Cells Generation}
-The first task in Lisa implementation is to partition the $2$ dimensional key space into a series of grid cells based on the data distribution along a sequence of axes. Then we number the cells along these axes as well. The principal idea behind this partition strategy is to divide the key space into cell boundaries and apply a mapping function to create monotonically increasing mapping values at the cell boundaries. 
+The first task in LISA implementation is to partition the $2$ dimensional key space into a series of grid cells based on the data distribution along a sequence of axes. Then we number the cells along these axes as well. The principal idea behind this partition strategy is to divide the key space into cell boundaries and apply a mapping function to create monotonically increasing mapping values at the cell boundaries. 
 
 %TODO: change the principal idea behind.
 
@@ -213,8 +213,8 @@ We need to sort the key space along the sequence of axis before we partition the
             \texttt{Store the 2nd dimensional coordinate of first and last key of cell[$i$][$j$] .} \\
 		 }
       }
-     \caption{Grid Cell Generation Algorithm for Lisa Method}
-     \label{Training_Lisa_Baseline}
+     \caption{Grid Cell Generation Algorithm for LISA Method}
+     \label{Training_LISA_Baseline}
 \end{algorithm}
 
 \subsubsection{Mapping Function}
@@ -393,7 +393,7 @@ $$
 \boldsymbol{\beta}^{(k+1)}=\boldsymbol{\beta}^{(k)} + lr^{(k)}s^{(k)}
 $$
 
-As described in Algorithm \ref{Shard_Training_Lisa}, we perform  following operations during shard training, :
+As described in Algorithm \ref{Shard_Training_LISA}, we perform  following operations during shard training, :
 
 \begin{enumerate}
 	\item Divide the sorted mapped values into equal sized $U$ intervals. We found empirically that training algorithm generalizes better if mapped intervals are aligned with grid cell boundaries. $U$ is initialized to numbers of grid cells. 
@@ -405,7 +405,7 @@ As described in Algorithm \ref{Shard_Training_Lisa}, we perform  following opera
     
     \item $x =[x_0,\cdots, x_V] $ specifies the keys' mapped values in interval i, $[m_{i-1},m_{i}]$ 
     
-    \item Given $V +1$ sorted mapped values $x =[x_0,\cdots, x_V]$ and their indices $y =[0,\cdots, V]$, each $\mathcal{F}_{i}$ is built and trained with the procedure mentioned in the algorithm \ref{Shard_Training_Lisa}.
+    \item Given $V +1$ sorted mapped values $x =[x_0,\cdots, x_V]$ and their indices $y =[0,\cdots, V]$, each $\mathcal{F}_{i}$ is built and trained with the procedure mentioned in the algorithm \ref{Shard_Training_LISA}.
     
 
 \end{enumerate}
@@ -436,7 +436,7 @@ As described in Algorithm \ref{Shard_Training_Lisa}, we perform  following opera
     }
     
     \caption{Shard Training Algorithm}
-    \label{Shard_Training_Lisa}
+    \label{Shard_Training_LISA}
 \end{algorithm}
 
 \subsubsection{Local Models for Shards}
