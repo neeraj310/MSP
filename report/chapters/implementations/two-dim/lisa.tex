@@ -168,7 +168,7 @@ $ inf (M(S_{i}))  > sup (M(S_{j}))$ when $i > j$.
 \item \textbf{Local Model}. Local model $L_{i}$ is a model that processes operations within a shard $S_i$ . It keeps dynamic structures such as the addresses of pages contained by $S_{i}$. Local models are not relevant to our implementation as full data-set is loaded in the main memory.
 \end{enumerate}
 
-\subsection{Design and Implementation Details}
+\subsection{LISA Implementation in Details}
 \subsubsection{Grid Cells Generation}
 The first task in LISA implementation is to partition the $2$ dimensional key space into a series of grid cells based on the data distribution along a sequence of axes. Then we number the cells along these axes as well. The principal idea behind this partition strategy is to divide the key space into cell boundaries and apply a mapping function to create monotonically increasing mapping values at the cell boundaries. 
 
