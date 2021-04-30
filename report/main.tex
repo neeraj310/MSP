@@ -111,6 +111,8 @@
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
 \newcommand{\comment}[1]{}
+\newcommand*{\fullref}[1]{\hyperref[{#1}]{\autoref*{#1} \nameref*{#1}}}
+
 \begin{document}
 
 \begingroup
@@ -145,6 +147,7 @@
 \section{One Dimensional Data}
 \label{sec:one-dim-implementation}
 
+% \label{section:B-Tree}
 \subsection{B-Tree}
 
 \input{chapters/implementations/one-dim/b-tree}

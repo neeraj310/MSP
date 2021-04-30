@@ -26,7 +26,7 @@ For the one-dimensional data, we can learn the CDF by using a recursive model as
 
 		\centering
 		\includegraphics[scale=0.5]{graphs/implementation/2d/2d_rmi_limitation}
-		\captionof{figure}{An example demonstrating the limitations of one-dimensional learned index in two-dimensional data. In this graph we have $F(x\leq A)=\frac{1}{3}$ but with learned index in one-dimensional, we cannot learned such joint CDF.}
+		\captionof{figure}{An example demonstrating the limitations of one-dimensional learned index in two-dimensional data. In this graph we have $F(x\leq A)=\frac{1}{3}$ but with learned index in one-dimensional, we cannot learn such joint CDF.}
 		\label{fig:2d_limitation_rmi}
 
 	
@@ -44,7 +44,6 @@ This section presents the definition
 	\item \textbf{Cell}. A grid cell is a rectangle whose lower and upper corners are points $(l_0, l_1)$ and  $(u_0,u_1)$, i.e.,  cell = $(l_{0},u_{0}) \times [l_{1},u_{1})$.
 	
 	\item \textbf{Mapping Function}. A mapping function $\mathcal{M}$ is a function on the domain $\mathbb{R}^2$ to the non-negative range, i.e $\mathcal{M}:[0,X_{0}]\times [0,X_{1}]\to [0,+\infty)$ such that $M(x_0,x_{1}) \leq \mathcal{M}(y_{0},y_1)$ when $x_0 \leq y_0$ and $x_1 \leq y_1$.
-	%TODO: add some example mapping functions
 \end{enumerate}
 
 \subsection{Baseline Method}  
@@ -60,10 +59,7 @@ As shown in Fig. \ref{fig:BaseLine_Method}, the key space is divided into 3 cell
 \begin{figure*}[t]
     \centering
     \includegraphics[width=1.1\textwidth]{graphs/implementation/Baseline_limitation_new.pdf}
-    \caption{LISA Baseline Method \\
-    a) Key space is divided into 3 cells with equal number of keys\\
-    b) To search for a query, we first need to find out the cell which contain the query point\\
-    c) Once the query point is found, we need to compare the query point 2 dimensional key value with all the keys in the cell until a match is found}
+    \caption{LISA Baseline Method. In this figure, a) Key space is divided into 3 cells with equal number of keys. b) To search for a query, we first need to find out the cell which contain the query point. c) Once the query point is found, we need to compare the query point 2 dimensional key value with all the keys in the cell until a match is found}
     \label{fig:BaseLine_Method}
 \end{figure*}
 \subsubsection{Training}
@@ -131,18 +127,12 @@ For prediction, we find the cell corresponding to mapped value of the query poin
 
 \subsection{LISA Overview}
 
-%TODO: motivation 
-
 Given a spatial dataset, we generate the mapping function $\mathcal{M}$ and the shard prediction function $\mathcal{SP}$. Based on them, we build our index structure, LISA, to process point, range and $K$NN queries. LISA consists of four parts: the representation of grid cells, the mapping function $\mathcal{M}$, the shard prediction function $\mathcal{SP}$, and the local models for all shards. As illustrated in the Fig \ref{fig:LISA_Framework}. the procedure of building LISA is composed of four parts.
 
 \begin{figure*}[t]
     \centering
-    %\includegraphics[width=17cm,height=4.5cm]{graphs/implementation/lisa_overview}
-\includegraphics[width=1\textwidth]{graphs/implementation/lisa_overview.pdf}
-    \caption{LISA Framework\\
-     1) Generate grid cells, and apply Lebesgue Measure to each cell to map two dimensional key value to a scalar.\\
-    2) Sort mapped values and divide them across equal length intervals termed as mapped intervals ( 3 in our figure)\\
-    3) For each mapped interval, divide the mapped value range in shards  (3 in our figure) and learn a linear regression function to partition the keys belonging to a particular interval, into different shards }
+	\includegraphics[width=1\textwidth]{graphs/implementation/lisa_overview.pdf}
+    \caption{LISA Framework. In this figure, 1) Generate grid cells, and apply Lebesgue Measure to each cell to map two dimensional key value to a scalar. 2) Sort mapped values and divide them across equal length intervals termed as mapped intervals (3 in our figure). 3) For each mapped interval, divide the mapped value range in shards  (3 in our figure) and learn a linear regression function to partition the keys belonging to a particular interval, into different shards }
     \label{fig:LISA_Framework}
 \end{figure*}
 
@@ -162,10 +152,10 @@ This section presents the additional definition specific to LISA implementation.
 	\item \textbf{Shard}. The shard $S$ is the pre-image of an
 interval $[a, b) \subseteq [0, +1)$ under the mapping function $\mathcal{M}$,  i.e., $S = M^{-1}([a.b))$. \\
 %TODO: move this paragraph into somewhere more suitable
-Given an initial data set, we divide the key space into cell grids based on the data distribution, map keys values to an one dimensional space using mapping function, followed by learning several monotonic shard prediction functions. After sorting, the one dimensional mapped value space is divided into equal-length intervals. One shard prediction function is learned for each interval, to partition the keys belonging to a particular interval, into different shards. As keys are sorted by mapped values before partitioning them into equal sized intervals, and all shards exhibit a total order with respect to their corresponding intervals in the mapped range(Shard Prediction function for each interval is monotonically increasing), following relationship holds \\
-$ inf (M(S_{i}))  > sup (M(S_{j}))$ when $i > j$.
+Given an initial data set, we divide the key space into cell grids based on the data distribution, map keys values to an one dimensional space using mapping function, followed by learning several monotonic shard prediction functions. After sorting, the one dimensional mapped value space is divided into equal-length intervals. One shard prediction function is learned for each interval, to partition the keys belonging to a particular interval, into different shards. As keys are sorted by mapped values before partitioning them into equal sized intervals, and all shards exhibit a total order with respect to their corresponding intervals in the mapped range (Shard Prediction function for each interval is monotonically increasing), following relationship holds
+$$ \text{inf} (M(S_{i}))  > \text{sup} (M(S_{j}))\: \text{if}\: i > j$$
 
-\item \textbf{Local Model}. Local model $L_{i}$ is a model that processes operations within a shard $S_i$ . It keeps dynamic structures such as the addresses of pages contained by $S_{i}$. Local models are not relevant to our implementation as full data-set is loaded in the main memory.
+\item \textbf{Local Model}. Local model $L_{i}$ is a model that processes operations within a shard $S_i$. It keeps dynamic structures such as the addresses of pages contained by $S_{i}$. Local models are not relevant to our implementation as full data-set is loaded in the main memory.
 \end{enumerate}
 
 \subsection{LISA Implementation in Details}
@@ -174,23 +164,21 @@ The first task in LISA implementation is to partition the $2$ dimensional key sp
 
 %TODO: change the principal idea behind.
 
-    $ M(x_{i} \in V) <  M(x_{j} \in V)$ when $i<j$, where $x_{i} \in C_{i}$ and $x_{j} \in C_{j}$ 
+    $$ M(x_{i} \in V) <  M(x_{j} \in V) \text{ for } x_{i} \in C_{i}, x_{j} \in C_{j}; \text{ if } i<j$$
     
-i.e. mapped value of a key in cell $i$ will always be less than mapped values of a key in cell $j$, if $i <j$.
+The above inequality means that the mapped value of a key in cell $i$ will always be less than mapped values of a key in cell $j$, if $i <j$.
 
 \begin{mscexample}
 	Consider the example shown in the figure \ref{fig:Cell_Parttion}: 27 keys are partitioned into $9$ cell,  resulting in $3$ keys per cell. To partition the key space, we first sort the keys values according to $1^{st}$ dimension and divide the keys into $3$ vertical columns each containing $9$ keys. Then for each vertical column of $9$ keys, we sort the keys again according to $2^{nd}$ dimension, and divide the keys in each column into $3$ new cells. The number of cells $N$ into which the keys space is divided, is a hyper-parameter and found empirically using grid search.
 
 \end{mscexample}
 
-We need to sort the key space along the sequence of axis before we partition the keys value along that axis to make sure that cells don't contain overlapping keys. \\
+We need to sort the key space along the sequence of axis before we partition the keys value along that axis to make sure that cells don't contain overlapping keys.
 
 \begin{figure*}[t]
     \centering
     \includegraphics[width=1\textwidth]{graphs/implementation/cell_generation.pdf}
-    \caption{Cell Partition Strategy: \\
-    1) : Sort Keys on $1^{st}$ dimension and divide into 3 vertical columns each containing 9 keys\\
-    2) : Sort each vertical column keys on $2^{nd}$ dimension and divide into 3 horizontal columns each containing 3 keys}
+    \caption{Cell Partition Strategy. In this figure, we first sort Keys on $1^{st}$ dimension and divide into 3 vertical columns each containing 9 keys. Then we sort each vertical column keys on $2^{nd}$ dimension and divide into 3 horizontal columns each containing 3 keys}
     \label{fig:Cell_Parttion}
 \end{figure*}
 
@@ -230,18 +218,22 @@ As shown in figure \ref{fig:Lebesgue_Measure}, in $2$-dimensional case, $\frac {
 \begin{figure*}[t]
     \centering
     \includegraphics[width=0.6\textwidth]{graphs/implementation/Lebesgue_Measure.pdf}
-    \caption{Lebesgue Measure Representation for 2 dimensional data\\
-    1) Lebesgue Measure for the black point in first cell will be ratio of area of red rectangle divided by the total area of $1^{st}$ cell = $50/100=0.5$ \\
-    1) Lebesgue Measure for the green point in second cell will be ratio of area of blue rectangle divided by the total area of $2^{nd}$ cell = $20/100= 0.2$}
+    \caption{Lebesgue Measure Representation for 2 dimensional data.}
     \label{fig:Lebesgue_Measure}
 \end{figure*}
+
+\begin{mscexample}
+	In \ref{fig:Lebesgue_Measure}, we calculate the Lebesgue measure for the black and green points as examples.
+	\begin{enumerate}
+		\item For the black point in the first cell, the Lebesgue measure will be ratio of area of red rectangle divided by the total area of $1^{st}$ cell, i.e. $50/100=0.5$.
+		\item For the green point in the second cell, the Lebesgue measure will be ratio of area of blue rectangle divided by the total area of $2^{nd}$ cell, i.e. $20/100= 0.2$ 
+	\end{enumerate}
+\end{mscexample}
 
 \begin{figure*}[t]
     \centering
     \includegraphics[width=1\textwidth]{graphs/Mapped_cdf.png}
-    \caption{Mapping 2 dimensional key Values to one dimensional cdf\\
-    1) Generate grid cells, and apply Lebesgue Measure to each cell.\\
-    2) Sort key in each cell according to mapped value. Mapped values in consecutive cells are already sorted by mapping function definition. Plot the cdf of mapped values. }
+    \caption{Mapping 2 dimensional key Values to one dimensional cdf. In this figure, we first generate grid cells, and apply Lebesgue Measure to each cell in 1). Then in the 2) step, we sort key in each cell according to mapped value. Mapped values in consecutive cells are already sorted by mapping function definition. The third plot is the CDF of mapped values.}
     \label{fig:Mapped_Cdf}
 \end{figure*}
 
@@ -274,7 +266,7 @@ Then the problem left is to train the linear regression functions $\mathcal{F}_i
 \begin{figure*}[t]
     \centering
 	\includegraphics[width=0.6\textwidth]{graphs/implementation/shardPrediction.pdf}
-    \caption{Piecewise linear regression functions learnt by ShardTrainingAlgorithm, $V+1$ is the number of keys per mapped interval}
+    \caption{Piecewise linear regression functions learnt by the piecewise linear function in the shard prediction training algorithm, $V+1$ is the number of keys per mapped interval.}
     \label{shardPrediction}
 \end{figure*}
 
@@ -312,9 +304,9 @@ Assume that $\boldsymbol{\beta}=\hat{\boldsymbol{\beta}}=(\hat{\beta_0},\hat{\be
 $$
 \boldsymbol{A}=\left[\begin{array}{ccccc}
 1 & x_{0}-\hat{\beta}_{0} & \left(x_{0}-\hat{\beta}_{1}\right) 1_{x_{0} \geq \hat{\beta}_{1}} & \ldots & \left(x_{0}-\hat{\beta}_{\sigma}\right) 1_{x_{0} \geq \hat{\beta}_{\sigma}} \\
-1 & x_{1}-\hat{\beta}_{0} & \left(x_{1}-\hat{\beta}_{1}\right) 1_{x_{1} \geq \hat{\beta}_{1}} & \ldots & \left(x_{1}-\hat{\beta}_{\sigma}\right) 1_{x_{1}} \geq \hat{\beta}_{\sigma} \\
+1 & x_{1}-\hat{\beta}_{0} & \left(x_{1}-\hat{\beta}_{1}\right) 1_{x_{1} \geq \hat{\beta}_{1}} & \ldots & \left(x_{1}-\hat{\beta}_{\sigma}\right) 1_{x_{1} \geq \hat{\beta}_{\sigma}} \\
 \vdots & \vdots & \vdots & \ddots & \vdots \\
-1 & x_{N}-\hat{\beta}_{0} & \left(x_{V}-\hat{\beta}_{1}\right) 1_{x_{V} \geq \hat{\beta}_{2}} & \cdots & \left(x_{V}-\hat{\beta}_{\sigma}\right) 1_{x_{V} \geq \hat{\beta}_{\sigma}}
+1 & x_{V}-\hat{\beta}_{0} & \left(x_{V}-\hat{\beta}_{1}\right) 1_{x_{V} \geq \hat{\beta}_{2}} & \cdots & \left(x_{V}-\hat{\beta}_{\sigma}\right) 1_{x_{V} \geq \hat{\beta}_{\sigma}}
 \end{array}\right]$$
 
 where $1_{x_{0} \geq \hat{\beta}_{1}}$ equals to $1$ if ${x_{0} \geq \hat{\beta}_{1}}$, otherwise it equals to $0$.

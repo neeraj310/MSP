@@ -10,16 +10,13 @@ After creating corresponding mapped values, we then apply the shard prediction f
     \centering
     \includegraphics[width=\textwidth]{graphs/range_query_lisa.png}
     \caption{Range Query Search in LISA} 
-    %1) Find the cells that overlap with query rectangle qr. \\
-    %2) Decompose qr into the unions of smaller query rectangles, each of which intersect one only one cell. \\
-    %3) Find shards corresponding to lower and upper coordinates for each query rectangle, and perform a sequential search.}
     \label{fig:Range_Query_LISA}
 \end{figure}
 
 \begin{mscexample}
 	In Fig. \ref{fig:Range_Query_LISA}, we present a range query example. Following steps show how we perform range query represented by the red rectangle.
 	\begin{enumerate}
-		\item Find the cells that overlap with query rectangle qr. In our example, 3 cells are overlapping with the query rectangle. 
+		\item Find the cells that overlap with query rectangle $qr$. In our example, 3 cells are overlapping with the query rectangle. 
 		\item Decompose qr into the unions of smaller query rectangles, each of which intersect one only one cell as represented by $qr_{0}^{'}$, $qr_{1}^{'}$ and $qr_{2}^{'}$ in Fig. \ref{fig:Range_Query_LISA}.
 		
 		\item Calculate mapped values of $qr_{0}^{'}$, $qr_{1}^{'}$ and $qr_{2}^{'}$ vertices represented by \\
