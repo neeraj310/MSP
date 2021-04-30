@@ -74,8 +74,13 @@ def train(filename, settings={}):
         models.append(model)
     if settings['fcn']:
         model = FCNModel(page_size=page_size, layers=[1, 9, 9, 1], activations=[
-                         'relu', 'relu', 'relu'], epochs=10000)
+                         'relu', 'relu', 'relu'], epochs=1000)
         models.append(model)
+        '''
+        model = FCNModel(page_size=page_size, layers=[1, 9, 9, 1], activations=[
+                         'identity', 'identity', 'identity'], epochs=1000)
+        models.append(model)
+        '''
     if settings['staged']:
         model = StagedModel(['fcn', 'fcn', 'fcn'], [1, 200, 4000], page_size)
         models.append(model)
@@ -104,12 +109,12 @@ def train(filename, settings={}):
 
 if __name__ == "__main__":
     settings = {
-        "b-tree": True,
+        "b-tree": False,
         "fcn": True,
-        "staged": True,
-        "conv": True,
+        "staged": False,
+        "conv": False,
         "write": False,
-        "draw_curve": False,
+        "draw_curve": True,
         "sample_size": None,
     }
     filename = sys.argv[1]

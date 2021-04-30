@@ -20,6 +20,20 @@ This task is similar to the image segmentation in computer vision, which essenti
 
 \section{Problem Formation}
 
+With convolutional neural network, we expect to classify each point with their key into two categories: a break point or not. After the classification, we train a linear function between two adjacent break points, which we have a closed-form solution.
+
+\begin{mscexample}
+	For example, assume that we have a page size $N_{page}=1$ and we have the keys as $X=[1,2,3,5,6,7]$. Hence they will be allocated to the pages $Y=[1,2,3,4,5,6]$. The relation between $X$ and $Y$ can be illustrated in the figure below.
+	
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{graphs/conv/points_examples}
+		\label{fig:conv_points}
+		\captionof{figure}{The relation between $X$ and $Y$}
+	\end{center}
+	
+	In this example, we expect to have a binary classification result as $B=[0,0,1,1,0,0]$. Then we train three linear functions illustrated as the green, red and blue lines in the figure.
+\end{mscexample} 
+
 Assume that we have the keys $X$ and their corresponding pages $Y$, the problem can be formulated and divided into the following subproblems:
 
 \begin{enumerate}

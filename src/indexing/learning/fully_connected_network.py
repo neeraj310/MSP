@@ -29,6 +29,10 @@ class FullyConnectedNetwork():
                        self.num_neurons[idx + 1]))
             if self.activations[idx] == 'relu':
                 self.model.add(ReLu('relu_{}'.format(idx)))
+            elif self.activations[idx] =='identity':
+                pass
+            else:
+                raise ValueError("Unexpected activation function: {}".format(self.activations[idx]))
         self.model.build_params()
         # self.model.summary()
 

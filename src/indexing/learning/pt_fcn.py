@@ -27,6 +27,8 @@ class FullyConnectedNetwork():
                 nn.Linear(self.num_neurons[idx], self.num_neurons[idx + 1]))
             if self.activations[idx] == 'relu':
                 modules.append(nn.ReLU())
+            if self.activations[idx] == 'identity':
+                pass
         self.model = Sequential(*modules)
         self.optimizer = torch.optim.SGD(self.model.parameters(), lr=self.lr)
 

@@ -28,7 +28,7 @@ In case of high dimensional key values, key with in a cell can not be searched w
 	\item Find the cell which contains the query key based on mapped value using binary search. 
 	\item With in the cell, replace sequential search based on query key value with the  binary search based on query key mapped value. Once mapped value is found, do a lookup in the neighbourhood of the found key based on query key 2 dimensional value. 
 \end{enumerate}
-As shown in Fig. \ref{fig:LISA_Baseline_Optimization}, we get significant savings in the query time with this approach for smaller values of N. As the value of N increases, number of Keys per cell decreases, and savings in avoiding sequential search gets normalized. 
+As shown in Fig. \ref{fig:LISA_Baseline_Optimization}, we get significant savings in the query time with this approach for smaller values of N. As the value of $N$ increases, number of Keys per cell decreases, and savings in avoiding sequential search gets normalized. 
 
 
 \begin{figure}

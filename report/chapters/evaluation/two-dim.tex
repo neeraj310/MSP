@@ -26,7 +26,7 @@ As discussed in previous section, there are multiple challenges in using the com
 After generating dataset as mentioned in previous section, we sample a smaller subset from it. We repeat our experiments for $3$ different sample sizes of 10000, 100000 and 1000000 points. Test data is a copy of training data for all our experiments. For Baseline and LISA models, final prediction is given by linear search through a range of values (identified as a Cell for Baseline and Shard for LISA model) and mean square error (MSE) is zero as test points are already learned during training. This is where Learned Index models differ from traditional machine learning models where model performance is evaluated on unseen data. 
 
 \subsubsection {Hyper-parameter search for the LISA baseline}
-Baseline model has one hyper-parameter: N (Number of cells specifying the number of equal length intervals into which mapped values are divided). The point query search consists of two parts, first is binary search to locate the cell into which the query key is located, followed by sequentially comparison of the query key value with keys in the found cell until a match is found. The time complexity of first search is $log_{2}N_{1}$, where $N_{1}$ is the number of cells. The time complexity of second search is  $ \left \lceil {N_{2} / 2}\right \rceil $, where $N_{2}$ is the number of keys per cell.  
+Baseline model has one hyper-parameter: $N$ (Number of cells specifying the number of equal length intervals into which mapped values are divided). The point query search consists of two parts, first is binary search to locate the cell into which the query key is located, followed by sequentially comparison of the query key value with keys in the found cell until a match is found. The time complexity of first search is $log_{2}N_{1}$, where $N_{1}$ is the number of cells. The time complexity of second search is  $ \left \lceil {N_{2} / 2}\right \rceil $, where $N_{2}$ is the number of keys per cell.  
 
 \begin{figure}
  \centering
@@ -59,11 +59,11 @@ Baseline model has one hyper-parameter: N (Number of cells specifying the number
 \begin{mscconclusion}
 	Following conclusions can be drawn from experimental results shown in table \ref{small_lognormal_lisa_baseline_10000} and Fig. \ref{fig:LISA_Baseline_Hyperparameter_Search}
 \begin{enumerate}
-    \item Optimum value of hyper-parameter N will be equal to number of points in the training data-set, resulting in 1 key per cell and search query time of O($log_{2}N$).
+    \item Optimum value of hyper-parameter $N$ will be equal to number of points in the training data-set, resulting in 1 key per cell and search query time of O($log_{2}N$).
 	
-	\item Average Query Time:  Average Query Time decreases with increase in value of N as number of keys per cell decreases.
+	\item Average Query Time:  Average Query Time decreases with increase in value of $N$ as number of keys per cell decreases.
 	\item Build time: Build time increases with increase in value of N, as metadata for additional cells needs to be calculated. 
-	\item Memory Size:  Memory requirements of the model increases with increase in value of N, as metadata for additional cells needs to be stored. Increase  in memory size is not significant with increase in N as we maintain only two values per cell, mapped value of first key in the cell and mapped value of last key in the cell.
+	\item Memory Size:  Memory requirements of the model increases with increase in value of N, as metadata for additional cells needs to be stored. Increase  in memory size is not significant with increase in $N$ as we maintain only two values per cell, mapped value of first key in the cell and mapped value of last key in the cell.
 \end{enumerate}
 \end{mscconclusion}
 
@@ -131,7 +131,7 @@ Table \ref{Point_Query_Comparision} and  Fig. \ref{fig:Point_Query_Comparision} 
 The following conclusions can be concluded:
 
 	\begin{enumerate}
-    \item LISA outperforms $K$D-tree in terms of average query time. Search complexity of $K$D-Tree and LISA baseline( configured to keep 1 key per cell) is $O(N)$, and O($log_{2}N$) respectively where N is the number of points in the training data-set. On the other hand point query search cost in LISA is a combination of 4 costs.
+    \item LISA outperforms $K$D-tree in terms of average query time. Search complexity of $K$D-Tree and LISA baseline( configured to keep 1 key per cell) is $O(N)$, and O($log_{2}N$) respectively where $N$ is the number of points in the training data-set. On the other hand point query search cost in LISA is a combination of 4 costs.
     \begin{enumerate}
     \item Search cost to find the grid cell to which point query belongs. This cost increase linearly with increase in number of grid cells. 
     %Once the grid cell is found, calculate the mapped value as specified in the section.

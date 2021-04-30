@@ -1,31 +1,50 @@
 \subsubsection{Activation Functions}
+
+From our observations, activation functions determines the shape of the fully connected neural network. With the one-dimensional data, the input and output of a neural network is always a scalar, which reveals interesting relations between the activation function and the output of neural network. We use two different activations functions to describe this relation.
+
+\begin{figure}[!htb]
+\begin{subfigure}[b]{0.5\textwidth}
+	\centering
+	\includegraphics[width=8cm]{graphs/insights/identity}
+	\caption{Identity Activation}
+	\label{fig:id_act}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.5\textwidth}
+	\centering
+	\includegraphics[width=8cm]{graphs/insights/relu}	
+	\caption{ReLU Activation}
+	\label{fig:relu_act}
+\end{subfigure}
+\caption{The predictions of neural networks with different activation functions. The blue line represents the ground truth and the orange line represents the predicted output.}
+\label{fig:relation_of_activation_function}
+\end{figure}
+
 \begin{itemize}
 \item
   If we use identity activation function, i.e.$z^{(i)}(x)=x$, then no
   matter how many layers are there, the fully connected neural network
   falls back to a linear regression.
 
-  \textbf{Proof:} The output of the first layer, with identity
-  activation function, will be
-  \(z^{(1)}(w^{(1)}x+b^{(1)})=w^{(1)}x+b^{(1)}\). Then the output will
-  be the input of the next layer, and hence the output of the second
-  layer will be
-  \(z^{(2)}(w^{(2)}(w^{(1)}x+b^{(1)})+b^{(2)})=w^{(2)}w^{(1)}x+w^{(2)}b^{(1)}+b^{(2)}\).
-  Similar induction can be obtained for multiple layers. Hence if we use
-  identity activation, the trained neural network will fall back to a
-  linear regression. 
+  \textbf{Proof:} The output of the first layer, with identity activation function, will be $o^{(1)}=z^{(1)}(w^{(1)}x+b^{(1)})=w^{(1)}x+b^{(1)}$. Then the output will be the input of the next layer, and hence the output of the second layer will be $o^{(2)}=z^{(2)}(w^{(2)}(w^{(1)}x+b^{(1)})+b^{(2)})=w^{(2)}w^{(1)}x+w^{(2)}b^{(1)}+b^{(2)}$. Hence if we use identity activation, the trained neural network will become a linear regression. The predicted output of a neural network with identity activation is illustrated in Fig \ref{fig:id_act}, where we could verify that the predicted output is a line.
 \item
-  With ReLU (Rectified Linear Unit) as activation function
-  i.e.~\(z^{(i)}(x)=\text{max}(0,x)\), then the fully connected neural
-  network falls back to a piecewise linear function.
+  With ReLU (Rectified Linear Unit) as activation function, i.e. $z^{(i)}(x)=\text{max}(0,x)$, then the fully connected neural network becomes a piecewise linear function.
 
-  \textbf{Proof:} The output with ReLU activation function, will be
-  \(z^{(1)}(w^{(1)}x+b^{(1)})=\text{max}(w^{(1)}x+b^{(1)}, 0)\). Then
-  the output will be the input of the next layer, and hence the output
-  of the second layer will be
-  \(z^{(2)}(w^{(2)}(w^{(1)}x+b^{(1)})+b^{(2)})=\text{max}(w^{(2)}w^{(1)}x+w^{(2)}b^{(1)}+b^{(2)},0)\).
-  Similar induction can be obtained for multiple layers. Hence if we use
-  identity activation, the trained neural network will fall back to a
-  piecewise linear function. The visualization below shows our lemma is
-  correct.
+\textbf{Proof:} In the first layer, the output of a neural network with ReLU activation will be $o^{(1)}=z^{(1)}(w^{(1)}x+b^{(1)})=\text{max}(w^{(1)}x+b^{(1)},0)$. There will be two cases for this function:
+
+\begin{equation}
+	o^{(1)}=\begin{cases}	
+		w^{(1)}x+b & w^{(1)}x+b>0 \\
+		0 & \text{otherwise}
+	\end{cases}
+\end{equation}
+
+The output of the first layer will be the input of the second layer, which uses the same ReLU activation function. Hence the output will be $o^{(2)}=z^{(2)}(w^{(2)}o^{(1)}+b^{(2)})=z^{(2)}(w^{(2)}\text{max}(w^{(1)}x+b^{(1)},0)+b^{(2)})$.
+
+\begin{equation}
+	o^{(2)}= \begin{cases}
+		w^{(2)}b^{(2)} & w^{(1)}x+b^{(1)}<0 \\
+		0 & w^{(2)}(\text{max}(w^{(1)}x+b^{(1)},0))+b^{(2)}<0 
+	\end{cases}	
+\end{equation}
 \end{itemize}
