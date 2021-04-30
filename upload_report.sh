@@ -6,5 +6,5 @@
 rm -rf ./report/*
 cp -R ../msc-project/* ./report/
 git add *
-git commit -m "Fix Issues"
+git commit -m "Fix #2"
 git push uzh master

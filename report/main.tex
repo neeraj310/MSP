@@ -136,13 +136,14 @@
 \begin{mscsummary}
 	In this chapter, we describe the implementation details of classic tree-based indexes and learned indexes.
 	\begin{enumerate}
-		\item In the first section, we present how to construct the B-Tree, Baseline model and Recursive Model Index (RMI) for one-dimensional data.
-		\item In the second section, we present how to construct the $K$D-Tree, LISA baseline and LISA model for two-dimensional data.
-		\item In the third section, we describe how to use these indexes to perform different queries. For the one-dimensional data, we show how to perform point query with B-Tree, Baseline model and RMI. For the two-dimensional data, we show how to perform point query, range query and $K$NN query with $K$D-Tree, LISA baseline and LISA model.
+		\item In the Section \ref{sec:one-dim-implementation}, we present how to construct the B-Tree, Baseline model and Recursive Model Index (RMI) for one-dimensional data.
+		\item In the Section \ref{sec:two-dim-implementation}, we present how to construct the $K$D-Tree, LISA baseline and LISA model for two-dimensional data.
+		\item In the Section \ref{sec:queries-implementation}, we describe how to use these indexes to perform different queries. For the one-dimensional data, we show how to perform point query with B-Tree, Baseline model and RMI. For the two-dimensional data, we show how to perform point query, range query and $K$NN query with $K$D-Tree, LISA baseline and LISA model.
 	\end{enumerate}
 \end{mscsummary}
 
 \section{One Dimensional Data}
+\label{sec:one-dim-implementation}
 
 \subsection{B-Tree}
 
@@ -157,6 +158,7 @@
 \input{chapters/implementations/one-dim/rmi}
 
 \section{Two Dimensional Data}
+\label{sec:two-dim-implementation}
 
 \subsection{$K$D-Tree}
 
@@ -167,6 +169,7 @@
 \input{chapters/implementations/two-dim/lisa}
 
 \section{Queries}
+\label{sec:queries-implementation}
 
 \input{chapters/implementations/queries/query}
 
