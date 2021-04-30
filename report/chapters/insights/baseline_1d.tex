@@ -34,17 +34,17 @@ From our observations, activation functions determines the shape of the fully co
 
 \begin{equation}
 	o^{(1)}=\begin{cases}	
-		w^{(1)}x+b & w^{(1)}x+b>0 \\
+		w^{(1)}x+b^{(1)} & w^{(1)}x+b^{(1)}>0 \\
 		0 & \text{otherwise}
 	\end{cases}
 \end{equation}
 
-The output of the first layer will be the input of the second layer, which uses the same ReLU activation function. Hence the output will be $o^{(2)}=z^{(2)}(w^{(2)}o^{(1)}+b^{(2)})=z^{(2)}(w^{(2)}\text{max}(w^{(1)}x+b^{(1)},0)+b^{(2)})$.
+\textbf{This paragraph will be rephrased very soon}
 
-\begin{equation}
-	o^{(2)}= \begin{cases}
-		w^{(2)}b^{(2)} & w^{(1)}x+b^{(1)}<0 \\
-		0 & w^{(2)}(\text{max}(w^{(1)}x+b^{(1)},0))+b^{(2)}<0 
-	\end{cases}	
-\end{equation}
+The output of the first layer will be the input of the second layer, which uses the same ReLU activation function. Hence the output will be $o^{(2)}=z^{(2)}(w^{(2)}o^{(1)}+b^{(2)})=z^{(2)}(w^{(2)}\text{max}(w^{(1)}x+b^{(1)},0)+b^{(2)})$. If $w^{(2)}(\text{max}(w^{(1)}x+b^{(1)},0))+b^{(2)}<0$, then the output will be $0$. Otherwise, as the $o^{(1)}$ is a vector, we have to perform the multiplication element by element. Assume that $o^{(1)}=[\text{max}(w^{(1)}_{1}x+b^{(1)}_1, 0),\cdots,\text{max}(w^{(1)}_{n}x+b^{(1)}_n,0)]$. By multiplying with $w^{(2)}$, we get $$o^{(2)}=w^{(2)}_1\text{max}(w_1^{(1)}x+b^{(1)}_1, 0)+\cdots+w^{(2)}_n\text{max}(w_n^{(1)}x+b^{(1)}_n, 0)+b_2$$
+
+For each term in the equation above, there are two possibilities: $0$ when $w_i^{(1)}x+b_1<0$ or $w_i^{(2)}w_i^{(1)}x+w_i^{(2)}b_i^{(1)}$. Without loss of generality, we consider a case where all of them are non-zero. In this case, we will have $$o^{(2)}=\sum_{i}w_i^{(2)}w_i^{(1)}x+\sum_i w_i^{(2)}b_i^{(1)}+b_2$$ 
+
+From the above induction, we find out that it is still a linear function when all values are positive. If there are some values to be zeros, then the function is still a linear function, but with different slope and intercept. Hence we conclude that the neural networks with ReLU activation function will become a piecewise linear function.
+
 \end{itemize}
