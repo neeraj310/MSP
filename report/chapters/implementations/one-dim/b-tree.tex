@@ -59,7 +59,7 @@ In the insertion, we travel down the tree and search for the position where the 
  }\uElse{
    \texttt{InsertNonFull(r, k)}
   }
- \caption{B-tree Insertion}
+ \caption{Insert}
  \label{algo:b-tree-insertion}
 \end{algorithm}
 
@@ -100,7 +100,7 @@ In the Algo. \ref{algo:b-tree-split-child}, the node \texttt{y} originally has $
 }
 \texttt{x.key$_i$ = y.key$_t$}\\
 \texttt{x.n = x.n+1}
-\caption{Split a Child Node in B-Tree}
+\caption{SplitChild}
 \label{algo:b-tree-split-child}	
 \end{algorithm}
 
@@ -138,6 +138,6 @@ The Algo. \ref{algo:b-tree-insert-nonfull} works as follows:
 	}
 	\texttt{InsertNonFull(x.c$_i$, k)}
 }
-\caption{Insert into a Non-Full Node in B-Tree}
+\caption{InsertNonFull}
 \label{algo:b-tree-insert-nonfull}	
 \end{algorithm}

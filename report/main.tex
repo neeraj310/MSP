@@ -82,7 +82,7 @@
 		\end{mdframed}
 	} {\medskip}
 	
-\newenvironment{mscsummary}{\fbox{Summary}}{\\}
+\newenvironment{mscsummary}{\fbox{Summary}}{\medskip}
 
 \newcommand{\comm}[1]{}
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
@@ -134,7 +134,12 @@
 \chapter{Implementation}
 
 \begin{mscsummary}
-	In this chapter, we first describe how we implement the B-Tree, Baseline model and recursive model for one-dimensional data. After that, we illustrate the implementation of LISA and LISA Baseline, which are two index models for two-dimensional data. At the end, we describe how we use these indexes to perform point query, range query and $K$NN query.
+	In this chapter, we describe the implementation details of classic tree-based indexes and learned indexes.
+	\begin{enumerate}
+		\item In the first section, we present how to construct the B-Tree, Baseline model and Recursive Model Index (RMI) for one-dimensional data.
+		\item In the second section, we present how to construct the $K$D-Tree, LISA baseline and LISA model for two-dimensional data.
+		\item In the third section, we describe how to use these indexes to perform different queries. For the one-dimensional data, we show how to perform point query with B-Tree, Baseline model and RMI. For the two-dimensional data, we show how to perform point query, range query and $K$NN query with $K$D-Tree, LISA baseline and LISA model.
+	\end{enumerate}
 \end{mscsummary}
 
 \section{One Dimensional Data}
