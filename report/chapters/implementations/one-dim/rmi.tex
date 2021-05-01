@@ -1,5 +1,5 @@
 %TODO: there should be some graph to demonstrate the last-mile problem.
-
+\label{sssec:RMI}
 In our baseline models, it is not very difficult to reduce the mean square error from millions to thousands. However, it is much harder to reduce it from thousands to tens, which is the so-called last mile problem.
 
 In order to solve this problem, the recursive model index was proposed \cite{kraska2018case}. The idea is to split the large dataset into smaller pieces and assign each piece an index model. By doing so, each model is only responsible for a small range of keys. Ideally, in each smaller range, the keys are distributed in a way that is easier to be learned by our index models, such as polynomial model, fully connected model or even a B-Tree model.

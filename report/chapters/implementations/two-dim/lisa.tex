@@ -1,8 +1,8 @@
-Spatial data and query processing have become ubiquitous due to the proliferation of location-based services such as digital mapping, location-based social networking, and geo-targeted advertising. Motivated by the performance benefits of learned indices for one-dimensional data, this section explores the application of learned index for spatial data. The main motivation is to map spatial data into one-dimensional data through several steps and apply machine learning techniques to generate a learned index for the one-dimensional data.
+Spatial data and query processing have become ubiquitous due to the proliferation of location-based services such as digital mapping, location-based social networking, and geo-targeted advertising. Motivated by the performance benefits of learned indices for one-dimensional data, this section explores the application of learned index for spatial data. The key idea in LISA \cite{li2020lisa} is to map spatial data into one-dimensional data through several steps and apply machine learning techniques to generate a learned index for the one-dimensional data.
 
 \subsubsection{Motivation}
 
-In the last section, we described a recursive model index (RMI) that consists of a number of machine learning models staged into a hierarchy to enable synthesis of specialised index structures, termed learned indexes. Provided with a search key $x$, RMI predicts the position of $x$'s data with some error bound, by learning the CDF over the key search space. However, the idea of RMI is not applicable in the context of spatial data as spatial data invalidates the assumption required by RMI that the data is sorted by key and that any imprecision can be easily corrected by a localised search. Although it is possible to learn multi-dimensional CDFs, such CDFs will result in searching local regions qualified on one dimension but not all dimensions.
+In the section \ref{sssec:RMI}, we described a recursive model index (RMI) that consists of a number of machine learning models staged into a hierarchy to enable synthesis of specialised index structures, termed learned indexes. Provided with a search key $x$, RMI predicts the position of $x$'s data with some error bound, by learning the CDF over the key search space. However, the idea of RMI is not applicable in the context of spatial data as spatial data invalidates the assumption required by RMI that the data is sorted by key and that any imprecision can be easily corrected by a localised search. Although it is possible to learn multi-dimensional CDFs, such CDFs will result in searching local regions qualified on one dimension but not all dimensions.
 \comm{  
 \begin{figure*}[t]
     \centering
@@ -32,7 +32,7 @@ For the one-dimensional data, we can learn the CDF by using a recursive model as
 	
 \end{mscexample}
 
-LISA solves this problem by partitioning search space into a series of grid cells based on the data distribution and building a\comment{partially monotonic} function map the data from $\mathbb{R}^d$ into $\mathbb{R}$, in our case, we have $d=2$. We call this function as \textit{Mapping Function}.
+LISA builds on the work from Tim Kraska \cite{kraska2018case} and solves this problem by mapping the 2-D key space into a 1-D sorted array and use linear regression functions to learn the cdf. It partitions the 2-D key space into a series of grid cells based on the data distribution and builds a partially monotonic function to map the data from $\mathbb{R}^d$ into $\mathbb{R}$, in our case, we have $d=2$. We call this function as \textit{Mapping Function}.
 
 \subsubsection{Definitions}
 
@@ -53,12 +53,19 @@ We can extend the learned index method for range queries on spatial data by usin
 For a range query, represented by the query rectangle $qr = [l_{0},u_{0}) \times [l_{1},u_{1})$, We only need to predict the indices of $(l_{0}, l_{1})$ and $(u_{0},u_{1})$ namely $i_{1}$ and $i_{2}$ respectively. Then we scan the keys in $i_{2}-i_{1}+1$ cells, and find those keys that fall in the query rectangle qr. 
 
 \begin{mscexample}
-As shown in Fig. \ref{fig:BaseLine_Method}, the key space is divided into 3 cells using the mapping function $\mathcal{M}((x,y))= x+y$. The query rectangle consisting of only $1$ key, falls inside the second cell. During prediction, we need to find out the cell to which our query rectangle belongs (the $2^{nd}$ cell in our example). Once the cell is identified, we need to compare the $2$ dimensional key value of the query point, against all the possible keys in that cell until a match is found. This results in $8$ irrelevant points accessed for the range query that only contains one relevant key.
+Conider the example shown in Fig. \ref{fig:BaseLine_Method}. . During prediction, we need to find out the cell to which our query point belongs (the $2^{nd}$ cell in our example). .
+
+	\begin{enumerate}
+		\item The 2-D key space is divided into 3 cells using the mapping function $\mathcal{M}((x,y))= x+y$. Each section in Fig. \ref{fig:BaseLine_Method} represents one cell. 
+		\item The query point is represented by the blue rectangle. It consists of only $1$ key and falls inside the second cell. 
+		\item Identify the cell to which the query rectangle belongs by doing a binary search based on query point mapped value. 
+		\item Once the cell $2$ is identified, we need to compare the 2-D key value of the query point, against all the possible keys in that cell 2 until a match is found. This can results in maximum of $8$ irrelevant points being accessed for the point query.
+	\end{enumerate}
 \end{mscexample}
 
 \begin{figure*}[t]
     \centering
-    \includegraphics[width=1.1\textwidth]{graphs/implementation/Baseline_limitation_new.pdf}
+    \includegraphics[width=1.1\textwidth]{graphs/implementation/Baseline_limitation_chen_limitation.pdf}
     \caption{LISA Baseline Method. In this figure, a) Key space is divided into 3 cells with equal number of keys. b) To search for a query, we first need to find out the cell which contain the query point. c) Once the query point is found, we need to compare the query point 2 dimensional key value with all the keys in the cell until a match is found}
     \label{fig:BaseLine_Method}
 \end{figure*}
@@ -66,41 +73,46 @@ As shown in Fig. \ref{fig:BaseLine_Method}, the key space is divided into 3 cell
 
 The training dataset for the baseline model can be notated as $(\boldsymbol{X}, Y)$ with entries notated as $(\boldsymbol{x},y)$. $\boldsymbol{X}$ represents the two dimensional key coordinates, and $Y$ represents the corresponding data item. 
 
-In order to construct the baseline model, we need to have several parameters listed below:
-\begin{enumerate}
-	\item $N$, which represents the number of cells into which the key's mapped value space will be divided.
-\end{enumerate}
-
-As described in Algorithm \ref{Training_LISA_Baseline}, during training, we perform the following operations:
-
-\begin{enumerate}
-	\item Sort all keys according to their mapped values.
-	\item Divide the keys into equal sized cells
-	\item Store the mapped values of first and last key for each cell into an array
-\end{enumerate}
-
 \begin{algorithm}[H]
     \SetAlgoLined
     \SetKwInOut{Input}{input}
     \SetKwInOut{Output}{Output}
-    \Input{$N$; trainset=[$(x,y);x \in \mathbb{R}^{2};y \in \mathbb{R}$]}
-    \Output{$\mathcal{M}$:Mapped Function}
-     \For{$i\gets0$ \KwTo $len(x)$}{
-            	\texttt{x[$i$].mapped\_value = x[$i$][0]+x[$i][1$]} \\
+    \Input{$N$: number\_of\_cells; trainset=[$(x,y);x \in \mathbb{R}^{2};y \in \mathbb{R}$]}
+    \Output{cell: Array containing cells' metadata}
+     \For{$i\gets0$ \KwTo $len($x$)$}{
+            	\texttt{$x$[$i$].mapped\_value = $x$[$i$][0]+$x$[$i$][1]} \\
             
      }
-     \texttt{sortXBasedOnMappedValue()}\\
-     \texttt{Divide $x$ into $N$ equal size cells}\\
-     %\texttt{Store mapped value of first and last key for each cell }\\
-      \For{$i\gets0$ \KwTo $N$} 
+     
+     \texttt{$K$ = len$(x) \slash N$} // keys per cell \\
+     \texttt{$x$ = $x$[argsort($x$.mapped\_value)]} //sort x based on mapped values \\ 
+     %\texttt{sorted_indexes = x_sorted.indexes()}
+     %\texttt{x = x[sorted_indexes]}
+     %\texttt{Divide x into equal size pages according to num\_of\_cells}\\
+     %\texttt{Store mapped value of first and last key for each page }\\
+      \For{$i\gets0$ \KwTo N}
      {
-         \texttt{denseArray[$i$].lower = first key in cell $i$  } \\
-		 \texttt{denseArray[$i$].upper = last key in cell $i$  }
+         \texttt{cell[$i$].lower = $x$[$i$* $K$].mapped\_value } \\
+		\texttt{cell[$i$].upper = $x$[($i$+1)*$K$].mapped\_value } \\  
 		
      }
-     \caption{Training Algorithm for LISA Baseline Method}
-     \label{Training_LISA_Baseline}
+     \Return \texttt{cell}
+		   
+     \caption{Training Algorithm for Lisa Baseline Method}
+     \label{algo:Training_Lisa_Baseline}
 \end{algorithm}
+
+In the Algo. \ref{algo:Training_Lisa_Baseline},  training of LISA baseline model is described in the following steps:
+
+\begin{enumerate}
+	\item $N$, which represents the number of cells into which the key's mapped value space will be divided.
+    \item In lines $1$ to $3$, we calculate the mapped value of each item in the training set.
+	\item On line $4$, we calculate the number of keys per cell. 
+	\item On line $5$, Sort train set according to keys' mapped values.
+	 \item In lines $6$ to $9$, we divide the keys into equal sized cells. Per cell we need to store meta data for two keys, corresponding to first and last key in the cell 
+\end{enumerate}
+
+
 
 For prediction, we find the cell corresponding to mapped value of the query point using binary search, scan this cell sequentially and compare the values of keys in the cell against the query point, until a match is found.
 
@@ -109,18 +121,36 @@ For prediction, we find the cell corresponding to mapped value of the query poin
 \begin{algorithm}[H]
     \SetAlgoLined
     \SetKwInOut{Input}{input}
-    \Input{\texttt{x\_test}: Key; \texttt{d:}Array with metadata for each cell}
+    \SetKwInOut{Output}{Output}
+     \Input{x\_test : query\_point; cell : cell\_metadata\_array: $x$ : training\_database\_array}
+     \Output{x\_test.value : query\_point\_value }
+    %\Input{\texttt{$x\_test$: query_point}; \texttt{$d$:}Array with metadata for each cell}
+    \texttt{cell\_found = False }\\
     \texttt{x\_test.mapped\_value = x\_test[0]+x\_test[1] } \\
-    \For{$i\gets0$ \KwTo $len(denseArray)$}
+    \For{$i\gets0$ \KwTo len(cell)}
     {
-        \If{$\mathcal{M}(x\_test) \in [d[i].lower,d[i].upper]$} 
+        \If{ x\_test.mapped\_value$\in$ [cell[$i$].lower, cell[$i$].upper)} 
         {
-		    \texttt{Key is in Page $i$ } \\
+		    %\texttt{Key is in Page $i$ } \\
+		    \texttt{cell\_found = True }\\
 		    \texttt{break }
+		   
 		}
     }
+    \uIf{cell\_found==True} {
+    `   \texttt{$K$ =  cell.keys\_per\_page  }\\
+        \texttt{cell\_offset = $K$*$i$  }\\
+    	 \For{$i\gets cell\_offset$ \KwTo $K$+cell\_offset}
+    {   
+        \If{(x\_test[0] == $x$[$i$][0]) and (x\_test[1] == $x$[$i$][1])  } 
+        {
+		   	\Return \texttt{$x$[$i$].value}
+		   
+		}
+    }
+    }
   
- 	 \texttt{Sequentially search for x\_test in page $i$} \\
+ 	 	\Return \texttt{-1}
      \caption{Prediction Algorithm for LISA Baseline Model }
 \end{algorithm}
 
@@ -169,8 +199,13 @@ The first task in LISA implementation is to partition the $2$ dimensional key sp
 The above inequality means that the mapped value of a key in cell $i$ will always be less than mapped values of a key in cell $j$, if $i <j$.
 
 \begin{mscexample}
-	Consider the example shown in the figure \ref{fig:Cell_Parttion}: 27 keys are partitioned into $9$ cell,  resulting in $3$ keys per cell. To partition the key space, we first sort the keys values according to $1^{st}$ dimension and divide the keys into $3$ vertical columns each containing $9$ keys. Then for each vertical column of $9$ keys, we sort the keys again according to $2^{nd}$ dimension, and divide the keys in each column into $3$ new cells. The number of cells $N$ into which the keys space is divided, is a hyper-parameter and found empirically using grid search.
-
+	Consider the example shown in the figure \ref{fig:Cell_Parttion}.
+	\begin{enumerate}
+		\item Plot A shows distribution of 27 keys in 2-D space. 
+		\item In plot B, we first sort Keys on $1^{st}$ dimension and divide into 3 vertical columns each containing 9 keys. 
+		\item Then for each vertical column of $9$ keys, we sort the keys again according to $2^{nd}$ dimension, and divide the keys in each vetical column into $3$ new cells. 
+		\item The total number of cells into which the keys space is divided, is a hyper-parameter and found empirically using grid search.
+	\end{enumerate}
 \end{mscexample}
 
 We need to sort the key space along the sequence of axis before we partition the keys value along that axis to make sure that cells don't contain overlapping keys.
@@ -178,32 +213,52 @@ We need to sort the key space along the sequence of axis before we partition the
 \begin{figure*}[t]
     \centering
     \includegraphics[width=1\textwidth]{graphs/implementation/cell_generation.pdf}
-    \caption{Cell Partition Strategy. In this figure, we first sort Keys on $1^{st}$ dimension and divide into 3 vertical columns each containing 9 keys. Then we sort each vertical column keys on $2^{nd}$ dimension and divide into 3 horizontal columns each containing 3 keys}
+    \caption{Cell Partition Strategy.}
     \label{fig:Cell_Parttion}
 \end{figure*}
 
 \begin{algorithm}[H]
     \SetAlgoLined
     \SetKwInOut{Input}{input}
-     \Input{\texttt{N;$x$; $y$}}
-     \texttt{trainset=[$(x,y);x \in \mathbb{R}^{2};y \in \mathbb{R}$]} \\
-     \texttt{$keysPerCell =  len(x) \slash (N \times N) $}\\
-     \texttt{sort$x$BasedOnDimension\_0()} // Sort x based on $1^{st}$ dimension. \\
-     \For{$i\gets0$ \KwTo $N$}  
-     {
-        \texttt{Store the 1st dimensional coordinates of first and last key in cell $i$} \\
-        \texttt{Sort keys in cell $i$ based on 2nd dimension,x[:][1] }\\
-     }
-      \For{$i\gets0$ \KwTo $N$}
+      \Input{$N$ : length\_of\_grid\_cell; trainset : [$(x,y);x \in \mathbb{R}^{2};y \in \mathbb{R}$]}
+     %\texttt{trainset=[$(x,y);x \in \mathbb{R}^{2};y \in \mathbb{R}$]} \\
+     \texttt{$K$ =  len($x$)\slash$(N * N) $} // K: Keys per cell \\
+      \texttt{$x$ = $x$[argsort($x$[0])]} //Sort x based on $1^{st}$ dimension \\
+     \For{$i\gets0$ \KwTo $N$}
       {
          \For{$j\gets0$ \KwTo $N$}
          {
-            \texttt{Store the 2nd dimensional coordinate of first and last key of cell[$i$][$j$] .} \\
+           cell[$i$+$j$*$N$].lower[0] = $x$[$i$ *$K$ *$N$][0] // Store keys's x coordinate for first key in cell.\\
+           cell[$i$+$j$*$N$].upper[0] = $x$[($i+1$) *$K$ *$N$][0] // Store keys's x coordinate for last key in cell.\\
+		 }
+      }
+     \For{$i\gets0$ \KwTo $N$}  
+     {
+        \texttt{$x$[$i$*$K$*$N$:($i+1$)*$K$*$N$] = $x$[argsort($x$[$i$*$K$*$N$:($i+1$)*$K$ *$N$])+$i$*$K$*$N$][1]} //Sort x based on $2^{nd}$ dimension \\
+     } 
+     \For{$i\gets0$ \KwTo $N$}
+      {
+         \For{$j\gets0$ \KwTo $N$}
+         {
+            cell[$i$+$j$*$N$].lower[1] = $x$[$j$ *$K$ *$N$][0] // Store keys's y coordinate for first key in cell.\\
+            cell[$i$+$j$*$N$].upper[1] = $x$[($j+1$) *$K$ *$N$][0] // Store keys's y coordinate for last key in cell.\\
 		 }
       }
      \caption{Grid Cell Generation Algorithm for LISA Method}
-     \label{Training_LISA_Baseline}
+     \label{algo:grid_cell_generation}
 \end{algorithm}
+
+In the Algo. \ref{algo:grid_cell_generation},  segregation of key space into cells is performed in the following steps:
+
+\begin{enumerate}
+	\item Row length of the grid cell $N$ is passed as input. In our implementation grid cell is constrained to be a square and total number of cells is given by $N$*$N$.
+	\item  Then we calculate number of keys per cell ($K$) and sort $x$ based on $1^{st}$ dimension.
+	\item In lines $3$ to $8$, we divide the key space into $N$ vertical columns each containing $K$*$N$ keys. Since our cell grid is $N$*$N$, for each cell along x dimension, we store the same values of keys's x coordinates for $N$ cells along y dimension, thereby creating a vertical column of $N$ cells for each cell along x dimension. Per cell we need to store meta data for two keys, corresponding to first and last key in the cell. 
+	
+	\item In lines $9$ to $11$, for each vertical column of $K$*$N$ keys, we sort the keys again according to $2^{nd}$ dimension.
+	\item In lines $12$ to $17$, we divide the keys in each vertical column into $N$ new cells and store the keys's y coordinates.
+\end{enumerate}
+
 
 \subsubsection{Mapping Function}
 \label{sssec:Mapping_Function}
@@ -233,7 +288,8 @@ As shown in figure \ref{fig:Lebesgue_Measure}, in $2$-dimensional case, $\frac {
 \begin{figure*}[t]
     \centering
     \includegraphics[width=1\textwidth]{graphs/Mapped_cdf.png}
-    \caption{Mapping 2 dimensional key Values to one dimensional cdf. In this figure, we first generate grid cells, and apply Lebesgue Measure to each cell in 1). Then in the 2) step, we sort key in each cell according to mapped value. Mapped values in consecutive cells are already sorted by mapping function definition. The third plot is the CDF of mapped values.}
+    \caption{Mapping 2 dimensional key Values to one dimensional cdf.} 
+    %In this figure, we first generate grid cells, and apply Lebesgue Measure to each cell in 1). Then in the 2) step, we sort key in each cell according to mapped value. Mapped values in consecutive cells are already sorted by mapping function definition. The third plot is the CDF of mapped values.}
     \label{fig:Mapped_Cdf}
 \end{figure*}
 

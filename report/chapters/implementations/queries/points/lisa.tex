@@ -1,9 +1,65 @@
-Point query search in LISA is composed of following steps.
+\begin{algorithm}[H]
+    \SetAlgoLined
+    \SetKwInOut{Input}{input}
+    \SetKwInOut{Output}{Output}
+     \Input{x\_test :query\_point; $D$: number\_of\_shards\_per\_mapped\_interval; cell :cell\_metadata\_array: $x$ :training\_database\_array}
+     \Output{x\_test.value : query\_point\_value }
+    %\Input{\texttt{$x\_test$: query_point}; \texttt{$d$:}Array with metadata for each cell}
+    \texttt{cell\_found = False }\\
+    %\texttt{x\_test.mapped\_value = x\_test[0]+x\_test[1] } \\
+    \For{$i\gets0$ \KwTo len(cell)}
+    {
+        \uIf{ (x\_test[0]>=cell[$i$].lower[0]) and (x\_test[1]<=cell[$i$].upper[0])} 
+        {
+            \If{ (x\_test[1]>=cell[$i$].lower[1]) and (x\_test[1]<=cell[$i$].upper[1])} 
+            {
+		    %\texttt{Key is in Page $i$ } \\
+		    \texttt{cell\_found = True }\\
+		    \texttt{break }
+		   
+		   }
+		}
+    }
+    \If{\texttt{cell\_found==True}} {
+          \texttt{x\_test.area=(x\_test[0]-cell[$i$].lower[0])*
+                (x\_test[1]-cell[$i$].lower[1])}\\
+        \texttt{cell\_area=(cell[$i$].upper[0]-cell[$i$].lower[0])*
+        (cell[$i$].upper[1]-cell[$i$].lower[1])}\\
+           \texttt{x\_test.mapped\_value=cell[$i$].id +(x\_test.area\slash cell\_area)}\\
+           \texttt{x\_test.mapped\_interval=binary\_search(cell.mapped\_array, x\_test.mapped\_value)}\\
+           \texttt{shard\_id = x\_test.mapped\_interval*$D$ + cell.shard\_prediction(x\_test.mapped\_value) }\\
+           \texttt{$K$=cell.keys\_per\_shard}\\
+           \texttt{shard\_offset=shard\_id*$K$ }\\
+           	\For{$i \gets$ shard\_offset \KwTo shard\_offset +$K$}
+            {   
+                \If{(x\_test[0] == $x$[$i$][0]) and (x\_test[1] == $x$[$i$][1])  } 
+                    {
+		   	            \Return \texttt{$x$[$i$].value}
+		   
+		            }
+            }
+                       
+           
+           \Return \texttt{-1}
+       }
+  
+ 	 	\Return \texttt{-1}
+     \caption{Prediction Algorithm for LISA Point Query }
+     \label{algo:Lisa_point_query}
+\end{algorithm}
+
+In the Algo. \ref{algo:Lisa_point_query}, Point query search is performed in following steps:
 
 \begin{enumerate}
-	\item Find the cell to which point query belongs by comparing the query key value with first and last key in each cell. First key in the cell represents the lower corner of the cell, whereas last key in the cell represents the upper corner. This search will be linear in the number of cells.
-	\item Calculate mapped value of the query key as mentioned in the Section \ref{sssec:Mapping_Function} \textit{Mapping Function}.
-	\item During model training, $2$ dimensional key space is mapped into a sorted one dimensional array. Find the mapped interval to which point query's mapped value belongs using binary search on this array.  
-	\item Predict the shard id for calculated mapped interval. It is found empirically that predicted shard id can differ from ground-truth value by 1 for keys falling near the shard boundaries. 
-	\item Search for the query key in the predicted shard by sequentially comparing against all the keys in the shard until a match is found. In case of no match, search in adjacent left and right shards as predicted shard id can have an error of $1$. 
+	\item In lines $2$ to $8$, find the cell to which point query belongs by comparing the query key value with first and last key in each cell. First key in the cell represents the lower corner of the cell, whereas last key in the cell represents the upper corner. This search will be linear in the number of cells.
+	\item In lines $10$ to $12$, calculate mapped value of the query key as mentioned in the Section \ref{sssec:Mapping_Function} \textit{Mapping Function}.
+	
+	\item During model training, $2$ dimensional key space is mapped into a sorted one dimensional array.  On line $11$, find the mapped interval to which point query's mapped value belongs using binary search on this array.  
+	
+	\item On line $14$, predict the shard id for calculated mapped interval. It is found empirically that predicted shard id can differ from ground-truth value by 1 for keys falling near the shard boundaries. 
+	
+	\item In lines $17$ to $20$, search for the query key in the predicted shard by sequentially comparing against all the keys in the shard until a match is found. 
+	
+	\item In case of no match, repeat the previous step in  adjacent left and right shards as predicted shard id can have an error of $1$. 
 \end{enumerate}
+
