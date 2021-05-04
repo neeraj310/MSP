@@ -1,0 +1,1355 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>indexing.models.lisa.basemodel API documentation</title>
+<meta name="description" content="Created on Fri Feb 26 14:36:30 2021 …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>indexing.models.lisa.basemodel</code></h1>
+</header>
+<section id="section-intro">
+<p>Created on Fri Feb 26 14:36:30 2021</p>
+<p>@author: neera</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python"># -*- coding: utf-8 -*-
+&#34;&#34;&#34;
+Created on Fri Feb 26 14:36:30 2021
+
+@author: neera
+&#34;&#34;&#34;
+import sys
+from timeit import default_timer as timer
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+sys.path.append(&#39;&#39;)
+import src.indexing.utilities.metrics as metrics
+
+
+class LisaBaseModel():
+    def __init__(self, degree) -&gt; None:
+        # PageCount : Number of pages into which keyspace is divided
+        self.pageCount = degree
+        # denseArray = Array to store Page Addresses
+        self.denseArray = np.zeros((degree, 3))
+        # nuofKeys = Total Nu of Keys in Database
+        self.nuofKeys = 0
+        # keysPerPage = Nu of keys per page.
+        self.keysPerPage = 0
+        # Data Structure to hold keys-value pairs
+        self.train_array = 0
+        self.name = &#39;Lisa Baseline&#39;
+        #Book Keeping code
+        self.page_size = 1
+        self.debugPrint = False
+
+
+    &#39;&#39;&#39;
+        Apply mapping function(key.x1+key.x2) to keys database.
+        Parameters
+        ----------
+        self.train_array:
+             Data structure containing key-value pairs .
+         
+        Returns
+        -------
+        self.train_array:
+             Update the data structure with mapped value for each key 
+    &#39;&#39;&#39;
+
+    def mapping_function(self):
+        for i in range(0, self.train_array.shape[0]):
+            self.train_array[
+                i, 3] = self.train_array[i][0] + self.train_array[i][1]
+
+    &#39;&#39;&#39;
+        Plot mapped values against position indexes.
+       
+    &#39;&#39;&#39;
+
+    def plot_function(self):
+        plt.figure(figsize=(20, 1000))
+        plt.plot(self.train_array[:, 3], self.train_array[:, 2])
+        plt.xlabel(&#39;Mapped Value&#39;)
+        plt.ylabel(&#39;Position Index&#39;)
+        plt.show()
+        return
+
+    &#39;&#39;&#39;
+        Initialize model parameters based on size of training data
+        
+    &#39;&#39;&#39;
+
+    def init_dense_array(self):
+
+        # nuofKeys will be equal to nu of data points in the training database.
+        self.nuofKeys = self.train_array.shape[0]
+        self.denseArray = np.zeros((self.pageCount, 3))
+        # Divide the keys space into equal length intervals.
+        self.keysPerPage = self.nuofKeys // self.pageCount
+        # Last page may have less number of keys than keysPerPage
+        if (self.nuofKeys &gt; self.keysPerPage * self.pageCount):
+            self.keysPerPage = self.keysPerPage + 1
+
+        if (((self.keysPerPage * self.pageCount) - self.nuofKeys) &gt;=
+                self.keysPerPage):
+            print(
+                &#39;Invalid configuration, Nu of keys per page needs to be greater than page count&#39;
+            )
+            return -1
+        # Store mapped value of first and last key of each page in denseArray
+        # These values will be used to decide the page for query point during query search
+        for i in range(self.pageCount - 1):
+            self.denseArray[i][0] = self.train_array[i * self.keysPerPage, 3]
+            self.denseArray[i][1] = self.train_array[(
+                (i + 1) * self.keysPerPage) - 1, 3]
+            self.denseArray[i][2] = i
+
+        # Last page may not be full
+        i = self.pageCount - 1
+        #Store mapped value boundries
+        self.denseArray[i][0] = self.train_array[i * self.keysPerPage, 3]
+        self.denseArray[i][1] = self.train_array[self.nuofKeys - 1, 3]
+        self.denseArray[i][2] = i
+        return 0
+
+    &#39;&#39;&#39;
+       Perform binary search based on query point mapped value to find the page address
+       containign the key
+       Parameters
+        ----------
+        x : Integer 
+            Mapped value of the query point
+                
+        Returns
+        -------
+        mid: Integer
+           Returns the page address or -1
+        
+    &#39;&#39;&#39;
+
+    def search_page_index(self, x):
+        low = 0
+        high = self.pageCount - 1
+        mid = 0
+        #print(&#39;searching for %d&#39; %(x))
+        while low &lt;= high:
+
+            mid = (high + low) // 2
+            #print(&#39;mid is %d&#39; %(mid))
+            # If x is greater, ignore left half
+            if self.denseArray[mid][1] &lt; x:
+                low = mid + 1
+
+            # If x is smaller, ignore right half
+            elif self.denseArray[mid][0] &gt; x:
+                high = mid - 1
+
+            # means x is present at mid
+            else:
+                #print(&#39;\n returning page %d&#39; %(mid))
+                return mid
+
+        # If we reach here, then the element was not present
+        #print(&#39;\n returning page %d&#39; %(-1))
+        return -1
+
+    &#39;&#39;&#39;
+       Perform binary search for the query point in a page based on mapped value
+       Parameters
+        ----------
+        x : Integer 
+            Mapped value of the query point
+        page_lower : Interger
+            Offset of the page containg the mapped key        
+        Returns
+        -------
+        mid: Integer
+           Returns the index which matches the query point mapped value or -1 
+        
+    &#39;&#39;&#39;
+
+    def key_binary_search(self, x, page_lower):
+        low = page_lower
+        # Last page may contain less nu of keys than self.keysPerPage
+        if (page_lower == (self.keysPerPage * (self.pageCount - 1))):
+            # Last page
+            high = self.nuofKeys - 1
+        else:
+            high = page_lower + self.keysPerPage - 1
+        mid = 0
+        #print(&#39;searching for %d&#39; %(x))
+        while low &lt;= high:
+
+            mid = (high + low) // 2
+            #print(&#39;mid is %d&#39; %(mid))
+            # If x is greater, ignore left half
+            if self.train_array[mid][3] &lt; x:
+                low = mid + 1
+
+                # If x is smaller, ignore right half
+            elif self.train_array[mid][3] &gt; x:
+                high = mid - 1
+
+            # means x is present at mid
+            else:
+                #print(&#39;\n returning index %d&#39; %(mid))
+                return mid
+
+        # If we reach here, then the element was not present
+        #print(&#39;\n returning page %d&#39; %(-1))
+        return -1
+
+    &#39;&#39;&#39;
+       Return keys belonging to range query from cells belonging to cell list
+       Parameters
+        ----------
+        query_l : tuple
+            Range Query lower coordinate
+        
+        query_u  : tuple
+            Range Query upper coordinate
+            
+        cellList : List
+            List contaning cells ids which are identified as part of 
+        query
+                     
+        Returns
+        -------
+        keylist :  npArray
+            Array of key/value pairs fetched by range query
+               
+                           
+    &#39;&#39;&#39;
+    def getKeysInRangeQuery(self, lowerPage, upperPage,query_l, query_u):
+        keyList = []
+        pageIdx = lowerPage
+        while(pageIdx &lt;=upperPage):
+            pageStart = pageIdx * self.keysPerPage
+            # Last page may contain less nu of keys than self.keysPerPage
+            if (pageStart == (self.keysPerPage * (self.pageCount - 1))):
+                # Last page
+                pageEnd = self.nuofKeys
+            else:
+                pageEnd = pageStart + self.keysPerPage
+           
+            
+            for j in range(pageStart, pageEnd):
+                 if(self.train_array[j, 0] &gt;= query_l[0] and self.train_array[j, 0] &lt;= query_u[0] )and \
+                         (self.train_array[j, 1] &gt;= query_l[1] and self.train_array[j, 1] &lt;= query_u[1] ):
+                        keyList.append(self.train_array[j, 0:3])
+            pageIdx += 1
+     
+        return np.array(keyList)
+    
+    &#39;&#39;&#39;
+       Decompose range query into a union of smaller query rectangles each 
+       belong to one and only one cell. 
+        
+        Parameters
+        ----------
+        query_l : tuple
+            Range Query lower coordinate
+        
+        query_u  : tuple
+            Range Query upper coordinate
+                     
+        Returns
+        -------
+        cell_list :  union of smaller query rectangles each 
+       belong to one and only one cell.
+            
+    &#39;&#39;&#39;
+    def range_query(self,query_l, query_u):
+      
+        if self.debugPrint:
+              print(&#39;Get pages for range (%d, %d), (%d, %d)&#39; %(query_l[0], query_l[1], query_u[0], query_u[1] )) 
+        lowerPage = self.search_page_index( query_l[0]+query_l[1]) 
+        upperPage = self.search_page_index( query_u[0]+query_u[1]) 
+        if self.debugPrint:
+            print(&#34;Pages to search from %d to %d&#34; %(lowerPage,upperPage))
+        return (lowerPage,upperPage)
+    
+    
+    &#39;&#39;&#39;
+        Predict range query for lisa model
+                                
+    &#39;&#39;&#39;
+    def predict_range_query(self, query_l, query_u):
+        (lowerPage,upperPage) =self.range_query(query_l, query_u) 
+        if(lowerPage == -1) or (upperPage == -1)  :
+            if self.debugPrint:
+                print(&#39;range query not found&#39;)
+            return -1
+        else:
+            neighboursKeySet = self.getKeysInRangeQuery(lowerPage, upperPage,query_l,query_u )
+            return np.sort(neighboursKeySet[:, -1])
+        
+
+
+    &#39;&#39;&#39;
+       Predict the position of query point in the database
+       Parameters
+        ----------
+        Query_point: Tuple 
+            2 dimensional key value
+       
+        Returns
+        -------
+        self.train_array[j][2]: Integer
+           Returns the value at the query point
+        
+    &#39;&#39;&#39;
+
+    def predict(self, query_point):
+        #print(query_point)
+        #start_time = timer()
+        mapped_val = query_point[0] + query_point[1]
+        i = self.search_page_index(mapped_val)
+        if (i == -1):
+            print(
+                &#39;\n\n\n Page not found query point = %d %d, mapped value = %d&#39;
+                % (query_point[0], query_point[1], mapped_val))
+            return -1
+
+        else:
+            page_lower = i * self.keysPerPage
+            # Last page may contain less nu of keys than self.keysPerPage
+            if (page_lower == (self.keysPerPage * (self.pageCount - 1))):
+                # Last page
+                high = self.nuofKeys
+            else:
+                high = page_lower + self.keysPerPage
+
+            for j in range(page_lower, high):
+                if ((query_point[0] == self.train_array[j][0])
+                        and (query_point[1] == self.train_array[j][1])):
+                    #print( &#39;value found in location %d &#39;%(in_data_arr[j][2]))
+                    #print(&#39;Time taken %f&#39;%(timer()-start_time))
+                    self.train_array[j][2]
+                    return self.train_array[j][2]
+
+            print(
+                &#39;\n\n\n Point not found query point = %d %d, mapped value = %d&#39;
+                % (query_point[0], query_point[1], mapped_val))
+            return -1
+
+    &#39;&#39;&#39;
+       Predict the position of query point based on mapped value instead of 
+       sequential search. 
+       Parameters
+        ----------
+        Query_point: Tuple 
+            2 dimensional key value
+       
+        Returns
+        -------
+        self.train_array[j][2]: Integer
+           Returns the value at the query point
+        
+    &#39;&#39;&#39;
+
+    def predict_opt(self, query_point):
+
+        mapped_val = query_point[0] + query_point[1]
+        i = self.search_page_index(mapped_val)
+        if (i == -1):
+            print(
+                &#39;\n\n\nPage Not Found:search page return -1, for query point %d %d \n\n&#39;
+                % (query_point[0], query_point[1]))
+            return i
+
+        else:
+
+            page_lower = i * self.keysPerPage
+            # Find key index based on mapped value
+            key_index = self.key_binary_search(mapped_val, page_lower)
+            if (key_index != -1):
+                # Multiple keys can have the same mapped value.
+
+                if ((query_point[0] == self.train_array[key_index][0]) and
+                    (query_point[1] == self.train_array[key_index][1])):
+                    # Return value if index key value matches with query point
+                    return (self.train_array[key_index][2])
+                else:
+                    i = 0
+                    # Search in the neighbourhood of index returned by key_binary_search
+                    # as multiple keys can have the same mapped value
+                    while (mapped_val == self.train_array[key_index - i][3]):
+                        if ((query_point[0]
+                             == self.train_array[key_index - i][0])
+                                and (query_point[1]
+                                     == self.train_array[key_index - i][1])):
+                            return (self.train_array[key_index - i][2])
+                        else:
+                            i = i + 1
+                    i = 0
+                    while (mapped_val == self.train_array[key_index + i][3]):
+                        if ((query_point[0]
+                             == self.train_array[key_index + i][0])
+                                and (query_point[1]
+                                     == self.train_array[key_index + i][1])):
+                            return (self.train_array[key_index + i][2])
+                        else:
+                            i = i + 1
+                print(
+                    &#39;\n\n\n Point not found query point = %d %d, mapped value = %d&#39;
+                    % (query_point[0], query_point[1], mapped_val))
+                return -1
+            else:
+                print(
+                    &#39;\n\n\n Point not found query point = %d %d, mapped value = %d&#39;
+                    % (query_point[0], query_point[1], mapped_val))
+                return -1
+
+    &#39;&#39;&#39;
+       Train the lisa Baselinemodel: Training consists of:
+            a) Applying mapping function to keys values taking into account &#39;
+               cell boundaries
+            b)Divining mapped values into equal length intervals. 
+    
+       Parameters
+        ----------
+        Train and test point np arrays
+       
+        Returns
+        -------
+        mse: Float
+           Mean square error for eval points
+           time : Time taken to build the lisaBaseline model. 
+        
+    &#39;&#39;&#39;
+
+    def train(self, x_train, y_train, x_test, y_test):
+
+        print(x_train.shape)
+        print(x_test.shape)
+        print(y_train.shape)
+        print(y_test.shape)
+
+        np.set_printoptions(threshold=1000)
+        start_time = timer()
+        self.train_array = np.hstack((x_train, y_train.reshape(-1, 1),
+                                      np.zeros((x_train.shape[0], 1),
+                                               dtype=x_train.dtype)))
+        self.train_array = self.train_array.astype(&#39;float64&#39;)
+        # Apply mapping function to 2 dimenional key values
+        self.mapping_function()
+
+        # Sort the input data array with mapped values
+        self.train_array = self.train_array[self.train_array[:, 3].argsort()]
+        #self.plot_function(in_data_arr)
+
+        #Init dense array with sorted mapped values(Store first and last key per page)
+        if (self.init_dense_array() == -1):
+            return -1, timer() - start_time
+
+        end_time = timer()
+        print(&#39;/n build time %f&#39; % (end_time - start_time))
+        test_data_size = x_test.shape[0]
+        pred_y = []
+        #for i in range(20):
+        print(&#39;\n In Lisabaseline.build evaluation %d data points&#39; %
+              (test_data_size))
+        for i in range(test_data_size):
+            pred_y.append(self.predict(x_test[i]))
+
+        pred_y = np.array(pred_y)
+        mse = metrics.mean_squared_error(y_test, pred_y)
+        return mse, end_time - start_time</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="indexing.models.lisa.basemodel.LisaBaseModel"><code class="flex name class">
+<span>class <span class="ident">LisaBaseModel</span></span>
+<span>(</span><span>degree)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class LisaBaseModel():
+    def __init__(self, degree) -&gt; None:
+        # PageCount : Number of pages into which keyspace is divided
+        self.pageCount = degree
+        # denseArray = Array to store Page Addresses
+        self.denseArray = np.zeros((degree, 3))
+        # nuofKeys = Total Nu of Keys in Database
+        self.nuofKeys = 0
+        # keysPerPage = Nu of keys per page.
+        self.keysPerPage = 0
+        # Data Structure to hold keys-value pairs
+        self.train_array = 0
+        self.name = &#39;Lisa Baseline&#39;
+        #Book Keeping code
+        self.page_size = 1
+        self.debugPrint = False
+
+
+    &#39;&#39;&#39;
+        Apply mapping function(key.x1+key.x2) to keys database.
+        Parameters
+        ----------
+        self.train_array:
+             Data structure containing key-value pairs .
+         
+        Returns
+        -------
+        self.train_array:
+             Update the data structure with mapped value for each key 
+    &#39;&#39;&#39;
+
+    def mapping_function(self):
+        for i in range(0, self.train_array.shape[0]):
+            self.train_array[
+                i, 3] = self.train_array[i][0] + self.train_array[i][1]
+
+    &#39;&#39;&#39;
+        Plot mapped values against position indexes.
+       
+    &#39;&#39;&#39;
+
+    def plot_function(self):
+        plt.figure(figsize=(20, 1000))
+        plt.plot(self.train_array[:, 3], self.train_array[:, 2])
+        plt.xlabel(&#39;Mapped Value&#39;)
+        plt.ylabel(&#39;Position Index&#39;)
+        plt.show()
+        return
+
+    &#39;&#39;&#39;
+        Initialize model parameters based on size of training data
+        
+    &#39;&#39;&#39;
+
+    def init_dense_array(self):
+
+        # nuofKeys will be equal to nu of data points in the training database.
+        self.nuofKeys = self.train_array.shape[0]
+        self.denseArray = np.zeros((self.pageCount, 3))
+        # Divide the keys space into equal length intervals.
+        self.keysPerPage = self.nuofKeys // self.pageCount
+        # Last page may have less number of keys than keysPerPage
+        if (self.nuofKeys &gt; self.keysPerPage * self.pageCount):
+            self.keysPerPage = self.keysPerPage + 1
+
+        if (((self.keysPerPage * self.pageCount) - self.nuofKeys) &gt;=
+                self.keysPerPage):
+            print(
+                &#39;Invalid configuration, Nu of keys per page needs to be greater than page count&#39;
+            )
+            return -1
+        # Store mapped value of first and last key of each page in denseArray
+        # These values will be used to decide the page for query point during query search
+        for i in range(self.pageCount - 1):
+            self.denseArray[i][0] = self.train_array[i * self.keysPerPage, 3]
+            self.denseArray[i][1] = self.train_array[(
+                (i + 1) * self.keysPerPage) - 1, 3]
+            self.denseArray[i][2] = i
+
+        # Last page may not be full
+        i = self.pageCount - 1
+        #Store mapped value boundries
+        self.denseArray[i][0] = self.train_array[i * self.keysPerPage, 3]
+        self.denseArray[i][1] = self.train_array[self.nuofKeys - 1, 3]
+        self.denseArray[i][2] = i
+        return 0
+
+    &#39;&#39;&#39;
+       Perform binary search based on query point mapped value to find the page address
+       containign the key
+       Parameters
+        ----------
+        x : Integer 
+            Mapped value of the query point
+                
+        Returns
+        -------
+        mid: Integer
+           Returns the page address or -1
+        
+    &#39;&#39;&#39;
+
+    def search_page_index(self, x):
+        low = 0
+        high = self.pageCount - 1
+        mid = 0
+        #print(&#39;searching for %d&#39; %(x))
+        while low &lt;= high:
+
+            mid = (high + low) // 2
+            #print(&#39;mid is %d&#39; %(mid))
+            # If x is greater, ignore left half
+            if self.denseArray[mid][1] &lt; x:
+                low = mid + 1
+
+            # If x is smaller, ignore right half
+            elif self.denseArray[mid][0] &gt; x:
+                high = mid - 1
+
+            # means x is present at mid
+            else:
+                #print(&#39;\n returning page %d&#39; %(mid))
+                return mid
+
+        # If we reach here, then the element was not present
+        #print(&#39;\n returning page %d&#39; %(-1))
+        return -1
+
+    &#39;&#39;&#39;
+       Perform binary search for the query point in a page based on mapped value
+       Parameters
+        ----------
+        x : Integer 
+            Mapped value of the query point
+        page_lower : Interger
+            Offset of the page containg the mapped key        
+        Returns
+        -------
+        mid: Integer
+           Returns the index which matches the query point mapped value or -1 
+        
+    &#39;&#39;&#39;
+
+    def key_binary_search(self, x, page_lower):
+        low = page_lower
+        # Last page may contain less nu of keys than self.keysPerPage
+        if (page_lower == (self.keysPerPage * (self.pageCount - 1))):
+            # Last page
+            high = self.nuofKeys - 1
+        else:
+            high = page_lower + self.keysPerPage - 1
+        mid = 0
+        #print(&#39;searching for %d&#39; %(x))
+        while low &lt;= high:
+
+            mid = (high + low) // 2
+            #print(&#39;mid is %d&#39; %(mid))
+            # If x is greater, ignore left half
+            if self.train_array[mid][3] &lt; x:
+                low = mid + 1
+
+                # If x is smaller, ignore right half
+            elif self.train_array[mid][3] &gt; x:
+                high = mid - 1
+
+            # means x is present at mid
+            else:
+                #print(&#39;\n returning index %d&#39; %(mid))
+                return mid
+
+        # If we reach here, then the element was not present
+        #print(&#39;\n returning page %d&#39; %(-1))
+        return -1
+
+    &#39;&#39;&#39;
+       Return keys belonging to range query from cells belonging to cell list
+       Parameters
+        ----------
+        query_l : tuple
+            Range Query lower coordinate
+        
+        query_u  : tuple
+            Range Query upper coordinate
+            
+        cellList : List
+            List contaning cells ids which are identified as part of 
+        query
+                     
+        Returns
+        -------
+        keylist :  npArray
+            Array of key/value pairs fetched by range query
+               
+                           
+    &#39;&#39;&#39;
+    def getKeysInRangeQuery(self, lowerPage, upperPage,query_l, query_u):
+        keyList = []
+        pageIdx = lowerPage
+        while(pageIdx &lt;=upperPage):
+            pageStart = pageIdx * self.keysPerPage
+            # Last page may contain less nu of keys than self.keysPerPage
+            if (pageStart == (self.keysPerPage * (self.pageCount - 1))):
+                # Last page
+                pageEnd = self.nuofKeys
+            else:
+                pageEnd = pageStart + self.keysPerPage
+           
+            
+            for j in range(pageStart, pageEnd):
+                 if(self.train_array[j, 0] &gt;= query_l[0] and self.train_array[j, 0] &lt;= query_u[0] )and \
+                         (self.train_array[j, 1] &gt;= query_l[1] and self.train_array[j, 1] &lt;= query_u[1] ):
+                        keyList.append(self.train_array[j, 0:3])
+            pageIdx += 1
+     
+        return np.array(keyList)
+    
+    &#39;&#39;&#39;
+       Decompose range query into a union of smaller query rectangles each 
+       belong to one and only one cell. 
+        
+        Parameters
+        ----------
+        query_l : tuple
+            Range Query lower coordinate
+        
+        query_u  : tuple
+            Range Query upper coordinate
+                     
+        Returns
+        -------
+        cell_list :  union of smaller query rectangles each 
+       belong to one and only one cell.
+            
+    &#39;&#39;&#39;
+    def range_query(self,query_l, query_u):
+      
+        if self.debugPrint:
+              print(&#39;Get pages for range (%d, %d), (%d, %d)&#39; %(query_l[0], query_l[1], query_u[0], query_u[1] )) 
+        lowerPage = self.search_page_index( query_l[0]+query_l[1]) 
+        upperPage = self.search_page_index( query_u[0]+query_u[1]) 
+        if self.debugPrint:
+            print(&#34;Pages to search from %d to %d&#34; %(lowerPage,upperPage))
+        return (lowerPage,upperPage)
+    
+    
+    &#39;&#39;&#39;
+        Predict range query for lisa model
+                                
+    &#39;&#39;&#39;
+    def predict_range_query(self, query_l, query_u):
+        (lowerPage,upperPage) =self.range_query(query_l, query_u) 
+        if(lowerPage == -1) or (upperPage == -1)  :
+            if self.debugPrint:
+                print(&#39;range query not found&#39;)
+            return -1
+        else:
+            neighboursKeySet = self.getKeysInRangeQuery(lowerPage, upperPage,query_l,query_u )
+            return np.sort(neighboursKeySet[:, -1])
+        
+
+
+    &#39;&#39;&#39;
+       Predict the position of query point in the database
+       Parameters
+        ----------
+        Query_point: Tuple 
+            2 dimensional key value
+       
+        Returns
+        -------
+        self.train_array[j][2]: Integer
+           Returns the value at the query point
+        
+    &#39;&#39;&#39;
+
+    def predict(self, query_point):
+        #print(query_point)
+        #start_time = timer()
+        mapped_val = query_point[0] + query_point[1]
+        i = self.search_page_index(mapped_val)
+        if (i == -1):
+            print(
+                &#39;\n\n\n Page not found query point = %d %d, mapped value = %d&#39;
+                % (query_point[0], query_point[1], mapped_val))
+            return -1
+
+        else:
+            page_lower = i * self.keysPerPage
+            # Last page may contain less nu of keys than self.keysPerPage
+            if (page_lower == (self.keysPerPage * (self.pageCount - 1))):
+                # Last page
+                high = self.nuofKeys
+            else:
+                high = page_lower + self.keysPerPage
+
+            for j in range(page_lower, high):
+                if ((query_point[0] == self.train_array[j][0])
+                        and (query_point[1] == self.train_array[j][1])):
+                    #print( &#39;value found in location %d &#39;%(in_data_arr[j][2]))
+                    #print(&#39;Time taken %f&#39;%(timer()-start_time))
+                    self.train_array[j][2]
+                    return self.train_array[j][2]
+
+            print(
+                &#39;\n\n\n Point not found query point = %d %d, mapped value = %d&#39;
+                % (query_point[0], query_point[1], mapped_val))
+            return -1
+
+    &#39;&#39;&#39;
+       Predict the position of query point based on mapped value instead of 
+       sequential search. 
+       Parameters
+        ----------
+        Query_point: Tuple 
+            2 dimensional key value
+       
+        Returns
+        -------
+        self.train_array[j][2]: Integer
+           Returns the value at the query point
+        
+    &#39;&#39;&#39;
+
+    def predict_opt(self, query_point):
+
+        mapped_val = query_point[0] + query_point[1]
+        i = self.search_page_index(mapped_val)
+        if (i == -1):
+            print(
+                &#39;\n\n\nPage Not Found:search page return -1, for query point %d %d \n\n&#39;
+                % (query_point[0], query_point[1]))
+            return i
+
+        else:
+
+            page_lower = i * self.keysPerPage
+            # Find key index based on mapped value
+            key_index = self.key_binary_search(mapped_val, page_lower)
+            if (key_index != -1):
+                # Multiple keys can have the same mapped value.
+
+                if ((query_point[0] == self.train_array[key_index][0]) and
+                    (query_point[1] == self.train_array[key_index][1])):
+                    # Return value if index key value matches with query point
+                    return (self.train_array[key_index][2])
+                else:
+                    i = 0
+                    # Search in the neighbourhood of index returned by key_binary_search
+                    # as multiple keys can have the same mapped value
+                    while (mapped_val == self.train_array[key_index - i][3]):
+                        if ((query_point[0]
+                             == self.train_array[key_index - i][0])
+                                and (query_point[1]
+                                     == self.train_array[key_index - i][1])):
+                            return (self.train_array[key_index - i][2])
+                        else:
+                            i = i + 1
+                    i = 0
+                    while (mapped_val == self.train_array[key_index + i][3]):
+                        if ((query_point[0]
+                             == self.train_array[key_index + i][0])
+                                and (query_point[1]
+                                     == self.train_array[key_index + i][1])):
+                            return (self.train_array[key_index + i][2])
+                        else:
+                            i = i + 1
+                print(
+                    &#39;\n\n\n Point not found query point = %d %d, mapped value = %d&#39;
+                    % (query_point[0], query_point[1], mapped_val))
+                return -1
+            else:
+                print(
+                    &#39;\n\n\n Point not found query point = %d %d, mapped value = %d&#39;
+                    % (query_point[0], query_point[1], mapped_val))
+                return -1
+
+    &#39;&#39;&#39;
+       Train the lisa Baselinemodel: Training consists of:
+            a) Applying mapping function to keys values taking into account &#39;
+               cell boundaries
+            b)Divining mapped values into equal length intervals. 
+    
+       Parameters
+        ----------
+        Train and test point np arrays
+       
+        Returns
+        -------
+        mse: Float
+           Mean square error for eval points
+           time : Time taken to build the lisaBaseline model. 
+        
+    &#39;&#39;&#39;
+
+    def train(self, x_train, y_train, x_test, y_test):
+
+        print(x_train.shape)
+        print(x_test.shape)
+        print(y_train.shape)
+        print(y_test.shape)
+
+        np.set_printoptions(threshold=1000)
+        start_time = timer()
+        self.train_array = np.hstack((x_train, y_train.reshape(-1, 1),
+                                      np.zeros((x_train.shape[0], 1),
+                                               dtype=x_train.dtype)))
+        self.train_array = self.train_array.astype(&#39;float64&#39;)
+        # Apply mapping function to 2 dimenional key values
+        self.mapping_function()
+
+        # Sort the input data array with mapped values
+        self.train_array = self.train_array[self.train_array[:, 3].argsort()]
+        #self.plot_function(in_data_arr)
+
+        #Init dense array with sorted mapped values(Store first and last key per page)
+        if (self.init_dense_array() == -1):
+            return -1, timer() - start_time
+
+        end_time = timer()
+        print(&#39;/n build time %f&#39; % (end_time - start_time))
+        test_data_size = x_test.shape[0]
+        pred_y = []
+        #for i in range(20):
+        print(&#39;\n In Lisabaseline.build evaluation %d data points&#39; %
+              (test_data_size))
+        for i in range(test_data_size):
+            pred_y.append(self.predict(x_test[i]))
+
+        pred_y = np.array(pred_y)
+        mse = metrics.mean_squared_error(y_test, pred_y)
+        return mse, end_time - start_time</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="indexing.models.lisa.basemodel.LisaBaseModel.getKeysInRangeQuery"><code class="name flex">
+<span>def <span class="ident">getKeysInRangeQuery</span></span>(<span>self, lowerPage, upperPage, query_l, query_u)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getKeysInRangeQuery(self, lowerPage, upperPage,query_l, query_u):
+    keyList = []
+    pageIdx = lowerPage
+    while(pageIdx &lt;=upperPage):
+        pageStart = pageIdx * self.keysPerPage
+        # Last page may contain less nu of keys than self.keysPerPage
+        if (pageStart == (self.keysPerPage * (self.pageCount - 1))):
+            # Last page
+            pageEnd = self.nuofKeys
+        else:
+            pageEnd = pageStart + self.keysPerPage
+       
+        
+        for j in range(pageStart, pageEnd):
+             if(self.train_array[j, 0] &gt;= query_l[0] and self.train_array[j, 0] &lt;= query_u[0] )and \
+                     (self.train_array[j, 1] &gt;= query_l[1] and self.train_array[j, 1] &lt;= query_u[1] ):
+                    keyList.append(self.train_array[j, 0:3])
+        pageIdx += 1
+ 
+    return np.array(keyList)</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.basemodel.LisaBaseModel.init_dense_array"><code class="name flex">
+<span>def <span class="ident">init_dense_array</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def init_dense_array(self):
+
+    # nuofKeys will be equal to nu of data points in the training database.
+    self.nuofKeys = self.train_array.shape[0]
+    self.denseArray = np.zeros((self.pageCount, 3))
+    # Divide the keys space into equal length intervals.
+    self.keysPerPage = self.nuofKeys // self.pageCount
+    # Last page may have less number of keys than keysPerPage
+    if (self.nuofKeys &gt; self.keysPerPage * self.pageCount):
+        self.keysPerPage = self.keysPerPage + 1
+
+    if (((self.keysPerPage * self.pageCount) - self.nuofKeys) &gt;=
+            self.keysPerPage):
+        print(
+            &#39;Invalid configuration, Nu of keys per page needs to be greater than page count&#39;
+        )
+        return -1
+    # Store mapped value of first and last key of each page in denseArray
+    # These values will be used to decide the page for query point during query search
+    for i in range(self.pageCount - 1):
+        self.denseArray[i][0] = self.train_array[i * self.keysPerPage, 3]
+        self.denseArray[i][1] = self.train_array[(
+            (i + 1) * self.keysPerPage) - 1, 3]
+        self.denseArray[i][2] = i
+
+    # Last page may not be full
+    i = self.pageCount - 1
+    #Store mapped value boundries
+    self.denseArray[i][0] = self.train_array[i * self.keysPerPage, 3]
+    self.denseArray[i][1] = self.train_array[self.nuofKeys - 1, 3]
+    self.denseArray[i][2] = i
+    return 0</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.basemodel.LisaBaseModel.key_binary_search"><code class="name flex">
+<span>def <span class="ident">key_binary_search</span></span>(<span>self, x, page_lower)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def key_binary_search(self, x, page_lower):
+    low = page_lower
+    # Last page may contain less nu of keys than self.keysPerPage
+    if (page_lower == (self.keysPerPage * (self.pageCount - 1))):
+        # Last page
+        high = self.nuofKeys - 1
+    else:
+        high = page_lower + self.keysPerPage - 1
+    mid = 0
+    #print(&#39;searching for %d&#39; %(x))
+    while low &lt;= high:
+
+        mid = (high + low) // 2
+        #print(&#39;mid is %d&#39; %(mid))
+        # If x is greater, ignore left half
+        if self.train_array[mid][3] &lt; x:
+            low = mid + 1
+
+            # If x is smaller, ignore right half
+        elif self.train_array[mid][3] &gt; x:
+            high = mid - 1
+
+        # means x is present at mid
+        else:
+            #print(&#39;\n returning index %d&#39; %(mid))
+            return mid
+
+    # If we reach here, then the element was not present
+    #print(&#39;\n returning page %d&#39; %(-1))
+    return -1</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.basemodel.LisaBaseModel.mapping_function"><code class="name flex">
+<span>def <span class="ident">mapping_function</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def mapping_function(self):
+    for i in range(0, self.train_array.shape[0]):
+        self.train_array[
+            i, 3] = self.train_array[i][0] + self.train_array[i][1]</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.basemodel.LisaBaseModel.plot_function"><code class="name flex">
+<span>def <span class="ident">plot_function</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def plot_function(self):
+    plt.figure(figsize=(20, 1000))
+    plt.plot(self.train_array[:, 3], self.train_array[:, 2])
+    plt.xlabel(&#39;Mapped Value&#39;)
+    plt.ylabel(&#39;Position Index&#39;)
+    plt.show()
+    return</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.basemodel.LisaBaseModel.predict"><code class="name flex">
+<span>def <span class="ident">predict</span></span>(<span>self, query_point)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def predict(self, query_point):
+    #print(query_point)
+    #start_time = timer()
+    mapped_val = query_point[0] + query_point[1]
+    i = self.search_page_index(mapped_val)
+    if (i == -1):
+        print(
+            &#39;\n\n\n Page not found query point = %d %d, mapped value = %d&#39;
+            % (query_point[0], query_point[1], mapped_val))
+        return -1
+
+    else:
+        page_lower = i * self.keysPerPage
+        # Last page may contain less nu of keys than self.keysPerPage
+        if (page_lower == (self.keysPerPage * (self.pageCount - 1))):
+            # Last page
+            high = self.nuofKeys
+        else:
+            high = page_lower + self.keysPerPage
+
+        for j in range(page_lower, high):
+            if ((query_point[0] == self.train_array[j][0])
+                    and (query_point[1] == self.train_array[j][1])):
+                #print( &#39;value found in location %d &#39;%(in_data_arr[j][2]))
+                #print(&#39;Time taken %f&#39;%(timer()-start_time))
+                self.train_array[j][2]
+                return self.train_array[j][2]
+
+        print(
+            &#39;\n\n\n Point not found query point = %d %d, mapped value = %d&#39;
+            % (query_point[0], query_point[1], mapped_val))
+        return -1</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.basemodel.LisaBaseModel.predict_opt"><code class="name flex">
+<span>def <span class="ident">predict_opt</span></span>(<span>self, query_point)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def predict_opt(self, query_point):
+
+    mapped_val = query_point[0] + query_point[1]
+    i = self.search_page_index(mapped_val)
+    if (i == -1):
+        print(
+            &#39;\n\n\nPage Not Found:search page return -1, for query point %d %d \n\n&#39;
+            % (query_point[0], query_point[1]))
+        return i
+
+    else:
+
+        page_lower = i * self.keysPerPage
+        # Find key index based on mapped value
+        key_index = self.key_binary_search(mapped_val, page_lower)
+        if (key_index != -1):
+            # Multiple keys can have the same mapped value.
+
+            if ((query_point[0] == self.train_array[key_index][0]) and
+                (query_point[1] == self.train_array[key_index][1])):
+                # Return value if index key value matches with query point
+                return (self.train_array[key_index][2])
+            else:
+                i = 0
+                # Search in the neighbourhood of index returned by key_binary_search
+                # as multiple keys can have the same mapped value
+                while (mapped_val == self.train_array[key_index - i][3]):
+                    if ((query_point[0]
+                         == self.train_array[key_index - i][0])
+                            and (query_point[1]
+                                 == self.train_array[key_index - i][1])):
+                        return (self.train_array[key_index - i][2])
+                    else:
+                        i = i + 1
+                i = 0
+                while (mapped_val == self.train_array[key_index + i][3]):
+                    if ((query_point[0]
+                         == self.train_array[key_index + i][0])
+                            and (query_point[1]
+                                 == self.train_array[key_index + i][1])):
+                        return (self.train_array[key_index + i][2])
+                    else:
+                        i = i + 1
+            print(
+                &#39;\n\n\n Point not found query point = %d %d, mapped value = %d&#39;
+                % (query_point[0], query_point[1], mapped_val))
+            return -1
+        else:
+            print(
+                &#39;\n\n\n Point not found query point = %d %d, mapped value = %d&#39;
+                % (query_point[0], query_point[1], mapped_val))
+            return -1</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.basemodel.LisaBaseModel.predict_range_query"><code class="name flex">
+<span>def <span class="ident">predict_range_query</span></span>(<span>self, query_l, query_u)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def predict_range_query(self, query_l, query_u):
+    (lowerPage,upperPage) =self.range_query(query_l, query_u) 
+    if(lowerPage == -1) or (upperPage == -1)  :
+        if self.debugPrint:
+            print(&#39;range query not found&#39;)
+        return -1
+    else:
+        neighboursKeySet = self.getKeysInRangeQuery(lowerPage, upperPage,query_l,query_u )
+        return np.sort(neighboursKeySet[:, -1])</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.basemodel.LisaBaseModel.range_query"><code class="name flex">
+<span>def <span class="ident">range_query</span></span>(<span>self, query_l, query_u)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def range_query(self,query_l, query_u):
+  
+    if self.debugPrint:
+          print(&#39;Get pages for range (%d, %d), (%d, %d)&#39; %(query_l[0], query_l[1], query_u[0], query_u[1] )) 
+    lowerPage = self.search_page_index( query_l[0]+query_l[1]) 
+    upperPage = self.search_page_index( query_u[0]+query_u[1]) 
+    if self.debugPrint:
+        print(&#34;Pages to search from %d to %d&#34; %(lowerPage,upperPage))
+    return (lowerPage,upperPage)</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.basemodel.LisaBaseModel.search_page_index"><code class="name flex">
+<span>def <span class="ident">search_page_index</span></span>(<span>self, x)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def search_page_index(self, x):
+    low = 0
+    high = self.pageCount - 1
+    mid = 0
+    #print(&#39;searching for %d&#39; %(x))
+    while low &lt;= high:
+
+        mid = (high + low) // 2
+        #print(&#39;mid is %d&#39; %(mid))
+        # If x is greater, ignore left half
+        if self.denseArray[mid][1] &lt; x:
+            low = mid + 1
+
+        # If x is smaller, ignore right half
+        elif self.denseArray[mid][0] &gt; x:
+            high = mid - 1
+
+        # means x is present at mid
+        else:
+            #print(&#39;\n returning page %d&#39; %(mid))
+            return mid
+
+    # If we reach here, then the element was not present
+    #print(&#39;\n returning page %d&#39; %(-1))
+    return -1</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.basemodel.LisaBaseModel.train"><code class="name flex">
+<span>def <span class="ident">train</span></span>(<span>self, x_train, y_train, x_test, y_test)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def train(self, x_train, y_train, x_test, y_test):
+
+    print(x_train.shape)
+    print(x_test.shape)
+    print(y_train.shape)
+    print(y_test.shape)
+
+    np.set_printoptions(threshold=1000)
+    start_time = timer()
+    self.train_array = np.hstack((x_train, y_train.reshape(-1, 1),
+                                  np.zeros((x_train.shape[0], 1),
+                                           dtype=x_train.dtype)))
+    self.train_array = self.train_array.astype(&#39;float64&#39;)
+    # Apply mapping function to 2 dimenional key values
+    self.mapping_function()
+
+    # Sort the input data array with mapped values
+    self.train_array = self.train_array[self.train_array[:, 3].argsort()]
+    #self.plot_function(in_data_arr)
+
+    #Init dense array with sorted mapped values(Store first and last key per page)
+    if (self.init_dense_array() == -1):
+        return -1, timer() - start_time
+
+    end_time = timer()
+    print(&#39;/n build time %f&#39; % (end_time - start_time))
+    test_data_size = x_test.shape[0]
+    pred_y = []
+    #for i in range(20):
+    print(&#39;\n In Lisabaseline.build evaluation %d data points&#39; %
+          (test_data_size))
+    for i in range(test_data_size):
+        pred_y.append(self.predict(x_test[i]))
+
+    pred_y = np.array(pred_y)
+    mse = metrics.mean_squared_error(y_test, pred_y)
+    return mse, end_time - start_time</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="indexing.models.lisa" href="index.html">indexing.models.lisa</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="indexing.models.lisa.basemodel.LisaBaseModel" href="#indexing.models.lisa.basemodel.LisaBaseModel">LisaBaseModel</a></code></h4>
+<ul class="two-column">
+<li><code><a title="indexing.models.lisa.basemodel.LisaBaseModel.getKeysInRangeQuery" href="#indexing.models.lisa.basemodel.LisaBaseModel.getKeysInRangeQuery">getKeysInRangeQuery</a></code></li>
+<li><code><a title="indexing.models.lisa.basemodel.LisaBaseModel.init_dense_array" href="#indexing.models.lisa.basemodel.LisaBaseModel.init_dense_array">init_dense_array</a></code></li>
+<li><code><a title="indexing.models.lisa.basemodel.LisaBaseModel.key_binary_search" href="#indexing.models.lisa.basemodel.LisaBaseModel.key_binary_search">key_binary_search</a></code></li>
+<li><code><a title="indexing.models.lisa.basemodel.LisaBaseModel.mapping_function" href="#indexing.models.lisa.basemodel.LisaBaseModel.mapping_function">mapping_function</a></code></li>
+<li><code><a title="indexing.models.lisa.basemodel.LisaBaseModel.plot_function" href="#indexing.models.lisa.basemodel.LisaBaseModel.plot_function">plot_function</a></code></li>
+<li><code><a title="indexing.models.lisa.basemodel.LisaBaseModel.predict" href="#indexing.models.lisa.basemodel.LisaBaseModel.predict">predict</a></code></li>
+<li><code><a title="indexing.models.lisa.basemodel.LisaBaseModel.predict_opt" href="#indexing.models.lisa.basemodel.LisaBaseModel.predict_opt">predict_opt</a></code></li>
+<li><code><a title="indexing.models.lisa.basemodel.LisaBaseModel.predict_range_query" href="#indexing.models.lisa.basemodel.LisaBaseModel.predict_range_query">predict_range_query</a></code></li>
+<li><code><a title="indexing.models.lisa.basemodel.LisaBaseModel.range_query" href="#indexing.models.lisa.basemodel.LisaBaseModel.range_query">range_query</a></code></li>
+<li><code><a title="indexing.models.lisa.basemodel.LisaBaseModel.search_page_index" href="#indexing.models.lisa.basemodel.LisaBaseModel.search_page_index">search_page_index</a></code></li>
+<li><code><a title="indexing.models.lisa.basemodel.LisaBaseModel.train" href="#indexing.models.lisa.basemodel.LisaBaseModel.train">train</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>

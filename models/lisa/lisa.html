@@ -1,0 +1,3735 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>indexing.models.lisa.lisa API documentation</title>
+<meta name="description" content="Created on Fri Feb 26 14:36:30 2021 …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>indexing.models.lisa.lisa</code></h1>
+</header>
+<section id="section-intro">
+<p>Created on Fri Feb 26 14:36:30 2021</p>
+<p>@author: neera</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python"># -*- coding: utf-8 -*-
+&#34;&#34;&#34;
+Created on Fri Feb 26 14:36:30 2021
+
+@author: neera
+&#34;&#34;&#34;
+import sys
+from timeit import default_timer as timer
+from typing import List, Tuple
+import numpy as np
+import pandas as pd
+from src.indexing.models import BaseModel
+import src.indexing.utilities.metrics as metrics
+
+import matplotlib.pyplot as plt
+
+class LisaModel():
+    def __init__(self, cellSize, nuOfShards) -&gt; None:
+        #cellSize : Nu of cells into which key space is divided
+        self.cellSize = cellSize
+        # keysPerShard : Number of keys per shard(\Psi)
+        self.keysPerShard = 0
+        # Np Array to contain the key value pairs
+        self.train_array=0
+        # Np Array to store cell boundaries for each cell. 
+        self.cellMatrix=0
+        # keysPerCell : Numebr of keys per Cell. 
+        self.keysPerCell=0
+        # nuOfKeys : Total nu of points in the training database
+        self.nuOfKeys=0
+        &#39;&#39;&#39;
+        additionalKeysInLastCell : Last cell may have more keys than keysPerCell
+        Bookkeeping code to allow for arbotary values of cell Size instead of
+        factor of nuOfKeys.
+        &#39;&#39;&#39;
+        self.additionalKeysInLastCell =0
+        # Number of Intervals into which sorted mapped values are divided
+        # Shard Prediction Function is learned for each interval. 
+        self.nuOfIntervals = 0
+        self.numOfKeysPerInterval = 0
+        # Number of shards per interval 
+        self.nuOfShards=nuOfShards
+        # Placeholder to store information regarding shard training function
+        self.shardMatrix=0
+        # Placeholder to store mapped values boundaries boundaries for each interval
+        self.mappedIntervalMatrix = 0
+        # Additional logic to allow arbitary values for nuOfIntervals
+        self.keysInLastInterval=0
+        # shardPredictionErrorCount : Additional debug error counter
+        self.shardPredictionErrorCount = 0
+        self.page_size=1
+        self.name = &#39;Lisa&#39;
+        self.initDelta = 3
+        self.debugPrint = 0
+        print(&#39;In Lisa Model&#39;)
+    
+    &#39;&#39;&#39;
+       Generates grid cells from training data. Divides training data into
+       cellSize*cellSize nu of cells. 
+    
+       Parameters
+        ----------
+         self.train_array : Np array
+             Array containing key value pairs
+       
+        Attributes :  
+        -------
+         self.cellMatrix: Np Array
+             Initialize an NP array to store bookkeeping infromation for cell grid, like
+             cell boundaries, cell number, area of the cell. 
+        
+    &#39;&#39;&#39;  
+    def generate_grid_cells(self):
+        cellSize =  self.cellSize
+        self.nuOfKeys = self.train_array.shape[0]
+        self.keysPerCell =  self.nuOfKeys // (cellSize*cellSize)
+        keysPerCell = self.keysPerCell
+        self.additionalKeysInLastCell = self.nuOfKeys-(keysPerCell*cellSize*cellSize)
+        
+        
+        self.numOfKeysPerInterval = self.keysPerCell
+        self.nuOfIntervals = self.nuOfKeys // self.numOfKeysPerInterval
+        self.keysInLastInterval = self.nuOfKeys - self.numOfKeysPerInterval*(self.nuOfIntervals -1)
+
+        self.keysPerShard = self.numOfKeysPerInterval//self.nuOfShards
+        self.nuOfKeysToSearchinAdjacentShard = self.keysPerShard //6
+        if(self.nuOfKeysToSearchinAdjacentShard &lt; 5):
+            self.nuOfKeysToSearchinAdjacentShard= 5
+        if (self.nuOfKeysToSearchinAdjacentShard &gt;self.keysPerShard ):
+            print(&#39;Invalid Configuration&#39;)
+            return -1
+        self.shardMatrix = np.zeros((self.nuOfIntervals, 5))
+        if(self.debugPrint):
+            print(&#39;nuOfIntervals =%d, numOfKeysPerInterval = %d nuOfShards = %d keysperShard = %d NuofKeys = %d keysInLastInterval = %d&#39;
+                      %(self.nuOfIntervals, self.numOfKeysPerInterval,self.nuOfShards,self.keysPerShard, self.nuOfKeys, self.keysInLastInterval) )
+
+            print(&#39;cellSize = %d, keysPerCell = %d, nuOfKeys = %d additionalKeysInLastCell = %d&#39; %(cellSize, keysPerCell,  self.nuOfKeys, self.additionalKeysInLastCell ))
+        # Sore keys based on x dimension
+        self.train_array = self.train_array[self.train_array[:,0].argsort()]
+        &#39;&#39;&#39;
+        Initialize Cell Matrix, Each element of cell matrix has [(l0, u0 ), (l1, u1), 
+        Cell Id, CellId*keysPerCell]. We  keep cell id and CellId*keysPerCell in 
+        2 mappings,position 5, 6, is mapping value increasing in x direction
+        position 7 8 is , mapping value increasing in y direction. 
+        &#39;&#39;&#39;
+        self.cellMatrix = np.zeros((cellSize*cellSize, 9))
+        # Divie X axis into equal no of keys, and fill x values for the cell
+        for i in range( self.cellSize):
+            for j in range( self.cellSize):
+                # Save x coordinate of first key in the cell
+                self.cellMatrix[i*cellSize+j][0] =  self.train_array[(keysPerCell*cellSize*(j))-(not(not(j%cellSize))) ,0]
+                # Save x coordinate of last key in the cell
+                self.cellMatrix[i*cellSize+j][2] =  self.train_array[(keysPerCell*cellSize*(j+1)) -1 ,0]
+                self.cellMatrix[i*cellSize+j][4] =  i*cellSize+j
+                self.cellMatrix[i*cellSize+j][5] =  (keysPerCell*cellSize*i)+j*keysPerCell
+                self.cellMatrix[i*cellSize+j][6] =  i + cellSize*j
+                self.cellMatrix[i*cellSize+j][7] =  (i*keysPerCell)+(keysPerCell*cellSize*j)
+        # Last cell may have more keys than KeysPerCell
+        self.cellMatrix[i*cellSize+j][2] =  self.train_array[-1 ,0]
+        
+        # Sort Keys along y direction
+        for i in range(cellSize-1):
+            self.train_array[keysPerCell*cellSize*i:keysPerCell*cellSize*(i+1)] = \
+                       self.train_array[(self.train_array[keysPerCell*cellSize*i:keysPerCell*cellSize*(i+1),1].argsort())+keysPerCell*cellSize*i]
+        # Last cell may have more keys than KeysPerCell 
+        i = i+1
+        self.train_array[keysPerCell*cellSize*i:-1] = self.train_array[(self.train_array[keysPerCell*cellSize*i:-1,1].argsort())+keysPerCell*cellSize*i]
+   
+        # Divide the keys along y Axis
+        for i in range(cellSize):
+            for j in range(cellSize):
+                self.cellMatrix[i*cellSize+j][1] =  self.train_array[((keysPerCell*(i-1)) + (keysPerCell*cellSize*j) +(keysPerCell-1)) ,1]
+                self.cellMatrix[i*cellSize+j][3] =  self.train_array[((keysPerCell*i) + (keysPerCell*cellSize*j) +(keysPerCell-1)) ,1]
+                #print(((keysPerCell*(i-1)) + (keysPerCell*cellSize*(j)) +(keysPerCell-1)))
+                #print( ((keysPerCell*(i)) + (keysPerCell*cellSize*(j)) +(keysPerCell-1)))
+                self.cellMatrix[i*cellSize+j][8] =  ((self.cellMatrix[i*cellSize+j][3] - self.cellMatrix[i*cellSize+j][1])* \
+                                (self.cellMatrix[i*cellSize+j][2] - self.cellMatrix[i*cellSize+j][0]))
+
+        self.cellMatrix[i*cellSize+j][3] =  self.train_array[-1 ,1]
+        self.cellMatrix[i*cellSize+j][8] =  ((self.cellMatrix[i*cellSize+j][3] - self.cellMatrix[i*cellSize+j][1])*
+                                        (self.cellMatrix[i*cellSize+j][2] - self.cellMatrix[i*cellSize+j][0]))
+        # Bookkeeping code        
+        for i in range(cellSize):
+            self.cellMatrix[i][1] =  0
+            self.cellMatrix[i][8] =  np.abs((self.cellMatrix[i][3] - self.cellMatrix[i][1])* \
+                                           (self.cellMatrix[i][2] - self.cellMatrix[i][0]))
+      
+        return 0
+    
+    &#39;&#39;&#39;
+       Apply mapping function to the 2 dimensional key value
+    
+       Attributes :  
+        -------
+        self.cellMatrix: Np Array
+             Containing bookkeeping infromation for cell grid, like
+             cell boundaries, cell number, area of the cell. 
+             
+        self.train_array: Np Array
+           Np Array containg key value pair. Mapped value will be calculated
+           for each key value pair in the training array.
+        
+        
+        
+    &#39;&#39;&#39;  
+    def compute_mapping_value(self):
+        j = 0
+        k = 0
+        # Apply mapping function to each key in the training database
+        for i in range(0,(self.keysPerCell*self.cellSize*self.cellSize)):
+            idx = (((i% self.keysPerCell)))
+            cellIdx = j*self.cellSize +k
+            keyArea = ((self.train_array[i][1] - self.cellMatrix[cellIdx][1])* \
+                      (self.train_array[i][0] - self.cellMatrix[cellIdx][0]))
+     
+            self.train_array[i, 3] =   self.cellMatrix[cellIdx][7] + \
+                                       ((keyArea/self.cellMatrix[cellIdx][8])*self.keysPerCell)
+          
+            if(idx ==(self.keysPerCell -1) ):
+                j  = j+1
+                if(j == self.cellSize):
+                    k = k+1
+                    j = 0
+                    
+        # Last cell can contain additional keys. Handle this boundary condition             
+        for i in range((self.keysPerCell*self.cellSize*self.cellSize), self.nuOfKeys):
+            if(self.debugPrint):
+                print(&#39;i = %d, cellIdx = %d&#39; %(i,cellIdx ))
+            keyArea = ((self.train_array[i][1] - self.cellMatrix[cellIdx][1])* \
+                       (self.train_array[i][0] - self.cellMatrix[cellIdx][0]))
+            self.train_array[i, 3] =   self.cellMatrix[cellIdx][7] + \
+                                       ((keyArea/self.cellMatrix[cellIdx][8])*(self.keysPerCell+self.additionalKeysInLastCell))            
+        # Sort the input data array with mapped values
+        self.train_array = self.train_array[self.train_array[:,3].argsort()]   
+    
+    &#39;&#39;&#39;
+        Convert input data to np array
+    &#39;&#39;&#39;
+    def convert_to_np_array(self, input_):
+        if isinstance(input_, np.ndarray) is False:
+            input_ = np.array(input_)
+        return input_
+   
+    
+   
+    &#39;&#39;&#39;
+        Return whether input matrix is Positive deifnite or not. 
+    &#39;&#39;&#39;
+    def is_pos_def(x):
+        return np.all((np.around(np.linalg.eigvals(x),4)) &gt;= 0)
+   
+    
+   
+    &#39;&#39;&#39;
+        Get Initial set of betas
+        Parameters
+        ----------
+        input_ : array_like
+            The object containing mapped values for the interval.
+        V : Integer
+            Repersents the nu of keys in the interval
+        D : Integer
+            Nu of shards(line segments/slopes-intercepts values) needs to be learned from training data
+    
+        Returns
+        -------
+        b_ : numpy array
+            The x(mapped value) locations where each line segment terminates. Referred to 
+            as breakpoints for each line segment and should be structured as a 1-D numpy array.
+    &#39;&#39;&#39;
+    def get_betas(self,input_, V, D):
+        b_ = np.zeros( D +1)
+        b_[0], b_[-1] = np.min(input_), np.max(input_)
+        i = 1
+        while(i&lt;(D)):
+            b_[i] = input_[i*(V//D)]
+            #print(i*(V//D))
+            i = i+1            
+            
+        return b_
+    
+    
+    
+    &#39;&#39;&#39;
+        Assemble the matrix A
+        Parameters
+        ----------
+        betas : np array
+            The x(mapped value) locations where each line segment terminates. Referred to 
+            as breakpoints for each line segment and should be structured as a 1-D numpy array.
+        x : np array
+            The x locations which the linear regression matrix is assembled on.
+            This must be a numpy array!
+        Returns
+        -------
+        A : ndarray (2-D)
+            The assembled linear regression matrix.
+ 
+    &#39;&#39;&#39;
+    def assemble_regression_matrix(self,betas, x):
+        betas = self.convert_to_np_array(betas)
+        # Sort the betas
+        betas_order = np.argsort(betas)
+        betas = betas[betas_order]
+        # Fetch number of parameters and line segments
+        n_segments = len(betas) - 1
+
+        # Assemble the regression matrix
+        A_list = [np.ones_like(x)]
+        A_list.append(x - betas[0])
+        for i in range(n_segments - 1):
+            A_list.append(np.where(x &gt;= betas[i+1],
+                                       x - betas[i+1],
+                                       0.0))
+        A = np.vstack(A_list).T
+        return A, betas,n_segments
+    
+    
+    
+    &#39;&#39;&#39;
+        Compute line segments slope after a piecewise linear
+        function has been fitted.
+        This will also calculate the y-intercept from each line in the form
+        y = mx + b. 
+        Parameters
+        ----------
+        y_hat : np array
+            Predicted value of the Sharding Function
+        betas : np array
+            The x locations which the linear regression matrix is assembled on.
+            This must be a numpy array!
+        n_segments
+            Number of line segments to learn
+            
+        Returns
+        -------
+        slopes : ndarray(1-D)
+            The slope of each ling segment as a 1-D numpy array.Slopes[0] is the slope
+            of the first line segment.
+        Intercepts : ndarray(1-D)
+            The intercept of each ling segment as a 1-D numpy array.Intercept[0] is the slope
+            of the first line segment.
+    &#39;&#39;&#39;
+    def compute_slopes(self, y_hat,betas,n_segments):
+        slopes = np.divide(
+                    (y_hat[1:n_segments + 1] -
+                     y_hat[:n_segments]),
+                    (betas[1:n_segments + 1] -
+                     betas[:n_segments]))
+        intercepts = y_hat[0:-1] - slopes * betas[0:-1]
+        return slopes, intercepts
+    
+    
+    &#39;&#39;&#39;
+        Compute least square fit(alphas) for the A matrix
+        This will also calculate the y-intercept from each line in the form
+        y = mx + b. 
+        Parameters
+        ----------
+        A : np array(2-D)
+            Assembled Linear Regression Matrix
+        y_data : np array 
+            Array conatinaing the label values
+           
+            
+        Returns
+        -------
+        alpha : ndarray(1-D)
+           Cofficients of Least square solution
+        SSR : Float
+            Cost value at the Least square solution
+        r:  ndarray(1-D)
+            Residual Error
+    &#39;&#39;&#39;
+    def lstsq(self,A, y_gt):
+
+        alpha, ssr, _, _ = np.linalg.lstsq(A, y_gt, rcond = -1)
+        # ssr is only calculated if self.n_data &gt; self.n_parameters
+        # in this case we ll need to calculate ssr manually
+        # where ssr = sum of square of residuals
+        y_hat = np.dot(A, alpha)
+        e = y_hat - y_gt
+        n_parameters = A.shape[1]
+        n_data = y_gt.size
+        if n_data &lt;= n_parameters:
+            ssr = np.dot(e, e)
+        if isinstance(ssr, list):
+            ssr = ssr[0]
+        elif isinstance(ssr, np.ndarray):
+            if ssr.size == 0:
+                y_hat = np.dot(A, alpha)
+                e = y_hat - y_gt
+                ssr = np.dot(e, e)
+            else:
+                ssr = ssr[0]
+
+        return alpha,np.around(ssr, 3), e  
+    
+    
+    
+    &#39;&#39;&#39;
+        Predict Shard Id. 
+        Parameters
+        ----------
+        x : np array(2-D)
+            Mapped Values Array
+        alpha : np array 
+            Least square solution cofficients
+        betas : np array 
+            Array containing termination point for line segments
+             
+        Returns
+        -------
+        y_hat : ndarray(1-D)
+           Predicted value of Least square solution
+    &#39;&#39;&#39;
+    def predictShardId(self, x, alpha=None, betas=None):
+        
+        #print(&#39;in function predictShardId&#39;)
+        if alpha is not None and betas is not None:
+            #print(betas)
+            alpha = alpha
+            # Sort the betas, then store them
+            betas_order = np.argsort(betas)
+            #   print(betas_order)
+            betas = betas[betas_order]
+          
+        x = self.convert_to_np_array(x)
+
+        A,_,_ = self.assemble_regression_matrix(betas, x)
+
+        # solve the regression problem
+        y_pred = np.dot(A, alpha)
+        return y_pred
+
+
+
+    &#39;&#39;&#39;
+        Calculate gradient update for beta(breakpoints)
+        Parameters
+        ----------
+        x : np array(2-D)
+            Mapped Values Array
+        alpha : np array 
+            Least square solution cofficients
+        betas : np array 
+            Array containing termination point for line segments
+        r_error : np array 
+           Error Residual from least square solutiuon
+        n_segments : Interger
+            Number of line segments(Shard Id) to learn
+        Returns
+        -------
+        s : ndarray(1-D)
+           Gradient update for next iteration 
+    &#39;&#39;&#39;
+    def calc_gradient(self, x, alpha, betas,r_error,n_segments):
+        K = np.diag(alpha)
+        G_list = [np.ones_like(x)]
+        G_list.append(x - betas[0])
+        for i in range(n_segments - 1):
+            G_list.append(np.where(x &gt;= betas[i+1],
+                                   x - betas[i+1],
+                                   np.inf))
+        G = np.vstack(G_list)
+        G= ((G!=np.inf).astype(int)*(-1))
+        KG = np.dot(K, G)
+        g= 2*(KG.dot(r_error))
+        g = np.around(g,3)
+        Y = 2*(KG.dot(np.transpose(KG)))
+        Y = np.around(Y,3)
+        try:
+            Y_inverse = np.linalg.inv(Y)
+            s = -Y_inverse.dot(g)
+        except np.linalg.LinAlgError:
+            if self.debugPrint:
+                print(&#39;Y_inverse not avaliable&#39;)
+            s = 0
+        pass
+        
+        return s
+    
+    &#39;&#39;&#39;
+        Find best learning rate( minimizes the ssr) for the iteration. 
+        Parameters
+        ----------
+        s : np array
+           gradient update
+        betas : np array 
+            Array containing termination point for line segments
+        x : np array
+            The x locations which the linear regression matrix is assembled on.
+            
+        y : np array 
+            Array conatinaing the label values
+        Returns
+        -------
+        lr : float
+           learning rate to be used for iteration. 
+    &#39;&#39;&#39;
+    
+ 
+
+    def find_learning_rate(self,s,betas,x, y):
+        lr_list = [0.001, 0.1]
+        ssr_list = []
+        # Do parameter search for learning rate. 
+        for lr in lr_list:
+            betas_new = betas+lr*s
+            A, _,_ =  self.assemble_regression_matrix(betas_new, x)
+            alpha, ssr,r_error = self.lstsq(A, y)
+            ssr_list.append(ssr)
+        min_lr = ssr_list.index(min(ssr_list))
+        lr = lr_list[min_lr]
+        # Return learning rate whcih minimizes the ssr. 
+        return lr
+    
+    &#39;&#39;&#39;
+       Check  alpha constraint according to shard training section in the 
+       lisa paper.(Section 3.4, equation (5))
+    &#39;&#39;&#39;
+    def check_alpha_constraint(self, alpha):
+        flag = True
+        for i in range(alpha.size+1):
+            alpha_sum = 0
+            for j in range(i):
+              alpha_sum = alpha_sum+alpha[j]
+            if (alpha_sum &lt; 0):
+                flag = False
+                break
+        
+        return flag
+    
+    &#39;&#39;&#39;
+      Plot learned value againt grounttruth for shard prediction
+    &#39;&#39;&#39;
+
+    def plot_sharding_prediction(self, x, y, alpha, betas):
+        return
+        xHat = np.linspace(min(x), max(x), num=10000)
+        yHat = self.predictShardId(xHat, alpha,betas)
+        plt.figure()
+        plt.plot(x, y, &#39;--&#39;)
+        plt.plot(xHat, yHat, &#39;-&#39;)
+        plt.show()
+        return
+
+    &#39;&#39;&#39;
+        Train linear functions for shard prediction. This function will be 
+        called for each mapped interval. 
+        Parameters
+        ----------
+        x : np array
+            The x locations which the linear regression matrix is assembled on.
+            
+        y : np array 
+            Array conatinaing the label values
+        
+        nuOfShards : Integer
+            Number of linde segments to be learned. 
+        Returns
+        -------
+        alpha : np array 
+            Least square solution cofficients
+        betas : np array 
+            Array containing termination point for line segments
+    &#39;&#39;&#39;
+    def trainShardingLinearFunctions(self,x, y,nuOfShards):
+        
+        betas_list = []
+        learning_iter_list= []
+        early_stop_count = 0
+        x_data, y_data = self.convert_to_np_array(x), self.convert_to_np_array(y)
+        n_data = x_data.size
+        #Initialize betas with uniform distribution
+        betas = self.get_betas(x_data,n_data,nuOfShards)
+       
+        A, betas,n_segments = self.assemble_regression_matrix(betas, x_data)
+       
+        
+        alpha, ssr_0,r_error = self.lstsq(A, y_data)
+        betas_list.append(betas)
+        learning_iter_list.append(ssr_0)
+        self.plot_sharding_prediction(x_data, y_data, alpha, betas)
+        #Training Loop
+        itr = 0
+        while(itr&lt;1000):
+            # Calculate Gradient Update
+            s = self.calc_gradient(x_data, alpha, betas,r_error,n_segments)
+            # Find best learning rate for this iter
+            lr = self.find_learning_rate(s,betas,x_data, y_data)
+            # Update betas 
+            betas = betas+lr*s
+            # Update alpha 
+            A, betas,n_segments = self.assemble_regression_matrix(betas, x_data)
+            alpha, ssr,r_error = self.lstsq(A, y_data)
+            alpha_constraint = self.check_alpha_constraint(alpha)
+            #Stop training if alpha constraint is violated
+            if (alpha_constraint == False):
+                break
+            # Check for early stopping
+            if (learning_iter_list[-1] == ssr):
+                early_stop_count = early_stop_count+1
+                if(early_stop_count &gt; 4):
+                    #print(&#39;Early Stopping&#39;)
+                    break
+            else:
+                early_stop_count = 0
+            learning_iter_list.append(ssr)
+            betas_list.append(betas)
+            itr = itr+1
+           
+        #get index corresponding to lowest error
+        min_ssr = learning_iter_list.index(min(learning_iter_list))
+        # get betas corresponding to lowest error
+        betas =  np.array(betas_list[min_ssr])
+        #get alphas corresponidng to lowest error
+        A, betas,_ = self.assemble_regression_matrix(betas, x_data)
+        alpha, ssr,r_error = self.lstsq(A, y_data)
+        self.plot_sharding_prediction(x_data, y_data, alpha, betas)
+        #print(&#39;Time taken %f&#39; %(timer()-start_time))
+        #print(&#34;Initial ssr %f, final ssr %f&#34; %(ssr_0,ssr))
+        return alpha, betas
+    
+    
+    &#39;&#39;&#39;
+        BookKeeping code to maintain mapped value at mapped interval boundries. 
+        Attribues
+        ----------
+        self. mappedIntervalMatrix : np array
+           Initializes a data structure with mapped values at boundaries of 
+           mapped interval. 
+            
+       
+    &#39;&#39;&#39;
+    def createMappedIntervalMatrix(self):
+        self.mappedIntervalMatrix = np.zeros((self.nuOfIntervals, 5))
+        for i in range(self.nuOfIntervals-1):
+            self.mappedIntervalMatrix[i][0] = i+1
+            self.mappedIntervalMatrix[i][1] = self.train_array[i*self.numOfKeysPerInterval, 2]
+            self.mappedIntervalMatrix[i][2] = self.train_array[(((i+1)*self.numOfKeysPerInterval)-1), 2]
+            self.mappedIntervalMatrix[i][3] = self.train_array[i*self.numOfKeysPerInterval, 3]
+            self.mappedIntervalMatrix[i][4] = self.train_array[(((i+1)*self.numOfKeysPerInterval)-1), 3]
+            
+        #Last Interval may have less nu of keys
+        i = i+1
+        self.mappedIntervalMatrix[i][0] = i+1
+        self.mappedIntervalMatrix[i][1] = self.train_array[i*self.numOfKeysPerInterval, 2]
+        self.mappedIntervalMatrix[i][2] = self.train_array[self.nuOfKeys-1, 2]
+        self.mappedIntervalMatrix[i][3] = self.train_array[i+1*self.numOfKeysPerInterval, 3]
+        self.mappedIntervalMatrix[i][4] = self.train_array[self.nuOfKeys-1, 3]
+        
+    
+    &#39;&#39;&#39;
+        BookKeeping code to maintain mapped value at Shard boundries. 
+        Attribues
+        ----------
+        self.shardMatrix : np array
+           Initializes a data structure with mapped values at boundaries of 
+           shard intervals.
+            
+       
+    &#39;&#39;&#39;
+    
+    def createShardMappingMatrix(self):
+        self.shardMatrix = np.zeros((self.nuOfIntervals*self.nuOfShards, 5))
+        numOfKeysPerInterval = self.numOfKeysPerInterval
+        keysPerShard = self.keysPerShard
+        # Initialize shardMatrix for ShardFunctions for each Interval. 
+        for i in range(self.nuOfIntervals-1):
+            for j in range(self.nuOfShards-1):
+                # Store mapped values at shard interval boundaries.  
+                idx = i*self.nuOfShards+j
+                self.shardMatrix[idx][0] = idx+1
+                self.shardMatrix[idx][1] = self.train_array[i*numOfKeysPerInterval + j*keysPerShard, 2]
+                self.shardMatrix[idx][2] = self.train_array[i*numOfKeysPerInterval+((j+1)*keysPerShard)-1, 2]
+                self.shardMatrix[idx][3] = self.train_array[i*numOfKeysPerInterval + j*keysPerShard, 3]
+                self.shardMatrix[idx][4] = self.train_array[i*numOfKeysPerInterval+((j+1)*keysPerShard)-1, 3]
+            j= j+1
+            idx = idx+1
+            # Handle boundary case as lasty shard may have additional keys.  
+            self.shardMatrix[idx][0] = idx+1
+            self.shardMatrix[idx][1] = self.train_array[i*numOfKeysPerInterval + j*keysPerShard, 2]
+            self.shardMatrix[idx][2] = self.train_array[((i+1)*numOfKeysPerInterval)-1  , 2]
+            self.shardMatrix[idx][3] = self.train_array[i*numOfKeysPerInterval + j*keysPerShard, 3]
+            self.shardMatrix[idx][4] = self.train_array[((i+1)*numOfKeysPerInterval)-1  , 3]
+            
+        #Last Interval may have less nu of keys
+        nuOfShardsinLastInterval =  self.nuOfShards #self.keysInLastInterval // keysPerShard
+        i = i+1
+        for j in range(nuOfShardsinLastInterval-1):
+            idx = i*self.nuOfShards+j
+      
+            self.shardMatrix[idx][0] = idx+1
+            self.shardMatrix[idx][1] = self.train_array[i*numOfKeysPerInterval + j*keysPerShard, 2]
+            self.shardMatrix[idx][2] = self.train_array[i*numOfKeysPerInterval+((j+1)*keysPerShard)-1, 2]
+            self.shardMatrix[idx][3] = self.train_array[i*numOfKeysPerInterval + j*keysPerShard, 3]
+            self.shardMatrix[idx][4] = self.train_array[i*numOfKeysPerInterval+((j+1)*keysPerShard)-1, 3]
+        j= j+1
+        idx = idx+1
+        # Handle boundary case as lasty shard may have additional keys.  
+        self.shardMatrix[idx][0] = idx+1
+        self.shardMatrix[idx][1] = self.train_array[i*numOfKeysPerInterval + j*keysPerShard, 2]
+        self.shardMatrix[idx][2] = self.train_array[self.nuOfKeys-1  , 2]
+        self.shardMatrix[idx][3] = self.train_array[i*numOfKeysPerInterval + j*keysPerShard, 3]
+        self.shardMatrix[idx][4] = self.train_array[self.nuOfKeys -1 , 3]
+
+    &#39;&#39;&#39;
+        Learn shard boundaries per mapping interval. Initalize data structures
+        to divide sorted mapped values in equal sized intervals, and learn 
+        SP function for each interval. 
+        
+        Attribues
+        ----------
+        self.mappedIntervalMatrix : np array
+           Data structure with mapped values at boundaries of 
+           mapped intervals.
+        self.shardMatrix : np array
+           Data structure with mapped values at boundaries of 
+           shard intervals.
+        alpha : np array 
+            Least square solution cofficients
+        betas : np array 
+            Array containing termination point for line segments
+        
+    &#39;&#39;&#39;
+    def createShards(self):
+        self.alphas_list = []
+        self.betas_list = []
+        self.createMappedIntervalMatrix()
+        self.createShardMappingMatrix()
+        
+        for i in range(self.nuOfIntervals):
+            x = self.train_array[i*self.numOfKeysPerInterval: ((i+1)*self.numOfKeysPerInterval), 3]
+            y = np.arange(x.shape[0])
+            #print(&#39;Interval %d&#39; %(i))
+            alphas, betas = self.trainShardingLinearFunctions(x, y,self.nuOfShards)
+            self.alphas_list.append(alphas)
+            self.betas_list.append(betas)
+            
+    &#39;&#39;&#39;
+        Search in the grid cell for a particular key value. 
+        
+        Parameters
+        ----------
+       query  : Tuple
+            Query point to be searched with 2 dimensional key value. 
+            
+        
+        Returns
+        -------
+        CellIdx = Interger 
+            Cell Index  corresponding to query point. 
+        
+    &#39;&#39;&#39;
+    def searchCellGrid(self, query):
+        
+        found = False
+        cellIdx = -1
+        for i in range(self.cellSize):
+             for j in range(self.cellSize):
+                 if(query[0] &gt;= self.cellMatrix[i+j*self.cellSize][0] and query[0] &lt;= self.cellMatrix[i+j*self.cellSize][2]) and \
+                     (query[1] &gt;= self.cellMatrix[i+j*self.cellSize][1] and query[1] &lt;= self.cellMatrix[i+j*self.cellSize][3]):
+                         found = True
+                         cellIdx = i+j*self.cellSize
+                         break
+             if (found == True):
+                 break
+        return cellIdx
+
+    &#39;&#39;&#39;
+        Do BST search for mapped interval based on query point mapped value
+        
+        Parameters
+        ----------
+       x  : float
+            Query point mapped value. 
+            
+        
+        Returns
+        -------
+       Index of mapped interval. 
+        
+    &#39;&#39;&#39;
+    def search_mapped_interval(self, x):
+        low = 0
+        high = self.nuOfIntervals - 1
+        mid = 0
+        #print(&#39;searching for %f&#39; %(x))
+        while low &lt;= high:
+
+            mid = (high + low) // 2
+            #print(&#39;mid is %d&#39; %(mid))
+            # If x is greater, ignore left half
+            if self.mappedIntervalMatrix[mid][4] &lt; x:
+                low = mid + 1
+
+            # If x is smaller, ignore right half
+            elif self.mappedIntervalMatrix[mid][3] &gt; x:
+                high = mid - 1
+
+            # means x is present at mid
+            else:
+                #print(&#39;\n returning page %d&#39; %(mid))
+                return mid        
+        # If we reach here, then the element was not present
+        #print(&#39;\n returning page %d&#39; %(-1))    
+        return -1
+    
+    &#39;&#39;&#39;
+       Search for the shard interval based on mapped value. 
+        
+        Parameters
+        ----------
+        x  : float
+            Query point mapped value. 
+        
+        intervalId : Integer
+            Mapped interval to which query point belongs
+            
+        
+        Returns
+        -------
+        Shard Id : Interger
+            
+    &#39;&#39;&#39;
+    def search_shard_matrix(self, x, intervalId):
+        shardOffset =  intervalId*self.nuOfShards      
+        for i in range(self.nuOfShards):
+            if ((x &gt;= self.shardMatrix[shardOffset+i][3])
+                and (x &lt;= self.shardMatrix[shardOffset+i][4])):
+                return i
+        return -1 
+    
+    &#39;&#39;&#39;
+       Idenitfy the mapped interval to which query point mapped value belongs 
+        
+        Parameters
+        ----------
+        x  : float
+            Query point mapped value. 
+        
+             
+        Returns
+        -------
+        Mapped Interval Id : Interger
+            
+    &#39;&#39;&#39;
+    def sequentially_scan_mapped_interval(self, x):
+        for i in range(self.nuOfIntervals):
+            if (x &lt;= self.mappedIntervalMatrix[i][4]):
+                return i
+        return -1 
+    
+    
+    &#39;&#39;&#39;
+       Search for the query point in the shard interval.  
+        
+        Parameters
+        ----------
+        query  : tuple
+            Query point 2 dimensional key value.  
+        
+        intervalId : Integer
+            Mapped interval to which query point belongs
+        
+             
+        Returns
+        -------
+        Value corresponding to query point key
+            
+    &#39;&#39;&#39;
+    def scan_shard(self, interval_id,shardId, query):
+        
+        mapped_interval_offset = interval_id*self.numOfKeysPerInterval
+        shard_offset = mapped_interval_offset + shardId*self.keysPerShard
+        end_offset = shard_offset+self.keysPerShard
+        if(shardId == self.nuOfShards -1):
+            if (interval_id != (self.nuOfIntervals-1)):
+                end_offset = end_offset+ (self.numOfKeysPerInterval % self.keysPerShard)
+            else:
+                end_offset = self.nuOfKeys
+            #print(&#39;Incrementing end offset by %d for shardId %d&#39;%((self.numOfKeysPerInterval % self.keysPerShard),shardId))
+        for i in range(shard_offset, end_offset):
+            if (self.train_array[i,0] == query[0]) and (self.train_array[i,1]== query[1]):
+                return self.train_array[i,2]
+       
+        if not ((interval_id == (self.nuOfIntervals-1)) and (shardId ==(self.nuOfShards -1))):
+            # Search in adjacent shard
+            for i in range (self.nuOfKeysToSearchinAdjacentShard):
+                 if (self.train_array[i+end_offset,0] == query[0]) and (self.train_array[i+end_offset,1]== query[1]):
+                    return self.train_array[i+end_offset,2]
+        if not ((interval_id == 0) and (shardId ==0)):
+            # Search in adjacent shard
+            for i in range (self.nuOfKeysToSearchinAdjacentShard):
+                 if (self.train_array[shard_offset-i,0] == query[0]) and (self.train_array[shard_offset-i,1]== query[1]):
+                     return self.train_array[shard_offset-i,2]
+        if self.debugPrint:        
+            print(&#39;query point %d %d not found in shard Id %d interval_id = %d sharrd_offset %d %d&#39; %(query[0], query[1], shardId,interval_id, shard_offset, end_offset))    
+            print(&#39;Shard Id %d start %d %d end point %d %d &#39;%(shardId, self.train_array[shard_offset,0],self.train_array[shard_offset,1], self.train_array[end_offset-1,0],self.train_array[end_offset-1,1],))
+            
+        return -1
+    
+    
+    &#39;&#39;&#39;
+       Search for the query point in the shard interval.  
+        
+        Parameters
+        ----------
+        query  : tuple
+            Query point 2 dimensional key value.  
+        
+        intervalId : Integer
+            Mapped interval to which query point belongs
+        
+             
+        Returns
+        -------
+        Value corresponding to query point key
+            
+    &#39;&#39;&#39;
+    def predict(self, query):
+       
+        cell_id = self.searchCellGrid(query)
+        if (cell_id == -1):
+            print(&#39;Query point %d %d not found&#39; %(query[0],query[1]))
+            return -1
+        else:
+            keyArea = np.abs((query[1] - self.cellMatrix[cell_id][1])*
+                       (query[0] - self.cellMatrix[cell_id][0]))
+     
+            mapped_value =   self.cellMatrix[cell_id][7] + ((keyArea/self.cellMatrix[cell_id][8])*self.keysPerCell)
+            intervalId =   self.search_mapped_interval(mapped_value)
+            if(intervalId == -1):
+                intervalId = self.sequentially_scan_mapped_interval(mapped_value)
+                if(intervalId == -1):
+                    print(&#39;Query point %d %d mapping value %f not found in sequential search&#39; %(query[0],query[1], mapped_value))
+                    return -1
+                            
+            v_pred = self.predictShardId(mapped_value, self.alphas_list[intervalId], self.betas_list[intervalId]).astype(int)
+            #gtShardId = self.search_shard_matrix(mapped_value, intervalId)
+            predShardId = v_pred[0]//self.keysPerShard
+            if(predShardId &lt; 0):
+                predShardId= 0
+            if(predShardId &gt;= self.nuOfShards):
+                predShardId = self.nuOfShards-1
+                
+             
+            y_pred = self.scan_shard(intervalId,predShardId, query)
+            if(y_pred == -1):
+                if self.debugPrint:
+                    print(&#39;query point %d %d not found with mapped value %f predicted shard id %d&#39; 
+                        %(query[0], query[1], mapped_value,predShardId ))    
+                return 0
+            return y_pred    
+    
+    
+       
+    &#39;&#39;&#39;
+       Decompose range query into a union of smaller query rectangles each 
+       belong to one and only one cell. 
+        
+        Parameters
+        ----------
+        query_l : tuple
+            Range Query lower coordinate
+        
+        query_u  : tuple
+            Range Query upper coordinate
+                     
+        Returns
+        -------
+        cell_list :  union of smaller query rectangles each 
+       belong to one and only one cell.
+            
+    &#39;&#39;&#39;
+    def range_query(self,query_l, query_u):
+        lowerBound = False
+        cell_list = []
+        for i in range(self.cellSize):
+            for j in range(self.cellSize):
+                idx = j*self.cellSize+i
+                if(query_l[0] &gt;= self.cellMatrix[idx][0] and query_l[0] &lt;= self.cellMatrix[idx][2]) and \
+                     (query_l[1] &gt;= self.cellMatrix[idx][1] and query_l[1] &lt;= self.cellMatrix[idx][3]):
+                    cell_list.append(idx)
+                    lowerBound = True
+                    break
+            if(lowerBound == True):
+                break
+                
+        if(lowerBound == False):
+            if(self.debugPrint):
+                print(&#39;Query Rectangle Outside the range&#39;)
+            return cell_list
+        else:
+            if(self.debugPrint):
+                print(&#39;lowerbound is a equal to %d&#39;%(idx))
+            x_offset = idx% self.cellSize
+            j = j+1
+            if(j == self.cellSize):
+                j = 0
+                i = i+1
+            idx = j*self.cellSize+i
+            while(i &lt; self.cellSize):
+                if ((idx%self.cellSize) &lt; x_offset):
+                    j = j+1
+                    if(j == self.cellSize):
+                        j = 0
+                        i = i+1
+                    idx = j*self.cellSize+i
+                    continue
+              
+                if(query_u[0] &gt;= self.cellMatrix[idx][0] and query_u[1] &gt;= self.cellMatrix[idx][1]):
+                #or (query_u[1] &lt;= lisa.cellMatrix[i][3] and query_u[0] &gt;= lisa.cellMatrix[i][0]):
+                    cell_list.append(idx)
+                j = j+1   
+                if(j == self.cellSize):
+                    j = 0
+                    i = i+1
+                idx = j*self.cellSize+i
+        if self.debugPrint:
+            print(cell_list)
+
+        return cell_list
+    
+    &#39;&#39;&#39;
+      Return keys belonging to range query from cells belonging to cell list
+       Parameters
+        ----------
+        query_l : tuple
+            Range Query lower coordinate
+        
+        query_u  : tuple
+            Range Query upper coordinate
+            
+        cellList : List
+            List contaning cells ids which are identified as part of 
+        query
+                     
+        Returns
+        -------
+        keylist :  npArray
+            Array of key/value pairs fetched by range query
+               
+                           
+    &#39;&#39;&#39;
+    
+    def getKeysInRangeQuerySlow(self, cellList, query_l, query_u):
+        keyList = []
+        for i in cellList:
+            nuOfKeys = self.keysPerCell
+            startOffset = int(self.cellMatrix[i][6]*(self.keysPerCell))
+            if i == ((self.cellSize*self.cellSize)-1):
+                nuOfKeys = nuOfKeys + self.additionalKeysInLastCell 
+            for j in range(startOffset, startOffset+nuOfKeys):
+                 if(self.train_array[j, 0] &gt;= query_l[0] and self.train_array[j, 0] &lt;= query_u[0] )and \
+                         (self.train_array[j, 1] &gt;= query_l[1] and self.train_array[j, 1] &lt;= query_u[1] ):
+                        keyList.append(self.train_array[j, 0:3])
+     
+        return np.array(keyList)
+    
+    def predict_first_shard_range_query(self,query_l,query_u,cell_id,keyList):
+       
+        
+        keyArea = np.abs((query_l[1] - self.cellMatrix[cell_id][1])*
+                   (query_l[0] - self.cellMatrix[cell_id][0]))
+    
+        mapped_value =   self.cellMatrix[cell_id][7] + ((keyArea/self.cellMatrix[cell_id][8])*self.keysPerCell)
+        intervalId =   self.search_mapped_interval(mapped_value)
+        if(intervalId == -1):
+            intervalId = self.sequentially_scan_mapped_interval(mapped_value)
+            if(intervalId == -1):
+                return keyList
+    
+        v_pred = self.predictShardId(mapped_value, self.alphas_list[intervalId], self.betas_list[intervalId]).astype(int)
+        predShardId = v_pred[0]//self.keysPerShard
+        if(predShardId &lt; 0):
+            predShardId= 0
+        if(predShardId &gt;= self.nuOfShards):
+            predShardId = self.nuOfShards-1
+        
+        mapped_interval_offset = intervalId*self.numOfKeysPerInterval
+        end_offset = mapped_interval_offset+self.numOfKeysPerInterval
+        if (predShardId&gt;0):
+            predShardId = predShardId-1
+        shard_offset = mapped_interval_offset + predShardId*self.keysPerShard
+        for j in range(shard_offset, end_offset):
+            if(self.train_array[j, 0] &gt;= query_l[0] and self.train_array[j, 0] &lt;= query_u[0] )and \
+                (self.train_array[j, 1] &gt;= query_l[1] and self.train_array[j, 1] &lt;= query_u[1] ):
+                keyList.append(self.train_array[j, 0:3])
+        return keyList
+    
+    
+    def predict_last_shard_range_query(self,query_l,query_u,cell_id,keyList):
+       
+    
+        keyArea = np.abs((query_u[1] - self.cellMatrix[cell_id][1])*
+                   (query_u[0] - self.cellMatrix[cell_id][0]))
+    
+        mapped_value =   self.cellMatrix[cell_id][7] + ((keyArea/self.cellMatrix[cell_id][8])*self.keysPerCell)
+        intervalId =   self.search_mapped_interval(mapped_value)
+        if(intervalId == -1):
+            intervalId = self.sequentially_scan_mapped_interval(mapped_value)
+            if(intervalId == -1):
+                return keyList
+    
+        v_pred = self.predictShardId(mapped_value, self.alphas_list[intervalId], self.betas_list[intervalId]).astype(int)
+        predShardId = v_pred[0]//self.keysPerShard
+        if(predShardId &lt; 0):
+            predShardId= 0
+        if(predShardId &gt;= self.nuOfShards):
+            predShardId = self.nuOfShards-1
+        
+        mapped_interval_offset = intervalId*self.numOfKeysPerInterval
+        if (predShardId&lt;(self.nuOfShards -1)):
+           predShardId = predShardId+1
+        start_offset = mapped_interval_offset
+        shard_offset = mapped_interval_offset + predShardId*self.keysPerShard
+        end_offset = shard_offset+self.keysPerShard
+        if(predShardId == self.nuOfShards -1):
+            if (intervalId != (self.nuOfIntervals-1)):
+                end_offset = end_offset+ (self.numOfKeysPerInterval % self.keysPerShard)
+            else:
+                end_offset = self.nuOfKeys
+       
+        for j in range(start_offset, end_offset):
+            if(self.train_array[j, 0] &gt;= query_l[0] and self.train_array[j, 0] &lt;= query_u[0] )and \
+                (self.train_array[j, 1] &gt;= query_l[1] and self.train_array[j, 1] &lt;= query_u[1] ):
+                keyList.append(self.train_array[j, 0:3])
+               
+       
+        return keyList
+
+
+        
+    def getKeysInRangeQuery(self,cellList, query_l, query_u):
+        keyList = []
+        cellId = cellList[0]
+        keyList = self.predict_first_shard_range_query(query_l, query_u, cellId,keyList)
+        cellList.pop(0)
+        if len(cellList) == 0:
+            return np.array(keyList)
+        cellId = cellList[-1]
+        cellList.pop(-1)
+        for i in cellList:
+            nuOfKeys = self.keysPerCell
+            startOffset = int(self.cellMatrix[i][6]*(self.keysPerCell))
+            if i == ((self.cellSize*self.cellSize)-1):
+                nuOfKeys = nuOfKeys + self.additionalKeysInLastCell 
+            for j in range(startOffset, startOffset+nuOfKeys):
+                 #if(lisa.train_array[j, 0] &gt;= query_l[0] and lisa.train_array[j, 0] &lt;= query_u[0] )and \
+                 #        (lisa.train_array[j, 1] &gt;= query_l[1] and lisa.train_array[j, 1] &lt;= query_u[1] ):
+                keyList.append(self.train_array[j, 0:3])
+       
+        keyList = self.predict_last_shard_range_query(query_l,query_u, cellId, keyList)
+        return np.array(keyList)
+
+    &#39;&#39;&#39;
+       Calculate euclidean distance between arguments left and right
+                
+    &#39;&#39;&#39;
+    def distance(self, left, right):
+        &#34;&#34;&#34; Returns the square of the distance between left and right. &#34;&#34;&#34;
+        return np.sqrt(((left[0] - right[0]) ** 2) + ((left[1] - right[1]) ** 2))
+        
+    &#39;&#39;&#39;
+      Return keys/value pairs belonging to knn of query point
+       Parameters
+        ----------
+        queryPoint : tuple
+            Query point 2 dimensional key coordinate
+        
+                  
+        k : Integer
+            Number of neighbours to return. 
+        
+                     
+        Returns
+        -------
+        keylist :  npArray
+           key value pairs belonging to knn of query point
+               
+                           
+    &#39;&#39;&#39;
+    def findKnnNeighbours (self, queryPoint, k):
+        for scale in range (1,5):
+            delta = self.initDelta**scale
+            query_l = (queryPoint[0]-delta, queryPoint[1]-delta)
+            query_h = (queryPoint[0]+delta, queryPoint[1]+delta)
+            if (query_l &lt; (self.train_array[0,0], self.train_array[0,1])):
+                query_l = (self.train_array[0,0], self.train_array[0,1])
+            if (query_h  &gt; (self.train_array[-1,0], self.train_array[-1,1])):
+                query_h = (self.train_array[-1,0], self.train_array[-1,1])
+                
+            cellList =self.range_query(query_l,query_h)
+            if(len(cellList) == 0):
+                print(&#39;range query is empty&#39;)
+                return None
+            neighboursKeySet = self.getKeysInRangeQuery(cellList,query_l,query_h )
+            if (len(neighboursKeySet) &lt; k):
+                if self.debugPrint:
+                    print(&#39;No of keys found = %d&#39; %(len(neighboursKeySet) ))
+                continue   
+            neighboursKeySet = np.hstack((neighboursKeySet, np.zeros((neighboursKeySet.shape[0], 1),dtype=neighboursKeySet.dtype)))
+            idx = np.where((neighboursKeySet[:, 0] == queryPoint[0] ) &amp; (neighboursKeySet[:, 1] == queryPoint[1]))
+            neighboursKeySet[:, 3] = self.distance(queryPoint,(neighboursKeySet[:, 0], neighboursKeySet[:,1]))
+            #neighboursKeySet[:, 3] = np.sqrt(((neighboursKeySet[:, 2]- neighboursKeySet[idx, 2]) ** 2))
+                                             
+            neighboursKeySet = neighboursKeySet[neighboursKeySet[:,3].argsort()]
+           
+            return neighboursKeySet[0:k, 3]
+        return (None, None)
+    
+    &#39;&#39;&#39;
+     Predict range query for lisa model
+                                
+    &#39;&#39;&#39;
+    def predict_range_query(self, query_l, query_u):
+        cellList =self.range_query(query_l, query_u)    
+        if(len(cellList) == 0):
+            if self.debugPrint:
+                print(&#39;range query is empty&#39;)
+            return -1
+        else:
+            neighboursKeySet = self.getKeysInRangeQuery(cellList, query_l, query_u)
+            return np.sort(neighboursKeySet[:, -1])
+        
+    &#39;&#39;&#39;
+     Predict knn query for lisa model
+                                
+    &#39;&#39;&#39;
+    def predict_knn_query(self, query, k):
+          y_pred = self.findKnnNeighbours(query, k)
+          return np.sort(y_pred)
+          
+        
+            
+            
+
+    &#39;&#39;&#39;
+       Train the lisa model: Training consists of:
+            a) cell grid generation
+            b) Applying mapping function to keys values taking into account &#39;
+               cell boundaries
+            c) Learning Shard boundaries using piecewise linear functions. 
+    
+       Parameters
+        ----------
+        Train and test point np arrays
+       
+        Returns
+        -------
+        mse: Float
+           Mean square error for eval points
+           time : Time taken to build the lisaBaseline model. 
+        
+    &#39;&#39;&#39;  
+    def train(self, x_train, y_train, x_test, y_test):
+
+        print(x_train.shape)
+        print(x_test.shape)
+        print(y_train.shape)
+        print(y_test.shape)
+    
+        
+        np.set_printoptions(threshold=100000)
+        start_time = timer()
+        self.train_array = np.hstack((x_train, y_train.reshape(-1, 1),
+                                      np.zeros((x_train.shape[0], 1),
+                                               dtype=x_train.dtype)))
+        #print( self.train_array[0:100,:])
+        self.train_array = self.train_array.astype(&#39;float64&#39;)
+        if (self.generate_grid_cells() == -1):
+            print(&#39;Invalid Configuration&#39;)
+            return -1, timer() - start_time
+        self.compute_mapping_value()
+        self.createShards()
+        end_time = timer()
+        print(&#39;/n build time %f&#39; % (end_time - start_time))
+        #print(self.train_array)
+        test_data_size = x_test.shape[0]
+        pred_y = []
+        #for i in range(20):
+        print(&#39;\n In Lisabaseline.build evaluation %d data points&#39; %
+              (test_data_size))
+        error_count = 0
+        for i in range(test_data_size):
+            y_hat = self.predict(x_test[i])
+            if(y_hat != y_test[i]):
+                print(&#39; pred = %d, gt = %d&#39; %(y_hat, y_test[i] ))
+                error_count = error_count+1
+            pred_y.append(y_hat)
+
+        pred_y = np.array(pred_y)
+        #mse = metrics.mean_absolute_error(y_test, pred_y)
+        mse = metrics.mean_squared_error(y_test, pred_y)
+        print(&#39;error count is %d, test size is %d ratio is %f&#39; %(error_count,test_data_size, error_count/test_data_size ))
+        print(&#39;nuOfIntervals =%d, numOfKeysPerInterval = %d nuOfShards = %d keysperShard = %d NuofKeys = %d keysInLastInterval = %d&#39;
+                      %(self.nuOfIntervals, self.numOfKeysPerInterval,self.nuOfShards,self.keysPerShard, self.nuOfKeys, self.keysInLastInterval) )
+
+        print(&#39;cellSize = %d, keysPerCell = %d, nuOfKeys = %d additionalKeysInLastCell = %d&#39; %(self.cellSize, self.keysPerCell,  self.nuOfKeys, self.additionalKeysInLastCell ))
+        if self.debugPrint:
+            print(self.cellMatrix)
+        return mse, end_time - start_time
+     
+        
+        </code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="indexing.models.lisa.lisa.LisaModel"><code class="flex name class">
+<span>class <span class="ident">LisaModel</span></span>
+<span>(</span><span>cellSize, nuOfShards)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class LisaModel():
+    def __init__(self, cellSize, nuOfShards) -&gt; None:
+        #cellSize : Nu of cells into which key space is divided
+        self.cellSize = cellSize
+        # keysPerShard : Number of keys per shard(\Psi)
+        self.keysPerShard = 0
+        # Np Array to contain the key value pairs
+        self.train_array=0
+        # Np Array to store cell boundaries for each cell. 
+        self.cellMatrix=0
+        # keysPerCell : Numebr of keys per Cell. 
+        self.keysPerCell=0
+        # nuOfKeys : Total nu of points in the training database
+        self.nuOfKeys=0
+        &#39;&#39;&#39;
+        additionalKeysInLastCell : Last cell may have more keys than keysPerCell
+        Bookkeeping code to allow for arbotary values of cell Size instead of
+        factor of nuOfKeys.
+        &#39;&#39;&#39;
+        self.additionalKeysInLastCell =0
+        # Number of Intervals into which sorted mapped values are divided
+        # Shard Prediction Function is learned for each interval. 
+        self.nuOfIntervals = 0
+        self.numOfKeysPerInterval = 0
+        # Number of shards per interval 
+        self.nuOfShards=nuOfShards
+        # Placeholder to store information regarding shard training function
+        self.shardMatrix=0
+        # Placeholder to store mapped values boundaries boundaries for each interval
+        self.mappedIntervalMatrix = 0
+        # Additional logic to allow arbitary values for nuOfIntervals
+        self.keysInLastInterval=0
+        # shardPredictionErrorCount : Additional debug error counter
+        self.shardPredictionErrorCount = 0
+        self.page_size=1
+        self.name = &#39;Lisa&#39;
+        self.initDelta = 3
+        self.debugPrint = 0
+        print(&#39;In Lisa Model&#39;)
+    
+    &#39;&#39;&#39;
+       Generates grid cells from training data. Divides training data into
+       cellSize*cellSize nu of cells. 
+    
+       Parameters
+        ----------
+         self.train_array : Np array
+             Array containing key value pairs
+       
+        Attributes :  
+        -------
+         self.cellMatrix: Np Array
+             Initialize an NP array to store bookkeeping infromation for cell grid, like
+             cell boundaries, cell number, area of the cell. 
+        
+    &#39;&#39;&#39;  
+    def generate_grid_cells(self):
+        cellSize =  self.cellSize
+        self.nuOfKeys = self.train_array.shape[0]
+        self.keysPerCell =  self.nuOfKeys // (cellSize*cellSize)
+        keysPerCell = self.keysPerCell
+        self.additionalKeysInLastCell = self.nuOfKeys-(keysPerCell*cellSize*cellSize)
+        
+        
+        self.numOfKeysPerInterval = self.keysPerCell
+        self.nuOfIntervals = self.nuOfKeys // self.numOfKeysPerInterval
+        self.keysInLastInterval = self.nuOfKeys - self.numOfKeysPerInterval*(self.nuOfIntervals -1)
+
+        self.keysPerShard = self.numOfKeysPerInterval//self.nuOfShards
+        self.nuOfKeysToSearchinAdjacentShard = self.keysPerShard //6
+        if(self.nuOfKeysToSearchinAdjacentShard &lt; 5):
+            self.nuOfKeysToSearchinAdjacentShard= 5
+        if (self.nuOfKeysToSearchinAdjacentShard &gt;self.keysPerShard ):
+            print(&#39;Invalid Configuration&#39;)
+            return -1
+        self.shardMatrix = np.zeros((self.nuOfIntervals, 5))
+        if(self.debugPrint):
+            print(&#39;nuOfIntervals =%d, numOfKeysPerInterval = %d nuOfShards = %d keysperShard = %d NuofKeys = %d keysInLastInterval = %d&#39;
+                      %(self.nuOfIntervals, self.numOfKeysPerInterval,self.nuOfShards,self.keysPerShard, self.nuOfKeys, self.keysInLastInterval) )
+
+            print(&#39;cellSize = %d, keysPerCell = %d, nuOfKeys = %d additionalKeysInLastCell = %d&#39; %(cellSize, keysPerCell,  self.nuOfKeys, self.additionalKeysInLastCell ))
+        # Sore keys based on x dimension
+        self.train_array = self.train_array[self.train_array[:,0].argsort()]
+        &#39;&#39;&#39;
+        Initialize Cell Matrix, Each element of cell matrix has [(l0, u0 ), (l1, u1), 
+        Cell Id, CellId*keysPerCell]. We  keep cell id and CellId*keysPerCell in 
+        2 mappings,position 5, 6, is mapping value increasing in x direction
+        position 7 8 is , mapping value increasing in y direction. 
+        &#39;&#39;&#39;
+        self.cellMatrix = np.zeros((cellSize*cellSize, 9))
+        # Divie X axis into equal no of keys, and fill x values for the cell
+        for i in range( self.cellSize):
+            for j in range( self.cellSize):
+                # Save x coordinate of first key in the cell
+                self.cellMatrix[i*cellSize+j][0] =  self.train_array[(keysPerCell*cellSize*(j))-(not(not(j%cellSize))) ,0]
+                # Save x coordinate of last key in the cell
+                self.cellMatrix[i*cellSize+j][2] =  self.train_array[(keysPerCell*cellSize*(j+1)) -1 ,0]
+                self.cellMatrix[i*cellSize+j][4] =  i*cellSize+j
+                self.cellMatrix[i*cellSize+j][5] =  (keysPerCell*cellSize*i)+j*keysPerCell
+                self.cellMatrix[i*cellSize+j][6] =  i + cellSize*j
+                self.cellMatrix[i*cellSize+j][7] =  (i*keysPerCell)+(keysPerCell*cellSize*j)
+        # Last cell may have more keys than KeysPerCell
+        self.cellMatrix[i*cellSize+j][2] =  self.train_array[-1 ,0]
+        
+        # Sort Keys along y direction
+        for i in range(cellSize-1):
+            self.train_array[keysPerCell*cellSize*i:keysPerCell*cellSize*(i+1)] = \
+                       self.train_array[(self.train_array[keysPerCell*cellSize*i:keysPerCell*cellSize*(i+1),1].argsort())+keysPerCell*cellSize*i]
+        # Last cell may have more keys than KeysPerCell 
+        i = i+1
+        self.train_array[keysPerCell*cellSize*i:-1] = self.train_array[(self.train_array[keysPerCell*cellSize*i:-1,1].argsort())+keysPerCell*cellSize*i]
+   
+        # Divide the keys along y Axis
+        for i in range(cellSize):
+            for j in range(cellSize):
+                self.cellMatrix[i*cellSize+j][1] =  self.train_array[((keysPerCell*(i-1)) + (keysPerCell*cellSize*j) +(keysPerCell-1)) ,1]
+                self.cellMatrix[i*cellSize+j][3] =  self.train_array[((keysPerCell*i) + (keysPerCell*cellSize*j) +(keysPerCell-1)) ,1]
+                #print(((keysPerCell*(i-1)) + (keysPerCell*cellSize*(j)) +(keysPerCell-1)))
+                #print( ((keysPerCell*(i)) + (keysPerCell*cellSize*(j)) +(keysPerCell-1)))
+                self.cellMatrix[i*cellSize+j][8] =  ((self.cellMatrix[i*cellSize+j][3] - self.cellMatrix[i*cellSize+j][1])* \
+                                (self.cellMatrix[i*cellSize+j][2] - self.cellMatrix[i*cellSize+j][0]))
+
+        self.cellMatrix[i*cellSize+j][3] =  self.train_array[-1 ,1]
+        self.cellMatrix[i*cellSize+j][8] =  ((self.cellMatrix[i*cellSize+j][3] - self.cellMatrix[i*cellSize+j][1])*
+                                        (self.cellMatrix[i*cellSize+j][2] - self.cellMatrix[i*cellSize+j][0]))
+        # Bookkeeping code        
+        for i in range(cellSize):
+            self.cellMatrix[i][1] =  0
+            self.cellMatrix[i][8] =  np.abs((self.cellMatrix[i][3] - self.cellMatrix[i][1])* \
+                                           (self.cellMatrix[i][2] - self.cellMatrix[i][0]))
+      
+        return 0
+    
+    &#39;&#39;&#39;
+       Apply mapping function to the 2 dimensional key value
+    
+       Attributes :  
+        -------
+        self.cellMatrix: Np Array
+             Containing bookkeeping infromation for cell grid, like
+             cell boundaries, cell number, area of the cell. 
+             
+        self.train_array: Np Array
+           Np Array containg key value pair. Mapped value will be calculated
+           for each key value pair in the training array.
+        
+        
+        
+    &#39;&#39;&#39;  
+    def compute_mapping_value(self):
+        j = 0
+        k = 0
+        # Apply mapping function to each key in the training database
+        for i in range(0,(self.keysPerCell*self.cellSize*self.cellSize)):
+            idx = (((i% self.keysPerCell)))
+            cellIdx = j*self.cellSize +k
+            keyArea = ((self.train_array[i][1] - self.cellMatrix[cellIdx][1])* \
+                      (self.train_array[i][0] - self.cellMatrix[cellIdx][0]))
+     
+            self.train_array[i, 3] =   self.cellMatrix[cellIdx][7] + \
+                                       ((keyArea/self.cellMatrix[cellIdx][8])*self.keysPerCell)
+          
+            if(idx ==(self.keysPerCell -1) ):
+                j  = j+1
+                if(j == self.cellSize):
+                    k = k+1
+                    j = 0
+                    
+        # Last cell can contain additional keys. Handle this boundary condition             
+        for i in range((self.keysPerCell*self.cellSize*self.cellSize), self.nuOfKeys):
+            if(self.debugPrint):
+                print(&#39;i = %d, cellIdx = %d&#39; %(i,cellIdx ))
+            keyArea = ((self.train_array[i][1] - self.cellMatrix[cellIdx][1])* \
+                       (self.train_array[i][0] - self.cellMatrix[cellIdx][0]))
+            self.train_array[i, 3] =   self.cellMatrix[cellIdx][7] + \
+                                       ((keyArea/self.cellMatrix[cellIdx][8])*(self.keysPerCell+self.additionalKeysInLastCell))            
+        # Sort the input data array with mapped values
+        self.train_array = self.train_array[self.train_array[:,3].argsort()]   
+    
+    &#39;&#39;&#39;
+        Convert input data to np array
+    &#39;&#39;&#39;
+    def convert_to_np_array(self, input_):
+        if isinstance(input_, np.ndarray) is False:
+            input_ = np.array(input_)
+        return input_
+   
+    
+   
+    &#39;&#39;&#39;
+        Return whether input matrix is Positive deifnite or not. 
+    &#39;&#39;&#39;
+    def is_pos_def(x):
+        return np.all((np.around(np.linalg.eigvals(x),4)) &gt;= 0)
+   
+    
+   
+    &#39;&#39;&#39;
+        Get Initial set of betas
+        Parameters
+        ----------
+        input_ : array_like
+            The object containing mapped values for the interval.
+        V : Integer
+            Repersents the nu of keys in the interval
+        D : Integer
+            Nu of shards(line segments/slopes-intercepts values) needs to be learned from training data
+    
+        Returns
+        -------
+        b_ : numpy array
+            The x(mapped value) locations where each line segment terminates. Referred to 
+            as breakpoints for each line segment and should be structured as a 1-D numpy array.
+    &#39;&#39;&#39;
+    def get_betas(self,input_, V, D):
+        b_ = np.zeros( D +1)
+        b_[0], b_[-1] = np.min(input_), np.max(input_)
+        i = 1
+        while(i&lt;(D)):
+            b_[i] = input_[i*(V//D)]
+            #print(i*(V//D))
+            i = i+1            
+            
+        return b_
+    
+    
+    
+    &#39;&#39;&#39;
+        Assemble the matrix A
+        Parameters
+        ----------
+        betas : np array
+            The x(mapped value) locations where each line segment terminates. Referred to 
+            as breakpoints for each line segment and should be structured as a 1-D numpy array.
+        x : np array
+            The x locations which the linear regression matrix is assembled on.
+            This must be a numpy array!
+        Returns
+        -------
+        A : ndarray (2-D)
+            The assembled linear regression matrix.
+ 
+    &#39;&#39;&#39;
+    def assemble_regression_matrix(self,betas, x):
+        betas = self.convert_to_np_array(betas)
+        # Sort the betas
+        betas_order = np.argsort(betas)
+        betas = betas[betas_order]
+        # Fetch number of parameters and line segments
+        n_segments = len(betas) - 1
+
+        # Assemble the regression matrix
+        A_list = [np.ones_like(x)]
+        A_list.append(x - betas[0])
+        for i in range(n_segments - 1):
+            A_list.append(np.where(x &gt;= betas[i+1],
+                                       x - betas[i+1],
+                                       0.0))
+        A = np.vstack(A_list).T
+        return A, betas,n_segments
+    
+    
+    
+    &#39;&#39;&#39;
+        Compute line segments slope after a piecewise linear
+        function has been fitted.
+        This will also calculate the y-intercept from each line in the form
+        y = mx + b. 
+        Parameters
+        ----------
+        y_hat : np array
+            Predicted value of the Sharding Function
+        betas : np array
+            The x locations which the linear regression matrix is assembled on.
+            This must be a numpy array!
+        n_segments
+            Number of line segments to learn
+            
+        Returns
+        -------
+        slopes : ndarray(1-D)
+            The slope of each ling segment as a 1-D numpy array.Slopes[0] is the slope
+            of the first line segment.
+        Intercepts : ndarray(1-D)
+            The intercept of each ling segment as a 1-D numpy array.Intercept[0] is the slope
+            of the first line segment.
+    &#39;&#39;&#39;
+    def compute_slopes(self, y_hat,betas,n_segments):
+        slopes = np.divide(
+                    (y_hat[1:n_segments + 1] -
+                     y_hat[:n_segments]),
+                    (betas[1:n_segments + 1] -
+                     betas[:n_segments]))
+        intercepts = y_hat[0:-1] - slopes * betas[0:-1]
+        return slopes, intercepts
+    
+    
+    &#39;&#39;&#39;
+        Compute least square fit(alphas) for the A matrix
+        This will also calculate the y-intercept from each line in the form
+        y = mx + b. 
+        Parameters
+        ----------
+        A : np array(2-D)
+            Assembled Linear Regression Matrix
+        y_data : np array 
+            Array conatinaing the label values
+           
+            
+        Returns
+        -------
+        alpha : ndarray(1-D)
+           Cofficients of Least square solution
+        SSR : Float
+            Cost value at the Least square solution
+        r:  ndarray(1-D)
+            Residual Error
+    &#39;&#39;&#39;
+    def lstsq(self,A, y_gt):
+
+        alpha, ssr, _, _ = np.linalg.lstsq(A, y_gt, rcond = -1)
+        # ssr is only calculated if self.n_data &gt; self.n_parameters
+        # in this case we ll need to calculate ssr manually
+        # where ssr = sum of square of residuals
+        y_hat = np.dot(A, alpha)
+        e = y_hat - y_gt
+        n_parameters = A.shape[1]
+        n_data = y_gt.size
+        if n_data &lt;= n_parameters:
+            ssr = np.dot(e, e)
+        if isinstance(ssr, list):
+            ssr = ssr[0]
+        elif isinstance(ssr, np.ndarray):
+            if ssr.size == 0:
+                y_hat = np.dot(A, alpha)
+                e = y_hat - y_gt
+                ssr = np.dot(e, e)
+            else:
+                ssr = ssr[0]
+
+        return alpha,np.around(ssr, 3), e  
+    
+    
+    
+    &#39;&#39;&#39;
+        Predict Shard Id. 
+        Parameters
+        ----------
+        x : np array(2-D)
+            Mapped Values Array
+        alpha : np array 
+            Least square solution cofficients
+        betas : np array 
+            Array containing termination point for line segments
+             
+        Returns
+        -------
+        y_hat : ndarray(1-D)
+           Predicted value of Least square solution
+    &#39;&#39;&#39;
+    def predictShardId(self, x, alpha=None, betas=None):
+        
+        #print(&#39;in function predictShardId&#39;)
+        if alpha is not None and betas is not None:
+            #print(betas)
+            alpha = alpha
+            # Sort the betas, then store them
+            betas_order = np.argsort(betas)
+            #   print(betas_order)
+            betas = betas[betas_order]
+          
+        x = self.convert_to_np_array(x)
+
+        A,_,_ = self.assemble_regression_matrix(betas, x)
+
+        # solve the regression problem
+        y_pred = np.dot(A, alpha)
+        return y_pred
+
+
+
+    &#39;&#39;&#39;
+        Calculate gradient update for beta(breakpoints)
+        Parameters
+        ----------
+        x : np array(2-D)
+            Mapped Values Array
+        alpha : np array 
+            Least square solution cofficients
+        betas : np array 
+            Array containing termination point for line segments
+        r_error : np array 
+           Error Residual from least square solutiuon
+        n_segments : Interger
+            Number of line segments(Shard Id) to learn
+        Returns
+        -------
+        s : ndarray(1-D)
+           Gradient update for next iteration 
+    &#39;&#39;&#39;
+    def calc_gradient(self, x, alpha, betas,r_error,n_segments):
+        K = np.diag(alpha)
+        G_list = [np.ones_like(x)]
+        G_list.append(x - betas[0])
+        for i in range(n_segments - 1):
+            G_list.append(np.where(x &gt;= betas[i+1],
+                                   x - betas[i+1],
+                                   np.inf))
+        G = np.vstack(G_list)
+        G= ((G!=np.inf).astype(int)*(-1))
+        KG = np.dot(K, G)
+        g= 2*(KG.dot(r_error))
+        g = np.around(g,3)
+        Y = 2*(KG.dot(np.transpose(KG)))
+        Y = np.around(Y,3)
+        try:
+            Y_inverse = np.linalg.inv(Y)
+            s = -Y_inverse.dot(g)
+        except np.linalg.LinAlgError:
+            if self.debugPrint:
+                print(&#39;Y_inverse not avaliable&#39;)
+            s = 0
+        pass
+        
+        return s
+    
+    &#39;&#39;&#39;
+        Find best learning rate( minimizes the ssr) for the iteration. 
+        Parameters
+        ----------
+        s : np array
+           gradient update
+        betas : np array 
+            Array containing termination point for line segments
+        x : np array
+            The x locations which the linear regression matrix is assembled on.
+            
+        y : np array 
+            Array conatinaing the label values
+        Returns
+        -------
+        lr : float
+           learning rate to be used for iteration. 
+    &#39;&#39;&#39;
+    
+ 
+
+    def find_learning_rate(self,s,betas,x, y):
+        lr_list = [0.001, 0.1]
+        ssr_list = []
+        # Do parameter search for learning rate. 
+        for lr in lr_list:
+            betas_new = betas+lr*s
+            A, _,_ =  self.assemble_regression_matrix(betas_new, x)
+            alpha, ssr,r_error = self.lstsq(A, y)
+            ssr_list.append(ssr)
+        min_lr = ssr_list.index(min(ssr_list))
+        lr = lr_list[min_lr]
+        # Return learning rate whcih minimizes the ssr. 
+        return lr
+    
+    &#39;&#39;&#39;
+       Check  alpha constraint according to shard training section in the 
+       lisa paper.(Section 3.4, equation (5))
+    &#39;&#39;&#39;
+    def check_alpha_constraint(self, alpha):
+        flag = True
+        for i in range(alpha.size+1):
+            alpha_sum = 0
+            for j in range(i):
+              alpha_sum = alpha_sum+alpha[j]
+            if (alpha_sum &lt; 0):
+                flag = False
+                break
+        
+        return flag
+    
+    &#39;&#39;&#39;
+      Plot learned value againt grounttruth for shard prediction
+    &#39;&#39;&#39;
+
+    def plot_sharding_prediction(self, x, y, alpha, betas):
+        return
+        xHat = np.linspace(min(x), max(x), num=10000)
+        yHat = self.predictShardId(xHat, alpha,betas)
+        plt.figure()
+        plt.plot(x, y, &#39;--&#39;)
+        plt.plot(xHat, yHat, &#39;-&#39;)
+        plt.show()
+        return
+
+    &#39;&#39;&#39;
+        Train linear functions for shard prediction. This function will be 
+        called for each mapped interval. 
+        Parameters
+        ----------
+        x : np array
+            The x locations which the linear regression matrix is assembled on.
+            
+        y : np array 
+            Array conatinaing the label values
+        
+        nuOfShards : Integer
+            Number of linde segments to be learned. 
+        Returns
+        -------
+        alpha : np array 
+            Least square solution cofficients
+        betas : np array 
+            Array containing termination point for line segments
+    &#39;&#39;&#39;
+    def trainShardingLinearFunctions(self,x, y,nuOfShards):
+        
+        betas_list = []
+        learning_iter_list= []
+        early_stop_count = 0
+        x_data, y_data = self.convert_to_np_array(x), self.convert_to_np_array(y)
+        n_data = x_data.size
+        #Initialize betas with uniform distribution
+        betas = self.get_betas(x_data,n_data,nuOfShards)
+       
+        A, betas,n_segments = self.assemble_regression_matrix(betas, x_data)
+       
+        
+        alpha, ssr_0,r_error = self.lstsq(A, y_data)
+        betas_list.append(betas)
+        learning_iter_list.append(ssr_0)
+        self.plot_sharding_prediction(x_data, y_data, alpha, betas)
+        #Training Loop
+        itr = 0
+        while(itr&lt;1000):
+            # Calculate Gradient Update
+            s = self.calc_gradient(x_data, alpha, betas,r_error,n_segments)
+            # Find best learning rate for this iter
+            lr = self.find_learning_rate(s,betas,x_data, y_data)
+            # Update betas 
+            betas = betas+lr*s
+            # Update alpha 
+            A, betas,n_segments = self.assemble_regression_matrix(betas, x_data)
+            alpha, ssr,r_error = self.lstsq(A, y_data)
+            alpha_constraint = self.check_alpha_constraint(alpha)
+            #Stop training if alpha constraint is violated
+            if (alpha_constraint == False):
+                break
+            # Check for early stopping
+            if (learning_iter_list[-1] == ssr):
+                early_stop_count = early_stop_count+1
+                if(early_stop_count &gt; 4):
+                    #print(&#39;Early Stopping&#39;)
+                    break
+            else:
+                early_stop_count = 0
+            learning_iter_list.append(ssr)
+            betas_list.append(betas)
+            itr = itr+1
+           
+        #get index corresponding to lowest error
+        min_ssr = learning_iter_list.index(min(learning_iter_list))
+        # get betas corresponding to lowest error
+        betas =  np.array(betas_list[min_ssr])
+        #get alphas corresponidng to lowest error
+        A, betas,_ = self.assemble_regression_matrix(betas, x_data)
+        alpha, ssr,r_error = self.lstsq(A, y_data)
+        self.plot_sharding_prediction(x_data, y_data, alpha, betas)
+        #print(&#39;Time taken %f&#39; %(timer()-start_time))
+        #print(&#34;Initial ssr %f, final ssr %f&#34; %(ssr_0,ssr))
+        return alpha, betas
+    
+    
+    &#39;&#39;&#39;
+        BookKeeping code to maintain mapped value at mapped interval boundries. 
+        Attribues
+        ----------
+        self. mappedIntervalMatrix : np array
+           Initializes a data structure with mapped values at boundaries of 
+           mapped interval. 
+            
+       
+    &#39;&#39;&#39;
+    def createMappedIntervalMatrix(self):
+        self.mappedIntervalMatrix = np.zeros((self.nuOfIntervals, 5))
+        for i in range(self.nuOfIntervals-1):
+            self.mappedIntervalMatrix[i][0] = i+1
+            self.mappedIntervalMatrix[i][1] = self.train_array[i*self.numOfKeysPerInterval, 2]
+            self.mappedIntervalMatrix[i][2] = self.train_array[(((i+1)*self.numOfKeysPerInterval)-1), 2]
+            self.mappedIntervalMatrix[i][3] = self.train_array[i*self.numOfKeysPerInterval, 3]
+            self.mappedIntervalMatrix[i][4] = self.train_array[(((i+1)*self.numOfKeysPerInterval)-1), 3]
+            
+        #Last Interval may have less nu of keys
+        i = i+1
+        self.mappedIntervalMatrix[i][0] = i+1
+        self.mappedIntervalMatrix[i][1] = self.train_array[i*self.numOfKeysPerInterval, 2]
+        self.mappedIntervalMatrix[i][2] = self.train_array[self.nuOfKeys-1, 2]
+        self.mappedIntervalMatrix[i][3] = self.train_array[i+1*self.numOfKeysPerInterval, 3]
+        self.mappedIntervalMatrix[i][4] = self.train_array[self.nuOfKeys-1, 3]
+        
+    
+    &#39;&#39;&#39;
+        BookKeeping code to maintain mapped value at Shard boundries. 
+        Attribues
+        ----------
+        self.shardMatrix : np array
+           Initializes a data structure with mapped values at boundaries of 
+           shard intervals.
+            
+       
+    &#39;&#39;&#39;
+    
+    def createShardMappingMatrix(self):
+        self.shardMatrix = np.zeros((self.nuOfIntervals*self.nuOfShards, 5))
+        numOfKeysPerInterval = self.numOfKeysPerInterval
+        keysPerShard = self.keysPerShard
+        # Initialize shardMatrix for ShardFunctions for each Interval. 
+        for i in range(self.nuOfIntervals-1):
+            for j in range(self.nuOfShards-1):
+                # Store mapped values at shard interval boundaries.  
+                idx = i*self.nuOfShards+j
+                self.shardMatrix[idx][0] = idx+1
+                self.shardMatrix[idx][1] = self.train_array[i*numOfKeysPerInterval + j*keysPerShard, 2]
+                self.shardMatrix[idx][2] = self.train_array[i*numOfKeysPerInterval+((j+1)*keysPerShard)-1, 2]
+                self.shardMatrix[idx][3] = self.train_array[i*numOfKeysPerInterval + j*keysPerShard, 3]
+                self.shardMatrix[idx][4] = self.train_array[i*numOfKeysPerInterval+((j+1)*keysPerShard)-1, 3]
+            j= j+1
+            idx = idx+1
+            # Handle boundary case as lasty shard may have additional keys.  
+            self.shardMatrix[idx][0] = idx+1
+            self.shardMatrix[idx][1] = self.train_array[i*numOfKeysPerInterval + j*keysPerShard, 2]
+            self.shardMatrix[idx][2] = self.train_array[((i+1)*numOfKeysPerInterval)-1  , 2]
+            self.shardMatrix[idx][3] = self.train_array[i*numOfKeysPerInterval + j*keysPerShard, 3]
+            self.shardMatrix[idx][4] = self.train_array[((i+1)*numOfKeysPerInterval)-1  , 3]
+            
+        #Last Interval may have less nu of keys
+        nuOfShardsinLastInterval =  self.nuOfShards #self.keysInLastInterval // keysPerShard
+        i = i+1
+        for j in range(nuOfShardsinLastInterval-1):
+            idx = i*self.nuOfShards+j
+      
+            self.shardMatrix[idx][0] = idx+1
+            self.shardMatrix[idx][1] = self.train_array[i*numOfKeysPerInterval + j*keysPerShard, 2]
+            self.shardMatrix[idx][2] = self.train_array[i*numOfKeysPerInterval+((j+1)*keysPerShard)-1, 2]
+            self.shardMatrix[idx][3] = self.train_array[i*numOfKeysPerInterval + j*keysPerShard, 3]
+            self.shardMatrix[idx][4] = self.train_array[i*numOfKeysPerInterval+((j+1)*keysPerShard)-1, 3]
+        j= j+1
+        idx = idx+1
+        # Handle boundary case as lasty shard may have additional keys.  
+        self.shardMatrix[idx][0] = idx+1
+        self.shardMatrix[idx][1] = self.train_array[i*numOfKeysPerInterval + j*keysPerShard, 2]
+        self.shardMatrix[idx][2] = self.train_array[self.nuOfKeys-1  , 2]
+        self.shardMatrix[idx][3] = self.train_array[i*numOfKeysPerInterval + j*keysPerShard, 3]
+        self.shardMatrix[idx][4] = self.train_array[self.nuOfKeys -1 , 3]
+
+    &#39;&#39;&#39;
+        Learn shard boundaries per mapping interval. Initalize data structures
+        to divide sorted mapped values in equal sized intervals, and learn 
+        SP function for each interval. 
+        
+        Attribues
+        ----------
+        self.mappedIntervalMatrix : np array
+           Data structure with mapped values at boundaries of 
+           mapped intervals.
+        self.shardMatrix : np array
+           Data structure with mapped values at boundaries of 
+           shard intervals.
+        alpha : np array 
+            Least square solution cofficients
+        betas : np array 
+            Array containing termination point for line segments
+        
+    &#39;&#39;&#39;
+    def createShards(self):
+        self.alphas_list = []
+        self.betas_list = []
+        self.createMappedIntervalMatrix()
+        self.createShardMappingMatrix()
+        
+        for i in range(self.nuOfIntervals):
+            x = self.train_array[i*self.numOfKeysPerInterval: ((i+1)*self.numOfKeysPerInterval), 3]
+            y = np.arange(x.shape[0])
+            #print(&#39;Interval %d&#39; %(i))
+            alphas, betas = self.trainShardingLinearFunctions(x, y,self.nuOfShards)
+            self.alphas_list.append(alphas)
+            self.betas_list.append(betas)
+            
+    &#39;&#39;&#39;
+        Search in the grid cell for a particular key value. 
+        
+        Parameters
+        ----------
+       query  : Tuple
+            Query point to be searched with 2 dimensional key value. 
+            
+        
+        Returns
+        -------
+        CellIdx = Interger 
+            Cell Index  corresponding to query point. 
+        
+    &#39;&#39;&#39;
+    def searchCellGrid(self, query):
+        
+        found = False
+        cellIdx = -1
+        for i in range(self.cellSize):
+             for j in range(self.cellSize):
+                 if(query[0] &gt;= self.cellMatrix[i+j*self.cellSize][0] and query[0] &lt;= self.cellMatrix[i+j*self.cellSize][2]) and \
+                     (query[1] &gt;= self.cellMatrix[i+j*self.cellSize][1] and query[1] &lt;= self.cellMatrix[i+j*self.cellSize][3]):
+                         found = True
+                         cellIdx = i+j*self.cellSize
+                         break
+             if (found == True):
+                 break
+        return cellIdx
+
+    &#39;&#39;&#39;
+        Do BST search for mapped interval based on query point mapped value
+        
+        Parameters
+        ----------
+       x  : float
+            Query point mapped value. 
+            
+        
+        Returns
+        -------
+       Index of mapped interval. 
+        
+    &#39;&#39;&#39;
+    def search_mapped_interval(self, x):
+        low = 0
+        high = self.nuOfIntervals - 1
+        mid = 0
+        #print(&#39;searching for %f&#39; %(x))
+        while low &lt;= high:
+
+            mid = (high + low) // 2
+            #print(&#39;mid is %d&#39; %(mid))
+            # If x is greater, ignore left half
+            if self.mappedIntervalMatrix[mid][4] &lt; x:
+                low = mid + 1
+
+            # If x is smaller, ignore right half
+            elif self.mappedIntervalMatrix[mid][3] &gt; x:
+                high = mid - 1
+
+            # means x is present at mid
+            else:
+                #print(&#39;\n returning page %d&#39; %(mid))
+                return mid        
+        # If we reach here, then the element was not present
+        #print(&#39;\n returning page %d&#39; %(-1))    
+        return -1
+    
+    &#39;&#39;&#39;
+       Search for the shard interval based on mapped value. 
+        
+        Parameters
+        ----------
+        x  : float
+            Query point mapped value. 
+        
+        intervalId : Integer
+            Mapped interval to which query point belongs
+            
+        
+        Returns
+        -------
+        Shard Id : Interger
+            
+    &#39;&#39;&#39;
+    def search_shard_matrix(self, x, intervalId):
+        shardOffset =  intervalId*self.nuOfShards      
+        for i in range(self.nuOfShards):
+            if ((x &gt;= self.shardMatrix[shardOffset+i][3])
+                and (x &lt;= self.shardMatrix[shardOffset+i][4])):
+                return i
+        return -1 
+    
+    &#39;&#39;&#39;
+       Idenitfy the mapped interval to which query point mapped value belongs 
+        
+        Parameters
+        ----------
+        x  : float
+            Query point mapped value. 
+        
+             
+        Returns
+        -------
+        Mapped Interval Id : Interger
+            
+    &#39;&#39;&#39;
+    def sequentially_scan_mapped_interval(self, x):
+        for i in range(self.nuOfIntervals):
+            if (x &lt;= self.mappedIntervalMatrix[i][4]):
+                return i
+        return -1 
+    
+    
+    &#39;&#39;&#39;
+       Search for the query point in the shard interval.  
+        
+        Parameters
+        ----------
+        query  : tuple
+            Query point 2 dimensional key value.  
+        
+        intervalId : Integer
+            Mapped interval to which query point belongs
+        
+             
+        Returns
+        -------
+        Value corresponding to query point key
+            
+    &#39;&#39;&#39;
+    def scan_shard(self, interval_id,shardId, query):
+        
+        mapped_interval_offset = interval_id*self.numOfKeysPerInterval
+        shard_offset = mapped_interval_offset + shardId*self.keysPerShard
+        end_offset = shard_offset+self.keysPerShard
+        if(shardId == self.nuOfShards -1):
+            if (interval_id != (self.nuOfIntervals-1)):
+                end_offset = end_offset+ (self.numOfKeysPerInterval % self.keysPerShard)
+            else:
+                end_offset = self.nuOfKeys
+            #print(&#39;Incrementing end offset by %d for shardId %d&#39;%((self.numOfKeysPerInterval % self.keysPerShard),shardId))
+        for i in range(shard_offset, end_offset):
+            if (self.train_array[i,0] == query[0]) and (self.train_array[i,1]== query[1]):
+                return self.train_array[i,2]
+       
+        if not ((interval_id == (self.nuOfIntervals-1)) and (shardId ==(self.nuOfShards -1))):
+            # Search in adjacent shard
+            for i in range (self.nuOfKeysToSearchinAdjacentShard):
+                 if (self.train_array[i+end_offset,0] == query[0]) and (self.train_array[i+end_offset,1]== query[1]):
+                    return self.train_array[i+end_offset,2]
+        if not ((interval_id == 0) and (shardId ==0)):
+            # Search in adjacent shard
+            for i in range (self.nuOfKeysToSearchinAdjacentShard):
+                 if (self.train_array[shard_offset-i,0] == query[0]) and (self.train_array[shard_offset-i,1]== query[1]):
+                     return self.train_array[shard_offset-i,2]
+        if self.debugPrint:        
+            print(&#39;query point %d %d not found in shard Id %d interval_id = %d sharrd_offset %d %d&#39; %(query[0], query[1], shardId,interval_id, shard_offset, end_offset))    
+            print(&#39;Shard Id %d start %d %d end point %d %d &#39;%(shardId, self.train_array[shard_offset,0],self.train_array[shard_offset,1], self.train_array[end_offset-1,0],self.train_array[end_offset-1,1],))
+            
+        return -1
+    
+    
+    &#39;&#39;&#39;
+       Search for the query point in the shard interval.  
+        
+        Parameters
+        ----------
+        query  : tuple
+            Query point 2 dimensional key value.  
+        
+        intervalId : Integer
+            Mapped interval to which query point belongs
+        
+             
+        Returns
+        -------
+        Value corresponding to query point key
+            
+    &#39;&#39;&#39;
+    def predict(self, query):
+       
+        cell_id = self.searchCellGrid(query)
+        if (cell_id == -1):
+            print(&#39;Query point %d %d not found&#39; %(query[0],query[1]))
+            return -1
+        else:
+            keyArea = np.abs((query[1] - self.cellMatrix[cell_id][1])*
+                       (query[0] - self.cellMatrix[cell_id][0]))
+     
+            mapped_value =   self.cellMatrix[cell_id][7] + ((keyArea/self.cellMatrix[cell_id][8])*self.keysPerCell)
+            intervalId =   self.search_mapped_interval(mapped_value)
+            if(intervalId == -1):
+                intervalId = self.sequentially_scan_mapped_interval(mapped_value)
+                if(intervalId == -1):
+                    print(&#39;Query point %d %d mapping value %f not found in sequential search&#39; %(query[0],query[1], mapped_value))
+                    return -1
+                            
+            v_pred = self.predictShardId(mapped_value, self.alphas_list[intervalId], self.betas_list[intervalId]).astype(int)
+            #gtShardId = self.search_shard_matrix(mapped_value, intervalId)
+            predShardId = v_pred[0]//self.keysPerShard
+            if(predShardId &lt; 0):
+                predShardId= 0
+            if(predShardId &gt;= self.nuOfShards):
+                predShardId = self.nuOfShards-1
+                
+             
+            y_pred = self.scan_shard(intervalId,predShardId, query)
+            if(y_pred == -1):
+                if self.debugPrint:
+                    print(&#39;query point %d %d not found with mapped value %f predicted shard id %d&#39; 
+                        %(query[0], query[1], mapped_value,predShardId ))    
+                return 0
+            return y_pred    
+    
+    
+       
+    &#39;&#39;&#39;
+       Decompose range query into a union of smaller query rectangles each 
+       belong to one and only one cell. 
+        
+        Parameters
+        ----------
+        query_l : tuple
+            Range Query lower coordinate
+        
+        query_u  : tuple
+            Range Query upper coordinate
+                     
+        Returns
+        -------
+        cell_list :  union of smaller query rectangles each 
+       belong to one and only one cell.
+            
+    &#39;&#39;&#39;
+    def range_query(self,query_l, query_u):
+        lowerBound = False
+        cell_list = []
+        for i in range(self.cellSize):
+            for j in range(self.cellSize):
+                idx = j*self.cellSize+i
+                if(query_l[0] &gt;= self.cellMatrix[idx][0] and query_l[0] &lt;= self.cellMatrix[idx][2]) and \
+                     (query_l[1] &gt;= self.cellMatrix[idx][1] and query_l[1] &lt;= self.cellMatrix[idx][3]):
+                    cell_list.append(idx)
+                    lowerBound = True
+                    break
+            if(lowerBound == True):
+                break
+                
+        if(lowerBound == False):
+            if(self.debugPrint):
+                print(&#39;Query Rectangle Outside the range&#39;)
+            return cell_list
+        else:
+            if(self.debugPrint):
+                print(&#39;lowerbound is a equal to %d&#39;%(idx))
+            x_offset = idx% self.cellSize
+            j = j+1
+            if(j == self.cellSize):
+                j = 0
+                i = i+1
+            idx = j*self.cellSize+i
+            while(i &lt; self.cellSize):
+                if ((idx%self.cellSize) &lt; x_offset):
+                    j = j+1
+                    if(j == self.cellSize):
+                        j = 0
+                        i = i+1
+                    idx = j*self.cellSize+i
+                    continue
+              
+                if(query_u[0] &gt;= self.cellMatrix[idx][0] and query_u[1] &gt;= self.cellMatrix[idx][1]):
+                #or (query_u[1] &lt;= lisa.cellMatrix[i][3] and query_u[0] &gt;= lisa.cellMatrix[i][0]):
+                    cell_list.append(idx)
+                j = j+1   
+                if(j == self.cellSize):
+                    j = 0
+                    i = i+1
+                idx = j*self.cellSize+i
+        if self.debugPrint:
+            print(cell_list)
+
+        return cell_list
+    
+    &#39;&#39;&#39;
+      Return keys belonging to range query from cells belonging to cell list
+       Parameters
+        ----------
+        query_l : tuple
+            Range Query lower coordinate
+        
+        query_u  : tuple
+            Range Query upper coordinate
+            
+        cellList : List
+            List contaning cells ids which are identified as part of 
+        query
+                     
+        Returns
+        -------
+        keylist :  npArray
+            Array of key/value pairs fetched by range query
+               
+                           
+    &#39;&#39;&#39;
+    
+    def getKeysInRangeQuerySlow(self, cellList, query_l, query_u):
+        keyList = []
+        for i in cellList:
+            nuOfKeys = self.keysPerCell
+            startOffset = int(self.cellMatrix[i][6]*(self.keysPerCell))
+            if i == ((self.cellSize*self.cellSize)-1):
+                nuOfKeys = nuOfKeys + self.additionalKeysInLastCell 
+            for j in range(startOffset, startOffset+nuOfKeys):
+                 if(self.train_array[j, 0] &gt;= query_l[0] and self.train_array[j, 0] &lt;= query_u[0] )and \
+                         (self.train_array[j, 1] &gt;= query_l[1] and self.train_array[j, 1] &lt;= query_u[1] ):
+                        keyList.append(self.train_array[j, 0:3])
+     
+        return np.array(keyList)
+    
+    def predict_first_shard_range_query(self,query_l,query_u,cell_id,keyList):
+       
+        
+        keyArea = np.abs((query_l[1] - self.cellMatrix[cell_id][1])*
+                   (query_l[0] - self.cellMatrix[cell_id][0]))
+    
+        mapped_value =   self.cellMatrix[cell_id][7] + ((keyArea/self.cellMatrix[cell_id][8])*self.keysPerCell)
+        intervalId =   self.search_mapped_interval(mapped_value)
+        if(intervalId == -1):
+            intervalId = self.sequentially_scan_mapped_interval(mapped_value)
+            if(intervalId == -1):
+                return keyList
+    
+        v_pred = self.predictShardId(mapped_value, self.alphas_list[intervalId], self.betas_list[intervalId]).astype(int)
+        predShardId = v_pred[0]//self.keysPerShard
+        if(predShardId &lt; 0):
+            predShardId= 0
+        if(predShardId &gt;= self.nuOfShards):
+            predShardId = self.nuOfShards-1
+        
+        mapped_interval_offset = intervalId*self.numOfKeysPerInterval
+        end_offset = mapped_interval_offset+self.numOfKeysPerInterval
+        if (predShardId&gt;0):
+            predShardId = predShardId-1
+        shard_offset = mapped_interval_offset + predShardId*self.keysPerShard
+        for j in range(shard_offset, end_offset):
+            if(self.train_array[j, 0] &gt;= query_l[0] and self.train_array[j, 0] &lt;= query_u[0] )and \
+                (self.train_array[j, 1] &gt;= query_l[1] and self.train_array[j, 1] &lt;= query_u[1] ):
+                keyList.append(self.train_array[j, 0:3])
+        return keyList
+    
+    
+    def predict_last_shard_range_query(self,query_l,query_u,cell_id,keyList):
+       
+    
+        keyArea = np.abs((query_u[1] - self.cellMatrix[cell_id][1])*
+                   (query_u[0] - self.cellMatrix[cell_id][0]))
+    
+        mapped_value =   self.cellMatrix[cell_id][7] + ((keyArea/self.cellMatrix[cell_id][8])*self.keysPerCell)
+        intervalId =   self.search_mapped_interval(mapped_value)
+        if(intervalId == -1):
+            intervalId = self.sequentially_scan_mapped_interval(mapped_value)
+            if(intervalId == -1):
+                return keyList
+    
+        v_pred = self.predictShardId(mapped_value, self.alphas_list[intervalId], self.betas_list[intervalId]).astype(int)
+        predShardId = v_pred[0]//self.keysPerShard
+        if(predShardId &lt; 0):
+            predShardId= 0
+        if(predShardId &gt;= self.nuOfShards):
+            predShardId = self.nuOfShards-1
+        
+        mapped_interval_offset = intervalId*self.numOfKeysPerInterval
+        if (predShardId&lt;(self.nuOfShards -1)):
+           predShardId = predShardId+1
+        start_offset = mapped_interval_offset
+        shard_offset = mapped_interval_offset + predShardId*self.keysPerShard
+        end_offset = shard_offset+self.keysPerShard
+        if(predShardId == self.nuOfShards -1):
+            if (intervalId != (self.nuOfIntervals-1)):
+                end_offset = end_offset+ (self.numOfKeysPerInterval % self.keysPerShard)
+            else:
+                end_offset = self.nuOfKeys
+       
+        for j in range(start_offset, end_offset):
+            if(self.train_array[j, 0] &gt;= query_l[0] and self.train_array[j, 0] &lt;= query_u[0] )and \
+                (self.train_array[j, 1] &gt;= query_l[1] and self.train_array[j, 1] &lt;= query_u[1] ):
+                keyList.append(self.train_array[j, 0:3])
+               
+       
+        return keyList
+
+
+        
+    def getKeysInRangeQuery(self,cellList, query_l, query_u):
+        keyList = []
+        cellId = cellList[0]
+        keyList = self.predict_first_shard_range_query(query_l, query_u, cellId,keyList)
+        cellList.pop(0)
+        if len(cellList) == 0:
+            return np.array(keyList)
+        cellId = cellList[-1]
+        cellList.pop(-1)
+        for i in cellList:
+            nuOfKeys = self.keysPerCell
+            startOffset = int(self.cellMatrix[i][6]*(self.keysPerCell))
+            if i == ((self.cellSize*self.cellSize)-1):
+                nuOfKeys = nuOfKeys + self.additionalKeysInLastCell 
+            for j in range(startOffset, startOffset+nuOfKeys):
+                 #if(lisa.train_array[j, 0] &gt;= query_l[0] and lisa.train_array[j, 0] &lt;= query_u[0] )and \
+                 #        (lisa.train_array[j, 1] &gt;= query_l[1] and lisa.train_array[j, 1] &lt;= query_u[1] ):
+                keyList.append(self.train_array[j, 0:3])
+       
+        keyList = self.predict_last_shard_range_query(query_l,query_u, cellId, keyList)
+        return np.array(keyList)
+
+    &#39;&#39;&#39;
+       Calculate euclidean distance between arguments left and right
+                
+    &#39;&#39;&#39;
+    def distance(self, left, right):
+        &#34;&#34;&#34; Returns the square of the distance between left and right. &#34;&#34;&#34;
+        return np.sqrt(((left[0] - right[0]) ** 2) + ((left[1] - right[1]) ** 2))
+        
+    &#39;&#39;&#39;
+      Return keys/value pairs belonging to knn of query point
+       Parameters
+        ----------
+        queryPoint : tuple
+            Query point 2 dimensional key coordinate
+        
+                  
+        k : Integer
+            Number of neighbours to return. 
+        
+                     
+        Returns
+        -------
+        keylist :  npArray
+           key value pairs belonging to knn of query point
+               
+                           
+    &#39;&#39;&#39;
+    def findKnnNeighbours (self, queryPoint, k):
+        for scale in range (1,5):
+            delta = self.initDelta**scale
+            query_l = (queryPoint[0]-delta, queryPoint[1]-delta)
+            query_h = (queryPoint[0]+delta, queryPoint[1]+delta)
+            if (query_l &lt; (self.train_array[0,0], self.train_array[0,1])):
+                query_l = (self.train_array[0,0], self.train_array[0,1])
+            if (query_h  &gt; (self.train_array[-1,0], self.train_array[-1,1])):
+                query_h = (self.train_array[-1,0], self.train_array[-1,1])
+                
+            cellList =self.range_query(query_l,query_h)
+            if(len(cellList) == 0):
+                print(&#39;range query is empty&#39;)
+                return None
+            neighboursKeySet = self.getKeysInRangeQuery(cellList,query_l,query_h )
+            if (len(neighboursKeySet) &lt; k):
+                if self.debugPrint:
+                    print(&#39;No of keys found = %d&#39; %(len(neighboursKeySet) ))
+                continue   
+            neighboursKeySet = np.hstack((neighboursKeySet, np.zeros((neighboursKeySet.shape[0], 1),dtype=neighboursKeySet.dtype)))
+            idx = np.where((neighboursKeySet[:, 0] == queryPoint[0] ) &amp; (neighboursKeySet[:, 1] == queryPoint[1]))
+            neighboursKeySet[:, 3] = self.distance(queryPoint,(neighboursKeySet[:, 0], neighboursKeySet[:,1]))
+            #neighboursKeySet[:, 3] = np.sqrt(((neighboursKeySet[:, 2]- neighboursKeySet[idx, 2]) ** 2))
+                                             
+            neighboursKeySet = neighboursKeySet[neighboursKeySet[:,3].argsort()]
+           
+            return neighboursKeySet[0:k, 3]
+        return (None, None)
+    
+    &#39;&#39;&#39;
+     Predict range query for lisa model
+                                
+    &#39;&#39;&#39;
+    def predict_range_query(self, query_l, query_u):
+        cellList =self.range_query(query_l, query_u)    
+        if(len(cellList) == 0):
+            if self.debugPrint:
+                print(&#39;range query is empty&#39;)
+            return -1
+        else:
+            neighboursKeySet = self.getKeysInRangeQuery(cellList, query_l, query_u)
+            return np.sort(neighboursKeySet[:, -1])
+        
+    &#39;&#39;&#39;
+     Predict knn query for lisa model
+                                
+    &#39;&#39;&#39;
+    def predict_knn_query(self, query, k):
+          y_pred = self.findKnnNeighbours(query, k)
+          return np.sort(y_pred)
+          
+        
+            
+            
+
+    &#39;&#39;&#39;
+       Train the lisa model: Training consists of:
+            a) cell grid generation
+            b) Applying mapping function to keys values taking into account &#39;
+               cell boundaries
+            c) Learning Shard boundaries using piecewise linear functions. 
+    
+       Parameters
+        ----------
+        Train and test point np arrays
+       
+        Returns
+        -------
+        mse: Float
+           Mean square error for eval points
+           time : Time taken to build the lisaBaseline model. 
+        
+    &#39;&#39;&#39;  
+    def train(self, x_train, y_train, x_test, y_test):
+
+        print(x_train.shape)
+        print(x_test.shape)
+        print(y_train.shape)
+        print(y_test.shape)
+    
+        
+        np.set_printoptions(threshold=100000)
+        start_time = timer()
+        self.train_array = np.hstack((x_train, y_train.reshape(-1, 1),
+                                      np.zeros((x_train.shape[0], 1),
+                                               dtype=x_train.dtype)))
+        #print( self.train_array[0:100,:])
+        self.train_array = self.train_array.astype(&#39;float64&#39;)
+        if (self.generate_grid_cells() == -1):
+            print(&#39;Invalid Configuration&#39;)
+            return -1, timer() - start_time
+        self.compute_mapping_value()
+        self.createShards()
+        end_time = timer()
+        print(&#39;/n build time %f&#39; % (end_time - start_time))
+        #print(self.train_array)
+        test_data_size = x_test.shape[0]
+        pred_y = []
+        #for i in range(20):
+        print(&#39;\n In Lisabaseline.build evaluation %d data points&#39; %
+              (test_data_size))
+        error_count = 0
+        for i in range(test_data_size):
+            y_hat = self.predict(x_test[i])
+            if(y_hat != y_test[i]):
+                print(&#39; pred = %d, gt = %d&#39; %(y_hat, y_test[i] ))
+                error_count = error_count+1
+            pred_y.append(y_hat)
+
+        pred_y = np.array(pred_y)
+        #mse = metrics.mean_absolute_error(y_test, pred_y)
+        mse = metrics.mean_squared_error(y_test, pred_y)
+        print(&#39;error count is %d, test size is %d ratio is %f&#39; %(error_count,test_data_size, error_count/test_data_size ))
+        print(&#39;nuOfIntervals =%d, numOfKeysPerInterval = %d nuOfShards = %d keysperShard = %d NuofKeys = %d keysInLastInterval = %d&#39;
+                      %(self.nuOfIntervals, self.numOfKeysPerInterval,self.nuOfShards,self.keysPerShard, self.nuOfKeys, self.keysInLastInterval) )
+
+        print(&#39;cellSize = %d, keysPerCell = %d, nuOfKeys = %d additionalKeysInLastCell = %d&#39; %(self.cellSize, self.keysPerCell,  self.nuOfKeys, self.additionalKeysInLastCell ))
+        if self.debugPrint:
+            print(self.cellMatrix)
+        return mse, end_time - start_time</code></pre>
+</details>
+<h3>Instance variables</h3>
+<dl>
+<dt id="indexing.models.lisa.lisa.LisaModel.nuOfKeys"><code class="name">var <span class="ident">nuOfKeys</span></code></dt>
+<dd>
+<div class="desc"><p>additionalKeysInLastCell : Last cell may have more keys than keysPerCell
+Bookkeeping code to allow for arbotary values of cell Size instead of
+factor of nuOfKeys.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="indexing.models.lisa.lisa.LisaModel.assemble_regression_matrix"><code class="name flex">
+<span>def <span class="ident">assemble_regression_matrix</span></span>(<span>self, betas, x)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def assemble_regression_matrix(self,betas, x):
+    betas = self.convert_to_np_array(betas)
+    # Sort the betas
+    betas_order = np.argsort(betas)
+    betas = betas[betas_order]
+    # Fetch number of parameters and line segments
+    n_segments = len(betas) - 1
+
+    # Assemble the regression matrix
+    A_list = [np.ones_like(x)]
+    A_list.append(x - betas[0])
+    for i in range(n_segments - 1):
+        A_list.append(np.where(x &gt;= betas[i+1],
+                                   x - betas[i+1],
+                                   0.0))
+    A = np.vstack(A_list).T
+    return A, betas,n_segments</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.calc_gradient"><code class="name flex">
+<span>def <span class="ident">calc_gradient</span></span>(<span>self, x, alpha, betas, r_error, n_segments)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calc_gradient(self, x, alpha, betas,r_error,n_segments):
+    K = np.diag(alpha)
+    G_list = [np.ones_like(x)]
+    G_list.append(x - betas[0])
+    for i in range(n_segments - 1):
+        G_list.append(np.where(x &gt;= betas[i+1],
+                               x - betas[i+1],
+                               np.inf))
+    G = np.vstack(G_list)
+    G= ((G!=np.inf).astype(int)*(-1))
+    KG = np.dot(K, G)
+    g= 2*(KG.dot(r_error))
+    g = np.around(g,3)
+    Y = 2*(KG.dot(np.transpose(KG)))
+    Y = np.around(Y,3)
+    try:
+        Y_inverse = np.linalg.inv(Y)
+        s = -Y_inverse.dot(g)
+    except np.linalg.LinAlgError:
+        if self.debugPrint:
+            print(&#39;Y_inverse not avaliable&#39;)
+        s = 0
+    pass
+    
+    return s</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.check_alpha_constraint"><code class="name flex">
+<span>def <span class="ident">check_alpha_constraint</span></span>(<span>self, alpha)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def check_alpha_constraint(self, alpha):
+    flag = True
+    for i in range(alpha.size+1):
+        alpha_sum = 0
+        for j in range(i):
+          alpha_sum = alpha_sum+alpha[j]
+        if (alpha_sum &lt; 0):
+            flag = False
+            break
+    
+    return flag</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.compute_mapping_value"><code class="name flex">
+<span>def <span class="ident">compute_mapping_value</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def compute_mapping_value(self):
+    j = 0
+    k = 0
+    # Apply mapping function to each key in the training database
+    for i in range(0,(self.keysPerCell*self.cellSize*self.cellSize)):
+        idx = (((i% self.keysPerCell)))
+        cellIdx = j*self.cellSize +k
+        keyArea = ((self.train_array[i][1] - self.cellMatrix[cellIdx][1])* \
+                  (self.train_array[i][0] - self.cellMatrix[cellIdx][0]))
+ 
+        self.train_array[i, 3] =   self.cellMatrix[cellIdx][7] + \
+                                   ((keyArea/self.cellMatrix[cellIdx][8])*self.keysPerCell)
+      
+        if(idx ==(self.keysPerCell -1) ):
+            j  = j+1
+            if(j == self.cellSize):
+                k = k+1
+                j = 0
+                
+    # Last cell can contain additional keys. Handle this boundary condition             
+    for i in range((self.keysPerCell*self.cellSize*self.cellSize), self.nuOfKeys):
+        if(self.debugPrint):
+            print(&#39;i = %d, cellIdx = %d&#39; %(i,cellIdx ))
+        keyArea = ((self.train_array[i][1] - self.cellMatrix[cellIdx][1])* \
+                   (self.train_array[i][0] - self.cellMatrix[cellIdx][0]))
+        self.train_array[i, 3] =   self.cellMatrix[cellIdx][7] + \
+                                   ((keyArea/self.cellMatrix[cellIdx][8])*(self.keysPerCell+self.additionalKeysInLastCell))            
+    # Sort the input data array with mapped values
+    self.train_array = self.train_array[self.train_array[:,3].argsort()]   </code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.compute_slopes"><code class="name flex">
+<span>def <span class="ident">compute_slopes</span></span>(<span>self, y_hat, betas, n_segments)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def compute_slopes(self, y_hat,betas,n_segments):
+    slopes = np.divide(
+                (y_hat[1:n_segments + 1] -
+                 y_hat[:n_segments]),
+                (betas[1:n_segments + 1] -
+                 betas[:n_segments]))
+    intercepts = y_hat[0:-1] - slopes * betas[0:-1]
+    return slopes, intercepts</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.convert_to_np_array"><code class="name flex">
+<span>def <span class="ident">convert_to_np_array</span></span>(<span>self, input_)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def convert_to_np_array(self, input_):
+    if isinstance(input_, np.ndarray) is False:
+        input_ = np.array(input_)
+    return input_</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.createMappedIntervalMatrix"><code class="name flex">
+<span>def <span class="ident">createMappedIntervalMatrix</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def createMappedIntervalMatrix(self):
+    self.mappedIntervalMatrix = np.zeros((self.nuOfIntervals, 5))
+    for i in range(self.nuOfIntervals-1):
+        self.mappedIntervalMatrix[i][0] = i+1
+        self.mappedIntervalMatrix[i][1] = self.train_array[i*self.numOfKeysPerInterval, 2]
+        self.mappedIntervalMatrix[i][2] = self.train_array[(((i+1)*self.numOfKeysPerInterval)-1), 2]
+        self.mappedIntervalMatrix[i][3] = self.train_array[i*self.numOfKeysPerInterval, 3]
+        self.mappedIntervalMatrix[i][4] = self.train_array[(((i+1)*self.numOfKeysPerInterval)-1), 3]
+        
+    #Last Interval may have less nu of keys
+    i = i+1
+    self.mappedIntervalMatrix[i][0] = i+1
+    self.mappedIntervalMatrix[i][1] = self.train_array[i*self.numOfKeysPerInterval, 2]
+    self.mappedIntervalMatrix[i][2] = self.train_array[self.nuOfKeys-1, 2]
+    self.mappedIntervalMatrix[i][3] = self.train_array[i+1*self.numOfKeysPerInterval, 3]
+    self.mappedIntervalMatrix[i][4] = self.train_array[self.nuOfKeys-1, 3]</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.createShardMappingMatrix"><code class="name flex">
+<span>def <span class="ident">createShardMappingMatrix</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def createShardMappingMatrix(self):
+    self.shardMatrix = np.zeros((self.nuOfIntervals*self.nuOfShards, 5))
+    numOfKeysPerInterval = self.numOfKeysPerInterval
+    keysPerShard = self.keysPerShard
+    # Initialize shardMatrix for ShardFunctions for each Interval. 
+    for i in range(self.nuOfIntervals-1):
+        for j in range(self.nuOfShards-1):
+            # Store mapped values at shard interval boundaries.  
+            idx = i*self.nuOfShards+j
+            self.shardMatrix[idx][0] = idx+1
+            self.shardMatrix[idx][1] = self.train_array[i*numOfKeysPerInterval + j*keysPerShard, 2]
+            self.shardMatrix[idx][2] = self.train_array[i*numOfKeysPerInterval+((j+1)*keysPerShard)-1, 2]
+            self.shardMatrix[idx][3] = self.train_array[i*numOfKeysPerInterval + j*keysPerShard, 3]
+            self.shardMatrix[idx][4] = self.train_array[i*numOfKeysPerInterval+((j+1)*keysPerShard)-1, 3]
+        j= j+1
+        idx = idx+1
+        # Handle boundary case as lasty shard may have additional keys.  
+        self.shardMatrix[idx][0] = idx+1
+        self.shardMatrix[idx][1] = self.train_array[i*numOfKeysPerInterval + j*keysPerShard, 2]
+        self.shardMatrix[idx][2] = self.train_array[((i+1)*numOfKeysPerInterval)-1  , 2]
+        self.shardMatrix[idx][3] = self.train_array[i*numOfKeysPerInterval + j*keysPerShard, 3]
+        self.shardMatrix[idx][4] = self.train_array[((i+1)*numOfKeysPerInterval)-1  , 3]
+        
+    #Last Interval may have less nu of keys
+    nuOfShardsinLastInterval =  self.nuOfShards #self.keysInLastInterval // keysPerShard
+    i = i+1
+    for j in range(nuOfShardsinLastInterval-1):
+        idx = i*self.nuOfShards+j
+  
+        self.shardMatrix[idx][0] = idx+1
+        self.shardMatrix[idx][1] = self.train_array[i*numOfKeysPerInterval + j*keysPerShard, 2]
+        self.shardMatrix[idx][2] = self.train_array[i*numOfKeysPerInterval+((j+1)*keysPerShard)-1, 2]
+        self.shardMatrix[idx][3] = self.train_array[i*numOfKeysPerInterval + j*keysPerShard, 3]
+        self.shardMatrix[idx][4] = self.train_array[i*numOfKeysPerInterval+((j+1)*keysPerShard)-1, 3]
+    j= j+1
+    idx = idx+1
+    # Handle boundary case as lasty shard may have additional keys.  
+    self.shardMatrix[idx][0] = idx+1
+    self.shardMatrix[idx][1] = self.train_array[i*numOfKeysPerInterval + j*keysPerShard, 2]
+    self.shardMatrix[idx][2] = self.train_array[self.nuOfKeys-1  , 2]
+    self.shardMatrix[idx][3] = self.train_array[i*numOfKeysPerInterval + j*keysPerShard, 3]
+    self.shardMatrix[idx][4] = self.train_array[self.nuOfKeys -1 , 3]</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.createShards"><code class="name flex">
+<span>def <span class="ident">createShards</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def createShards(self):
+    self.alphas_list = []
+    self.betas_list = []
+    self.createMappedIntervalMatrix()
+    self.createShardMappingMatrix()
+    
+    for i in range(self.nuOfIntervals):
+        x = self.train_array[i*self.numOfKeysPerInterval: ((i+1)*self.numOfKeysPerInterval), 3]
+        y = np.arange(x.shape[0])
+        #print(&#39;Interval %d&#39; %(i))
+        alphas, betas = self.trainShardingLinearFunctions(x, y,self.nuOfShards)
+        self.alphas_list.append(alphas)
+        self.betas_list.append(betas)</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.distance"><code class="name flex">
+<span>def <span class="ident">distance</span></span>(<span>self, left, right)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns the square of the distance between left and right.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def distance(self, left, right):
+    &#34;&#34;&#34; Returns the square of the distance between left and right. &#34;&#34;&#34;
+    return np.sqrt(((left[0] - right[0]) ** 2) + ((left[1] - right[1]) ** 2))</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.findKnnNeighbours"><code class="name flex">
+<span>def <span class="ident">findKnnNeighbours</span></span>(<span>self, queryPoint, k)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def findKnnNeighbours (self, queryPoint, k):
+    for scale in range (1,5):
+        delta = self.initDelta**scale
+        query_l = (queryPoint[0]-delta, queryPoint[1]-delta)
+        query_h = (queryPoint[0]+delta, queryPoint[1]+delta)
+        if (query_l &lt; (self.train_array[0,0], self.train_array[0,1])):
+            query_l = (self.train_array[0,0], self.train_array[0,1])
+        if (query_h  &gt; (self.train_array[-1,0], self.train_array[-1,1])):
+            query_h = (self.train_array[-1,0], self.train_array[-1,1])
+            
+        cellList =self.range_query(query_l,query_h)
+        if(len(cellList) == 0):
+            print(&#39;range query is empty&#39;)
+            return None
+        neighboursKeySet = self.getKeysInRangeQuery(cellList,query_l,query_h )
+        if (len(neighboursKeySet) &lt; k):
+            if self.debugPrint:
+                print(&#39;No of keys found = %d&#39; %(len(neighboursKeySet) ))
+            continue   
+        neighboursKeySet = np.hstack((neighboursKeySet, np.zeros((neighboursKeySet.shape[0], 1),dtype=neighboursKeySet.dtype)))
+        idx = np.where((neighboursKeySet[:, 0] == queryPoint[0] ) &amp; (neighboursKeySet[:, 1] == queryPoint[1]))
+        neighboursKeySet[:, 3] = self.distance(queryPoint,(neighboursKeySet[:, 0], neighboursKeySet[:,1]))
+        #neighboursKeySet[:, 3] = np.sqrt(((neighboursKeySet[:, 2]- neighboursKeySet[idx, 2]) ** 2))
+                                         
+        neighboursKeySet = neighboursKeySet[neighboursKeySet[:,3].argsort()]
+       
+        return neighboursKeySet[0:k, 3]
+    return (None, None)</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.find_learning_rate"><code class="name flex">
+<span>def <span class="ident">find_learning_rate</span></span>(<span>self, s, betas, x, y)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_learning_rate(self,s,betas,x, y):
+    lr_list = [0.001, 0.1]
+    ssr_list = []
+    # Do parameter search for learning rate. 
+    for lr in lr_list:
+        betas_new = betas+lr*s
+        A, _,_ =  self.assemble_regression_matrix(betas_new, x)
+        alpha, ssr,r_error = self.lstsq(A, y)
+        ssr_list.append(ssr)
+    min_lr = ssr_list.index(min(ssr_list))
+    lr = lr_list[min_lr]
+    # Return learning rate whcih minimizes the ssr. 
+    return lr</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.generate_grid_cells"><code class="name flex">
+<span>def <span class="ident">generate_grid_cells</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_grid_cells(self):
+    cellSize =  self.cellSize
+    self.nuOfKeys = self.train_array.shape[0]
+    self.keysPerCell =  self.nuOfKeys // (cellSize*cellSize)
+    keysPerCell = self.keysPerCell
+    self.additionalKeysInLastCell = self.nuOfKeys-(keysPerCell*cellSize*cellSize)
+    
+    
+    self.numOfKeysPerInterval = self.keysPerCell
+    self.nuOfIntervals = self.nuOfKeys // self.numOfKeysPerInterval
+    self.keysInLastInterval = self.nuOfKeys - self.numOfKeysPerInterval*(self.nuOfIntervals -1)
+
+    self.keysPerShard = self.numOfKeysPerInterval//self.nuOfShards
+    self.nuOfKeysToSearchinAdjacentShard = self.keysPerShard //6
+    if(self.nuOfKeysToSearchinAdjacentShard &lt; 5):
+        self.nuOfKeysToSearchinAdjacentShard= 5
+    if (self.nuOfKeysToSearchinAdjacentShard &gt;self.keysPerShard ):
+        print(&#39;Invalid Configuration&#39;)
+        return -1
+    self.shardMatrix = np.zeros((self.nuOfIntervals, 5))
+    if(self.debugPrint):
+        print(&#39;nuOfIntervals =%d, numOfKeysPerInterval = %d nuOfShards = %d keysperShard = %d NuofKeys = %d keysInLastInterval = %d&#39;
+                  %(self.nuOfIntervals, self.numOfKeysPerInterval,self.nuOfShards,self.keysPerShard, self.nuOfKeys, self.keysInLastInterval) )
+
+        print(&#39;cellSize = %d, keysPerCell = %d, nuOfKeys = %d additionalKeysInLastCell = %d&#39; %(cellSize, keysPerCell,  self.nuOfKeys, self.additionalKeysInLastCell ))
+    # Sore keys based on x dimension
+    self.train_array = self.train_array[self.train_array[:,0].argsort()]
+    &#39;&#39;&#39;
+    Initialize Cell Matrix, Each element of cell matrix has [(l0, u0 ), (l1, u1), 
+    Cell Id, CellId*keysPerCell]. We  keep cell id and CellId*keysPerCell in 
+    2 mappings,position 5, 6, is mapping value increasing in x direction
+    position 7 8 is , mapping value increasing in y direction. 
+    &#39;&#39;&#39;
+    self.cellMatrix = np.zeros((cellSize*cellSize, 9))
+    # Divie X axis into equal no of keys, and fill x values for the cell
+    for i in range( self.cellSize):
+        for j in range( self.cellSize):
+            # Save x coordinate of first key in the cell
+            self.cellMatrix[i*cellSize+j][0] =  self.train_array[(keysPerCell*cellSize*(j))-(not(not(j%cellSize))) ,0]
+            # Save x coordinate of last key in the cell
+            self.cellMatrix[i*cellSize+j][2] =  self.train_array[(keysPerCell*cellSize*(j+1)) -1 ,0]
+            self.cellMatrix[i*cellSize+j][4] =  i*cellSize+j
+            self.cellMatrix[i*cellSize+j][5] =  (keysPerCell*cellSize*i)+j*keysPerCell
+            self.cellMatrix[i*cellSize+j][6] =  i + cellSize*j
+            self.cellMatrix[i*cellSize+j][7] =  (i*keysPerCell)+(keysPerCell*cellSize*j)
+    # Last cell may have more keys than KeysPerCell
+    self.cellMatrix[i*cellSize+j][2] =  self.train_array[-1 ,0]
+    
+    # Sort Keys along y direction
+    for i in range(cellSize-1):
+        self.train_array[keysPerCell*cellSize*i:keysPerCell*cellSize*(i+1)] = \
+                   self.train_array[(self.train_array[keysPerCell*cellSize*i:keysPerCell*cellSize*(i+1),1].argsort())+keysPerCell*cellSize*i]
+    # Last cell may have more keys than KeysPerCell 
+    i = i+1
+    self.train_array[keysPerCell*cellSize*i:-1] = self.train_array[(self.train_array[keysPerCell*cellSize*i:-1,1].argsort())+keysPerCell*cellSize*i]
+
+    # Divide the keys along y Axis
+    for i in range(cellSize):
+        for j in range(cellSize):
+            self.cellMatrix[i*cellSize+j][1] =  self.train_array[((keysPerCell*(i-1)) + (keysPerCell*cellSize*j) +(keysPerCell-1)) ,1]
+            self.cellMatrix[i*cellSize+j][3] =  self.train_array[((keysPerCell*i) + (keysPerCell*cellSize*j) +(keysPerCell-1)) ,1]
+            #print(((keysPerCell*(i-1)) + (keysPerCell*cellSize*(j)) +(keysPerCell-1)))
+            #print( ((keysPerCell*(i)) + (keysPerCell*cellSize*(j)) +(keysPerCell-1)))
+            self.cellMatrix[i*cellSize+j][8] =  ((self.cellMatrix[i*cellSize+j][3] - self.cellMatrix[i*cellSize+j][1])* \
+                            (self.cellMatrix[i*cellSize+j][2] - self.cellMatrix[i*cellSize+j][0]))
+
+    self.cellMatrix[i*cellSize+j][3] =  self.train_array[-1 ,1]
+    self.cellMatrix[i*cellSize+j][8] =  ((self.cellMatrix[i*cellSize+j][3] - self.cellMatrix[i*cellSize+j][1])*
+                                    (self.cellMatrix[i*cellSize+j][2] - self.cellMatrix[i*cellSize+j][0]))
+    # Bookkeeping code        
+    for i in range(cellSize):
+        self.cellMatrix[i][1] =  0
+        self.cellMatrix[i][8] =  np.abs((self.cellMatrix[i][3] - self.cellMatrix[i][1])* \
+                                       (self.cellMatrix[i][2] - self.cellMatrix[i][0]))
+  
+    return 0</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.getKeysInRangeQuery"><code class="name flex">
+<span>def <span class="ident">getKeysInRangeQuery</span></span>(<span>self, cellList, query_l, query_u)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getKeysInRangeQuery(self,cellList, query_l, query_u):
+    keyList = []
+    cellId = cellList[0]
+    keyList = self.predict_first_shard_range_query(query_l, query_u, cellId,keyList)
+    cellList.pop(0)
+    if len(cellList) == 0:
+        return np.array(keyList)
+    cellId = cellList[-1]
+    cellList.pop(-1)
+    for i in cellList:
+        nuOfKeys = self.keysPerCell
+        startOffset = int(self.cellMatrix[i][6]*(self.keysPerCell))
+        if i == ((self.cellSize*self.cellSize)-1):
+            nuOfKeys = nuOfKeys + self.additionalKeysInLastCell 
+        for j in range(startOffset, startOffset+nuOfKeys):
+             #if(lisa.train_array[j, 0] &gt;= query_l[0] and lisa.train_array[j, 0] &lt;= query_u[0] )and \
+             #        (lisa.train_array[j, 1] &gt;= query_l[1] and lisa.train_array[j, 1] &lt;= query_u[1] ):
+            keyList.append(self.train_array[j, 0:3])
+   
+    keyList = self.predict_last_shard_range_query(query_l,query_u, cellId, keyList)
+    return np.array(keyList)</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.getKeysInRangeQuerySlow"><code class="name flex">
+<span>def <span class="ident">getKeysInRangeQuerySlow</span></span>(<span>self, cellList, query_l, query_u)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getKeysInRangeQuerySlow(self, cellList, query_l, query_u):
+    keyList = []
+    for i in cellList:
+        nuOfKeys = self.keysPerCell
+        startOffset = int(self.cellMatrix[i][6]*(self.keysPerCell))
+        if i == ((self.cellSize*self.cellSize)-1):
+            nuOfKeys = nuOfKeys + self.additionalKeysInLastCell 
+        for j in range(startOffset, startOffset+nuOfKeys):
+             if(self.train_array[j, 0] &gt;= query_l[0] and self.train_array[j, 0] &lt;= query_u[0] )and \
+                     (self.train_array[j, 1] &gt;= query_l[1] and self.train_array[j, 1] &lt;= query_u[1] ):
+                    keyList.append(self.train_array[j, 0:3])
+ 
+    return np.array(keyList)</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.get_betas"><code class="name flex">
+<span>def <span class="ident">get_betas</span></span>(<span>self, input_, V, D)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_betas(self,input_, V, D):
+    b_ = np.zeros( D +1)
+    b_[0], b_[-1] = np.min(input_), np.max(input_)
+    i = 1
+    while(i&lt;(D)):
+        b_[i] = input_[i*(V//D)]
+        #print(i*(V//D))
+        i = i+1            
+        
+    return b_</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.is_pos_def"><code class="name flex">
+<span>def <span class="ident">is_pos_def</span></span>(<span>x)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_pos_def(x):
+    return np.all((np.around(np.linalg.eigvals(x),4)) &gt;= 0)</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.lstsq"><code class="name flex">
+<span>def <span class="ident">lstsq</span></span>(<span>self, A, y_gt)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def lstsq(self,A, y_gt):
+
+    alpha, ssr, _, _ = np.linalg.lstsq(A, y_gt, rcond = -1)
+    # ssr is only calculated if self.n_data &gt; self.n_parameters
+    # in this case we ll need to calculate ssr manually
+    # where ssr = sum of square of residuals
+    y_hat = np.dot(A, alpha)
+    e = y_hat - y_gt
+    n_parameters = A.shape[1]
+    n_data = y_gt.size
+    if n_data &lt;= n_parameters:
+        ssr = np.dot(e, e)
+    if isinstance(ssr, list):
+        ssr = ssr[0]
+    elif isinstance(ssr, np.ndarray):
+        if ssr.size == 0:
+            y_hat = np.dot(A, alpha)
+            e = y_hat - y_gt
+            ssr = np.dot(e, e)
+        else:
+            ssr = ssr[0]
+
+    return alpha,np.around(ssr, 3), e  </code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.plot_sharding_prediction"><code class="name flex">
+<span>def <span class="ident">plot_sharding_prediction</span></span>(<span>self, x, y, alpha, betas)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def plot_sharding_prediction(self, x, y, alpha, betas):
+    return
+    xHat = np.linspace(min(x), max(x), num=10000)
+    yHat = self.predictShardId(xHat, alpha,betas)
+    plt.figure()
+    plt.plot(x, y, &#39;--&#39;)
+    plt.plot(xHat, yHat, &#39;-&#39;)
+    plt.show()
+    return</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.predict"><code class="name flex">
+<span>def <span class="ident">predict</span></span>(<span>self, query)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def predict(self, query):
+   
+    cell_id = self.searchCellGrid(query)
+    if (cell_id == -1):
+        print(&#39;Query point %d %d not found&#39; %(query[0],query[1]))
+        return -1
+    else:
+        keyArea = np.abs((query[1] - self.cellMatrix[cell_id][1])*
+                   (query[0] - self.cellMatrix[cell_id][0]))
+ 
+        mapped_value =   self.cellMatrix[cell_id][7] + ((keyArea/self.cellMatrix[cell_id][8])*self.keysPerCell)
+        intervalId =   self.search_mapped_interval(mapped_value)
+        if(intervalId == -1):
+            intervalId = self.sequentially_scan_mapped_interval(mapped_value)
+            if(intervalId == -1):
+                print(&#39;Query point %d %d mapping value %f not found in sequential search&#39; %(query[0],query[1], mapped_value))
+                return -1
+                        
+        v_pred = self.predictShardId(mapped_value, self.alphas_list[intervalId], self.betas_list[intervalId]).astype(int)
+        #gtShardId = self.search_shard_matrix(mapped_value, intervalId)
+        predShardId = v_pred[0]//self.keysPerShard
+        if(predShardId &lt; 0):
+            predShardId= 0
+        if(predShardId &gt;= self.nuOfShards):
+            predShardId = self.nuOfShards-1
+            
+         
+        y_pred = self.scan_shard(intervalId,predShardId, query)
+        if(y_pred == -1):
+            if self.debugPrint:
+                print(&#39;query point %d %d not found with mapped value %f predicted shard id %d&#39; 
+                    %(query[0], query[1], mapped_value,predShardId ))    
+            return 0
+        return y_pred    </code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.predictShardId"><code class="name flex">
+<span>def <span class="ident">predictShardId</span></span>(<span>self, x, alpha=None, betas=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def predictShardId(self, x, alpha=None, betas=None):
+    
+    #print(&#39;in function predictShardId&#39;)
+    if alpha is not None and betas is not None:
+        #print(betas)
+        alpha = alpha
+        # Sort the betas, then store them
+        betas_order = np.argsort(betas)
+        #   print(betas_order)
+        betas = betas[betas_order]
+      
+    x = self.convert_to_np_array(x)
+
+    A,_,_ = self.assemble_regression_matrix(betas, x)
+
+    # solve the regression problem
+    y_pred = np.dot(A, alpha)
+    return y_pred</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.predict_first_shard_range_query"><code class="name flex">
+<span>def <span class="ident">predict_first_shard_range_query</span></span>(<span>self, query_l, query_u, cell_id, keyList)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def predict_first_shard_range_query(self,query_l,query_u,cell_id,keyList):
+   
+    
+    keyArea = np.abs((query_l[1] - self.cellMatrix[cell_id][1])*
+               (query_l[0] - self.cellMatrix[cell_id][0]))
+
+    mapped_value =   self.cellMatrix[cell_id][7] + ((keyArea/self.cellMatrix[cell_id][8])*self.keysPerCell)
+    intervalId =   self.search_mapped_interval(mapped_value)
+    if(intervalId == -1):
+        intervalId = self.sequentially_scan_mapped_interval(mapped_value)
+        if(intervalId == -1):
+            return keyList
+
+    v_pred = self.predictShardId(mapped_value, self.alphas_list[intervalId], self.betas_list[intervalId]).astype(int)
+    predShardId = v_pred[0]//self.keysPerShard
+    if(predShardId &lt; 0):
+        predShardId= 0
+    if(predShardId &gt;= self.nuOfShards):
+        predShardId = self.nuOfShards-1
+    
+    mapped_interval_offset = intervalId*self.numOfKeysPerInterval
+    end_offset = mapped_interval_offset+self.numOfKeysPerInterval
+    if (predShardId&gt;0):
+        predShardId = predShardId-1
+    shard_offset = mapped_interval_offset + predShardId*self.keysPerShard
+    for j in range(shard_offset, end_offset):
+        if(self.train_array[j, 0] &gt;= query_l[0] and self.train_array[j, 0] &lt;= query_u[0] )and \
+            (self.train_array[j, 1] &gt;= query_l[1] and self.train_array[j, 1] &lt;= query_u[1] ):
+            keyList.append(self.train_array[j, 0:3])
+    return keyList</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.predict_knn_query"><code class="name flex">
+<span>def <span class="ident">predict_knn_query</span></span>(<span>self, query, k)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def predict_knn_query(self, query, k):
+      y_pred = self.findKnnNeighbours(query, k)
+      return np.sort(y_pred)</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.predict_last_shard_range_query"><code class="name flex">
+<span>def <span class="ident">predict_last_shard_range_query</span></span>(<span>self, query_l, query_u, cell_id, keyList)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def predict_last_shard_range_query(self,query_l,query_u,cell_id,keyList):
+   
+
+    keyArea = np.abs((query_u[1] - self.cellMatrix[cell_id][1])*
+               (query_u[0] - self.cellMatrix[cell_id][0]))
+
+    mapped_value =   self.cellMatrix[cell_id][7] + ((keyArea/self.cellMatrix[cell_id][8])*self.keysPerCell)
+    intervalId =   self.search_mapped_interval(mapped_value)
+    if(intervalId == -1):
+        intervalId = self.sequentially_scan_mapped_interval(mapped_value)
+        if(intervalId == -1):
+            return keyList
+
+    v_pred = self.predictShardId(mapped_value, self.alphas_list[intervalId], self.betas_list[intervalId]).astype(int)
+    predShardId = v_pred[0]//self.keysPerShard
+    if(predShardId &lt; 0):
+        predShardId= 0
+    if(predShardId &gt;= self.nuOfShards):
+        predShardId = self.nuOfShards-1
+    
+    mapped_interval_offset = intervalId*self.numOfKeysPerInterval
+    if (predShardId&lt;(self.nuOfShards -1)):
+       predShardId = predShardId+1
+    start_offset = mapped_interval_offset
+    shard_offset = mapped_interval_offset + predShardId*self.keysPerShard
+    end_offset = shard_offset+self.keysPerShard
+    if(predShardId == self.nuOfShards -1):
+        if (intervalId != (self.nuOfIntervals-1)):
+            end_offset = end_offset+ (self.numOfKeysPerInterval % self.keysPerShard)
+        else:
+            end_offset = self.nuOfKeys
+   
+    for j in range(start_offset, end_offset):
+        if(self.train_array[j, 0] &gt;= query_l[0] and self.train_array[j, 0] &lt;= query_u[0] )and \
+            (self.train_array[j, 1] &gt;= query_l[1] and self.train_array[j, 1] &lt;= query_u[1] ):
+            keyList.append(self.train_array[j, 0:3])
+           
+   
+    return keyList</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.predict_range_query"><code class="name flex">
+<span>def <span class="ident">predict_range_query</span></span>(<span>self, query_l, query_u)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def predict_range_query(self, query_l, query_u):
+    cellList =self.range_query(query_l, query_u)    
+    if(len(cellList) == 0):
+        if self.debugPrint:
+            print(&#39;range query is empty&#39;)
+        return -1
+    else:
+        neighboursKeySet = self.getKeysInRangeQuery(cellList, query_l, query_u)
+        return np.sort(neighboursKeySet[:, -1])</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.range_query"><code class="name flex">
+<span>def <span class="ident">range_query</span></span>(<span>self, query_l, query_u)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def range_query(self,query_l, query_u):
+    lowerBound = False
+    cell_list = []
+    for i in range(self.cellSize):
+        for j in range(self.cellSize):
+            idx = j*self.cellSize+i
+            if(query_l[0] &gt;= self.cellMatrix[idx][0] and query_l[0] &lt;= self.cellMatrix[idx][2]) and \
+                 (query_l[1] &gt;= self.cellMatrix[idx][1] and query_l[1] &lt;= self.cellMatrix[idx][3]):
+                cell_list.append(idx)
+                lowerBound = True
+                break
+        if(lowerBound == True):
+            break
+            
+    if(lowerBound == False):
+        if(self.debugPrint):
+            print(&#39;Query Rectangle Outside the range&#39;)
+        return cell_list
+    else:
+        if(self.debugPrint):
+            print(&#39;lowerbound is a equal to %d&#39;%(idx))
+        x_offset = idx% self.cellSize
+        j = j+1
+        if(j == self.cellSize):
+            j = 0
+            i = i+1
+        idx = j*self.cellSize+i
+        while(i &lt; self.cellSize):
+            if ((idx%self.cellSize) &lt; x_offset):
+                j = j+1
+                if(j == self.cellSize):
+                    j = 0
+                    i = i+1
+                idx = j*self.cellSize+i
+                continue
+          
+            if(query_u[0] &gt;= self.cellMatrix[idx][0] and query_u[1] &gt;= self.cellMatrix[idx][1]):
+            #or (query_u[1] &lt;= lisa.cellMatrix[i][3] and query_u[0] &gt;= lisa.cellMatrix[i][0]):
+                cell_list.append(idx)
+            j = j+1   
+            if(j == self.cellSize):
+                j = 0
+                i = i+1
+            idx = j*self.cellSize+i
+    if self.debugPrint:
+        print(cell_list)
+
+    return cell_list</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.scan_shard"><code class="name flex">
+<span>def <span class="ident">scan_shard</span></span>(<span>self, interval_id, shardId, query)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def scan_shard(self, interval_id,shardId, query):
+    
+    mapped_interval_offset = interval_id*self.numOfKeysPerInterval
+    shard_offset = mapped_interval_offset + shardId*self.keysPerShard
+    end_offset = shard_offset+self.keysPerShard
+    if(shardId == self.nuOfShards -1):
+        if (interval_id != (self.nuOfIntervals-1)):
+            end_offset = end_offset+ (self.numOfKeysPerInterval % self.keysPerShard)
+        else:
+            end_offset = self.nuOfKeys
+        #print(&#39;Incrementing end offset by %d for shardId %d&#39;%((self.numOfKeysPerInterval % self.keysPerShard),shardId))
+    for i in range(shard_offset, end_offset):
+        if (self.train_array[i,0] == query[0]) and (self.train_array[i,1]== query[1]):
+            return self.train_array[i,2]
+   
+    if not ((interval_id == (self.nuOfIntervals-1)) and (shardId ==(self.nuOfShards -1))):
+        # Search in adjacent shard
+        for i in range (self.nuOfKeysToSearchinAdjacentShard):
+             if (self.train_array[i+end_offset,0] == query[0]) and (self.train_array[i+end_offset,1]== query[1]):
+                return self.train_array[i+end_offset,2]
+    if not ((interval_id == 0) and (shardId ==0)):
+        # Search in adjacent shard
+        for i in range (self.nuOfKeysToSearchinAdjacentShard):
+             if (self.train_array[shard_offset-i,0] == query[0]) and (self.train_array[shard_offset-i,1]== query[1]):
+                 return self.train_array[shard_offset-i,2]
+    if self.debugPrint:        
+        print(&#39;query point %d %d not found in shard Id %d interval_id = %d sharrd_offset %d %d&#39; %(query[0], query[1], shardId,interval_id, shard_offset, end_offset))    
+        print(&#39;Shard Id %d start %d %d end point %d %d &#39;%(shardId, self.train_array[shard_offset,0],self.train_array[shard_offset,1], self.train_array[end_offset-1,0],self.train_array[end_offset-1,1],))
+        
+    return -1</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.searchCellGrid"><code class="name flex">
+<span>def <span class="ident">searchCellGrid</span></span>(<span>self, query)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def searchCellGrid(self, query):
+    
+    found = False
+    cellIdx = -1
+    for i in range(self.cellSize):
+         for j in range(self.cellSize):
+             if(query[0] &gt;= self.cellMatrix[i+j*self.cellSize][0] and query[0] &lt;= self.cellMatrix[i+j*self.cellSize][2]) and \
+                 (query[1] &gt;= self.cellMatrix[i+j*self.cellSize][1] and query[1] &lt;= self.cellMatrix[i+j*self.cellSize][3]):
+                     found = True
+                     cellIdx = i+j*self.cellSize
+                     break
+         if (found == True):
+             break
+    return cellIdx</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.search_mapped_interval"><code class="name flex">
+<span>def <span class="ident">search_mapped_interval</span></span>(<span>self, x)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def search_mapped_interval(self, x):
+    low = 0
+    high = self.nuOfIntervals - 1
+    mid = 0
+    #print(&#39;searching for %f&#39; %(x))
+    while low &lt;= high:
+
+        mid = (high + low) // 2
+        #print(&#39;mid is %d&#39; %(mid))
+        # If x is greater, ignore left half
+        if self.mappedIntervalMatrix[mid][4] &lt; x:
+            low = mid + 1
+
+        # If x is smaller, ignore right half
+        elif self.mappedIntervalMatrix[mid][3] &gt; x:
+            high = mid - 1
+
+        # means x is present at mid
+        else:
+            #print(&#39;\n returning page %d&#39; %(mid))
+            return mid        
+    # If we reach here, then the element was not present
+    #print(&#39;\n returning page %d&#39; %(-1))    
+    return -1</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.search_shard_matrix"><code class="name flex">
+<span>def <span class="ident">search_shard_matrix</span></span>(<span>self, x, intervalId)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def search_shard_matrix(self, x, intervalId):
+    shardOffset =  intervalId*self.nuOfShards      
+    for i in range(self.nuOfShards):
+        if ((x &gt;= self.shardMatrix[shardOffset+i][3])
+            and (x &lt;= self.shardMatrix[shardOffset+i][4])):
+            return i
+    return -1 </code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.sequentially_scan_mapped_interval"><code class="name flex">
+<span>def <span class="ident">sequentially_scan_mapped_interval</span></span>(<span>self, x)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def sequentially_scan_mapped_interval(self, x):
+    for i in range(self.nuOfIntervals):
+        if (x &lt;= self.mappedIntervalMatrix[i][4]):
+            return i
+    return -1 </code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.train"><code class="name flex">
+<span>def <span class="ident">train</span></span>(<span>self, x_train, y_train, x_test, y_test)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def train(self, x_train, y_train, x_test, y_test):
+
+    print(x_train.shape)
+    print(x_test.shape)
+    print(y_train.shape)
+    print(y_test.shape)
+
+    
+    np.set_printoptions(threshold=100000)
+    start_time = timer()
+    self.train_array = np.hstack((x_train, y_train.reshape(-1, 1),
+                                  np.zeros((x_train.shape[0], 1),
+                                           dtype=x_train.dtype)))
+    #print( self.train_array[0:100,:])
+    self.train_array = self.train_array.astype(&#39;float64&#39;)
+    if (self.generate_grid_cells() == -1):
+        print(&#39;Invalid Configuration&#39;)
+        return -1, timer() - start_time
+    self.compute_mapping_value()
+    self.createShards()
+    end_time = timer()
+    print(&#39;/n build time %f&#39; % (end_time - start_time))
+    #print(self.train_array)
+    test_data_size = x_test.shape[0]
+    pred_y = []
+    #for i in range(20):
+    print(&#39;\n In Lisabaseline.build evaluation %d data points&#39; %
+          (test_data_size))
+    error_count = 0
+    for i in range(test_data_size):
+        y_hat = self.predict(x_test[i])
+        if(y_hat != y_test[i]):
+            print(&#39; pred = %d, gt = %d&#39; %(y_hat, y_test[i] ))
+            error_count = error_count+1
+        pred_y.append(y_hat)
+
+    pred_y = np.array(pred_y)
+    #mse = metrics.mean_absolute_error(y_test, pred_y)
+    mse = metrics.mean_squared_error(y_test, pred_y)
+    print(&#39;error count is %d, test size is %d ratio is %f&#39; %(error_count,test_data_size, error_count/test_data_size ))
+    print(&#39;nuOfIntervals =%d, numOfKeysPerInterval = %d nuOfShards = %d keysperShard = %d NuofKeys = %d keysInLastInterval = %d&#39;
+                  %(self.nuOfIntervals, self.numOfKeysPerInterval,self.nuOfShards,self.keysPerShard, self.nuOfKeys, self.keysInLastInterval) )
+
+    print(&#39;cellSize = %d, keysPerCell = %d, nuOfKeys = %d additionalKeysInLastCell = %d&#39; %(self.cellSize, self.keysPerCell,  self.nuOfKeys, self.additionalKeysInLastCell ))
+    if self.debugPrint:
+        print(self.cellMatrix)
+    return mse, end_time - start_time</code></pre>
+</details>
+</dd>
+<dt id="indexing.models.lisa.lisa.LisaModel.trainShardingLinearFunctions"><code class="name flex">
+<span>def <span class="ident">trainShardingLinearFunctions</span></span>(<span>self, x, y, nuOfShards)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def trainShardingLinearFunctions(self,x, y,nuOfShards):
+    
+    betas_list = []
+    learning_iter_list= []
+    early_stop_count = 0
+    x_data, y_data = self.convert_to_np_array(x), self.convert_to_np_array(y)
+    n_data = x_data.size
+    #Initialize betas with uniform distribution
+    betas = self.get_betas(x_data,n_data,nuOfShards)
+   
+    A, betas,n_segments = self.assemble_regression_matrix(betas, x_data)
+   
+    
+    alpha, ssr_0,r_error = self.lstsq(A, y_data)
+    betas_list.append(betas)
+    learning_iter_list.append(ssr_0)
+    self.plot_sharding_prediction(x_data, y_data, alpha, betas)
+    #Training Loop
+    itr = 0
+    while(itr&lt;1000):
+        # Calculate Gradient Update
+        s = self.calc_gradient(x_data, alpha, betas,r_error,n_segments)
+        # Find best learning rate for this iter
+        lr = self.find_learning_rate(s,betas,x_data, y_data)
+        # Update betas 
+        betas = betas+lr*s
+        # Update alpha 
+        A, betas,n_segments = self.assemble_regression_matrix(betas, x_data)
+        alpha, ssr,r_error = self.lstsq(A, y_data)
+        alpha_constraint = self.check_alpha_constraint(alpha)
+        #Stop training if alpha constraint is violated
+        if (alpha_constraint == False):
+            break
+        # Check for early stopping
+        if (learning_iter_list[-1] == ssr):
+            early_stop_count = early_stop_count+1
+            if(early_stop_count &gt; 4):
+                #print(&#39;Early Stopping&#39;)
+                break
+        else:
+            early_stop_count = 0
+        learning_iter_list.append(ssr)
+        betas_list.append(betas)
+        itr = itr+1
+       
+    #get index corresponding to lowest error
+    min_ssr = learning_iter_list.index(min(learning_iter_list))
+    # get betas corresponding to lowest error
+    betas =  np.array(betas_list[min_ssr])
+    #get alphas corresponidng to lowest error
+    A, betas,_ = self.assemble_regression_matrix(betas, x_data)
+    alpha, ssr,r_error = self.lstsq(A, y_data)
+    self.plot_sharding_prediction(x_data, y_data, alpha, betas)
+    #print(&#39;Time taken %f&#39; %(timer()-start_time))
+    #print(&#34;Initial ssr %f, final ssr %f&#34; %(ssr_0,ssr))
+    return alpha, betas</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="indexing.models.lisa" href="index.html">indexing.models.lisa</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="indexing.models.lisa.lisa.LisaModel" href="#indexing.models.lisa.lisa.LisaModel">LisaModel</a></code></h4>
+<ul class="">
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.assemble_regression_matrix" href="#indexing.models.lisa.lisa.LisaModel.assemble_regression_matrix">assemble_regression_matrix</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.calc_gradient" href="#indexing.models.lisa.lisa.LisaModel.calc_gradient">calc_gradient</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.check_alpha_constraint" href="#indexing.models.lisa.lisa.LisaModel.check_alpha_constraint">check_alpha_constraint</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.compute_mapping_value" href="#indexing.models.lisa.lisa.LisaModel.compute_mapping_value">compute_mapping_value</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.compute_slopes" href="#indexing.models.lisa.lisa.LisaModel.compute_slopes">compute_slopes</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.convert_to_np_array" href="#indexing.models.lisa.lisa.LisaModel.convert_to_np_array">convert_to_np_array</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.createMappedIntervalMatrix" href="#indexing.models.lisa.lisa.LisaModel.createMappedIntervalMatrix">createMappedIntervalMatrix</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.createShardMappingMatrix" href="#indexing.models.lisa.lisa.LisaModel.createShardMappingMatrix">createShardMappingMatrix</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.createShards" href="#indexing.models.lisa.lisa.LisaModel.createShards">createShards</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.distance" href="#indexing.models.lisa.lisa.LisaModel.distance">distance</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.findKnnNeighbours" href="#indexing.models.lisa.lisa.LisaModel.findKnnNeighbours">findKnnNeighbours</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.find_learning_rate" href="#indexing.models.lisa.lisa.LisaModel.find_learning_rate">find_learning_rate</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.generate_grid_cells" href="#indexing.models.lisa.lisa.LisaModel.generate_grid_cells">generate_grid_cells</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.getKeysInRangeQuery" href="#indexing.models.lisa.lisa.LisaModel.getKeysInRangeQuery">getKeysInRangeQuery</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.getKeysInRangeQuerySlow" href="#indexing.models.lisa.lisa.LisaModel.getKeysInRangeQuerySlow">getKeysInRangeQuerySlow</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.get_betas" href="#indexing.models.lisa.lisa.LisaModel.get_betas">get_betas</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.is_pos_def" href="#indexing.models.lisa.lisa.LisaModel.is_pos_def">is_pos_def</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.lstsq" href="#indexing.models.lisa.lisa.LisaModel.lstsq">lstsq</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.nuOfKeys" href="#indexing.models.lisa.lisa.LisaModel.nuOfKeys">nuOfKeys</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.plot_sharding_prediction" href="#indexing.models.lisa.lisa.LisaModel.plot_sharding_prediction">plot_sharding_prediction</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.predict" href="#indexing.models.lisa.lisa.LisaModel.predict">predict</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.predictShardId" href="#indexing.models.lisa.lisa.LisaModel.predictShardId">predictShardId</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.predict_first_shard_range_query" href="#indexing.models.lisa.lisa.LisaModel.predict_first_shard_range_query">predict_first_shard_range_query</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.predict_knn_query" href="#indexing.models.lisa.lisa.LisaModel.predict_knn_query">predict_knn_query</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.predict_last_shard_range_query" href="#indexing.models.lisa.lisa.LisaModel.predict_last_shard_range_query">predict_last_shard_range_query</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.predict_range_query" href="#indexing.models.lisa.lisa.LisaModel.predict_range_query">predict_range_query</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.range_query" href="#indexing.models.lisa.lisa.LisaModel.range_query">range_query</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.scan_shard" href="#indexing.models.lisa.lisa.LisaModel.scan_shard">scan_shard</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.searchCellGrid" href="#indexing.models.lisa.lisa.LisaModel.searchCellGrid">searchCellGrid</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.search_mapped_interval" href="#indexing.models.lisa.lisa.LisaModel.search_mapped_interval">search_mapped_interval</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.search_shard_matrix" href="#indexing.models.lisa.lisa.LisaModel.search_shard_matrix">search_shard_matrix</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.sequentially_scan_mapped_interval" href="#indexing.models.lisa.lisa.LisaModel.sequentially_scan_mapped_interval">sequentially_scan_mapped_interval</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.train" href="#indexing.models.lisa.lisa.LisaModel.train">train</a></code></li>
+<li><code><a title="indexing.models.lisa.lisa.LisaModel.trainShardingLinearFunctions" href="#indexing.models.lisa.lisa.LisaModel.trainShardingLinearFunctions">trainShardingLinearFunctions</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>
